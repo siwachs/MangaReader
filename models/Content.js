@@ -55,7 +55,7 @@ const contentSchema = mongoose.Schema(
       default: 0,
     },
     rating: {
-      type: mongoose.Types.Decimal128,
+      type: Number,
       min: 0,
       max: 5,
     },

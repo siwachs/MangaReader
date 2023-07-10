@@ -107,72 +107,73 @@ export async function getServerSideProps(context) {
         selectedFields: "displayImageThumbnail,title",
       },
     });
-    const latestUpdates = await Axios.get("/api/content", {
-      params: {
-        contentType: "recently-updated",
-        limit: 6,
-        selectedFields: "displayImagePoster,title",
-      },
-    });
-    const topInternetSearch = await Axios.get("/api/content", {
-      params: {
-        contentType: "topInternetSearch",
-        limit: 6,
-        selectedFields: "displayImagePoster,title",
-      },
-    });
-    const trending = await Axios.get("/api/content", {
-      params: {
-        contentType: "trending",
-        limit: 8,
-        selectedFields:
-          "displayImagePoster,title,description,noOfViews,noOfLikes,populatedTags",
-      },
-    });
-    const massUpdates = await Axios.get("/api/content", {
-      params: {
-        contentType: "massUpdate",
-        limit: 8,
-        selectedFields: "displayImageThumbnail,title",
-      },
-    });
-    const genreList = await Axios.get("/api/content", {
-      params: {
-        tagId: "all",
-        limit: 6,
-        selectedFields: "displayImagePoster,title,noOfLikes",
-      },
-    });
-    const recentlyAdded = await Axios.get("/api/content", {
-      params: {
-        contentType: "recently-added",
-        limit: 12,
-        selectedFields: "displayImagePoster,title",
-      },
-    });
-    const completed = await Axios.get("/api/content", {
-      params: {
-        contentType: "completed",
-        limit: 6,
-        selectedFields: "displayImagePoster,title",
-      },
-    });
+    // const latestUpdates = await Axios.get("/api/content", {
+    //   params: {
+    //     contentType: "recently-updated",
+    //     limit: 6,
+    //     selectedFields: "displayImagePoster,title",
+    //   },
+    // });
+    // const topInternetSearch = await Axios.get("/api/content", {
+    //   params: {
+    //     contentType: "topInternetSearch",
+    //     limit: 6,
+    //     selectedFields: "displayImagePoster,title",
+    //   },
+    // });
+    // const trending = await Axios.get("/api/content", {
+    //   params: {
+    //     contentType: "trending",
+    //     limit: 8,
+    //     selectedFields:
+    //       "displayImagePoster,title,description,noOfViews,noOfLikes,populatedTags",
+    //   },
+    // });
+    // const massUpdates = await Axios.get("/api/content", {
+    //   params: {
+    //     contentType: "massUpdate",
+    //     limit: 8,
+    //     selectedFields: "displayImageThumbnail,title",
+    //   },
+    // });
+    // const genreList = await Axios.get("/api/content", {
+    //   params: {
+    //     tagId: "all",
+    //     limit: 6,
+    //     selectedFields: "displayImagePoster,title,noOfLikes",
+    //   },
+    // });
+    // const recentlyAdded = await Axios.get("/api/content", {
+    //   params: {
+    //     contentType: "recently-added",
+    //     limit: 12,
+    //     selectedFields: "displayImagePoster,title",
+    //   },
+    // });
+    // const completed = await Axios.get("/api/content", {
+    //   params: {
+    //     contentType: "completed",
+    //     limit: 6,
+    //     selectedFields: "displayImagePoster,title",
+    //   },
+    // });
     fetchedData.sliderSlides = silderSlides.data;
-    fetchedData.latestUpdates = latestUpdates.data;
-    fetchedData.topInternetSearch = topInternetSearch.data;
-    fetchedData.trending = trending.data;
-    fetchedData.massUpdates = massUpdates.data;
-    fetchedData.genres = await getCachedGenreList();
-    fetchedData.genreList = genreList.data?.contentList;
-    fetchedData.recentlyAdded = recentlyAdded.data;
-    fetchedData.completed = completed.data;
+    // fetchedData.latestUpdates = latestUpdates.data;
+    // fetchedData.topInternetSearch = topInternetSearch.data;
+    // fetchedData.trending = trending.data;
+    // fetchedData.massUpdates = massUpdates.data;
+    // fetchedData.genres = await getCachedGenreList();
+    // fetchedData.genreList = genreList.data?.contentList;
+    // fetchedData.recentlyAdded = recentlyAdded.data;
+    // fetchedData.completed = completed.data;
+
     return {
       props: {
         ...fetchedData,
       },
     };
   } catch (catchedError) {
-    const statusCode = catchedError.response?.status;
+    const statusCode = catchedError.response?.status || null;
     const message = catchedError.response?.data?.error || null;
 
     return {
