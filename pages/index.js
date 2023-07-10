@@ -129,13 +129,13 @@ export async function getServerSideProps(context) {
           "displayImagePoster,title,description,noOfViews,noOfLikes,populatedTags",
       },
     });
-    // const massUpdates = await Axios.get("/api/content", {
-    //   params: {
-    //     contentType: "massUpdate",
-    //     limit: 8,
-    //     selectedFields: "displayImageThumbnail,title",
-    //   },
-    // });
+    const massUpdates = await Axios.get("/api/content", {
+      params: {
+        contentType: "massUpdate",
+        limit: 8,
+        selectedFields: "displayImageThumbnail,title",
+      },
+    });
     const genreList = await Axios.get("/api/content", {
       params: {
         tagId: "all",
@@ -150,22 +150,22 @@ export async function getServerSideProps(context) {
     //     selectedFields: "displayImagePoster,title",
     //   },
     // });
-    // const completed = await Axios.get("/api/content", {
-    //   params: {
-    //     contentType: "completed",
-    //     limit: 6,
-    //     selectedFields: "displayImagePoster,title",
-    //   },
-    // });
+    const completed = await Axios.get("/api/content", {
+      params: {
+        contentType: "completed",
+        limit: 6,
+        selectedFields: "displayImagePoster,title",
+      },
+    });
     fetchedData.sliderSlides = silderSlides.data;
     fetchedData.latestUpdates = latestUpdates.data;
     fetchedData.topInternetSearch = topInternetSearch.data;
     fetchedData.trending = trending.data;
-    // fetchedData.massUpdates = massUpdates.data;
+    fetchedData.massUpdates = massUpdates.data;
     fetchedData.genres = await getCachedGenreList();
     fetchedData.genreList = genreList.data?.contentList;
     // fetchedData.recentlyAdded = recentlyAdded.data;
-    // fetchedData.completed = completed.data;
+    fetchedData.completed = completed.data;
 
     return {
       props: {
