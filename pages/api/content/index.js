@@ -6,10 +6,6 @@ import Comment from "@/models/Comment";
 
 import getContent from "@/lib/getContent";
 
-export const config = {
-  runtime: "edge",
-};
-
 const handler = async (req, res) => {
   await connectToDB();
 
