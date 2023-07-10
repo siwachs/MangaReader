@@ -1,8 +1,6 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
-// import Axios from "./lib/axiosConfig";
-
 export default withAuth(
   async function middleware(req) {
     // Middleware Function Invoke Only if authorized return true.
@@ -21,7 +19,6 @@ export default withAuth(
           return new NextResponse("Only Admin can access this page.");
         }
       } catch (error) {
-        console.log("error is", error);
         return new NextResponse("Only Admin can access this page.");
       }
     }
@@ -35,4 +32,7 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ["/admin/:path*", "/user-profile/:path*"] };
+export const config = {
+  matcher: ["/admin/:path*", "/user-profile/:path*"],
+  runtime: "experimental-edge",
+};

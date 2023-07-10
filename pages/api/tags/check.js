@@ -1,6 +1,10 @@
 import connectToDB from "@/lib/connectToDB";
 import Tag from "@/models/Tag";
 
+export const config = {
+  runtime: "edge",
+};
+
 const handler = async (req, res) => {
   await connectToDB();
 

@@ -2,6 +2,10 @@ import Content from "@/models/Content";
 
 import { transformText } from "@/lib/utils";
 
+export const config = {
+  runtime: "edge",
+};
+
 const handler = async (req, res) => {
   const {
     method,

@@ -6,6 +6,10 @@ import Chapter from "@/models/Chapter";
 
 import { deleteFromDB } from "@/lib/deleteFromDB";
 
+export const config = {
+  runtime: "edge",
+};
+
 const handler = async (req, res) => {
   await connectToDB();
 

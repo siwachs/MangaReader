@@ -4,6 +4,10 @@ import { authOptions } from "../auth/[...nextauth]";
 import connectToDB from "@/lib/connectToDB";
 import User from "@/models/User";
 
+export const config = {
+  runtime: "edge",
+};
+
 const handler = async (req, res) => {
   const session = await getServerSession(req, res, authOptions);
 

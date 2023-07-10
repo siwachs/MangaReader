@@ -1,6 +1,10 @@
 import connectToDB from "@/lib/connectToDB";
 import User from "@/models/User";
 
+export const config = {
+  runtime: "edge",
+};
+
 const handler = async (req, res) => {
   const {
     method,
