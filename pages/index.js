@@ -107,20 +107,20 @@ export async function getServerSideProps(context) {
         selectedFields: "displayImageThumbnail,title",
       },
     });
-    // const latestUpdates = await Axios.get("/api/content", {
-    //   params: {
-    //     contentType: "recently-updated",
-    //     limit: 6,
-    //     selectedFields: "displayImagePoster,title",
-    //   },
-    // });
-    // const topInternetSearch = await Axios.get("/api/content", {
-    //   params: {
-    //     contentType: "topInternetSearch",
-    //     limit: 6,
-    //     selectedFields: "displayImagePoster,title",
-    //   },
-    // });
+    const latestUpdates = await Axios.get("/api/content", {
+      params: {
+        contentType: "recently-updated",
+        limit: 6,
+        selectedFields: "displayImagePoster,title",
+      },
+    });
+    const topInternetSearch = await Axios.get("/api/content", {
+      params: {
+        contentType: "topInternetSearch",
+        limit: 6,
+        selectedFields: "displayImagePoster,title",
+      },
+    });
     // const trending = await Axios.get("/api/content", {
     //   params: {
     //     contentType: "trending",
@@ -158,8 +158,8 @@ export async function getServerSideProps(context) {
     //   },
     // });
     fetchedData.sliderSlides = silderSlides.data;
-    // fetchedData.latestUpdates = latestUpdates.data;
-    // fetchedData.topInternetSearch = topInternetSearch.data;
+    fetchedData.latestUpdates = latestUpdates.data;
+    fetchedData.topInternetSearch = topInternetSearch.data;
     // fetchedData.trending = trending.data;
     // fetchedData.massUpdates = massUpdates.data;
     // fetchedData.genres = await getCachedGenreList();

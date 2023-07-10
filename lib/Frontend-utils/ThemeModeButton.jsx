@@ -18,17 +18,15 @@ const ThemeModeButton = ({ buttonSize, inherit, size }) => {
   return currentTheme === "dark" ? (
     <button onClick={() => setTheme("light")}>
       <WbSunny
-        sx={{ color: "#f59e0b" }}
+        sx={{ color: "#f59e0b", fontSize: size && "1.875rem" }}
         fontSize={buttonSize ? "large" : inherit ? "inherit" : undefined}
-        className={`${size ? size : ""}`}
       />
     </button>
   ) : (
     <button onClick={() => setTheme("dark")}>
       <Brightness4
-        sx={{ color: "#111827" }}
+        sx={{ color: "#111827", fontSize: size && "1.875rem" }}
         fontSize={buttonSize ? "large" : inherit ? "inherit" : undefined}
-        className={`${size ? size : ""}`}
       />
     </button>
   );

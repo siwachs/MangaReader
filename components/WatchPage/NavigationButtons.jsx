@@ -42,7 +42,7 @@ const NavigationButtons = ({
         </button>
 
         {setThemeSwitch && (
-          <div className="absolute right-3">
+          <div className="absolute" style={{ right: "0.75rem" }}>
             <ThemeModeButton inherit size="text-2xl md:text-3xl" />
           </div>
         )}
