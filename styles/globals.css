@@ -1,0 +1,248 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Global CSS */
+  --swiper-theme-color: #ff204e !important;
+  --text-color: #ff5454;
+  --text-color-darkred: #ff204e;
+  --text-color-black: #333;
+  --text-color-black-secondary: #000000;
+  --text-color-primary: #404040;
+  --text-color-secondary: #888888;
+  --text-darkgray: #616161;
+  --text-color-genre: #948084;
+  --text-color-gray: #9d9d9d;
+  --text-gray-profile: #9c9c9c;
+  --text-color-content: #999999;
+  --text-color-contact: #ccc;
+  --text-color-stats: #555;
+  --text-color-yellow: #ffbd4f;
+
+  --pagination-nav-color: #666666;
+
+  /* Link-colors */
+  --navlink-color: #4d5168;
+
+  /* Placeholders and borders */
+  --border-color-primary: #d8d8d8;
+  --border-color-secondary: #979797;
+  --border-color-searchbox: #c6c6c6;
+  --border-color-arrow: #c6c6c6;
+
+  --border-color-footer-primary: #e4dddd;
+  --border-color-footer-secondary: #eee;
+  --border-color-contact-section: #444;
+  --border-color-nav: #707070;
+
+  --placeholder-color: #ccc;
+  --color-split-line: #ededf8;
+
+  /* Background */
+  --bg-profile: #f6f6f6;
+  --bg-footer-mobile: #363636;
+  --bg-footer-desktop: #f9f9fd;
+  --bg-searchbox: #faf9fd;
+  --bg-genre: #faf9fd;
+  --bg-button: #ff5b3b;
+  --bg-chapters: #f8f8f8;
+}
+
+@layer base {
+  body {
+    font-family: Nunito-SemiBold, "Microsoft JhengHei", "Microsoft Yahei", arial,
+      helvetica, sans-serif;
+
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white;
+  }
+}
+
+@layer components {
+  .trending-content-bg {
+    background-image: url("../public/assetsImages/hot-content-bg.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    @apply dark:brightness-90;
+  }
+
+  .genre-list-bg {
+    background-image: url("../public/assetsImages/genre-bg.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+  .mobile-navlinks {
+    @apply text-sm font-[500] text-[var(--text-color-primary)] dark:text-white sm:text-base;
+  }
+
+  .mobile-footer-link {
+    @apply flex h-[88px] items-center justify-center border-b border-[var(--border-color-footer-secondary)] font-extrabold text-[var(--text-color-content)] md:text-lg;
+  }
+
+  .pagination-button {
+    @apply inline-flex h-[3.125rem] items-center justify-center text-sm text-black disabled:text-[var(--pagination-nav-color)]  dark:text-white dark:disabled:text-[var(--pagination-nav-color)] md:text-base lg:max-w-[11.25rem] lg:rounded-3xl lg:border lg:border-black lg:disabled:border-[var(--borer-color-primary)];
+  }
+
+  .chapter-controller-button {
+    @apply ml-9 flex h-[3.125rem] items-center justify-center rounded-[6.25rem] border border-[var(--text-color-darkred)] bg-white px-[0.9375rem] text-xl;
+  }
+
+  .list-style {
+    color: var(--text-color-content);
+    @apply dark:text-white;
+  }
+
+  .list-style::before {
+    padding: 0;
+    color: var(--text-color-content);
+    content: "/\00a0"; /* \00a0 is for Non breaking space */
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none; /*EDGE*/
+    scrollbar-width: none; /*FIREFOX*/
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /*CHROME*/
+  }
+
+  .one-line-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .box-Shadow {
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
+  }
+
+  .box-Shadow-Button {
+    box-shadow: 0 3px 5px rgba(255, 32, 78, 0.3);
+  }
+
+  .linear-gradient-class {
+    background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0.1)
+    );
+  }
+
+  .controller-button-mobile {
+    @apply flex h-[2.1875rem] w-[15%] items-center justify-center rounded-[6.25rem] border border-[var(--text-color-darkred)] bg-white text-lg;
+  }
+
+  .controller-border-color {
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .controller-button-responsive {
+    @apply flex h-[2.5rem] items-center lg:h-[3.125rem];
+  }
+
+  .controller-button-active {
+    @apply border-b-2 border-[var(--text-color-darkred)] text-[var(--text-color-darkred)];
+  }
+
+  .watchPage-button {
+    @apply cursor-pointer items-center justify-center text-[var(--text-color-darkred)] lg:inline-flex lg:h-[2.1875rem] lg:w-[5.9375rem] lg:rounded-[6.25rem] lg:border lg:border-[var(--text-color-darkred)] lg:text-base;
+  }
+
+  .watchPage-button-text {
+    @apply ml-[0.125rem] hidden lg:inline-block lg:text-base;
+  }
+
+  .watchPage-pagination-button {
+    @apply flex h-[1.5625rem] w-[40%] items-center justify-center rounded-[31.25rem] border border-[var(--text-color-darkred)] text-center text-xs text-[var(--text-color-darkred)] disabled:border-[var(--border-color-nav)] disabled:text-[var(--text-color-content)] md:h-[1.875rem] md:text-sm  lg:h-[2.5rem] lg:text-base;
+  }
+
+  .watchPage-pagination-button-enable {
+    @apply border-[var(--text-color-darkred)] text-[var(--text-color-darkred)];
+  }
+
+  .admin-card {
+    @apply my-5 flex min-h-[100px] cursor-pointer flex-col items-center justify-center rounded-[8px] bg-white hover:bg-gray-200 dark:text-black dark:brightness-95;
+  }
+}
+
+/* Swiper.js style... */
+.swiper {
+}
+
+.swiper-slide {
+}
+
+.swiper-pagination {
+  bottom: 0 !important;
+}
+
+.swiper-pagination-bullet {
+  opacity: 1 !important;
+  background: #c9caca !important;
+  height: 0.75rem !important;
+  width: 0.75rem !important;
+  margin: 0 0.4rem !important;
+  @apply brightness-125;
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--text-color-darkred) !important;
+}
+
+@media screen and (min-width: 640px) {
+  .swiper-pagination-bullet {
+    height: 0.8rem !important;
+    width: 0.8rem !important;
+    margin: 0 0.6rem !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-pagination-bullet {
+    height: 0.9rem !important;
+    width: 0.9rem !important;
+    margin: 0 0.7rem !important;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :root {
+    --swiper-navigation-size: 3.5rem !important;
+  }
+}
+
+/* For Touch-screens */
+@media (pointer: coarse) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    @apply invisible opacity-0;
+  }
+}
+
+/* For Mouse and Desktop */
+@media (pointer: fine) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    @apply visible opacity-100;
+  }
+}
+
+/* Fonts */
+@font-face {
+  font-family: Nunito-SemiBold;
+  src: local("Nunito-SemiBold"), url("../Fonts/Nunito-SemiBold.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: Nunito-SemiBold;
+  font-weight: bold;
+  src: local("Nunito-SemiBold"), url("../Fonts/Nunito-Bold.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: Nunito-Bold;
+  src: local("Nunito-Bold"), url("../Fonts/Nunito-Bold.ttf");
+  font-display: swap;
+}
