@@ -136,13 +136,13 @@ export async function getServerSideProps(context) {
     //     selectedFields: "displayImageThumbnail,title",
     //   },
     // });
-    // const genreList = await Axios.get("/api/content", {
-    //   params: {
-    //     tagId: "all",
-    //     limit: 6,
-    //     selectedFields: "displayImagePoster,title,noOfLikes",
-    //   },
-    // });
+    const genreList = await Axios.get("/api/content", {
+      params: {
+        tagId: "all",
+        limit: 6,
+        selectedFields: "displayImagePoster,title,noOfLikes",
+      },
+    });
     // const recentlyAdded = await Axios.get("/api/content", {
     //   params: {
     //     contentType: "recently-added",
@@ -160,10 +160,10 @@ export async function getServerSideProps(context) {
     fetchedData.sliderSlides = silderSlides.data;
     fetchedData.latestUpdates = latestUpdates.data;
     fetchedData.topInternetSearch = topInternetSearch.data;
-    // fetchedData.trending = trending.data;
+    fetchedData.trending = trending.data;
     // fetchedData.massUpdates = massUpdates.data;
-    // fetchedData.genres = await getCachedGenreList();
-    // fetchedData.genreList = genreList.data?.contentList;
+    fetchedData.genres = await getCachedGenreList();
+    fetchedData.genreList = genreList.data?.contentList;
     // fetchedData.recentlyAdded = recentlyAdded.data;
     // fetchedData.completed = completed.data;
 
