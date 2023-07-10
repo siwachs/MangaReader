@@ -121,14 +121,14 @@ export async function getServerSideProps(context) {
         selectedFields: "displayImagePoster,title",
       },
     });
-    // const trending = await Axios.get("/api/content", {
-    //   params: {
-    //     contentType: "trending",
-    //     limit: 8,
-    //     selectedFields:
-    //       "displayImagePoster,title,description,noOfViews,noOfLikes,populatedTags",
-    //   },
-    // });
+    const trending = await Axios.get("/api/content", {
+      params: {
+        contentType: "trending",
+        limit: 8,
+        selectedFields:
+          "displayImagePoster,title,description,noOfViews,noOfLikes,populatedTags",
+      },
+    });
     // const massUpdates = await Axios.get("/api/content", {
     //   params: {
     //     contentType: "massUpdate",
