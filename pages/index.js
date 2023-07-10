@@ -13,6 +13,7 @@ import LatestUpdates from "../components/ContentList/LatestUpdates";
 import Genres from "../components/ContentList/Genres";
 import NewContent from "../components/ContentList/NewContent";
 import Completed from "../components/ContentList/Completed";
+import ErrorComponent from "@/components/ErrorComponent";
 
 //Images
 import leftCircle from "../public/assetsImages/circle-left.png";
@@ -28,8 +29,13 @@ export default function Home({
   genreList,
   recentlyAdded,
   completed,
+  error,
+  statusCode,
+  message,
 }) {
-  return (
+  return error ? (
+    <ErrorComponent statusCode={statusCode} message={message} />
+  ) : (
     <main className="relative">
       <Image
         src={leftCircle}
@@ -160,11 +166,22 @@ export async function getServerSideProps(context) {
     fetchedData.genreList = genreList.data?.contentList;
     fetchedData.recentlyAdded = recentlyAdded.data;
     fetchedData.completed = completed.data;
-  } catch (error) {}
+    return {
+      props: {
+        ...fetchedData,
+      },
+    };
+  } catch (catchedError) {
+    const statusCode = catchedError.response?.status;
+    const message = catchedError.response?.data?.error || null;
 
-  return {
-    props: {
-      ...fetchedData,
-    },
-  };
+    return {
+      props: {
+        ...fetchedData,
+        error: true,
+        statusCode,
+        message,
+      },
+    };
+  }
 }
