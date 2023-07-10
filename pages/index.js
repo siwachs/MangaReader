@@ -143,13 +143,13 @@ export async function getServerSideProps(context) {
         selectedFields: "displayImagePoster,title,noOfLikes",
       },
     });
-    // const recentlyAdded = await Axios.get("/api/content", {
-    //   params: {
-    //     contentType: "recently-added",
-    //     limit: 12,
-    //     selectedFields: "displayImagePoster,title",
-    //   },
-    // });
+    const recentlyAdded = await Axios.get("/api/content", {
+      params: {
+        contentType: "recently-added",
+        limit: 12,
+        selectedFields: "displayImagePoster,title",
+      },
+    });
     const completed = await Axios.get("/api/content", {
       params: {
         contentType: "completed",
@@ -164,7 +164,7 @@ export async function getServerSideProps(context) {
     fetchedData.massUpdates = massUpdates.data;
     fetchedData.genres = await getCachedGenreList();
     fetchedData.genreList = genreList.data?.contentList;
-    // fetchedData.recentlyAdded = recentlyAdded.data;
+    fetchedData.recentlyAdded = recentlyAdded.data;
     fetchedData.completed = completed.data;
 
     return {
