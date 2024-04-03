@@ -1,5 +1,5 @@
 {
-  "name": "read-manga",
+  "name": "manga-reader",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,34 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.12.2",
-    "autoprefixer": "10.4.14",
-    "axios": "^1.4.0",
-    "crypto-js": "^4.1.1",
-    "eslint": "8.39.0",
-    "eslint-config-next": "^13.4.9",
-    "firebase": "^9.21.0",
-    "lodash": "^4.17.21",
-    "moment": "^2.29.4",
-    "mongodb": "^5.7.0",
-    "mongoose": "^7.3.2",
-    "next": "^13.4.9",
-    "next-auth": "^4.22.1",
-    "next-themes": "^0.2.1",
-    "node-cache": "^5.1.2",
-    "numeral": "^2.0.6",
-    "postcss": "8.4.23",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "sharp": "^0.32.1",
-    "swiper": "^9.2.4",
-    "tailwindcss": "3.3.2"
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "14.1.4"
   },
   "devDependencies": {
-    "prettier": "^2.8.8",
-    "prettier-plugin-tailwindcss": "^0.2.8"
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.4"
   }
 }
