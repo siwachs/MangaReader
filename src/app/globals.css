@@ -19,6 +19,9 @@ body,
 
 @layer base {
   :root {
+    --app-navlink-color: #4d5168;
+    --app-text-color-red: #ff5454;
+    --app-text-color-dark-gray: #333;
   }
 }
 

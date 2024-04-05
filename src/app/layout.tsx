@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 
-import Header from "@/components/header.component";
+import Header from "@/components/header";
 
-const nunito = Nunito({ subsets: ["vietnamese"], weight: ["600"] });
+const nunito = Nunito({
+  subsets: ["vietnamese"],
+  weight: ["300", "400", "500", "600", "700", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Manga Reader - Read Manga, Anime, Manhua, and Donghua Online",
