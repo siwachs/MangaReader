@@ -22,6 +22,7 @@ body,
     --app-navlink-color: #4d5168;
     --app-text-color-red: #ff5454;
     --app-text-color-dark-gray: #333;
+    --app-border-color-gray: #d8d8d8;
   }
 }
 
@@ -29,4 +30,9 @@ body,
   body {
     @apply bg-white text-gray-900;
   }
+}
+
+/* Language Picker 24px */
+header #language-picker:checked ~ #languages-list {
+  @apply top-9;
 }
