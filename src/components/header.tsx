@@ -16,19 +16,18 @@ const languages = [
 
 const LanguagePicker = () => {
   return (
-    <div className="absolute right-5 top-0.5 lg:relative">
+    <div className="relative">
       <label
         htmlFor="language-picker"
-        className="flex cursor-pointer select-none items-center gap-[5px] text-sm text-[var(--app-text-color-dark-gray)]"
+        className="flex cursor-pointer select-none items-center gap-1 text-[var(--app-text-color-dark-gray)]"
       >
         <span>English</span>
-        <ChevronDown classNames="h-4 w-4" />
+        <ChevronDown />
       </label>
       <input type="checkbox" hidden id="language-picker" />
-
       <div
         id="languages-list"
-        className="absolute -right-5 top-[30px] z-10 hidden w-[120px] rounded-[10px] border border-[var(--app-border-color-gray)] bg-white py-2.5 text-sm lg:left-[50%] lg:w-40 lg:-translate-x-[50%]"
+        className="absolute left-[50%] top-8 z-10 hidden w-40 -translate-x-[50%] rounded-[10px] border border-[var(--app-border-color-gray)] bg-white py-2.5"
       >
         {languages.map((language) => (
           <Link
@@ -36,7 +35,7 @@ const LanguagePicker = () => {
             href={language.href}
             data-link={language.dataLink}
             data-language-code={language.dataLanguageCode}
-            className={`inline-block h-7 w-full px-4 py-1 ${language.name === "English" && "bg-red-200"}`}
+            className={`inline-block h-7 w-full px-4 py-1 ${language.name === "English" && "bg-gray-100"}`}
           >
             <span className="ml-2.5 text-sm text-[var(--app-text-color-dark-gray)]">
               {language.name}
@@ -52,7 +51,7 @@ const Header = () => {
   return (
     <header className="fixed top-0 z-10 w-full bg-white">
       {/* Mobile Header */}
-      <div className="relative w-full">
+      <div className="relative w-full lg:hidden">
         <div className="mt-[18px] h-10">
           <Bars3 classNames="absolute left-5 top-0.5 h-[25px] w-[25px] cursor-pointer text-[var(--app-text-color-medium-gray)]" />
 
@@ -68,21 +67,23 @@ const Header = () => {
               className="h-[27px] w-[131px]"
             />
           </Link>
-
-          <LanguagePicker />
         </div>
       </div>
 
       {/* Large Screens Header */}
-      <div className="mx-auto mb-5 mt-2.5 hidden h-[90px] max-w-[1200px] lg:block">
-        <div className="flex h-10 items-center justify-end gap-5 text-sm">
-          <Link href="/">Log In</Link>
-          <Link href="/">History</Link>
+      <div className="relative h-auto w-full lg:mx-auto lg:mb-5 lg:mt-2.5 lg:h-[90px] lg:max-w-[1200px]">
+        <div className="lg:text-sm lg:flex lg:h-10 lg:items-center lg:justify-end lg:gap-5">
+          <Link className="hidden lg:inline" href="/">
+            Log In
+          </Link>
+          <Link className="hidden lg:inline" href="/">
+            History
+          </Link>
 
           <LanguagePicker />
         </div>
 
-        <div className="mt-2.5 flex h-[45px] items-center justify-between">
+        <div className="mt-2.5 hidden h-[45px] items-center justify-between lg:flex">
           <Link href="/">
             <Image
               src="/MangaToon.svg"
