@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
 import "./globals.css";
+import { nunito } from "@/utils/fonts";
 
 import Header from "@/components/header";
-
-const nunito = Nunito({
-  subsets: ["vietnamese"],
-  weight: ["300", "400", "500", "600", "700", "900"],
-});
 
 export const metadata: Metadata = {
   title: "Manga Reader - Read Manga, Anime, Manhua, and Donghua Online",
@@ -22,9 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={nunito.className}>
+      <body className={`${nunito.className} font-sans`}>
         <Header />
-        <div>{children}</div>
+        <main>{children}</main>
       </body>
     </html>
   );

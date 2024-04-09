@@ -34,5 +34,5 @@ body,
 
 /* Language Picker 24px */
 header #language-picker:checked ~ #languages-list {
-  @apply top-9;
+  @apply top-9 z-10;
 }
