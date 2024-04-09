@@ -2,10 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body,
 :root {
-  height: 100%;
+  --app-navlink-color: #4d5168;
+  --app-text-color-red: #ff5454;
+  --app-text-color-dark-gray: #333;
+  --app-border-color-gray: #d8d8d8;
+}
+
+body {
+  @apply bg-white text-gray-900;
 }
 
 .hidden-scrollbar {
@@ -17,22 +22,11 @@ body,
   display: none;
 }
 
-@layer base {
-  :root {
-    --app-navlink-color: #4d5168;
-    --app-text-color-red: #ff5454;
-    --app-text-color-dark-gray: #333;
-    --app-border-color-gray: #d8d8d8;
-  }
-}
-
-@layer base {
-  body {
-    @apply bg-white text-gray-900;
-  }
-}
-
-/* Language Picker 24px */
+/* Language Picker */
 header #language-picker:checked ~ #languages-list {
-  @apply top-9 z-10;
+  display: block;
+}
+
+#page-content {
+  margin-top: 101px;
 }

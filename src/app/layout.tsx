@@ -17,9 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${nunito.className} font-sans`}>
+      <body className={nunito.className}>
         <Header />
-        <main>{children}</main>
+        <main id="page-content">{children}</main>
       </body>
     </html>
   );
