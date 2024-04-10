@@ -16,18 +16,19 @@ const languages = [
 
 const LanguagePicker = () => {
   return (
-    <div className="relative">
+    <div className="absolute right-5 top-0.5 lg:relative lg:right-0 lg:top-0">
       <label
         htmlFor="language-picker"
-        className="flex cursor-pointer select-none items-center gap-1 text-[var(--app-text-color-dark-gray)]"
+        className="flex cursor-pointer select-none items-center gap-1 text-sm text-[var(--app-text-color-dark-gray)] lg:text-base"
       >
         <span>English</span>
         <ChevronDown />
       </label>
       <input type="checkbox" hidden id="language-picker" />
+
       <div
         id="languages-list"
-        className="absolute left-[50%] top-8 z-10 hidden w-40 -translate-x-[50%] rounded-[10px] border border-[var(--app-border-color-gray)] bg-white py-2.5"
+        className="absolute -right-5 top-[30px] z-10 hidden w-[120px] rounded-xl border border-[var(--app-border-color-gray)] bg-white py-2.5 text-sm lg:left-1/2 lg:right-0 lg:w-[150px] lg:-translate-x-1/2 lg:rounded-[10px] lg:text-base"
       >
         {languages.map((language) => (
           <Link
@@ -50,15 +51,24 @@ const LanguagePicker = () => {
 const Header = () => {
   return (
     <header className="fixed top-0 z-10 w-full bg-white">
-      {/* Mobile Header */}
-      <div className="relative w-full lg:hidden">
-        <div className="mt-[18px] h-10">
-          <Bars3 classNames="absolute left-5 top-0.5 h-[25px] w-[25px] cursor-pointer text-[var(--app-text-color-medium-gray)]" />
+      <div
+        id="nav"
+        className="relative h-auto w-full lg:mx-auto lg:mb-5 lg:mt-2.5 lg:h-[90px] lg:max-w-[1200px]"
+      >
+        <div
+          id="top-nav"
+          className="mt-[18px] h-10 lg:mt-0 lg:flex lg:items-center lg:justify-end lg:gap-5 lg:text-sm"
+        >
+          <Bars3 classNames="absolute lg:hidden left-5 top-0.5 h-[25px] w-[25px] cursor-pointer text-[var(--app-text-color-medium-gray)]" />
 
-          <Link
-            href="/"
-            className="mx-[25%] flex h-[34px] w-1/2 items-center justify-center"
-          >
+          <Link className="hidden lg:inline" href="/">
+            Log In
+          </Link>
+          <Link className="hidden lg:inline" href="/">
+            History
+          </Link>
+
+          <Link href="/" className="absolute left-1/2 top-0.5 -translate-x-1/2">
             <Image
               src="/MangaToon.svg"
               alt="mangatoon"
@@ -67,23 +77,14 @@ const Header = () => {
               className="h-[27px] w-[131px]"
             />
           </Link>
-        </div>
-      </div>
-
-      {/* Large Screens Header */}
-      <div className="relative h-auto w-full lg:mx-auto lg:mb-5 lg:mt-2.5 lg:h-[90px] lg:max-w-[1200px]">
-        <div className="lg:text-sm lg:flex lg:h-10 lg:items-center lg:justify-end lg:gap-5">
-          <Link className="hidden lg:inline" href="/">
-            Log In
-          </Link>
-          <Link className="hidden lg:inline" href="/">
-            History
-          </Link>
 
           <LanguagePicker />
         </div>
 
-        <div className="mt-2.5 hidden h-[45px] items-center justify-between lg:flex">
+        <div
+          id="bottom-nav"
+          className="mt-2.5 hidden h-[45px] items-center justify-between lg:flex"
+        >
           <Link href="/">
             <Image
               src="/MangaToon.svg"
