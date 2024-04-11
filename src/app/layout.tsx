@@ -19,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={nunito.className}>
         <Header />
+        <div id="sidebar-portal"></div>
         <main id="page-content">{children}</main>
       </body>
     </html>

@@ -6,6 +6,7 @@
   --app-navlink-color: #4d5168;
   --app-text-color-red: #ff5454;
   --app-text-color-medium-gray: #999;
+  --app-text-medium-dark-gray: #979797;
   --app-text-color-dark-gray: #333;
   --app-border-color-gray: #d8d8d8;
 }
@@ -24,10 +25,10 @@ body {
 }
 
 /* Language Picker */
-header #language-picker:checked ~ #languages-list {
+header #language-switcher:checked ~ #languages-list {
   display: block;
 }
 
 #page-content {
-  margin-top: 101px;
+  @apply mt-[101px];
 }
