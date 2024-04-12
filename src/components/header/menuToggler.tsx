@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import ReactDom from "react-dom";
 
-import Bars3 from "../icons/Bars3";
+import { Bars3 } from "../icons";
 import Sidebar from "./sidebar";
 
 const MenuToggler: React.FC = () => {

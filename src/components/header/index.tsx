@@ -1,9 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { desktopNavLinks } from "@/data/navbarNavlinks";
-import ChevronDown from "../icons/ChevronDown";
-import SearchGlass from "../icons/SearchGlass";
+import { desktopNavLinks } from "@/data/navlinks";
+import { ChevronDown, SearchGlass } from "../icons";
 import MenuToggler from "./menuToggler";
 
 const languages = [

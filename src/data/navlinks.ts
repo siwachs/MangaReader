@@ -5,7 +5,7 @@ interface Navlink {
 }
 
 export const desktopNavLinks: Navlink[] = [
-  { key: "home", label: "Home", link: "" },
+  { key: "home", label: "Home", link: "/" },
   { key: "comics", label: "Comics", link: "/comics" },
   { key: "novelToon", label: "NovelToon", link: "/noveltoon" },
   { key: "allManga", label: "AllManga", link: "/allmanga" },
