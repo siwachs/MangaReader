@@ -43,7 +43,7 @@ const Sidebar: React.FC<{
               <span>Home</span>
             </div>
           </Link>
-          <div className="h-[1px] w-full bg-gray-300" />
+          <div className="h-[0.5px] w-full bg-gray-300" />
         </nav>
       </div>
     </div>

@@ -1,9 +1,14 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 
 import { desktopNavLinks } from "@/data/navlinks";
 import { ChevronDown, SearchGlass } from "../icons";
-import MenuToggler from "./menuToggler";
+
+// Dynamic Imports
+const MenuToggler = dynamic(() => import("./menuToggler"), {
+  ssr: false,
+});
 
 const languages = [
   { name: "English", href: "/en", dataLink: "/en", dataLanguageCode: "en" },
