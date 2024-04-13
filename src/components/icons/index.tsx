@@ -45,6 +45,12 @@ const Bars3: React.FC<{ classNames?: string; onClick?: () => void }> = ({
 }) => {
   return (
     <svg
+      tabIndex={0}
+      onKeyDown={(e: React.KeyboardEvent<SVGSVGElement>) => {
+        if (e.key === "Enter" && onClick) {
+          onClick();
+        }
+      }}
       onClick={onClick}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -55,6 +61,36 @@ const Bars3: React.FC<{ classNames?: string; onClick?: () => void }> = ({
         fillRule="evenodd"
         d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
         clipRule="evenodd"
+      />
+    </svg>
+  );
+};
+
+const Close: React.FC<{
+  classNames?: string;
+  strokeWidth?: number;
+  onClick?: () => void;
+}> = ({ classNames = "h-5 w-5", strokeWidth = 1.5, onClick }) => {
+  return (
+    <svg
+      tabIndex={0}
+      onKeyDown={(e: React.KeyboardEvent<SVGSVGElement>) => {
+        if (e.key === "Enter" && onClick) {
+          onClick();
+        }
+      }}
+      onClick={onClick}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={classNames}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6 18 18 6M6 6l12 12"
       />
     </svg>
   );
@@ -171,6 +207,28 @@ const NotePad: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
+const Game: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
+  classNames = "h-5 w-5",
+  strokeWidth = 1.5,
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={classNames}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 0 1-.657.643 48.39 48.39 0 0 1-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 0 1-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 0 0-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 0 1-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 0 0 .657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 0 1-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 0 0 5.427-.63 48.05 48.05 0 0 0 .582-4.717.532.532 0 0 0-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 0 0 .658-.663 48.422 48.422 0 0 0-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 0 1-.61-.58v0Z"
+      />
+    </svg>
+  );
+};
+
 const Star: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   classNames = "h-5 w-5",
   strokeWidth = 1.5,
@@ -193,14 +251,39 @@ const Star: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
+const SignIn: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
+  classNames = "h-5 w-5",
+  strokeWidth = 1.5,
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={classNames}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+      />
+    </svg>
+  );
+};
+
 export {
   ChevronDown,
   Bars3,
+  Close,
   SearchGlass,
   Home,
   Clock,
   Book,
   Trophy,
   NotePad,
+  Game,
   Star,
+  SignIn,
 };

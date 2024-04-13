@@ -2,7 +2,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
-import { desktopNavLinks } from "@/data/navlinks";
+import { navLinks } from "@/data/navlinks";
 import { ChevronDown, SearchGlass } from "../icons";
 
 // Dynamic Imports
@@ -31,14 +31,17 @@ const Header: React.FC = () => {
         >
           <MenuToggler />
 
-          <Link className="hidden lg:inline" href="/">
-            Log In
+          <Link className="hidden lg:inline" href="/signin">
+            Sign In
           </Link>
-          <Link className="hidden lg:inline" href="/">
+          <Link className="hidden lg:inline" href="/history">
             History
           </Link>
 
-          <Link href="/" className="absolute left-1/2 top-0.5 -translate-x-1/2">
+          <Link
+            href="/"
+            className="absolute left-1/2 top-0.5 -translate-x-1/2 lg:hidden"
+          >
             <Image
               priority
               src="/MangaToon.svg"
@@ -98,27 +101,30 @@ const Header: React.FC = () => {
           </Link>
 
           <nav className="ml-5 flex flex-1 gap-5 font-bold text-[var(--app-navlink-color)]">
-            {desktopNavLinks.map((navLink) => (
-              <Link
-                key={navLink.key}
-                href={navLink.link}
-                className="hover:text-[var(--app-text-color-red)]"
-              >
-                {navLink.label}
-              </Link>
-            ))}
+            {navLinks.map(
+              (navLink) =>
+                !navLink.mobileOnly && (
+                  <Link
+                    key={navLink.key}
+                    href={navLink.link}
+                    className="hover:text-[var(--app-text-color-red)]"
+                  >
+                    {navLink.label}
+                  </Link>
+                ),
+            )}
           </nav>
 
           <div className="flex gap-2.5">
             <Link
-              href="/en/search"
+              href="/search"
               className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-red-500 text-red-500"
             >
               <SearchGlass classNames="h-6 w-6" />
             </Link>
 
             <Link
-              href="/"
+              href="/publish"
               className="inline-block h-10 rounded-[20px] bg-[var(--app-text-color-red)] px-6 text-sm leading-10 text-white hover:bg-red-500"
             >
               Publish

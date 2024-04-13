@@ -2,11 +2,12 @@ import { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { Home, SearchGlass } from "../icons";
+import { Close, SearchGlass } from "../icons";
+import { navLinks } from "@/data/navlinks";
 
 const Sidebar: React.FC<{
-  closeSidebar: Dispatch<SetStateAction<boolean>>;
-}> = ({ closeSidebar }) => {
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+}> = ({ setSidebarOpen }) => {
   return (
     <div
       role="menu"
@@ -36,16 +37,34 @@ const Sidebar: React.FC<{
           </div>
         </Link>
 
-        <nav className="mx-5">
-          <Link href="/">
-            <div className="flex h-[60px] flex-shrink-0 items-center gap-[15px] text-base font-bold text-gray-800">
-              <Home classNames="h-[16px] w-[16px]" strokeWidth={2.6} />
-              <span>Home</span>
-            </div>
-          </Link>
-          <div className="h-[0.5px] w-full bg-gray-300" />
+        <nav className="mx-5 mb-5">
+          {navLinks.map((navLink) => {
+            const { key, Icon, link, label } = navLink;
+
+            return (
+              <>
+                <Link
+                  href={link}
+                  key={key}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <div className="flex h-[60px] flex-shrink-0 items-center gap-[15px] text-base font-bold text-gray-800">
+                    <Icon classNames="h-[16px] w-[16px]" strokeWidth={2.6} />
+                    <span>{label}</span>
+                  </div>
+                </Link>
+                <div className="h-[0.5px] w-full bg-gray-300" key={key} />
+              </>
+            );
+          })}
         </nav>
       </div>
+
+      <Close
+        classNames="fixed right-[25px] top-[25px] z-30 h-[32px] w-[32px] cursor-pointer text-white"
+        strokeWidth={2.6}
+        onClick={() => setSidebarOpen(false)}
+      />
     </div>
   );
 };

@@ -7,11 +7,11 @@ import { Bars3 } from "../icons";
 import Sidebar from "./sidebar";
 
 const MenuToggler: React.FC = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  return sidebarOpen && document.getElementById("sidebar-portal") ? (
+  return sidebarOpen ? (
     ReactDom.createPortal(
-      <Sidebar closeSidebar={setSidebarOpen} />,
+      <Sidebar setSidebarOpen={setSidebarOpen} />,
       document.getElementById("sidebar-portal")!,
     )
   ) : (
