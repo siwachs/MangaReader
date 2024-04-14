@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -13,9 +13,9 @@ const Sidebar: React.FC<{
       role="menu"
       tabIndex={0}
       aria-label="close-sidebar"
-      className="fixed inset-0 z-20 bg-black/50"
+      className="fixed inset-0 z-20 bg-black/50 lg:hidden"
     >
-      <div className="fixed inset-0 z-30 w-[80%] overflow-auto bg-white">
+      <div className="fixed inset-0 z-30 w-[80%] max-w-sm overflow-auto bg-white">
         <div className="ml-[25px] mt-[28px] h-[27px]">
           <Image
             priority
@@ -42,19 +42,15 @@ const Sidebar: React.FC<{
             const { key, Icon, link, label } = navLink;
 
             return (
-              <>
-                <Link
-                  href={link}
-                  key={key}
-                  onClick={() => setSidebarOpen(false)}
-                >
+              <React.Fragment key={key}>
+                <Link href={link} onClick={() => setSidebarOpen(false)}>
                   <div className="flex h-[60px] flex-shrink-0 items-center gap-[15px] text-base font-bold text-gray-800">
                     <Icon classNames="h-[16px] w-[16px]" strokeWidth={2.6} />
                     <span>{label}</span>
                   </div>
                 </Link>
-                <div className="h-[0.5px] w-full bg-gray-300" key={key} />
-              </>
+                <div className="h-[1px] w-full bg-gray-300" />
+              </React.Fragment>
             );
           })}
         </nav>

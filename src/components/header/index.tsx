@@ -103,7 +103,7 @@ const Header: React.FC = () => {
           <nav className="ml-5 flex flex-1 gap-5 font-bold text-[var(--app-navlink-color)]">
             {navLinks.map(
               (navLink) =>
-                !navLink.mobileOnly && (
+                !navLink.sidebarOnly && (
                   <Link
                     key={navLink.key}
                     href={navLink.link}
@@ -120,7 +120,7 @@ const Header: React.FC = () => {
               href="/search"
               className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-red-500 text-red-500"
             >
-              <SearchGlass classNames="h-6 w-6" />
+              <SearchGlass classNames="h-5 w-5" strokeWidth={2.3} />
             </Link>
 
             <Link
