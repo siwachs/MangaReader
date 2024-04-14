@@ -1,5 +1,6 @@
-import { homeNavLinks } from "@/data/navlinks";
 import Link from "next/link";
+
+import { homeNavLinks } from "@/data/navlinks";
 
 export default function Home() {
   return (
@@ -8,11 +9,13 @@ export default function Home() {
         {homeNavLinks.map((navLink) => (
           <div key={navLink.key} className="relative mx-2.5 flex-shrink-0">
             <Link href={navLink.link}>
-              <span className="text-sm font-normal text-[var(--app-text-color-dark-slate)]">
+              <span className="text-sm font-normal leading-[37px] text-[var(--app-text-color-dark-slate)]">
                 {navLink.label}
               </span>
 
-              <div className="absolute" />
+              {navLink.link === "/" && (
+                <div className="absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]" />
+              )}
             </Link>
           </div>
         ))}
