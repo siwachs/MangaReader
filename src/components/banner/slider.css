@@ -1,0 +1,53 @@
+.slide .img {
+  transition:
+    width 0.4s,
+    height 0.4s,
+    top 0.4s,
+    left 0.4s,
+    z-index 0.4s;
+}
+
+.slide .img img {
+  width: calc(100% - 14px);
+  height: calc(100% - 14px);
+}
+
+.slide .img1 {
+  width: 0;
+  top: 12%;
+  left: -50%;
+  z-index: 1;
+  border-radius: 10px;
+}
+
+.slide .img2 {
+  width: 35%;
+  top: 12%;
+  left: -5%;
+  z-index: 2;
+  border-radius: 10px;
+}
+
+.slide .img3 {
+  width: 50%;
+  top: 0;
+  left: 25%;
+  z-index: 3;
+  border-radius: 10px;
+}
+
+.slide .img4 {
+  width: 35%;
+  top: 12%;
+  right: -5%;
+  z-index: 2;
+  border-radius: 10px;
+}
+
+.slide .img5 {
+  width: 0;
+  top: 12%;
+  left: 110%;
+  z-index: 1;
+  border-radius: 10px;
+}
