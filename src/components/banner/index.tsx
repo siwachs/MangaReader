@@ -16,11 +16,11 @@ const images = [
 ];
 
 const Banner: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [currentSlide, setCurrentSlide] = useState<number>(3);
 
   return (
     <div className="banner w-full overflow-hidden">
-      <div className="banner-images relative mx-auto my-[30px] w-[1200px]">
+      <div className="banner-images w-fill relative mx-auto my-[30px] max-w-[1200px]">
         <div className="slide relative h-[432px] w-full overflow-hidden">
           {images.map((image, index) => (
             <Link href="/" key={image}>
@@ -35,6 +35,15 @@ const Banner: React.FC = () => {
               </div>
             </Link>
           ))}
+
+          <div className="absolute bottom-0 z-10 flex w-full justify-center">
+            {images.map((image, index) => (
+              <div
+                key={image}
+                className={`m-[5px] h-[9px] rounded ${currentSlide === index + 1 ? "w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-[var(--app-text-color-light-gray)]"}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

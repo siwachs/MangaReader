@@ -51,3 +51,11 @@
   z-index: 1;
   border-radius: 10px;
 }
+
+.slide .img6 {
+  width: 0;
+  top: 12%;
+  left: 110%;
+  z-index: 1;
+  border-radius: 10px;
+}
