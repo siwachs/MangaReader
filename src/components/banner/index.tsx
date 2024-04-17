@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "./slider.css";
+import { ChevronLeft, ChevronRight } from "../icons";
 
 const images = [
   "https://cn-e-pic.mangatoon.mobi/pictures_library/7d7ed86c8b538179dc2c34bbdb9db293.webp",
@@ -16,18 +17,38 @@ const images = [
 ];
 
 const Banner: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState<number>(3);
+  const [currentSlide, setCurrentSlide] = useState<number>(2);
+
+  const getImageClass = (index: number): string => {
+    if (index === currentSlide) return "centerActive";
+
+    const slideIndex =
+      currentSlide - 1 < 0 ? images.length - 1 : currentSlide - 1;
+    if (slideIndex === index) return "leftActive";
+
+    if ((currentSlide + 1) % images.length === index) return "rightActive";
+
+    return "imageHidden";
+  };
+
+  const activateSlide = (index: number): void => {
+    if (index === currentSlide) return;
+
+    setCurrentSlide(index);
+  };
 
   return (
     <div className="banner w-full overflow-hidden">
       <div className="banner-images w-fill relative mx-auto my-[30px] max-w-[1200px]">
         <div className="slide relative h-[432px] w-full overflow-hidden">
           {images.map((image, index) => (
-            <Link href="/" key={image}>
-              <div className={`img absolute overflow-hidden img${index + 1}`}>
+            <Link key={image} href="/" onClick={() => activateSlide(index)}>
+              <div
+                className={`img absolute overflow-hidden ${getImageClass(index)}`}
+              >
                 <Image
                   src={image}
-                  alt={`slide-${index + 1}`}
+                  alt={`slide-${index}`}
                   width={800}
                   height={432}
                   className="mx-[7px] rounded"
@@ -38,13 +59,29 @@ const Banner: React.FC = () => {
 
           <div className="absolute bottom-0 z-10 flex w-full justify-center">
             {images.map((image, index) => (
-              <div
+              <button
                 key={image}
-                className={`m-[5px] h-[9px] rounded ${currentSlide === index + 1 ? "w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-[var(--app-text-color-light-gray)]"}`}
+                className={`m-[5px] h-[9px] rounded ${currentSlide === index ? "w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-[var(--app-text-color-light-gray)]"}`}
+                onClick={() => activateSlide(index)}
               />
             ))}
           </div>
         </div>
+
+        <ChevronLeft
+          onClick={() =>
+            setCurrentSlide((prev) => {
+              if (prev - 1 < 0) return images.length - 1;
+
+              return prev - 1;
+            })
+          }
+          className="absolute -left-[150px] top-1/2 z-20 h-[100px] w-[100px] -translate-y-1/2 cursor-pointer text-[var(--app-text-color-silver-gray)] ring-black focus:outline-none focus-visible:ring-2"
+        />
+        <ChevronRight
+          onClick={() => setCurrentSlide((prev) => (prev + 1) % images.length)}
+          className="absolute -right-[150px] top-1/2 z-20 h-[100px] w-[100px] -translate-y-1/2 cursor-pointer text-[var(--app-text-color-silver-gray)] ring-black focus:outline-none focus-visible:ring-2"
+        />
       </div>
     </div>
   );

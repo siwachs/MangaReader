@@ -17,6 +17,66 @@ const ChevronDown: React.FC<{ classNames?: string }> = ({
   );
 };
 
+const ChevronLeft: React.FC<{
+  className?: string;
+  strokeWidth?: number;
+  onClick?: () => void;
+}> = ({ className = "h-5 w-5", strokeWidth = 1.5, onClick }) => {
+  return (
+    <svg
+      tabIndex={0}
+      onKeyDown={(e: React.KeyboardEvent<SVGSVGElement>) => {
+        if (e.key === "Enter" && onClick) {
+          onClick();
+        }
+      }}
+      onClick={onClick}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15.75 19.5 8.25 12l7.5-7.5"
+      />
+    </svg>
+  );
+};
+
+const ChevronRight: React.FC<{
+  className?: string;
+  strokeWidth?: number;
+  onClick?: () => void;
+}> = ({ className = "h-5 w-5", strokeWidth = 1.5, onClick }) => {
+  return (
+    <svg
+      tabIndex={0}
+      onKeyDown={(e: React.KeyboardEvent<SVGSVGElement>) => {
+        if (e.key === "Enter" && onClick) {
+          onClick();
+        }
+      }}
+      onClick={onClick}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m8.25 4.5 7.5 7.5-7.5 7.5"
+      />
+    </svg>
+  );
+};
+
 const SearchGlass: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   classNames = "h-5 w-5",
   strokeWidth = 1.5,
@@ -275,6 +335,8 @@ const SignIn: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
 
 export {
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Bars3,
   Close,
   SearchGlass,

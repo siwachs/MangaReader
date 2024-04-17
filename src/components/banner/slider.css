@@ -12,15 +12,7 @@
   height: calc(100% - 14px);
 }
 
-.slide .img1 {
-  width: 0;
-  top: 12%;
-  left: -50%;
-  z-index: 1;
-  border-radius: 10px;
-}
-
-.slide .img2 {
+.slide .leftActive {
   width: 35%;
   top: 12%;
   left: -5%;
@@ -28,7 +20,7 @@
   border-radius: 10px;
 }
 
-.slide .img3 {
+.slide .centerActive {
   width: 50%;
   top: 0;
   left: 25%;
@@ -36,7 +28,7 @@
   border-radius: 10px;
 }
 
-.slide .img4 {
+.slide .rightActive {
   width: 35%;
   top: 12%;
   right: -5%;
@@ -44,15 +36,7 @@
   border-radius: 10px;
 }
 
-.slide .img5 {
-  width: 0;
-  top: 12%;
-  left: 110%;
-  z-index: 1;
-  border-radius: 10px;
-}
-
-.slide .img6 {
+.slide .imageHidden {
   width: 0;
   top: 12%;
   left: 110%;
