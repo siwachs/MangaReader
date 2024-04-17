@@ -32,6 +32,10 @@ body {
   display: none;
 }
 
+.hide-text {
+  @apply overflow-hidden overflow-ellipsis whitespace-nowrap;
+}
+
 /* Language Picker */
 header #language-switcher:checked ~ #languages-list {
   display: block;

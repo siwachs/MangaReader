@@ -1,4 +1,5 @@
 import Banner from "@/components/banner";
+import ContentList from "@/components/contentList";
 import HomeNav from "@/components/navigations/homeNav";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
     <>
       <HomeNav />
       <Banner />
+      <ContentList title="👏🏻 Read with Editor" dataUrl="/api/content-list" />
     </>
   );
 }
