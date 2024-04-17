@@ -38,9 +38,9 @@ const Banner: React.FC = () => {
   };
 
   return (
-    <div className="banner w-full overflow-hidden">
-      <div className="banner-images w-fill relative mx-auto my-[30px] max-w-[1200px]">
-        <div className="slide relative h-[432px] w-full overflow-hidden">
+    <div className="banner mx-auto mt-5 w-[90%] overflow-hidden lg:m-0 lg:w-full">
+      <div className="banner-images relative mx-auto w-full max-w-[1200px] lg:my-[30px]">
+        <div className="slide relative h-[60vw] w-full overflow-hidden lg:h-[432px]">
           {images.map((image, index) => (
             <Link key={image} href="/" onClick={() => activateSlide(index)}>
               <div
@@ -57,7 +57,7 @@ const Banner: React.FC = () => {
             </Link>
           ))}
 
-          <div className="absolute bottom-0 z-10 flex w-full justify-center">
+          <div className="absolute bottom-0 z-30 flex w-full justify-center">
             {images.map((image, index) => (
               <button
                 key={image}

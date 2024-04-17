@@ -8,38 +8,21 @@
 }
 
 .slide .img img {
-  width: calc(100% - 14px);
-  height: calc(100% - 14px);
+  @apply m-0 h-full w-full rounded lg:h-[calc(100%-14px)] lg:w-[calc(100%-14px)];
 }
 
 .slide .leftActive {
-  width: 35%;
-  top: 12%;
-  left: -5%;
-  z-index: 2;
-  border-radius: 10px;
+  @apply -left-full top-0 z-20 w-full rounded lg:-left-[5%] lg:top-[12%] lg:w-[35%] lg:rounded-[10px];
 }
 
 .slide .centerActive {
-  width: 50%;
-  top: 0;
-  left: 25%;
-  z-index: 3;
-  border-radius: 10px;
+  @apply left-0 top-0 z-30 w-full rounded lg:left-1/4 lg:w-1/2 lg:rounded-[10px];
 }
 
 .slide .rightActive {
-  width: 35%;
-  top: 12%;
-  right: -5%;
-  z-index: 2;
-  border-radius: 10px;
+  @apply -right-full top-0 z-20 w-full rounded lg:-right-[5%] lg:top-[12%] lg:w-[35%] lg:rounded-[10px];
 }
 
 .slide .imageHidden {
-  width: 0;
-  top: 12%;
-  left: 110%;
-  z-index: 1;
-  border-radius: 10px;
+  @apply left-[110%] top-[12%] z-10 w-0;
 }
