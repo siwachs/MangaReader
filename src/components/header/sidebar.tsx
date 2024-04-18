@@ -13,9 +13,9 @@ const Sidebar: React.FC<{
       role="menu"
       tabIndex={0}
       aria-label="close-sidebar"
-      className="fixed inset-0 z-20 bg-black/50 lg:hidden"
+      className="fixed inset-0 z-[60] bg-black/50 lg:hidden"
     >
-      <div className="fixed inset-0 z-30 w-[80%] max-w-sm overflow-auto bg-white">
+      <div className="fixed inset-0 z-50 w-[80%] max-w-sm overflow-auto bg-white">
         <div className="ml-[25px] mt-[28px] h-[27px]">
           <Image
             priority
