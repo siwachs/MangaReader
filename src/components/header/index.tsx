@@ -20,7 +20,7 @@ const languages = [
 
 const Header: React.FC = () => {
   return (
-    <header className="fixed top-0 z-10 w-full bg-white">
+    <header className="fixed top-0 z-50 w-full bg-white">
       <div
         id="nav"
         className="relative h-auto w-full lg:mx-auto lg:mb-5 lg:mt-2.5 lg:h-[90px] lg:max-w-[1200px]"

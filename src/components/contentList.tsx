@@ -16,16 +16,16 @@ const ContentList: React.FC<{ title: string; dataUrl: string }> = ({
 }) => {
   return (
     <div className="mx-auto w-[90%] overflow-hidden lg:mb-[30px] lg:w-full">
-      <div className="my-[20px] w-full max-w-[1200px] overflow-hidden lg:mx-auto lg:my-[30px]">
-        <h2 className="hide-text w-[70%] text-[22px] font-bold text-[var(--app-text-color-dark-gray)]">
+      <div className="mx-auto my-5 w-full max-w-[1200px] overflow-hidden lg:my-[30px]">
+        <h2 className="hide-text w-[70%] text-[22px] font-bold text-[var(--app-text-color-dark-gray)] lg:text-[28px]">
           {title}
         </h2>
 
-        <div className="mt-5 flex flex-wrap overflow-hidden">
+        <div className="mt-5 flex flex-wrap overflow-hidden lg:mt-[30px] lg:gap-[30px]">
           {dummyContent.map((content, index) => (
             <div
               key={content}
-              className={`mb-5 ${(index + 1) % 3 === 0 ? "mr-0" : "mr-[2%]"} w-[32%] lg:mb-[30px] lg:w-[175px]`}
+              className={`mb-5 ${(index + 1) % 3 === 0 ? "mr-0" : "mr-[2%] lg:mr-0"} w-[32%] lg:mb-[30px] lg:w-[175px]`}
             >
               <Link href="">
                 <div className="h-[140px] w-full overflow-hidden rounded lg:h-[233px]">
@@ -38,7 +38,7 @@ const ContentList: React.FC<{ title: string; dataUrl: string }> = ({
                   />
                 </div>
 
-                <div className="hide-text mt-[5px] overflow-hidden text-xs/[13px] text-[var(--app-text-color-dark-gray)]">
+                <div className="hide-text mt-[5px] overflow-hidden text-xs/[13px] text-[var(--app-text-color-dark-gray)] lg:mt-2.5 lg:text-lg/[22px]">
                   <span>Your Turn to Chase After Me</span>
                 </div>
               </Link>
