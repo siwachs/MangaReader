@@ -32,15 +32,18 @@ const HottestComics: React.FC = () => {
                   />
                 </div>
 
-                <div
-                  className="float-left ml-[3%] w-1/2 overflow-hidden lg:m-[10px_30px_20px_17px] lg:w-[328px]"
-                  style={{ fontFamily: "Noto Sans SC" }}
-                >
-                  <div className="hide-text h-[29px] w-[70%] text-base/[29px] font-[500] text-[var(--app-text-color-black)] lg:text-xl/[29px]">
+                <div className="float-left ml-[3%] w-1/2 overflow-hidden lg:m-[10px_30px_20px_17px] lg:w-[328px]">
+                  <div
+                    className="hide-text h-[29px] w-[70%] text-base/[29px] font-[500] text-[var(--app-text-color-black)] lg:text-xl/[29px]"
+                    style={{ fontFamily: "Noto Sans SC" }}
+                  >
                     <span>Your Turn to Chase After Me</span>
                   </div>
 
-                  <div className="hide-text h-5 w-[80%] text-sm/[20px] font-[400] text-[var(--app-text-color-slate-gray)]">
+                  <div
+                    className="hide-text h-5 w-[80%] text-sm/[20px] font-[400] text-[var(--app-text-color-slate-gray)]"
+                    style={{ fontFamily: "Noto Sans SC" }}
+                  >
                     <span>
                       School life / Romance / TimeTravel / Comedy / Urban /
                       Romance / Game
@@ -48,18 +51,21 @@ const HottestComics: React.FC = () => {
                   </div>
 
                   <div className="mt-2.5 flex h-5 w-full items-center">
-                    <View className="mr-0.5 h-4 w-4 lg:mr-1 lg:h-[18px] lg:w-[18px]" />
-                    <span className="mr-[15px] inline-block text-xs text-[var(--app-text-color-slate-gray)] lg:text-lg">
+                    <View className="mr-0.5 h-4 w-4" />
+                    <span className="mr-[15px] inline-block text-xs text-[var(--app-text-color-slate-gray)] lg:text-base">
                       34M
                     </span>
 
-                    <Like className="mr-0.5 h-4 w-4 lg:mr-1 lg:h-[18px] lg:w-[18px]" />
-                    <span className="text-xs text-[var(--app-text-color-slate-gray)] lg:text-lg">
+                    <Like className="mr-0.5 h-4 w-4" />
+                    <span className="text-xs text-[var(--app-text-color-slate-gray)] lg:text-base">
                       3.5M
                     </span>
                   </div>
 
-                  <div className="mt-5 line-clamp-4 w-[70%] text-xs/[18px] font-[400] text-[var(--app-text-color-slate-gray)] lg:w-full lg:text-sm">
+                  <div
+                    className="mt-5 line-clamp-4 w-[70%] text-xs/[18px] font-[400] text-[var(--app-text-color-slate-gray)] lg:w-full lg:text-sm"
+                    style={{ fontFamily: "Noto Sans SC" }}
+                  >
                     <span>
                       {`Qu Yan is a well-known charming and “willful” beauty among
                       the transmigration agents. She never failed a single

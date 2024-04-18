@@ -1,7 +1,8 @@
 import HomeNav from "@/components/navigations/homeNav";
 import Banner from "@/components/banner";
 import ContentList from "@/components/lists/contentList";
-import HottestComics from "@/components/lists/HottestComics";
+import HottestComics from "@/components/lists/hottestComics";
+import GernresList from "@/components/lists/genresList";
 
 export default function Home() {
   return (
@@ -16,7 +17,11 @@ export default function Home() {
         dataUrl="/api/content-list"
       />
       <HottestComics />
-      {/* Genres */}
+      <GernresList
+        title="Genres"
+        dataUrl="/api/content-list"
+        seeAll="/api/list"
+      />
       <ContentList
         title="New Comics"
         dataUrl="/api/content-list"
