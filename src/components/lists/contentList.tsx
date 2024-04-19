@@ -36,7 +36,9 @@ const ContentList: React.FC<{
               key={content}
               className="mb-5 w-[32%] lg:mb-[30px] lg:w-[175px]"
             >
-              <Link href="">
+              <Link
+                href={`${"Your Turn to Chase After Me".toLocaleLowerCase().replaceAll(" ", "-")}?content_id=1753528`}
+              >
                 <div className="h-[140px] w-full overflow-hidden rounded lg:h-[233px]">
                   <Image
                     src={content}

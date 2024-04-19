@@ -20,7 +20,10 @@ const HottestComics: React.FC = () => {
 
         <div className="mx-auto my-2.5 w-full overflow-hidden lg:flex">
           {dummyContent.map((image, index) => (
-            <Link key={image} href={image}>
+            <Link
+              key={image}
+              href={`${"Your Turn to Chase After Me".toLocaleLowerCase().replaceAll(" ", "-")}?content_id=1753528`}
+            >
               <div className="mb-[2%] mr-[15px] box-border h-[190px] w-[150%] overflow-hidden bg-[url('/assets/hot-content-bg.png')] bg-[length:100%_100%] p-[2%] lg:mb-0 lg:h-[275px] lg:w-[590px] lg:p-[15px]">
                 <div className="float-left h-full w-1/4 lg:h-[245px] lg:w-[185px]">
                   <Image

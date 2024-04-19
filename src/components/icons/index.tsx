@@ -1,12 +1,12 @@
-const ChevronDown: React.FC<{ classNames?: string }> = ({
-  classNames = "h-5 w-5",
+const ChevronDown: React.FC<{ className?: string }> = ({
+  className = "h-5 w-5",
 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         fillRule="evenodd"

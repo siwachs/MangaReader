@@ -57,16 +57,16 @@ const Header: React.FC = () => {
             <label
               aria-label="language-switcher"
               htmlFor="language-switcher"
-              className="flex cursor-pointer select-none items-center gap-1 text-sm text-[var(--app-text-color-dark-gray)] lg:text-base"
+              className="flex cursor-pointer select-none items-center gap-1 text-xs text-[var(--app-text-color-dark-gray)] lg:text-sm"
             >
               <span>English</span>
-              <ChevronDown />
+              <ChevronDown className="h-4 w-4 lg:h-5 lg:w-5" />
             </label>
             <input type="checkbox" hidden id="language-switcher" />
 
             <div
               id="languages-list"
-              className="absolute -right-5 top-[30px] z-10 hidden w-[120px] rounded-xl border border-[var(--app-border-color-gray)] bg-white py-2.5 text-sm lg:left-1/2 lg:right-0 lg:w-[150px] lg:-translate-x-1/2 lg:rounded-[10px] lg:text-base"
+              className="absolute -right-5 top-[30px] z-10 hidden w-[120px] rounded-xl border border-[var(--app-border-color-gray)] bg-white py-2.5 text-xs lg:left-1/2 lg:right-0 lg:w-[150px] lg:-translate-x-1/2 lg:rounded-[10px] lg:text-sm"
             >
               {languages.map((language) => (
                 <Link

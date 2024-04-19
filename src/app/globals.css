@@ -15,6 +15,7 @@
   --app-text-color-silver-gray: #cccccc;
   --app-text-medium-dark-gray: #979797;
   --app-text-color-dark-gray: #333;
+  --app-text-color-muted: #948084;
 
   --app-text-color-dark-slate: #404040;
 
@@ -45,4 +46,9 @@ header #language-switcher:checked ~ #languages-list {
 
 #page-content {
   @apply relative mt-[60px] lg:mt-[120px];
+}
+
+/* Navbar */
+.navbar-shadow {
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
 }

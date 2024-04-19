@@ -42,7 +42,11 @@ const Banner: React.FC = () => {
       <div className="banner-images relative mx-auto w-full max-w-[1200px] lg:my-[30px]">
         <div className="slide relative h-[60vw] w-full overflow-hidden lg:h-[432px]">
           {images.map((image, index) => (
-            <Link key={image} href="/" onClick={() => activateSlide(index)}>
+            <Link
+              key={image}
+              href={`${"Your Turn to Chase After Me".toLocaleLowerCase().replaceAll(" ", "-")}?content_id=1753528`}
+              onClick={() => activateSlide(index)}
+            >
               <div
                 className={`img absolute overflow-hidden ${getImageClass(index)}`}
               >

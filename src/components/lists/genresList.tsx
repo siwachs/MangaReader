@@ -11,6 +11,54 @@ const dummyContent = [
   "/dummyContent/6.webp",
 ];
 
+const mangaGenres = [
+  "Action",
+  "Adventure",
+  "Comedy",
+  "Drama",
+  "Fantasy",
+  "Horror",
+  "Mystery",
+  "Romance",
+  "Sci-Fi",
+  "Slice of Life",
+  "Sports",
+  "Supernatural",
+  "Psychological",
+  "Thriller",
+  "Historical",
+  "Martial Arts",
+  "School Life",
+  "Shounen",
+  "Shoujo",
+  "Seinen",
+  "Josei",
+  "Harem",
+  "Ecchi",
+  "Isekai",
+  "Tragedy",
+  "Yaoi",
+  "Yuri",
+  "Gender Bender",
+  "Music",
+  "Game",
+  "Space",
+  "Police",
+  "Samurai",
+  "Demons",
+  "Vampire",
+  "Gore",
+  "Super Power",
+  "Military",
+  "Magic",
+  "Parody",
+  "Kids",
+  "Medical",
+  "Reverse Harem",
+  "Dementia",
+  "Hentai",
+];
+
 const GernresList: React.FC<{
   title: string;
   dataUrl: string;
@@ -32,7 +80,21 @@ const GernresList: React.FC<{
             </Link>
           )}
 
-          {/* GenresList */}
+          <div className="hidden-scrollbar ml-[5px] mt-2.5 overflow-auto whitespace-nowrap">
+            {mangaGenres.map((genre, index) => (
+              <div
+                key={genre}
+                className="mb-[5px] mr-2.5 inline-block px-[5px] lg:mr-5 lg:px-2.5"
+              >
+                <Link
+                  className={`${index === 0 ? "border-b-2 border-[var(--app-text-color-red)] font-bold text-[var(--app-text-color-red)]" : "text-[var(--app-text-color-muted)]"} block h-5 text-sm lg:h-[30px] lg:text-lg/[30px]`}
+                  href="/"
+                >
+                  {genre}
+                </Link>
+              </div>
+            ))}
+          </div>
 
           <div className="mt-5 flex flex-wrap gap-[2%] overflow-hidden lg:mt-[30px] lg:gap-[30px]">
             {dummyContent.map((content, index) => (
@@ -40,7 +102,9 @@ const GernresList: React.FC<{
                 key={content}
                 className="mb-5 w-[32%] lg:mb-[30px] lg:w-[175px]"
               >
-                <Link href="">
+                <Link
+                  href={`${"Your Turn to Chase After Me".toLocaleLowerCase().replaceAll(" ", "-")}?content_id=1753528`}
+                >
                   <div className="h-[140px] w-full overflow-hidden rounded lg:h-[233px]">
                     <Image
                       src={content}
