@@ -80,12 +80,12 @@ const Banner: React.FC = () => {
               return prev - 1;
             })
           }
-          className="absolute -left-[150px] top-1/2 z-20 h-[100px] w-[100px] -translate-y-1/2 cursor-pointer text-[var(--app-text-color-silver-gray)] ring-black focus:outline-none focus-visible:ring-2"
+          className="navigationButton -left-[150px]"
         />
 
         <ChevronRight
           onClick={() => setCurrentSlide((prev) => (prev + 1) % images.length)}
-          className="absolute -right-[150px] top-1/2 z-20 h-[100px] w-[100px] -translate-y-1/2 cursor-pointer text-[var(--app-text-color-silver-gray)] ring-black focus:outline-none focus-visible:ring-2"
+          className="navigationButton -right-[150px]"
         />
       </div>
     </div>

@@ -80,6 +80,7 @@ const GernresList: React.FC<{
             </Link>
           )}
 
+          {/* Genres List */}
           <div className="hidden-scrollbar ml-[5px] mt-2.5 overflow-auto whitespace-nowrap">
             {mangaGenres.map((genre, index) => (
               <div

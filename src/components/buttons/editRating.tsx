@@ -8,7 +8,10 @@ const EditRating = () => {
       onClick={() => {}}
       className="ml-2.5 cursor-pointer text-[var(--app-text-color-neutral-gray)]"
     >
-      <Pencil className="h-[14px] w-[14px]" strokeWidth={2} />
+      <Pencil
+        className="h-[14px] w-[14px] lg:h-[17px] lg:w-[17px]"
+        strokeWidth={2}
+      />
     </span>
   );
 };

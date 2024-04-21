@@ -32,6 +32,10 @@ body {
   @apply bg-white text-gray-900;
 }
 
+.font-noto-sans-sc {
+  font-family: Noto Sans SC;
+}
+
 .hidden-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -43,11 +47,6 @@ body {
 
 .hide-text {
   @apply overflow-hidden overflow-ellipsis whitespace-nowrap;
-}
-
-/* Language Picker */
-header #language-switcher:checked ~ #languages-list {
-  display: block;
 }
 
 #page-content {

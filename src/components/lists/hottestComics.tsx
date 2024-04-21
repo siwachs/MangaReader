@@ -31,22 +31,16 @@ const HottestComics: React.FC = () => {
                     alt={`content${index + 1}`}
                     height={250}
                     width={200}
-                    className="h-full w-full rounded"
+                    className="h-full w-full rounded object-cover"
                   />
                 </div>
 
                 <div className="float-left ml-[3%] w-1/2 overflow-hidden lg:m-[10px_30px_20px_17px] lg:w-[328px]">
-                  <div
-                    className="hide-text h-[29px] w-[70%] text-base/[29px] font-[500] text-[var(--app-text-color-black)] lg:text-xl/[29px]"
-                    style={{ fontFamily: "Noto Sans SC" }}
-                  >
+                  <div className="hide-text font-noto-sans-sc h-[29px] w-[70%] text-base/[29px] font-[500] text-[var(--app-text-color-black)] lg:text-xl/[29px]">
                     <span>Your Turn to Chase After Me</span>
                   </div>
 
-                  <div
-                    className="hide-text h-5 w-[80%] text-sm/[20px] font-[400] text-[var(--app-text-color-slate-gray)]"
-                    style={{ fontFamily: "Noto Sans SC" }}
-                  >
+                  <div className="hide-text font-noto-sans-sc h-5 w-[80%] text-sm/[20px] font-[400] text-[var(--app-text-color-slate-gray)]">
                     <span>
                       School life / Romance / TimeTravel / Comedy / Urban /
                       Romance / Game
@@ -65,10 +59,7 @@ const HottestComics: React.FC = () => {
                     </span>
                   </div>
 
-                  <div
-                    className="mt-5 line-clamp-4 w-[70%] text-xs/[18px] font-[400] text-[var(--app-text-color-slate-gray)] lg:w-full lg:text-sm"
-                    style={{ fontFamily: "Noto Sans SC" }}
-                  >
+                  <div className="font-noto-sans-sc mt-5 line-clamp-4 w-[70%] text-xs/[18px] font-[400] text-[var(--app-text-color-slate-gray)] lg:w-full lg:text-sm">
                     <span>
                       {`Qu Yan is a well-known charming and “willful” beauty among
                       the transmigration agents. She never failed a single

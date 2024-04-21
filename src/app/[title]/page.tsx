@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Like, Pencil, StarSolid, View } from "@/components/icons";
+import { Like, StarSolid, View } from "@/components/icons";
 import EditRating from "@/components/buttons/editRating";
 import DetailDescription from "./_components/detailDescription";
 
@@ -60,24 +60,18 @@ export default function TitlePage() {
             </picture>
           </div>
 
-          <div className="detail-info inline-block w-full overflow-hidden lg:h-[345px] lg:w-[880px]">
+          <div className="detail-info w-full overflow-auto lg:inline-block lg:h-[345px] lg:w-[880px]">
             <div className="detail-title flex overflow-hidden py-2.5 lg:mb-[4px] lg:h-[29px] lg:py-0">
-              <span
-                style={{ fontFamily: "Noto Sans SC" }}
-                className="hide-text mr-[80px] w-full text-lg/[24px] font-[500] lg:mr-[15px] lg:h-[29px] lg:w-auto lg:text-xl/[29px]"
-              >
+              <span className="hide-text font-noto-sans-sc mr-[80px] w-full text-lg/[24px] font-[500] lg:mr-[15px] lg:h-[29px] lg:w-auto lg:text-xl/[29px]">
                 {data.title}
               </span>
 
-              <div className="absolute right-[5%] box-content h-[18px] whitespace-nowrap rounded-xl bg-[var(--app-text-color-red-orange)] px-[9px] pb-[3px] pt-[2px] text-center text-xs/[18px] text-white lg:static">
+              <div className="absolute right-[5%] box-content h-[18px] whitespace-nowrap rounded-xl bg-[var(--app-text-color-red-orange)] px-[9px] pb-[3px] pt-[2px] text-center text-xs/[18px] text-white lg:static lg:h-5 lg:text-sm">
                 {data.status}
               </div>
             </div>
 
-            <div
-              style={{ fontFamily: "Noto Sans SC" }}
-              className="detail-genres mb-[5px] h-5 overflow-auto whitespace-nowrap text-xs/[20px] font-normal text-[var(--app-text-color-darker-gray)] lg:mb-[15px] lg:w-[700px] lg:text-sm lg:text-[var(--app-text-color-slate-gray)]"
-            >
+            <div className="detail-genres font-noto-sans-sc mb-[5px] h-5 overflow-auto whitespace-nowrap text-xs/[20px] font-normal text-[var(--app-text-color-darker-gray)] lg:mb-[15px] lg:max-w-[700px] lg:text-sm lg:text-[var(--app-text-color-slate-gray)]">
               {data.genres.map((genre, index) => (
                 <React.Fragment key={genre}>
                   <Link href={"/"} key={genre}>
@@ -88,8 +82,8 @@ export default function TitlePage() {
               ))}
             </div>
 
-            <div className="detail-stats flex items-center text-[var(--app-text-color-darker-gray)] sm:flex-col sm:items-start lg:w-[700px]">
-              <div className="flex items-center text-[13px] lg:mb-[15px] lg:text-base">
+            <div className="detail-stats flex items-center text-[var(--app-text-color-darker-gray)] sm:flex-col sm:items-start">
+              <div className="flex items-center text-[13px] lg:text-base">
                 <View className="-mt-0.5 mr-0.5 h-[13px] w-[13px] lg:mr-1 lg:h-[18px] lg:w-[18px]" />
                 <span>{data.noOfViews}</span>
 
@@ -97,7 +91,7 @@ export default function TitlePage() {
                 <span>{data.numberOfLikes}</span>
               </div>
 
-              <div className="-mt-0.5 ml-2.5 flex items-center sm:ml-0 sm:mt-[5px] lg:mt-2.5">
+              <div className="-mt-0.5 ml-2.5 flex items-center sm:ml-0 sm:mt-[5px]">
                 {[...new Array(5)].map((star, index) => {
                   const uniqueKey = `star${index}`;
                   const inverse = Math.floor(data.rating) <= index;
@@ -105,22 +99,19 @@ export default function TitlePage() {
                     <StarSolid
                       key={uniqueKey}
                       inverse={inverse}
-                      className="h-[17px] w-[17px] lg:mr-[3px]"
+                      className="h-[17px] w-[17px] lg:mr-[3px] lg:h-5 lg:w-5"
                     />
                   );
                 })}
 
-                <span className="-mb-[1px] ml-[4px] mt-[1px] text-sm">
+                <span className="-mb-[1px] ml-[4px] mt-[1px] text-sm lg:text-lg">
                   {data.rating}
                 </span>
                 <EditRating />
               </div>
             </div>
 
-            <div
-              style={{ fontFamily: "Noto Sans SC" }}
-              className="detail-author mt-[5px] text-xs/[20px] font-normal text-[var(--app-text-color-standard-gray)] lg:mt-5 lg:w-[700px] lg:text-sm"
-            >
+            <div className="detail-author font-noto-sans-sc mt-[5px] text-xs/[20px] font-normal text-[var(--app-text-color-standard-gray)] lg:mt-2.5 lg:text-base">
               <span>{`Author Name: ${data.authonName}`}</span>
             </div>
 

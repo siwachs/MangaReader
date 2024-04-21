@@ -49,7 +49,7 @@ const ContentList: React.FC<{
                   />
                 </div>
 
-                <div className="hide-text font-noto-sans-sc mt-[5px] overflow-hidden text-xs/[13px] text-[var(--app-text-color-dark-gray)] lg:mt-2.5 lg:text-lg/[22px]">
+                <div className="hide-text mt-[5px] overflow-hidden text-xs/[13px] text-[var(--app-text-color-dark-gray)] lg:mt-2.5 lg:text-lg/[22px]">
                   <span>Your Turn to Chase After Me</span>
                 </div>
               </Link>

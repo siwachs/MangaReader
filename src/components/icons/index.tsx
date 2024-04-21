@@ -99,9 +99,7 @@ const SearchGlass: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
-const Bars3: React.FC<{ className?: string }> = ({
-  className = "h-5 w-5",
-}) => {
+const Bars3: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

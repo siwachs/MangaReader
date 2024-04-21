@@ -26,3 +26,7 @@
 .slide .imageHidden {
   @apply left-[110%] top-[12%] z-10 w-0;
 }
+
+.banner .banner-images .navigationButton {
+  @apply absolute top-1/2 z-20 h-[100px] w-[100px] -translate-y-1/2 cursor-pointer text-[var(--app-text-color-silver-gray)] ring-black focus:outline-none focus-visible:ring-2;
+}
