@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactDom from "react-dom";
 
 import { Bars3 } from "../icons";
@@ -8,6 +8,9 @@ import Sidebar from "./sidebar";
 
 const MenuToggler: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  useEffect(() => {
+    document.body.style.overflow = sidebarOpen ? "hidden" : "auto";
+  }, [sidebarOpen]);
 
   return sidebarOpen ? (
     ReactDom.createPortal(
@@ -15,10 +18,12 @@ const MenuToggler: React.FC = () => {
       document.getElementById("sidebar-portal")!,
     )
   ) : (
-    <Bars3
+    <span
       onClick={() => setSidebarOpen((prev) => !prev)}
-      classNames="h-[25px] w-[25px] text-[var(--app-text-color-medium-gray)] absolute left-5 top-0.5 cursor-pointer lg:hidden"
-    />
+      className="absolute left-5 top-0.5 cursor-pointer text-[var(--app-text-color-medium-gray)] lg:hidden"
+    >
+      <Bars3 className="h-[25px] w-[25px]" />
+    </span>
   );
 };
 

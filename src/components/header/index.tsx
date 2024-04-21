@@ -3,11 +3,14 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 
 import { navLinks } from "@/data/navlinks";
-import { ChevronDown, SearchGlass } from "../icons";
+import { Bars3, ChevronDown, SearchGlass } from "../icons";
 
 // Dynamic Imports
 const MenuToggler = dynamic(() => import("./menuToggler"), {
   ssr: false,
+  loading: () => (
+    <Bars3 className="absolute left-5 top-0.5 h-[25px] w-[25px] animate-pulse cursor-not-allowed text-[var(--app-text-color-medium-gray)] lg:hidden" />
+  ),
 });
 
 const languages = [
@@ -100,7 +103,7 @@ const Header: React.FC = () => {
             />
           </Link>
 
-          <nav className="ml-5 flex flex-1 gap-5 font-bold text-[var(--app-navlink-color)]">
+          <nav className="ml-5 flex flex-1 gap-5 overflow-auto whitespace-nowrap font-bold text-[var(--app-navlink-color)]">
             {navLinks.map(
               (navLink) =>
                 !navLink.sidebarOnly && (
