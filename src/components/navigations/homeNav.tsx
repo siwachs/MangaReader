@@ -9,7 +9,7 @@ const HomeNav: React.FC = () => {
   const pathName = usePathname();
 
   return (
-    <nav className="flex h-[40px] w-full items-center justify-between overflow-auto border-y border-[var(--app-border-color-gray)] px-2.5 lg:hidden">
+    <nav className="flex h-[40px] w-full items-center justify-between overflow-auto border-y border-[var(--app-border-color-gray)] px-2.5 md:hidden">
       {homeNavLinks.map((navLink) => (
         <div key={navLink.key} className="relative mx-2.5 flex-shrink-0">
           <Link href={navLink.link}>

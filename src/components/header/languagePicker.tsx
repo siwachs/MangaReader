@@ -14,21 +14,21 @@ const languages = [
 ];
 
 const LanguagePicker: React.FC = () => {
-  const [languagePickerOpen, setLanguagePickerOpen] = useState(false);
+  const [languagePickerOpen, setLanguagePickerOpen] = useState<boolean>(false);
 
   return (
-    <div className="absolute right-5 top-0.5 lg:relative lg:right-0 lg:top-0">
-      <div
-        className="flex cursor-pointer select-none items-center gap-1 text-xs text-[var(--app-text-color-dark-gray)] lg:text-sm"
+    <div className="absolute right-5 top-0.5 md:relative md:right-0 md:top-0">
+      <button
+        className="flex cursor-pointer select-none items-center gap-1 text-xs text-[var(--app-text-color-dark-gray)] md:text-sm"
         onClick={() => setLanguagePickerOpen((prev) => !prev)}
       >
         <span>English</span>
-        <ChevronDown className="h-4 w-4 lg:h-5 lg:w-5" />
-      </div>
+        <ChevronDown className="h-4 w-4 md:h-5 md:w-5" />
+      </button>
 
       <div
         id="languages-list"
-        className={`absolute -right-5 top-[30px] z-10 ${languagePickerOpen ? "block" : "hidden"} w-[120px] rounded-xl border border-[var(--app-border-color-gray)] bg-white py-2.5 text-xs lg:left-1/2 lg:right-0 lg:w-[150px] lg:-translate-x-1/2 lg:rounded-[10px] lg:text-sm`}
+        className={`absolute -right-5 top-[30px] z-10 ${languagePickerOpen ? "block" : "hidden"} w-[120px] rounded-xl border border-[var(--app-border-color-gray)] bg-white py-2.5 text-xs md:left-1/2 md:right-0 md:w-[150px] md:-translate-x-1/2 md:rounded-[10px] md:text-sm`}
       >
         {languages.map((language) => (
           <Link

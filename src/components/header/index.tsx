@@ -10,7 +10,7 @@ import { Bars3, SearchGlass } from "../icons";
 const MenuToggler = dynamic(() => import("./menuToggler"), {
   ssr: false,
   loading: () => (
-    <Bars3 className="absolute left-5 top-0.5 h-[25px] w-[25px] animate-pulse cursor-not-allowed text-[var(--app-text-color-medium-gray)] lg:hidden" />
+    <Bars3 className="absolute left-5 top-0.5 h-[25px] w-[25px] animate-pulse cursor-not-allowed text-[var(--app-text-color-medium-gray)] md:hidden" />
   ),
 });
 
@@ -19,24 +19,24 @@ const Header: React.FC = () => {
     <header className="fixed top-0 z-50 w-full bg-white">
       <div
         id="nav"
-        className="relative mx-auto w-full max-w-[1200px] lg:mb-5 lg:mt-2.5 lg:h-[90px]"
+        className="relative mx-auto w-full max-w-[1200px] md:mb-5 md:mt-2.5 md:h-[90px]"
       >
         <div
           id="top-nav"
-          className="mt-[18px] h-10 lg:mt-0 lg:flex lg:items-center lg:justify-end lg:gap-5 lg:text-sm"
+          className="mt-[18px] h-10 md:mt-0 md:flex md:items-center md:justify-end md:gap-5 md:text-sm"
         >
           <MenuToggler />
 
-          <Link className="hidden lg:inline" href="/signin">
+          <Link className="hidden md:inline" href="/signin">
             Sign In
           </Link>
-          <Link className="hidden lg:inline" href="/history">
+          <Link className="hidden md:inline" href="/history">
             History
           </Link>
 
           <Link
             href="/"
-            className="absolute left-1/2 top-0.5 -translate-x-1/2 lg:hidden"
+            className="absolute left-1/2 top-0.5 -translate-x-1/2 md:hidden"
           >
             <Image
               priority
@@ -53,7 +53,7 @@ const Header: React.FC = () => {
 
         <div
           id="bottom-nav"
-          className="mt-2.5 hidden h-[45px] items-center justify-between lg:flex"
+          className="mt-2.5 hidden h-[45px] items-center justify-between md:flex"
         >
           <Link href="/">
             <Image
@@ -62,11 +62,11 @@ const Header: React.FC = () => {
               alt="mangatoon"
               width={256}
               height={256}
-              className="h-10 w-[194px]"
+              className="h-10 md:w-[160px] lg:w-[194px]"
             />
           </Link>
 
-          <nav className="ml-5 flex flex-1 flex-shrink-0 gap-5 overflow-auto whitespace-nowrap text-base font-bold text-[var(--app-navlink-color)]">
+          <nav className="hidden-scrollbar ml-5 flex flex-1 flex-shrink-0 gap-5 overflow-auto whitespace-nowrap font-bold text-[var(--app-navlink-color)] md:text-sm lg:text-base">
             {navLinks.map(
               (navLink) =>
                 !navLink.sidebarOnly && (

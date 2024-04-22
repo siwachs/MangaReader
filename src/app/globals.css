@@ -33,7 +33,14 @@ body {
 }
 
 .font-noto-sans-sc {
-  font-family: Noto Sans SC;
+  font-family:
+    Noto Sans SC,
+    Nunito-SemiBold,
+    "Microsoft JhengHei",
+    "Microsoft Yahei",
+    arial,
+    helvetica,
+    sans-serif;
 }
 
 .hidden-scrollbar {
@@ -50,7 +57,7 @@ body {
 }
 
 #page-content {
-  @apply relative mt-[60px] lg:mt-[120px];
+  @apply relative mt-[60px] md:mt-[120px];
 }
 
 /* Navbar */

@@ -18,12 +18,12 @@ const MenuToggler: React.FC = () => {
       document.getElementById("sidebar-portal")!,
     )
   ) : (
-    <span
+    <button
       onClick={() => setSidebarOpen((prev) => !prev)}
-      className="absolute left-5 top-0.5 cursor-pointer text-[var(--app-text-color-medium-gray)] lg:hidden"
+      className="absolute left-5 top-0.5 cursor-pointer text-[var(--app-text-color-medium-gray)] md:hidden"
     >
       <Bars3 className="h-[25px] w-[25px]" />
-    </span>
+    </button>
   );
 };
 

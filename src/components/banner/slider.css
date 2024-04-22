@@ -8,19 +8,19 @@
 }
 
 .slide .img img {
-  @apply m-0 h-full w-full rounded lg:h-[calc(100%-14px)] lg:w-[calc(100%-14px)];
+  @apply m-0 h-full w-full rounded md:h-[calc(100%-14px)] md:w-[calc(100%-14px)];
 }
 
 .slide .leftActive {
-  @apply -left-full top-0 z-20 w-full rounded lg:-left-[5%] lg:top-[12%] lg:w-[35%] lg:rounded-[10px];
+  @apply -left-full top-0 z-20 w-full rounded md:-left-[5%] md:top-[12%] md:w-[35%] lg:rounded-[10px];
 }
 
 .slide .centerActive {
-  @apply left-0 top-0 z-30 w-full rounded lg:left-1/4 lg:w-1/2 lg:rounded-[10px];
+  @apply left-0 top-0 z-30 w-full rounded md:left-1/4 md:w-1/2 lg:rounded-[10px];
 }
 
 .slide .rightActive {
-  @apply -right-full top-0 z-20 w-full rounded lg:-right-[5%] lg:top-[12%] lg:w-[35%] lg:rounded-[10px];
+  @apply -right-full top-0 z-20 w-full rounded md:-right-[5%] md:top-[12%] md:w-[35%] lg:rounded-[10px];
 }
 
 .slide .imageHidden {
@@ -28,5 +28,5 @@
 }
 
 .banner .banner-images .navigationButton {
-  @apply absolute top-1/2 z-20 h-[100px] w-[100px] -translate-y-1/2 cursor-pointer text-[var(--app-text-color-silver-gray)] ring-black focus:outline-none focus-visible:ring-2;
+  @apply absolute top-1/2 z-20 hidden h-[100px] w-[100px] -translate-y-1/2 cursor-pointer text-[var(--app-text-color-silver-gray)] ring-black focus:outline-none focus-visible:ring-2 lg:block;
 }
