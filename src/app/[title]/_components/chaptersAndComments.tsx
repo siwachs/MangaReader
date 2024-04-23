@@ -9,7 +9,7 @@ const ChaptersAndComments = () => {
   const [menuType, setMenuType] = useState<"chapters" | "comments">("chapters");
 
   const menuTypeClasses =
-    "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=false]:text-[var(--app-text-color-medium-gray)] data-[active=true]:text-[var(--app-text-color-red)] md:h-20 md:text-sm/[80px]";
+    "inline-block w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=false]:text-[var(--app-text-color-medium-gray)] data-[active=true]:text-[var(--app-text-color-red)] md:text-xl/[80px]";
   const chaptersOrderClasses =
     "font-noto-sans-sc select-none font-[400] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-crimson)]";
 
@@ -47,7 +47,7 @@ const ChaptersAndComments = () => {
         </div>
       </div>
 
-      <div className="float-right flex gap-[5px] text-xs/[40px] text-[var(--app-text-color-slate-gray)] md:text-sm/[89px]">
+      <div className="float-right flex text-xs/[40px] text-[var(--app-text-color-slate-gray)] md:leading-[89px]">
         <div
           role="button"
           tabIndex={0}
@@ -63,7 +63,7 @@ const ChaptersAndComments = () => {
           <span>Positive</span>
         </div>
 
-        <span>/</span>
+        <span> &nbsp;/&nbsp; </span>
 
         <div
           role="button"
