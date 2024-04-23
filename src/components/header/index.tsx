@@ -2,16 +2,20 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
-import LanguagePicker from "./languagePicker";
+import SidebarLoading from "../loading/sidebarLoading";
+import LanguagePickerLoading from "../loading/languagePickerLoading";
+
 import { navLinks } from "@/data/navlinks";
-import { Bars3, SearchGlass } from "../icons";
+import { SearchGlass } from "../icons";
 
 // Dynamic Imports
 const MenuToggler = dynamic(() => import("./menuToggler"), {
   ssr: false,
-  loading: () => (
-    <Bars3 className="absolute left-5 top-0.5 h-[25px] w-[25px] animate-pulse cursor-not-allowed text-[var(--app-text-color-medium-gray)] md:hidden" />
-  ),
+  loading: () => <SidebarLoading />,
+});
+const LanguagePicker = dynamic(() => import("./languagePicker"), {
+  ssr: false,
+  loading: () => <LanguagePickerLoading />,
 });
 
 const Header: React.FC = () => {
@@ -66,7 +70,7 @@ const Header: React.FC = () => {
             />
           </Link>
 
-          <nav className="hidden-scrollbar ml-5 flex flex-1 flex-shrink-0 gap-5 overflow-auto whitespace-nowrap font-bold text-[var(--app-navlink-color)] md:text-sm lg:text-base">
+          <nav className="hidden-scrollbar ml-5 hidden flex-1 gap-5 overflow-auto whitespace-nowrap font-bold text-[var(--app-navlink-color)] md:text-sm lg:flex lg:text-base">
             {navLinks.map(
               (navLink) =>
                 !navLink.sidebarOnly && (

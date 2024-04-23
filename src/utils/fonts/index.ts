@@ -7,12 +7,14 @@ const nunito = localFont({
     { path: "./Nunito-Bold.ttf", weight: "700", style: "normal" },
   ],
   display: "swap",
+  preload: true,
 });
 
 const comicNeue = Comic_Neue({
   subsets: ["latin"],
   weight: ["400", "700"],
   display: "swap",
+  preload: true,
 });
 
 export { nunito, comicNeue };

@@ -33,14 +33,7 @@ body {
 }
 
 .font-noto-sans-sc {
-  font-family:
-    Noto Sans SC,
-    Nunito-SemiBold,
-    "Microsoft JhengHei",
-    "Microsoft Yahei",
-    arial,
-    helvetica,
-    sans-serif;
+  font-family: Noto Sans SC;
 }
 
 .hidden-scrollbar {

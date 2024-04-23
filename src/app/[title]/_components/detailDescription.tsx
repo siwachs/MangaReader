@@ -11,19 +11,19 @@ const DetailDescription: React.FC<{ description: string }> = ({
   return (
     <div className="detail-description relative flex lg:mt-[5px]">
       <div
-        className={`font-noto-sans-sc mr-[15px] ${!showAll && "line-clamp-2"} whitespace-pre-line break-all text-xs/[20px] font-normal text-[var(--app-text-color-dark-gray)] lg:max-w-[700px] lg:text-sm lg:text-[var(--app-text-color-slate-gray)]`}
+        className={`font-noto-sans-sc mr-[15px] font-[400] ${!showAll && "line-clamp-2"} max-w-[700px] whitespace-pre-line break-all text-xs/[20px] font-normal text-[var(--app-text-color-dark-gray)] md:text-sm md:text-[var(--app-text-color-slate-gray)]`}
       >
         <p>{description}</p>
       </div>
 
-      <div className="absolute bottom-0 right-0 h-5 leading-5 lg:right-[150px]">
+      <div className="absolute bottom-0 right-0 h-[18px] leading-[18px] lg:right-[150px]">
         {!showAll ? (
           <button onClick={() => setShowAll(true)} className="cursor-pointer">
-            <ArrowDownCircle className="h-[13px] w-[13px] lg:h-5 lg:w-5" />
+            <ArrowDownCircle className="h-[13px] w-[13px] md:h-5 md:w-5" />
           </button>
         ) : (
           <button onClick={() => setShowAll(false)} className="cursor-pointer">
-            <CloseCircle className="h-[13px] w-[13px] lg:h-5 lg:w-5" />
+            <CloseCircle className="h-[13px] w-[13px] md:h-5 md:w-5" />
           </button>
         )}
       </div>
