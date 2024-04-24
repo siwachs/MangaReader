@@ -4,7 +4,7 @@ import ContentList from "@/components/lists/contentList";
 import HottestComics from "@/components/lists/hottestComics";
 import GernresList from "@/components/lists/genresList";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <HomeNav />
