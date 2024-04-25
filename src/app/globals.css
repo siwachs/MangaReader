@@ -23,6 +23,8 @@
 
   --app-text-color-dark-slate: #404040;
 
+  --app-text-color-near-white: #f8f8f8;
+
   --app-border-color-gray: #d8d8d8;
 
   --app-text-color-orange-yellow: #ffbd4f;
@@ -53,7 +55,6 @@ body {
   @apply relative mt-[60px] md:mt-[120px];
 }
 
-/* Navbar */
-.navbar-shadow {
+.soft-edge-shadow {
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
 }

@@ -324,7 +324,10 @@ const SignIn: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
 };
 // Navbar Icons End
 
-const Like: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
+const Like: React.FC<{ className?: string; fill?: string }> = ({
+  className = "h-5 w-5",
+  fill = "#ff204e",
+}) => {
   return (
     <svg
       className={className}
@@ -337,18 +340,18 @@ const Like: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
         id="SVGRepo_tracerCarrier"
         strokeLinecap="round"
         strokeLinejoin="round"
-      ></g>
+      />
       <g id="SVGRepo_iconCarrier">
         <path
           d="M20.2699 16.265L20.9754 12.1852C21.1516 11.1662 20.368 10.2342 19.335 10.2342H14.1539C13.6404 10.2342 13.2494 9.77328 13.3325 9.26598L13.9952 5.22142C14.1028 4.56435 14.0721 3.892 13.9049 3.24752C13.7664 2.71364 13.3545 2.28495 12.8128 2.11093L12.6678 2.06435C12.3404 1.95918 11.9831 1.98365 11.6744 2.13239C11.3347 2.29611 11.0861 2.59473 10.994 2.94989L10.5183 4.78374C10.3669 5.36723 10.1465 5.93045 9.86218 6.46262C9.44683 7.24017 8.80465 7.86246 8.13711 8.43769L6.69838 9.67749C6.29272 10.0271 6.07968 10.5506 6.12584 11.0844L6.93801 20.4771C7.0125 21.3386 7.7328 22 8.59658 22H13.2452C16.7265 22 19.6975 19.5744 20.2699 16.265Z"
-          fill="#ff204e"
-        ></path>
+          fill={fill}
+        />
         <path
           fillRule="evenodd"
           clipRule="evenodd"
           d="M2.96767 9.48508C3.36893 9.46777 3.71261 9.76963 3.74721 10.1698L4.71881 21.4063C4.78122 22.1281 4.21268 22.7502 3.48671 22.7502C2.80289 22.7502 2.25 22.1954 2.25 21.5129V10.2344C2.25 9.83275 2.5664 9.5024 2.96767 9.48508Z"
-          fill="#ff204e"
-        ></path>
+          fill={fill}
+        />
       </g>
     </svg>
   );
@@ -403,6 +406,40 @@ const Heart: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
           d="M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z"
           fill="#ff5454"
         ></path>
+      </g>
+    </svg>
+  );
+};
+
+const CommentSolid: React.FC<{ className?: string; fill?: string }> = ({
+  className = "h-5 w-5",
+  fill = "#ff204e",
+}) => {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 32 32"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      fill={fill}
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+      <g
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <g id="SVGRepo_iconCarrier">
+        <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+          <g
+            id="Icon-Set-Filled"
+            transform="translate(-154.000000, -257.000000)"
+            fill={fill}
+          >
+            <path d="M177,270 L163,270 C162.448,270 162,269.553 162,269 C162,268.448 162.448,268 163,268 L177,268 C177.552,268 178,268.448 178,269 C178,269.553 177.552,270 177,270 L177,270 Z M175,276 L165,276 C164.448,276 164,275.553 164,275 C164,274.447 164.448,274 165,274 L175,274 C175.552,274 176,274.447 176,275 C176,275.553 175.552,276 175,276 L175,276 Z M170,257 C161.164,257 154,263.269 154,271 C154,275.419 156.345,279.354 160,281.919 L160,289 L167.009,284.747 C167.979,284.907 168.977,285 170,285 C178.836,285 186,278.732 186,271 C186,263.269 178.836,257 170,257 L170,257 Z" />
+          </g>
+        </g>
       </g>
     </svg>
   );
@@ -488,6 +525,72 @@ const CloseCircle: React.FC<{
   );
 };
 
+const Share: React.FC<{
+  className?: string;
+  strokeWidth?: number;
+}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
+      />
+    </svg>
+  );
+};
+
+const Bookmark: React.FC<{
+  className?: string;
+  strokeWidth?: number;
+}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
+      />
+    </svg>
+  );
+};
+
+const BookOpen: React.FC<{
+  className?: string;
+  strokeWidth?: number;
+}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+      />
+    </svg>
+  );
+};
+
 export {
   ChevronDown,
   ChevronLeft,
@@ -506,8 +609,12 @@ export {
   Like,
   View,
   Heart,
+  CommentSolid,
   StarSolid,
   Pencil,
   ArrowDownCircle,
   CloseCircle,
+  Share,
+  Bookmark,
+  BookOpen,
 };
