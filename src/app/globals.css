@@ -58,3 +58,7 @@ body {
 .soft-edge-shadow {
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
 }
+
+.pink-lift-shadow {
+  box-shadow: 0 3px 5px rgba(255, 32, 78, 0.3);
+}
