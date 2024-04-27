@@ -286,6 +286,8 @@ const chapters = [
 const getChapters = async (req: NextRequest) => {
   try {
     const pagination = req.nextUrl.searchParams.get("pagination");
+    const pageSize = parseInt(req.nextUrl.searchParams.get("pageSize")!) || 12;
+
     if (pagination) {
       return NextResponse.json(
         {
@@ -307,6 +309,9 @@ const getChapters = async (req: NextRequest) => {
       {
         error: false,
         chapters: combinedChapters,
+        pageNumber: 1,
+        pageSize: 12,
+        totalPages: Math.ceil(chapters.length / pageSize),
         totalChapters: chapters.length,
       },
       {

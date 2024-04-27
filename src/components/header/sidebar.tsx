@@ -57,7 +57,7 @@ const Sidebar: React.FC<{
       </div>
 
       <Close
-        classNames="fixed right-[25px] top-[25px] z-30 h-[32px] w-[32px] cursor-pointer text-white"
+        className="fixed right-[25px] top-[25px] z-30 h-[32px] w-[32px] cursor-pointer text-white"
         strokeWidth={2.6}
         onClick={() => setSidebarOpen(false)}
       />

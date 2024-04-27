@@ -117,10 +117,10 @@ const Bars3: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
 };
 
 const Close: React.FC<{
-  classNames?: string;
+  className?: string;
   strokeWidth?: number;
   onClick?: () => void;
-}> = ({ classNames = "h-5 w-5", strokeWidth = 1.5, onClick }) => {
+}> = ({ className = "h-5 w-5", strokeWidth = 1.5, onClick }) => {
   return (
     <svg
       tabIndex={0}
@@ -135,7 +135,7 @@ const Close: React.FC<{
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
