@@ -1,21 +1,14 @@
 import React from "react";
 
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  Like,
-  StarSolid,
-  View,
-  CommentSolid,
-  Share,
-  Bookmark,
-  BookOpen,
-} from "@/components/icons";
+import { Like, StarSolid, View } from "@/components/icons";
 import EditRating from "@/app/[title]/_components/editRating";
 import DetailDescription from "./_components/detailDescription";
-import ChaptersAndComments from "./_components/chaptersAndComments";
+import ChaptersAndCommentsLoading from "./_components/chaptersAndCommentsLoading";
 
 const data = {
   thumbnail: "/dummyContent/thumbnail.webp",
@@ -46,7 +39,59 @@ const data = {
 
   MangaToon got authorization from Xiaomingtaiji to publish this work, the content is the author's own point of view, and does not represent the stand of MangaToon.`,
   noOfChapters: 256,
+  chapters: [
+    {
+      _id: "1",
+      title: "Chapter 1",
+      releaseDate: "2022-04-19",
+      noOfLike: 849,
+      noOfComments: 923,
+    },
+    {
+      _id: "2",
+      title: "Chapter 2",
+      releaseDate: "2022-04-19",
+      noOfLike: 849,
+      noOfComments: 923,
+    },
+    {
+      _id: "3",
+      title: "Chapter 3",
+      releaseDate: "2022-04-19",
+      noOfLike: 849,
+      noOfComments: 923,
+    },
+    {
+      _id: "4",
+      title: "Chapter 4",
+      releaseDate: "2022-04-19",
+      noOfLike: 849,
+      noOfComments: 923,
+    },
+    {
+      _id: "5",
+      title: "Chapter 5",
+      releaseDate: "2022-04-19",
+      noOfLike: 849,
+      noOfComments: 923,
+    },
+    {
+      _id: "6",
+      title: "Chapter 6",
+      releaseDate: "2022-04-19",
+      noOfLike: 849,
+      noOfComments: 923,
+    },
+  ],
 };
+
+const ChaptersAndComments = dynamic(
+  () => import("./_components/chaptersAndComments"),
+  {
+    ssr: false,
+    loading: () => <ChaptersAndCommentsLoading chapters={data.chapters} />,
+  },
+);
 
 export const metadata: Metadata = {
   title: `${data.title} - Manga Reader`,

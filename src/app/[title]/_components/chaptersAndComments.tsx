@@ -11,6 +11,7 @@ import {
   BookOpen,
   Close,
 } from "@/components/icons";
+import { Chapter } from "../_types";
 
 const menuTypeClasses =
   "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=false]:text-[var(--app-text-color-medium-gray)] data-[active=true]:text-[var(--app-text-color-red)] md:h-20 md:w-auto md:border-none md:text-xl/[80px]";
@@ -20,13 +21,7 @@ const chaptersOrderClasses =
 type ChaptersOrder = "positive" | "reverse";
 type MenuType = "chapters" | "comments";
 type ChapterPayload = {
-  chapters: {
-    _id: string;
-    title: string;
-    releaseDate: string;
-    noOfLike: number;
-    noOfComments: number;
-  }[];
+  chapters: Chapter[];
   pageNumber: number;
   pageSize: number;
   totalPages: number;
@@ -34,7 +29,7 @@ type ChapterPayload = {
 };
 
 const ChaptersAndComments: React.FC = () => {
-  const [seeAll, setSeeAll] = useState<boolean>(true);
+  const [seeAll, setSeeAll] = useState<boolean>(false);
   const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("positive");
   const [menuType, setMenuType] = useState<MenuType>("chapters");
   const [chaptersPayload, setChaptersPayload] = useState<ChapterPayload>({
