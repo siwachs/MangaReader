@@ -10,8 +10,9 @@ export type Chapter = {
 
 export type ChapterPayload = {
   chapters: Chapter[];
-  pageNumber?: number;
-  pageSize?: number;
-  totalPages?: number;
+  infiniteScrollChapters: Chapter[];
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
   totalChapters: number;
 };

@@ -735,17 +735,17 @@ const getChapters = async (req: NextRequest) => {
   const PAGE_NUMBER = 1;
   const PAGE_SIZE = 18;
 
-  try {
-    const pagination =
-      req.nextUrl.searchParams.get("pagination") &&
-      req.nextUrl.searchParams.get("pagination") === "true";
-    const pageNumber =
-      Math.max(parseInt(req.nextUrl.searchParams.get("pageNumber")!), 0) ||
-      PAGE_NUMBER;
-    const pageSize =
-      Math.max(parseInt(req.nextUrl.searchParams.get("pageSize")!), 0) ||
-      PAGE_SIZE;
+  const pagination =
+    req.nextUrl.searchParams.get("pagination") &&
+    req.nextUrl.searchParams.get("pagination") === "true";
+  const pageNumber =
+    Math.max(parseInt(req.nextUrl.searchParams.get("pageNumber")!), 0) ||
+    PAGE_NUMBER;
+  const pageSize =
+    Math.max(parseInt(req.nextUrl.searchParams.get("pageSize")!), 0) ||
+    PAGE_SIZE;
 
+  try {
     if (pagination) {
       const startingIndex = (pageNumber - 1) * pageSize;
       const endingIndex = startingIndex + pageSize;
@@ -765,13 +765,16 @@ const getChapters = async (req: NextRequest) => {
       );
     }
 
-    const firstSix = chapters.slice(0, 6);
-    const lastSix = chapters.length > 6 ? chapters.slice(-6) : [];
+    const firstSix = chapters.slice(0, 18);
+    const lastSix = chapters.length > 18 ? chapters.slice(-6) : [];
 
     return NextResponse.json(
       {
         error: false,
         chapters: [...firstSix, ...lastSix],
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+        totalPages: Math.ceil(chapters.length / pageSize),
         totalChapters: chapters.length,
       },
       {
@@ -784,7 +787,10 @@ const getChapters = async (req: NextRequest) => {
         error: true,
         message: error.message,
         chapters: [],
-        totalChapters: 0,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+        totalPages: Math.ceil(chapters.length / pageSize),
+        totalChapters: chapters.length,
       },
       {
         status: 500,
