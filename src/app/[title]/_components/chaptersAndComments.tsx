@@ -22,6 +22,8 @@ type MenuType = "chapters" | "comments";
 
 const ChaptersAndComments: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const fetchReqRef = useRef(false);
+
   const [infiniteScrollLoading, setInfiniteScrollLoading] =
     useState<boolean>(false);
   const [seeAll, setSeeAll] = useState<boolean>(false);
@@ -58,37 +60,38 @@ const ChaptersAndComments: React.FC = () => {
     document.body.style.overflow = seeAll ? "hidden" : "auto";
     const container = containerRef.current;
 
-    const handleScroll = async () => {
-      if (container) {
-        const bottomOffset = container.scrollHeight - container.clientHeight;
-        const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
+    const getMoreChapters = async () => {
+      try {
+        setInfiniteScrollLoading(true);
+        fetchReqRef.current = true;
 
-        if (
-          scrolledToBottom &&
-          !infiniteScrollLoading &&
-          chaptersPayload.pageNumber !== chaptersPayload.totalPages
-        ) {
-          try {
-            setInfiniteScrollLoading(true);
-            const chaptersResponse = await fetch(
-              `/api/chapters?pagination=true&pageNumber=${chaptersPayload.pageNumber + 1}`,
-            );
-            const chaptersData = await chaptersResponse.json();
-            const { error, chapters, ...restOfChaptersPayload } = chaptersData;
+        const chaptersResponse = await fetch(
+          `/api/chapters?pagination=true&pageNumber=${chaptersPayload.pageNumber + 1}`,
+        );
+        const chaptersData = await chaptersResponse.json();
+        const { error, chapters, ...restOfChaptersPayload } = chaptersData;
 
-            setChaptersPayload((prev) => ({
-              ...prev,
-              infiniteScrollChapters: [
-                ...prev.infiniteScrollChapters,
-                ...chapters,
-              ],
-              ...restOfChaptersPayload,
-            }));
-          } catch (error: any) {
-          } finally {
-            setInfiniteScrollLoading(false);
-          }
-        }
+        setChaptersPayload((prev) => ({
+          ...prev,
+          infiniteScrollChapters: [...prev.infiniteScrollChapters, ...chapters],
+          ...restOfChaptersPayload,
+        }));
+      } catch (error: any) {
+      } finally {
+        setInfiniteScrollLoading(false);
+        fetchReqRef.current = false;
+      }
+    };
+
+    const handleScroll = () => {
+      if (!container || fetchReqRef.current) return;
+
+      const bottomOffset = container.scrollHeight - container.clientHeight;
+      const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
+      const hasMore = chaptersPayload.pageNumber !== chaptersPayload.totalPages;
+
+      if (!infiniteScrollLoading && scrolledToBottom && hasMore) {
+        getMoreChapters();
       }
     };
 
