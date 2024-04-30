@@ -58,6 +58,25 @@ const ChaptersAndComments: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const getChapters = async () => {
+      try {
+        const chaptersResponse = await fetch(
+          `/api/chapters?pagination=true&order=${chaptersOrderInfiniteScroll}`,
+        );
+        const chaptersData = await chaptersResponse.json();
+        const { error, chapters, ...restOfChaptersPayload } = chaptersData;
+        setChaptersPayload((prev) => ({
+          ...prev,
+          infiniteScrollChapters: chapters,
+          ...restOfChaptersPayload,
+        }));
+      } catch (error: any) {}
+    };
+
+    getChapters();
+  }, [chaptersOrderInfiniteScroll]);
+
+  useEffect(() => {
     document.body.style.overflow = seeAll ? "hidden" : "auto";
     const container = containerRef.current;
 
