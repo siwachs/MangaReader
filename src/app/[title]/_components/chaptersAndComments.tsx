@@ -11,14 +11,12 @@ import {
   BookOpen,
   Close,
 } from "@/components/icons";
-import { ChaptersOrder, ChapterPayload } from "../_types";
+import { MenuType, ChapterPayload } from "../_types";
 
 const menuTypeClasses =
   "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=false]:text-[var(--app-text-color-medium-gray)] data-[active=true]:text-[var(--app-text-color-red)] md:h-20 md:w-auto md:border-none md:text-xl/[80px]";
 const chaptersOrderClasses =
   "font-noto-sans-sc select-none font-[400] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-crimson)] data-[active=false]:text-[var(--app-text-color-slate-gray)]";
-
-type MenuType = "chapters" | "comments";
 
 const ChaptersAndComments: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,8 +25,12 @@ const ChaptersAndComments: React.FC = () => {
   const [infiniteScrollLoading, setInfiniteScrollLoading] =
     useState<boolean>(false);
   const [seeAll, setSeeAll] = useState<boolean>(false);
+
   const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("positive");
+  const [chaptersOrderInfiniteScroll, setChapterOrderInfiniteScroll] =
+    useState<ChaptersOrder>("positive");
   const [menuType, setMenuType] = useState<MenuType>("chapters");
+
   const [chaptersPayload, setChaptersPayload] = useState<ChapterPayload>({
     chapters: [],
     infiniteScrollChapters: [],
@@ -43,12 +45,11 @@ const ChaptersAndComments: React.FC = () => {
       try {
         const chaptersResponse = await fetch("/api/chapters");
         const chaptersData = await chaptersResponse.json();
-        const { error, chapters, ...chaptersPayload } = chaptersData;
+        const { error, chapters, ...restOfChaptersPayload } = chaptersData;
         setChaptersPayload((prev) => ({
           ...prev,
           chapters,
-          infiniteScrollChapters: chapters.slice(0, 18),
-          ...chaptersPayload,
+          ...restOfChaptersPayload,
         }));
       } catch (error: any) {}
     };

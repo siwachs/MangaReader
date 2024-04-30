@@ -1,4 +1,4 @@
-export type ChaptersOrder = "positive" | "reverse";
+export type MenuType = "chapters" | "comments";
 
 export type Chapter = {
   _id: string;

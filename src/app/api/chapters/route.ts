@@ -744,20 +744,27 @@ const getChapters = async (req: NextRequest) => {
   const pageSize =
     Math.max(parseInt(req.nextUrl.searchParams.get("pageSize")!), 0) ||
     PAGE_SIZE;
+  const chaptersOrder: ChaptersOrder =
+    (req.nextUrl.searchParams.get("chaptersOrder") as ChaptersOrder) ||
+    "positive";
 
   try {
     if (pagination) {
       const startingIndex = (pageNumber - 1) * pageSize;
       const endingIndex = startingIndex + pageSize;
 
+      // Fetch the chapters based on chaptersOrder
+      const fetchedChapters =
+        chaptersOrder === "reverse" ? chapters.slice().reverse() : chapters;
+
       return NextResponse.json(
         {
           error: false,
-          chapters: chapters.slice(startingIndex, endingIndex),
+          chapters: fetchedChapters.slice(startingIndex, endingIndex),
           pageNumber: pageNumber,
           pageSize: pageSize,
-          totalPages: Math.ceil(chapters.length / pageSize),
-          totalChapters: chapters.length,
+          totalPages: Math.ceil(fetchedChapters.length / pageSize),
+          totalChapters: fetchedChapters.length,
         },
         {
           status: 200,
@@ -765,8 +772,8 @@ const getChapters = async (req: NextRequest) => {
       );
     }
 
-    const firstSix = chapters.slice(0, 18);
-    const lastSix = chapters.length > 18 ? chapters.slice(-6) : [];
+    const firstSix = chapters.slice(0, 6);
+    const lastSix = chapters.length > 6 ? chapters.slice(-6) : [];
 
     return NextResponse.json(
       {
