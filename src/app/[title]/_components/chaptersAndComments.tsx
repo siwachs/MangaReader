@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 import {
@@ -11,7 +11,7 @@ import {
   BookOpen,
   Close,
 } from "@/components/icons";
-import { MenuType, ChapterPayload } from "../_types";
+import { MenuType, ChapterPayload, Chapter } from "../_types";
 
 const menuTypeClasses =
   "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=false]:text-[var(--app-text-color-medium-gray)] data-[active=true]:text-[var(--app-text-color-red)] md:h-20 md:w-auto md:border-none md:text-xl/[80px]";
@@ -82,7 +82,7 @@ const ChaptersAndComments: React.FC = () => {
     getChapters();
   }, [chaptersOrder]);
 
-  // on Infinite Scroll
+  // on Infinite Scroll (Can optimize with throttle)
   useEffect(() => {
     document.body.style.overflow = seeAll ? "hidden" : "auto";
     const container = containerRef.current;
@@ -254,30 +254,13 @@ const ChaptersAndComments: React.FC = () => {
       <div className="mx-auto mb-5 w-full max-w-[1200px]">
         <div className="ml-[6%] w-[94%] overflow-hidden md:ml-0 md:w-full">
           {chaptersPayload.chapters.slice(0, 6).map((chapter, index) => (
-            <Link
-              href="/"
+            <ChapterLink
               key={chapter._id}
-              className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-[var(--app-text-color-black)] md:min-h-[60px] md:w-[285px] md:p-[6px_0_8px_15px]"
-            >
-              <div className="h-[24px] text-xs md:text-sm">
-                <span className="mr-5">
-                  {chaptersOrder === "positive"
-                    ? index + 1
-                    : chaptersPayload.totalChapters - index}
-                </span>
-                <span className="hide-text">{chapter.title}</span>
-              </div>
-
-              <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">
-                <span>{chapter.releaseDate}</span>
-                <div className="flex items-center gap-[5px]">
-                  <Like className="h-[12px] w-[12px]" fill="#999" />
-                  <span>{chapter.noOfLike}</span>
-                  <CommentSolid className="h-[10px] w-[10px]" fill="#999" />
-                  <span>{chapter.noOfComments}</span>
-                </div>
-              </div>
-            </Link>
+              chapter={chapter}
+              chaptersOrder={chaptersOrder}
+              index={index}
+              totalChapters={chaptersPayload.totalChapters}
+            />
           ))}
         </div>
       </div>
@@ -364,30 +347,13 @@ const ChaptersAndComments: React.FC = () => {
             className={`${(!infiniteScrollLoading || !fetchReqRef.current) && "mb-12"} mt-[100px] flex flex-wrap items-center justify-between px-[4%]`}
           >
             {chaptersPayload.infiniteScrollChapters.map((chapter, index) => (
-              <Link
-                href="/"
+              <ChapterLink
                 key={chapter._id}
-                className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-[var(--app-text-color-black)] md:min-h-[60px] md:w-[270px] md:p-[6px_0_8px_15px]"
-              >
-                <div className="h-[24px] text-xs md:text-sm">
-                  <span className="mr-5">
-                    {chaptersOrder === "positive"
-                      ? index + 1
-                      : chaptersPayload.totalChapters - index}
-                  </span>
-                  <span className="hide-text">{chapter.title}</span>
-                </div>
-
-                <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">
-                  <span>{chapter.releaseDate}</span>
-                  <div className="flex items-center gap-[5px]">
-                    <Like className="h-[12px] w-[12px]" fill="#999" />
-                    <span>{chapter.noOfLike}</span>
-                    <CommentSolid className="h-[10px] w-[10px]" fill="#999" />
-                    <span>{chapter.noOfComments}</span>
-                  </div>
-                </div>
-              </Link>
+                chapter={chapter}
+                chaptersOrder={chaptersOrder}
+                index={index}
+                totalChapters={chaptersPayload.totalChapters}
+              />
             ))}
           </div>
 
@@ -422,5 +388,38 @@ const ChaptersAndComments: React.FC = () => {
     </>
   );
 };
+
+const ChapterLink: React.FC<{
+  chapter: Chapter;
+  chaptersOrder: ChaptersOrder;
+  index: number;
+  totalChapters: number;
+}> = React.memo(({ chapter, chaptersOrder, index, totalChapters }) => {
+  return (
+    <Link
+      href="/"
+      className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-[var(--app-text-color-black)] md:min-h-[60px] md:w-[285px] md:p-[6px_0_8px_15px]"
+    >
+      <div className="h-[24px] text-xs md:text-sm">
+        <span className="mr-5">
+          {chaptersOrder === "positive" ? index + 1 : totalChapters - index}
+        </span>
+        <span className="hide-text">{chapter.title}</span>
+      </div>
+
+      <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">
+        <span>{chapter.releaseDate}</span>
+        <div className="flex items-center gap-[5px]">
+          <Like className="h-[12px] w-[12px]" fill="#999" />
+          <span>{chapter.noOfLike}</span>
+          <CommentSolid className="h-[10px] w-[10px]" fill="#999" />
+          <span>{chapter.noOfComments}</span>
+        </div>
+      </div>
+    </Link>
+  );
+});
+
+ChapterLink.displayName = "Chapter";
 
 export default ChaptersAndComments;
