@@ -142,6 +142,32 @@ const ChaptersAndComments: React.FC = () => {
   return (
     <>
       <div className="menu-wrapper mx-[5%] w-[90%] max-w-[1200px] md:mx-auto md:w-full">
+        <div className="mt-[40px] hidden h-[50px] items-center md:flex">
+          <Link
+            href="/"
+            className="pink-lift-shadow flex h-[50px] items-center justify-center rounded-[100px] bg-[var(--app-text-color-crimson)] px-[15px] text-[var(--app-text-color-near-white)]"
+          >
+            <BookOpen className="h-[18px] w-[18px]" strokeWidth={2.1} />
+            <span className="font-noto-sans-sc ml-2.5 inline-block h-[29px] text-base/[29px] font-[500]">
+              Read Now
+            </span>
+          </Link>
+
+          <button className="ml-[35px] flex h-[50px] items-center justify-center rounded-[100px] border border-[var(--app-text-color-crimson)] px-[15px] text-[var(--app-text-color-crimson)]">
+            <Bookmark className="h-[20px] w-[20px]" strokeWidth={2.1} />
+            <span className="font-noto-sans-sc ml-2.5 inline-block h-[29px] text-base/[29px] font-[500]">
+              Subscribe
+            </span>
+          </button>
+
+          <button className="ml-[35px] flex h-[50px] items-center justify-center rounded-[100px] border border-[var(--app-text-color-crimson)] px-[15px] text-[var(--app-text-color-crimson)]">
+            <Share className="h-[20px] w-[20px]" strokeWidth={2.1} />
+            <span className="font-noto-sans-sc ml-2.5 inline-block h-[29px] text-base/[29px] font-[500]">
+              Share
+            </span>
+          </button>
+        </div>
+
         <div className="h-10 w-full max-w-[1200px] border-b border-black border-opacity-[0.2] md:h-20">
           <div className="float-left w-[35%] md:w-auto">
             <div
@@ -201,7 +227,7 @@ const ChaptersAndComments: React.FC = () => {
               <span>Positive</span>
             </div>
 
-            <span>/</span>
+            <span className="text-[var(--app-text-color-slate-gray)]">/</span>
 
             <div
               role="button"
@@ -226,12 +252,12 @@ const ChaptersAndComments: React.FC = () => {
       </div>
 
       <div className="mx-auto mb-5 w-full max-w-[1200px]">
-        <div className="ml-[6%] w-[94%] overflow-hidden md:w-full">
+        <div className="ml-[6%] w-[94%] overflow-hidden md:ml-0 md:w-full">
           {chaptersPayload.chapters.slice(0, 6).map((chapter, index) => (
             <Link
               href="/"
               key={chapter._id}
-              className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-[var(--app-text-color-black)] md:min-h-[60px] md:w-[270px] md:p-[6px_0_8px_15px]"
+              className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-[var(--app-text-color-black)] md:min-h-[60px] md:w-[285px] md:p-[6px_0_8px_15px]"
             >
               <div className="h-[24px] text-xs md:text-sm">
                 <span className="mr-5">
