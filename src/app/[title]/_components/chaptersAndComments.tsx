@@ -27,8 +27,6 @@ const ChaptersAndComments: React.FC = () => {
   const [seeAll, setSeeAll] = useState<boolean>(false);
 
   const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("positive");
-  const [chaptersOrderInfiniteScroll, setChapterOrderInfiniteScroll] =
-    useState<ChaptersOrder>("positive");
   const [menuType, setMenuType] = useState<MenuType>("chapters");
 
   const [chaptersPayload, setChaptersPayload] = useState<ChapterPayload>({
@@ -40,6 +38,7 @@ const ChaptersAndComments: React.FC = () => {
     totalChapters: 0,
   });
 
+  // Initial Chapters fetching
   useEffect(() => {
     const getChapters = async () => {
       try {
@@ -57,11 +56,13 @@ const ChaptersAndComments: React.FC = () => {
     getChapters();
   }, []);
 
+  // Change Chapters Order
   useEffect(() => {
     const getChapters = async () => {
       try {
+        fetchReqRef.current = true;
         const chaptersResponse = await fetch(
-          `/api/chapters?pagination=true&order=${chaptersOrderInfiniteScroll}`,
+          `/api/chapters?pagination=true&order=${chaptersOrder}`,
         );
         const chaptersData = await chaptersResponse.json();
         const { error, chapters, ...restOfChaptersPayload } = chaptersData;
@@ -70,12 +71,16 @@ const ChaptersAndComments: React.FC = () => {
           infiniteScrollChapters: chapters,
           ...restOfChaptersPayload,
         }));
-      } catch (error: any) {}
+      } catch (error: any) {
+      } finally {
+        fetchReqRef.current = false;
+      }
     };
 
     getChapters();
-  }, [chaptersOrderInfiniteScroll]);
+  }, [chaptersOrder]);
 
+  // Infinite Scroll
   useEffect(() => {
     document.body.style.overflow = seeAll ? "hidden" : "auto";
     const container = containerRef.current;
@@ -104,13 +109,13 @@ const ChaptersAndComments: React.FC = () => {
     };
 
     const handleScroll = () => {
-      if (!container || fetchReqRef.current) return;
+      if (!container || fetchReqRef.current || infiniteScrollLoading) return;
 
       const bottomOffset = container.scrollHeight - container.clientHeight;
       const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
       const hasMore = chaptersPayload.pageNumber !== chaptersPayload.totalPages;
 
-      if (!infiniteScrollLoading && scrolledToBottom && hasMore) {
+      if (scrolledToBottom && hasMore) {
         getMoreChapters();
       }
     };
@@ -123,12 +128,13 @@ const ChaptersAndComments: React.FC = () => {
   }, [seeAll, infiniteScrollLoading, chaptersPayload]);
 
   const changeChapterOrder = (order: ChaptersOrder) => {
-    if (order === chaptersOrder) return;
+    if (chaptersOrder === order) return;
     setChaptersOrder(order);
-    setChaptersPayload({
-      ...chaptersPayload,
-      chapters: chaptersPayload.chapters.slice().reverse(),
-    });
+    setChaptersPayload((prev) => ({
+      ...prev,
+      chapters: prev.chapters.slice().reverse(),
+      infiniteScrollChapters: [],
+    }));
   };
 
   return (
@@ -288,9 +294,12 @@ const ChaptersAndComments: React.FC = () => {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => {}}
+                  onClick={() => {
+                    changeChapterOrder("positive");
+                  }}
                   onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
                     if (e.key === "Enter") {
+                      changeChapterOrder("positive");
                     }
                   }}
                   data-active={chaptersOrder === "positive"}
@@ -306,9 +315,12 @@ const ChaptersAndComments: React.FC = () => {
                 <div
                   role="button"
                   tabIndex={0}
-                  onClick={() => {}}
+                  onClick={() => {
+                    changeChapterOrder("reverse");
+                  }}
                   onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
                     if (e.key === "Enter") {
+                      changeChapterOrder("reverse");
                     }
                   }}
                   data-active={chaptersOrder === "reverse"}
@@ -321,7 +333,7 @@ const ChaptersAndComments: React.FC = () => {
           </div>
 
           <div
-            className={`${!infiniteScrollLoading && "mb-12"} mt-[100px] flex flex-wrap items-center justify-between px-[4%]`}
+            className={`${(!infiniteScrollLoading || !fetchReqRef.current) && "mb-12"} mt-[100px] flex flex-wrap items-center justify-between px-[4%]`}
           >
             {chaptersPayload.infiniteScrollChapters.map((chapter, index) => (
               <Link
@@ -351,12 +363,12 @@ const ChaptersAndComments: React.FC = () => {
             ))}
           </div>
 
-          <div
-            className={`my-6 ${infiniteScrollLoading ? "flex" : "hidden"} items-center justify-center`}
-          >
-            <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-[var(--app-text-color-vibrant-pink)]" />
-            <div className="sr-only">Loading...</div>
-          </div>
+          {(infiniteScrollLoading || fetchReqRef.current) && (
+            <div className={"my-6 flex items-center justify-center"}>
+              <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-[var(--app-text-color-vibrant-pink)]" />
+              <div className="sr-only">Loading...</div>
+            </div>
+          )}
         </div>
       </div>
 
