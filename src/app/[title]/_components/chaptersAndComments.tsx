@@ -38,7 +38,7 @@ const ChaptersAndComments: React.FC = () => {
     totalChapters: 0,
   });
 
-  // Initial Chapters fetching
+  // on Initial Chapters fetching
   useEffect(() => {
     const getChapters = async () => {
       try {
@@ -56,13 +56,14 @@ const ChaptersAndComments: React.FC = () => {
     getChapters();
   }, []);
 
-  // Change Chapters Order
+  // on Change Chapters Order
   useEffect(() => {
     const getChapters = async () => {
       try {
+        setInfiniteScrollLoading(true);
         fetchReqRef.current = true;
         const chaptersResponse = await fetch(
-          `/api/chapters?pagination=true&order=${chaptersOrder}`,
+          `/api/chapters?pagination=true&chaptersOrder=${chaptersOrder}`,
         );
         const chaptersData = await chaptersResponse.json();
         const { error, chapters, ...restOfChaptersPayload } = chaptersData;
@@ -73,6 +74,7 @@ const ChaptersAndComments: React.FC = () => {
         }));
       } catch (error: any) {
       } finally {
+        setInfiniteScrollLoading(false);
         fetchReqRef.current = false;
       }
     };
@@ -80,7 +82,7 @@ const ChaptersAndComments: React.FC = () => {
     getChapters();
   }, [chaptersOrder]);
 
-  // Infinite Scroll
+  // on Infinite Scroll
   useEffect(() => {
     document.body.style.overflow = seeAll ? "hidden" : "auto";
     const container = containerRef.current;
@@ -91,7 +93,7 @@ const ChaptersAndComments: React.FC = () => {
         fetchReqRef.current = true;
 
         const chaptersResponse = await fetch(
-          `/api/chapters?pagination=true&pageNumber=${chaptersPayload.pageNumber + 1}`,
+          `/api/chapters?pagination=true&pageNumber=${chaptersPayload.pageNumber + 1}&chaptersOrder=${chaptersOrder}`,
         );
         const chaptersData = await chaptersResponse.json();
         const { error, chapters, ...restOfChaptersPayload } = chaptersData;
@@ -115,7 +117,7 @@ const ChaptersAndComments: React.FC = () => {
       const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
       const hasMore = chaptersPayload.pageNumber !== chaptersPayload.totalPages;
 
-      if (scrolledToBottom && hasMore) {
+      if (scrolledToBottom && hasMore && seeAll) {
         getMoreChapters();
       }
     };
@@ -125,15 +127,15 @@ const ChaptersAndComments: React.FC = () => {
     }
 
     return () => container?.removeEventListener("scroll", handleScroll);
-  }, [seeAll, infiniteScrollLoading, chaptersPayload]);
+  }, [seeAll, infiniteScrollLoading, chaptersPayload, chaptersOrder]);
 
   const changeChapterOrder = (order: ChaptersOrder) => {
     if (chaptersOrder === order) return;
+
     setChaptersOrder(order);
     setChaptersPayload((prev) => ({
       ...prev,
       chapters: prev.chapters.slice().reverse(),
-      infiniteScrollChapters: [],
     }));
   };
 
