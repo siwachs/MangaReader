@@ -9,6 +9,7 @@ import { Like, StarSolid, View } from "@/components/icons";
 import EditRating from "@/app/[title]/_components/editRating";
 import DetailDescription from "./_components/detailDescription";
 import ChaptersAndCommentsLoading from "./_components/chaptersAndCommentsLoading";
+import { ChaptersPayload } from "./_types";
 
 const data = {
   thumbnail: "/dummyContent/thumbnail.webp",
@@ -85,11 +86,36 @@ const data = {
   ],
 };
 
+const chaptersPayload: ChaptersPayload = {
+  chapters: [],
+  infiniteScrollChapters: [],
+  pageNumber: 1,
+  pageSize: 18,
+  totalPages: 1,
+  totalChapters: 0,
+};
+(async () => {
+  try {
+    const getChaptersEndPoint = `${process.env.BASE_URL}${process.env.API_ENDPOINT_CHAPTERS}`;
+    const chaptersResponse = await fetch(getChaptersEndPoint);
+    const { chapters, totalPages, totalChapters } =
+      await chaptersResponse.json();
+    chaptersPayload.chapters = chapters;
+    chaptersPayload.totalPages = totalPages;
+    chaptersPayload.totalChapters = totalChapters;
+  } catch (error) {}
+})();
+
 const ChaptersAndComments = dynamic(
   () => import("./_components/chaptersAndComments"),
   {
     ssr: false,
-    loading: () => <ChaptersAndCommentsLoading chapters={data.chapters} />,
+    loading: () => (
+      <ChaptersAndCommentsLoading
+        chapters={chaptersPayload.chapters}
+        totalChapters={chaptersPayload.totalChapters}
+      />
+    ),
   },
 );
 
@@ -98,7 +124,7 @@ export const metadata: Metadata = {
   description: data.description,
 };
 
-export default function TitlePage() {
+export default async function TitlePage() {
   return (
     <>
       <div className="breadcrum hidden h-[50px] w-full pt-2.5 md:block">
@@ -201,7 +227,7 @@ export default function TitlePage() {
         </div>
       </div>
 
-      <ChaptersAndComments />
+      <ChaptersAndComments initialChaptersPayload={chaptersPayload} />
     </>
   );
 }

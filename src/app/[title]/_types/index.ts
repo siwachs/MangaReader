@@ -8,7 +8,7 @@ export type Chapter = {
   noOfComments: number;
 };
 
-export type ChapterPayload = {
+export type ChaptersPayload = {
   chapters: Chapter[];
   infiniteScrollChapters: Chapter[];
   pageNumber: number;

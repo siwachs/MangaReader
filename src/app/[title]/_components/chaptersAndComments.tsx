@@ -3,22 +3,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-import {
-  Like,
-  CommentSolid,
-  Share,
-  Bookmark,
-  BookOpen,
-  Close,
-} from "@/components/icons";
-import { MenuType, ChapterPayload, Chapter } from "../_types";
+import ChapterLink from "./chapterLink";
+import { Share, Bookmark, BookOpen, Close } from "@/components/icons";
+import { MenuType, ChaptersPayload } from "../_types";
 
 const menuTypeClasses =
-  "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=false]:text-[var(--app-text-color-medium-gray)] data-[active=true]:text-[var(--app-text-color-red)] md:h-20 md:w-auto md:border-none md:text-xl/[80px]";
+  "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=true]:text-[var(--app-text-color-red)] md:h-20 md:w-auto md:border-none md:text-xl/[80px]";
 const chaptersOrderClasses =
-  "font-noto-sans-sc select-none font-[400] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-crimson)] data-[active=false]:text-[var(--app-text-color-slate-gray)]";
+  "font-noto-sans-sc select-none font-[400] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-crimson)]";
+const contentInteractionButtonClasses =
+  "flex h-[36px] w-[15%] items-center justify-center rounded-[100px] border border-[var(--app-text-color-crimson)] text-[var(--app-text-color-crimson)] md:h-[50px] md:w-auto md:px-[15px]";
 
-const ChaptersAndComments: React.FC = () => {
+const ChaptersAndComments: React.FC<{
+  initialChaptersPayload: ChaptersPayload;
+}> = ({ initialChaptersPayload }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const fetchReqRef = useRef(false);
 
@@ -29,32 +27,9 @@ const ChaptersAndComments: React.FC = () => {
   const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("positive");
   const [menuType, setMenuType] = useState<MenuType>("chapters");
 
-  const [chaptersPayload, setChaptersPayload] = useState<ChapterPayload>({
-    chapters: [],
-    infiniteScrollChapters: [],
-    pageNumber: 1,
-    pageSize: 18,
-    totalPages: 1,
-    totalChapters: 0,
+  const [chaptersPayload, setChaptersPayload] = useState<ChaptersPayload>({
+    ...initialChaptersPayload,
   });
-
-  // on Initial Chapters fetching
-  useEffect(() => {
-    const getChapters = async () => {
-      try {
-        const chaptersResponse = await fetch("/api/chapters");
-        const chaptersData = await chaptersResponse.json();
-        const { error, chapters, ...restOfChaptersPayload } = chaptersData;
-        setChaptersPayload((prev) => ({
-          ...prev,
-          chapters,
-          ...restOfChaptersPayload,
-        }));
-      } catch (error: any) {}
-    };
-
-    getChapters();
-  }, []);
 
   // on Change Chapters Order
   useEffect(() => {
@@ -62,6 +37,7 @@ const ChaptersAndComments: React.FC = () => {
       try {
         setInfiniteScrollLoading(true);
         fetchReqRef.current = true;
+
         const chaptersResponse = await fetch(
           `/api/chapters?pagination=true&chaptersOrder=${chaptersOrder}`,
         );
@@ -79,10 +55,12 @@ const ChaptersAndComments: React.FC = () => {
       }
     };
 
-    getChapters();
-  }, [chaptersOrder]);
+    if (seeAll) {
+      getChapters();
+    }
+  }, [chaptersOrder, seeAll]);
 
-  // on Infinite Scroll (Can optimize with throttle)
+  // on Infinite Scroll
   useEffect(() => {
     document.body.style.overflow = seeAll ? "hidden" : "auto";
     const container = containerRef.current;
@@ -111,13 +89,14 @@ const ChaptersAndComments: React.FC = () => {
     };
 
     const handleScroll = () => {
-      if (!container || fetchReqRef.current || infiniteScrollLoading) return;
+      if (!container || fetchReqRef.current || infiniteScrollLoading || !seeAll)
+        return;
 
       const bottomOffset = container.scrollHeight - container.clientHeight;
       const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
       const hasMore = chaptersPayload.pageNumber !== chaptersPayload.totalPages;
 
-      if (scrolledToBottom && hasMore && seeAll) {
+      if (scrolledToBottom && hasMore) {
         getMoreChapters();
       }
     };
@@ -127,7 +106,15 @@ const ChaptersAndComments: React.FC = () => {
     }
 
     return () => container?.removeEventListener("scroll", handleScroll);
-  }, [seeAll, infiniteScrollLoading, chaptersPayload, chaptersOrder]);
+  }, [
+    seeAll,
+    infiniteScrollLoading,
+    chaptersPayload.infiniteScrollChapters,
+    chaptersPayload.pageNumber,
+    chaptersPayload.totalPages,
+    chaptersOrder,
+  ]);
+  // Use Signals with fetch to optimize and only make fetch request for fetch and cancel previous fetch calls. It use to prevent fetch race ie AbortController
 
   const changeChapterOrder = (order: ChaptersOrder) => {
     if (chaptersOrder === order) return;
@@ -142,34 +129,43 @@ const ChaptersAndComments: React.FC = () => {
   return (
     <>
       <div className="menu-wrapper mx-[5%] w-[90%] max-w-[1200px] md:mx-auto md:w-full">
-        <div className="mt-[40px] hidden h-[50px] items-center md:flex">
-          <Link
-            href="/"
-            className="pink-lift-shadow flex h-[50px] items-center justify-center rounded-[100px] bg-[var(--app-text-color-crimson)] px-[15px] text-[var(--app-text-color-near-white)]"
-          >
-            <BookOpen className="h-[18px] w-[18px]" strokeWidth={2.1} />
-            <span className="font-noto-sans-sc ml-2.5 inline-block h-[29px] text-base/[29px] font-[500]">
-              Read Now
+        <div className="content-interaction-wrapper soft-edge-shadow fixed bottom-0 left-0 z-30 flex h-[60px] w-full items-center justify-between bg-white px-[5%] md:static md:mt-[40px] md:h-[50px] md:flex-row-reverse md:justify-end md:gap-[35px] md:px-0 md:shadow-none">
+          <button className={contentInteractionButtonClasses}>
+            <Share
+              className="h-[13px] w-[13px] md:h-5 md:w-5"
+              strokeWidth={2.1}
+            />
+            <span className="font-noto-sans-sc ml-2.5 hidden h-[29px] text-base/[29px] font-[500] md:inline-block">
+              Share
             </span>
-          </Link>
+          </button>
 
-          <button className="ml-[35px] flex h-[50px] items-center justify-center rounded-[100px] border border-[var(--app-text-color-crimson)] px-[15px] text-[var(--app-text-color-crimson)]">
-            <Bookmark className="h-[20px] w-[20px]" strokeWidth={2.1} />
-            <span className="font-noto-sans-sc ml-2.5 inline-block h-[29px] text-base/[29px] font-[500]">
+          <button className={contentInteractionButtonClasses}>
+            <Bookmark
+              className="h-[13px] w-[13px] md:h-5 md:w-5"
+              strokeWidth={2.1}
+            />
+            <span className="font-noto-sans-sc ml-2.5 hidden h-[29px] text-base/[29px] font-[500] md:inline-block">
               Subscribe
             </span>
           </button>
 
-          <button className="ml-[35px] flex h-[50px] items-center justify-center rounded-[100px] border border-[var(--app-text-color-crimson)] px-[15px] text-[var(--app-text-color-crimson)]">
-            <Share className="h-[20px] w-[20px]" strokeWidth={2.1} />
-            <span className="font-noto-sans-sc ml-2.5 inline-block h-[29px] text-base/[29px] font-[500]">
-              Share
+          <Link
+            href="/"
+            className={`pink-lift-shadow ${contentInteractionButtonClasses} w-[60%] bg-[var(--app-text-color-crimson)] text-[var(--app-text-color-near-white)]`}
+          >
+            <BookOpen
+              className="h-[14px] w-[14px] md:h-[18px] md:w-[18px]"
+              strokeWidth={2.1}
+            />
+            <span className="font-noto-sans-sc ml-2.5 inline-block text-[13px]/[37px] font-[500] md:h-[29px] md:text-base/[29px]">
+              Read Now
             </span>
-          </button>
+          </Link>
         </div>
 
-        <div className="h-10 w-full max-w-[1200px] border-b border-black border-opacity-[0.2] md:h-20">
-          <div className="float-left w-[35%] md:w-auto">
+        <div className="menu-controls h-10 w-full max-w-[1200px] border-b border-black border-opacity-[0.2] md:h-20">
+          <div className="float-left w-[35%] text-[var(--app-text-color-medium-gray)] md:w-auto">
             <div
               role="button"
               tabIndex={0}
@@ -189,7 +185,9 @@ const ChaptersAndComments: React.FC = () => {
               Updated to Chapter {chaptersPayload.totalChapters}
             </span>
 
-            <span className="mx-3.5 hidden md:inline-block">/</span>
+            <span className="mx-3.5 hidden text-[var(--app-text-color-black)] md:inline-block">
+              /
+            </span>
 
             <div
               role="button"
@@ -211,7 +209,7 @@ const ChaptersAndComments: React.FC = () => {
             </span>
           </div>
 
-          <div className="float-right flex gap-[5px] text-xs/[40px] md:text-sm/[89px]">
+          <div className="float-right flex gap-[5px] text-xs/[40px] text-[var(--app-text-color-slate-gray)] md:text-sm/[89px]">
             <div
               role="button"
               tabIndex={0}
@@ -227,7 +225,7 @@ const ChaptersAndComments: React.FC = () => {
               <span>Positive</span>
             </div>
 
-            <span className="text-[var(--app-text-color-slate-gray)]">/</span>
+            <span className="text-[var(--app-text-color-black)]">/</span>
 
             <div
               role="button"
@@ -251,7 +249,7 @@ const ChaptersAndComments: React.FC = () => {
         </div>
       </div>
 
-      <div className="mx-auto mb-5 w-full max-w-[1200px]">
+      <div className="chapters-list mx-auto mb-5 w-full max-w-[1200px]">
         <div className="ml-[6%] w-[94%] overflow-hidden md:ml-0 md:w-full">
           {chaptersPayload.chapters.slice(0, 6).map((chapter, index) => (
             <ChapterLink
@@ -274,13 +272,13 @@ const ChaptersAndComments: React.FC = () => {
           }
         }}
         onClick={() => setSeeAll(true)}
-        className="mx-auto mb-[80px] h-[42px] w-[80%] cursor-pointer rounded-lg bg-[var(--app-text-color-near-white)] text-center leading-[42px] text-[var(--app-text-color-medium-gray)] md:hidden"
+        className="seeall-button mx-auto mb-[80px] h-[42px] w-[80%] cursor-pointer rounded-lg bg-[var(--app-text-color-near-white)] text-center leading-[42px] text-[var(--app-text-color-medium-gray)] md:hidden"
       >
         See all
       </div>
 
       <div
-        className={`fixed left-0 top-0 z-50 ${seeAll ? "block" : "hidden"} h-screen w-full bg-black/50`}
+        className={`infinite-scroll-list fixed left-0 top-0 z-50 ${seeAll ? "block" : "hidden"} h-screen w-full bg-black/50`}
       >
         <div
           ref={containerRef}
@@ -358,68 +356,19 @@ const ChaptersAndComments: React.FC = () => {
           </div>
 
           {(infiniteScrollLoading || fetchReqRef.current) && (
-            <div className={"my-6 flex items-center justify-center"}>
+            <div
+              className={
+                "loading-indicator my-6 flex items-center justify-center"
+              }
+            >
               <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-[var(--app-text-color-vibrant-pink)]" />
               <div className="sr-only">Loading...</div>
             </div>
           )}
         </div>
       </div>
-
-      <div className="soft-edge-shadow fixed bottom-0 left-0 z-30 flex h-[60px] w-full items-center justify-between bg-white px-[5%] md:hidden">
-        <button className="flex h-[36px] w-[15%] items-center justify-center rounded-[100px] border border-[var(--app-text-color-crimson)] text-[var(--app-text-color-crimson)]">
-          <Share className="h-[13px] w-[13px]" strokeWidth={2.1} />
-        </button>
-
-        <button className="flex h-[36px] w-[15%] items-center justify-center rounded-[100px] border border-[var(--app-text-color-crimson)] text-[var(--app-text-color-crimson)]">
-          <Bookmark className="h-[13px] w-[13px]" strokeWidth={2.1} />
-        </button>
-
-        <Link
-          href="/"
-          className="pink-lift-shadow flex h-[36px] w-[60%] items-center justify-center rounded-[100px] bg-[var(--app-text-color-crimson)] text-[var(--app-text-color-near-white)]"
-        >
-          <BookOpen className="h-[14px] w-[14px]" strokeWidth={2.1} />
-          <span className="font-noto-sans-sc ml-2.5 inline-block text-[13px]/[37px] font-[500]">
-            Read Now
-          </span>
-        </Link>
-      </div>
     </>
   );
 };
-
-const ChapterLink: React.FC<{
-  chapter: Chapter;
-  chaptersOrder: ChaptersOrder;
-  index: number;
-  totalChapters: number;
-}> = React.memo(({ chapter, chaptersOrder, index, totalChapters }) => {
-  return (
-    <Link
-      href="/"
-      className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-[var(--app-text-color-black)] md:min-h-[60px] md:w-[285px] md:p-[6px_0_8px_15px]"
-    >
-      <div className="h-[24px] text-xs md:text-sm">
-        <span className="mr-5">
-          {chaptersOrder === "positive" ? index + 1 : totalChapters - index}
-        </span>
-        <span className="hide-text">{chapter.title}</span>
-      </div>
-
-      <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">
-        <span>{chapter.releaseDate}</span>
-        <div className="flex items-center gap-[5px]">
-          <Like className="h-[12px] w-[12px]" fill="#999" />
-          <span>{chapter.noOfLike}</span>
-          <CommentSolid className="h-[10px] w-[10px]" fill="#999" />
-          <span>{chapter.noOfComments}</span>
-        </div>
-      </div>
-    </Link>
-  );
-});
-
-ChapterLink.displayName = "Chapter";
 
 export default ChaptersAndComments;
