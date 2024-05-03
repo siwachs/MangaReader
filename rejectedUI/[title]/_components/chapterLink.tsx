@@ -24,6 +24,7 @@ const ChapterLink: React.FC<{
 
       <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">
         <span>{chapter.releaseDate}</span>
+
         <div className="flex items-center gap-[5px]">
           <Like className="h-[12px] w-[12px]" fill="#999" />
           <span>{chapter.noOfLike}</span>

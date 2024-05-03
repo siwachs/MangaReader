@@ -5,20 +5,21 @@ import Link from "next/link";
 
 import ChapterLink from "./chapterLink";
 import { Share, Bookmark, BookOpen, Close } from "@/components/icons";
+import {
+  contentInteractionButtonClasses,
+  contentInteractionButtonTextClasses,
+} from "../_styles";
 import { MenuType, ChaptersPayload } from "../_types";
 
 const menuTypeClasses =
   "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=true]:text-[var(--app-text-color-red)] md:h-20 md:w-auto md:border-none md:text-xl/[80px]";
 const chaptersOrderClasses =
   "font-noto-sans-sc select-none font-[400] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-crimson)]";
-const contentInteractionButtonClasses =
-  "flex h-[36px] w-[15%] items-center justify-center rounded-[100px] border border-[var(--app-text-color-crimson)] text-[var(--app-text-color-crimson)] md:h-[50px] md:w-auto md:px-[15px]";
 
 const ChaptersAndComments: React.FC<{
   initialChaptersPayload: ChaptersPayload;
 }> = ({ initialChaptersPayload }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const fetchReqRef = useRef(false);
 
   const [infiniteScrollLoading, setInfiniteScrollLoading] =
     useState<boolean>(false);
@@ -33,10 +34,10 @@ const ChaptersAndComments: React.FC<{
 
   // on Change Chapters Order
   useEffect(() => {
+    containerRef.current?.scrollTo(0, 0);
     const getChapters = async () => {
       try {
         setInfiniteScrollLoading(true);
-        fetchReqRef.current = true;
 
         const chaptersResponse = await fetch(
           `/api/chapters?pagination=true&chaptersOrder=${chaptersOrder}`,
@@ -51,14 +52,11 @@ const ChaptersAndComments: React.FC<{
       } catch (error: any) {
       } finally {
         setInfiniteScrollLoading(false);
-        fetchReqRef.current = false;
       }
     };
 
-    if (seeAll) {
-      getChapters();
-    }
-  }, [chaptersOrder, seeAll]);
+    getChapters();
+  }, [chaptersOrder]);
 
   // on Infinite Scroll
   useEffect(() => {
@@ -68,7 +66,6 @@ const ChaptersAndComments: React.FC<{
     const getMoreChapters = async () => {
       try {
         setInfiniteScrollLoading(true);
-        fetchReqRef.current = true;
 
         const chaptersResponse = await fetch(
           `/api/chapters?pagination=true&pageNumber=${chaptersPayload.pageNumber + 1}&chaptersOrder=${chaptersOrder}`,
@@ -84,13 +81,11 @@ const ChaptersAndComments: React.FC<{
       } catch (error: any) {
       } finally {
         setInfiniteScrollLoading(false);
-        fetchReqRef.current = false;
       }
     };
 
     const handleScroll = () => {
-      if (!container || fetchReqRef.current || infiniteScrollLoading || !seeAll)
-        return;
+      if (!container || infiniteScrollLoading || !seeAll) return;
 
       const bottomOffset = container.scrollHeight - container.clientHeight;
       const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
@@ -135,9 +130,7 @@ const ChaptersAndComments: React.FC<{
               className="h-[13px] w-[13px] md:h-5 md:w-5"
               strokeWidth={2.1}
             />
-            <span className="font-noto-sans-sc ml-2.5 hidden h-[29px] text-base/[29px] font-[500] md:inline-block">
-              Share
-            </span>
+            <span className={contentInteractionButtonTextClasses}>Share</span>
           </button>
 
           <button className={contentInteractionButtonClasses}>
@@ -145,7 +138,7 @@ const ChaptersAndComments: React.FC<{
               className="h-[13px] w-[13px] md:h-5 md:w-5"
               strokeWidth={2.1}
             />
-            <span className="font-noto-sans-sc ml-2.5 hidden h-[29px] text-base/[29px] font-[500] md:inline-block">
+            <span className={contentInteractionButtonTextClasses}>
               Subscribe
             </span>
           </button>
@@ -164,7 +157,7 @@ const ChaptersAndComments: React.FC<{
           </Link>
         </div>
 
-        <div className="menu-controls h-10 w-full max-w-[1200px] border-b border-black border-opacity-[0.2] md:h-20">
+        <div className="menu-controls h-10 border-b border-black/[0.2] md:h-20">
           <div className="float-left w-[35%] text-[var(--app-text-color-medium-gray)] md:w-auto">
             <div
               role="button"
@@ -250,7 +243,7 @@ const ChaptersAndComments: React.FC<{
       </div>
 
       <div className="chapters-list mx-auto mb-5 w-full max-w-[1200px]">
-        <div className="ml-[6%] w-[94%] overflow-hidden md:ml-0 md:w-full">
+        <div className="ml-[6%] w-[94%] md:ml-0 md:flex md:w-full md:flex-wrap md:justify-center">
           {chaptersPayload.chapters.slice(0, 6).map((chapter, index) => (
             <ChapterLink
               key={chapter._id}
@@ -272,7 +265,7 @@ const ChaptersAndComments: React.FC<{
           }
         }}
         onClick={() => setSeeAll(true)}
-        className="seeall-button mx-auto mb-[80px] h-[42px] w-[80%] cursor-pointer rounded-lg bg-[var(--app-text-color-near-white)] text-center leading-[42px] text-[var(--app-text-color-medium-gray)] md:hidden"
+        className="see-all-button mx-auto mb-20 h-[42px] w-[80%] cursor-pointer rounded-lg bg-[var(--app-text-color-near-white)] text-center leading-[42px] text-[var(--app-text-color-medium-gray)] md:hidden"
       >
         See all
       </div>
@@ -282,7 +275,7 @@ const ChaptersAndComments: React.FC<{
       >
         <div
           ref={containerRef}
-          className="fixed bottom-0 left-0 z-[60] h-[90vh] w-full overflow-auto rounded-t-[16px] bg-white"
+          className="fixed bottom-0 left-0 z-[60] max-h-[90vh] w-full overflow-auto rounded-t-[16px] bg-white"
         >
           <div className="fixed w-full rounded-t-[16px] bg-white">
             <p className="m-4 mt-4 text-center text-base font-[500] text-[var(--app-text-color-dark-gray)]">
@@ -299,6 +292,7 @@ const ChaptersAndComments: React.FC<{
               <p className="text-[13px] text-[var(--app-text-color-dark-gray)]">
                 Updated to Chapter {chaptersPayload.totalChapters}
               </p>
+
               <div className="flex items-center text-[13px] leading-4">
                 <div
                   role="button"
@@ -317,9 +311,7 @@ const ChaptersAndComments: React.FC<{
                   <span>Positive</span>
                 </div>
 
-                <span className="text-[var(--app-text-color-pale-silver)]">
-                    |  
-                </span>
+                <span>  |  </span>
 
                 <div
                   role="button"
@@ -342,7 +334,7 @@ const ChaptersAndComments: React.FC<{
           </div>
 
           <div
-            className={`${(!infiniteScrollLoading || !fetchReqRef.current) && "mb-12"} mt-[100px] flex flex-wrap items-center justify-between px-[4%]`}
+            className={`${!infiniteScrollLoading && "mb-12"} mt-[100px] flex flex-wrap justify-between px-[4%]`}
           >
             {chaptersPayload.infiniteScrollChapters.map((chapter, index) => (
               <ChapterLink
@@ -355,7 +347,7 @@ const ChaptersAndComments: React.FC<{
             ))}
           </div>
 
-          {(infiniteScrollLoading || fetchReqRef.current) && (
+          {infiniteScrollLoading && (
             <div
               className={
                 "loading-indicator my-6 flex items-center justify-center"
