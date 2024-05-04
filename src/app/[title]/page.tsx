@@ -90,6 +90,21 @@ export default function TitlePage() {
           </div>
         </div>
       </div>
+
+      <div className="detail-episodes mt-[30px]">
+        <div className="detail-title mt-2 flex justify-between px-4">
+          <p className="ml-4 text-lg font-[700] text-[var(--app-text-color-dark-gray)]">
+            {data.title} Chapters
+          </p>
+          <div className="flex items-center text-[13px] leading-4">
+            <span>Reverse</span>
+            <span className="mx-1">|</span>
+            <span>Positive</span>
+          </div>
+        </div>
+
+        <div className="detail-subscribe"></div>
+      </div>
     </div>
   );
 }
