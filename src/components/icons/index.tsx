@@ -146,9 +146,8 @@ const Close: React.FC<{
   );
 };
 
-// Navbar Icons Start
-const Home: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const Home: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -158,7 +157,7 @@ const Home: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
@@ -169,8 +168,8 @@ const Home: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
-const Clock: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const Clock: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -180,7 +179,7 @@ const Clock: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
@@ -191,8 +190,8 @@ const Clock: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
-const Book: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const Book: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -202,7 +201,7 @@ const Book: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
@@ -213,8 +212,8 @@ const Book: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
-const Trophy: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const Trophy: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -224,7 +223,7 @@ const Trophy: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
@@ -235,8 +234,8 @@ const Trophy: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
-const NotePad: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const NotePad: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -246,7 +245,7 @@ const NotePad: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
@@ -257,8 +256,8 @@ const NotePad: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
-const Game: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const Game: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -268,7 +267,7 @@ const Game: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
@@ -279,8 +278,8 @@ const Game: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
-const Star: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const Star: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -290,7 +289,7 @@ const Star: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
@@ -301,8 +300,8 @@ const Star: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
   );
 };
 
-const SignIn: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const SignIn: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -312,7 +311,7 @@ const SignIn: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
@@ -322,7 +321,6 @@ const SignIn: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
     </svg>
   );
 };
-// Navbar Icons End
 
 const Like: React.FC<{ className?: string; fill?: string }> = ({
   className = "h-5 w-5",
@@ -445,15 +443,15 @@ const CommentSolid: React.FC<{ className?: string; fill?: string }> = ({
   );
 };
 
-const StarSolid: React.FC<{ className?: string; inverse?: boolean }> = ({
-  className = "h-5 w-5",
-  inverse = false,
-}) => {
+const StarSolid: React.FC<{
+  className?: string;
+  fill?: string;
+}> = ({ className = "h-5 w-5", fill = "#FFBC00" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      fill={inverse ? "#d8d8d8" : "#ffbd4f"}
+      fill={fill}
       className={className}
     >
       <path
@@ -461,6 +459,30 @@ const StarSolid: React.FC<{ className?: string; inverse?: boolean }> = ({
         d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
         clipRule="evenodd"
       />
+    </svg>
+  );
+};
+
+const HalfStarSolid: React.FC<{
+  className?: string;
+  fill?: string;
+}> = ({ className = "h-5 w-5", fill = "#FFBC00" }) => {
+  return (
+    <svg
+      fill={fill}
+      className={className}
+      viewBox="0 0 52 52"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+      <g
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <g id="SVGRepo_iconCarrier">
+        <path d="M27.4133467,3.10133815 L32.0133467,18.1013381 C32.2133467,18.7013381 32.8133467,19.0013381 33.4133467,19.0013381 L48.4133467,19.0013381 C49.9133467,19.0013381 50.5133467,21.0013381 49.3133467,21.9013381 L37.1133467,30.9013381 C36.6133467,31.3013381 36.4133467,32.0013381 36.6133467,32.6013381 L42.4133467,48.0013381 C42.8133467,49.4013381 41.3133467,50.6013381 40.1133467,49.7013381 L27.0133467,39.9013381 C26.5133467,39.5013381 25.8133467,39.5013381 25.2133467,39.9013381 L12.0133467,49.7013381 C10.8133467,50.6013381 9.21334668,49.4013381 9.71334668,48.0013381 L15.3133467,32.6013381 C15.5133467,32.0013381 15.3133467,31.3013381 14.8133467,30.9013381 L2.61334668,21.9013381 C1.41334668,21.0013381 2.11334668,19.0013381 3.51334668,19.0013381 L18.5133467,19.0013381 C19.2133467,19.0013381 19.7133467,18.8013381 19.9133467,18.1013381 L24.6133467,3.00133815 C25.0133467,1.60133815 27.0133467,1.70133815 27.4133467,3.10133815 Z M26.0133467,12.8023264 C26,14.1700393 26,33.5426636 26,34.4953918 C26.1865845,34.6476135 28.9331193,36.6890643 34.2396046,40.6197441 C34.9394191,41.144605 35.8141872,40.4447905 35.5809157,39.6283403 L35.5809157,39.6283403 L32.3085327,31.0201416 C31.9597778,30.2501831 32.3085327,29.7487793 32.7398682,29.4849854 L32.7398682,29.4849854 L39.6048489,24.6961622 C40.3046634,24.1713013 39.9547562,23.0049438 39.0799881,23.0049438 L39.0799881,23.0049438 L31.0206299,23.0049438 C30.6707226,23.0049438 29.7518921,22.8880615 29.5025635,21.9888306 L29.5025635,21.9888306 L26.8332347,13.4436151 C26.7175852,13.0388421 26.3602784,12.8204102 26.0133467,12.8023264 Z" />
+      </g>
     </svg>
   );
 };
@@ -591,6 +613,28 @@ const BookOpen: React.FC<{
   );
 };
 
+const Calender: React.FC<{
+  className?: string;
+  strokeWidth?: number;
+}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={strokeWidth}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+      />
+    </svg>
+  );
+};
+
 export {
   ChevronDown,
   ChevronLeft,
@@ -611,10 +655,12 @@ export {
   Heart,
   CommentSolid,
   StarSolid,
+  HalfStarSolid,
   Pencil,
   ArrowDownCircle,
   CloseCircle,
   Share,
   Bookmark,
   BookOpen,
+  Calender,
 };

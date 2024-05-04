@@ -3,11 +3,14 @@
 @tailwind utilities;
 
 :root {
+  --app-background-overlay-transparent-black: #0000009e;
+
   --app-navlink-color: #4d5168;
 
   --app-text-color-red: #ff5454;
   --app-text-color-crimson: #ff204e;
   --app-text-color-red-orange: #ff5b3b;
+  --app-text-color-right-pink: #ff526e;
   --app-text-color-vibrant-pink: rgb(255, 82, 110);
 
   --app-text-color-black: #000000;
@@ -30,6 +33,7 @@
   --app-border-color-gray: #d8d8d8;
 
   --app-text-color-orange-yellow: #ffbd4f;
+  --app-text-color-vibrant-golden: #ffbc00;
 }
 
 body {

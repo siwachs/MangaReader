@@ -45,7 +45,7 @@ const Sidebar: React.FC<{
               <React.Fragment key={key}>
                 <Link href={link} onClick={() => setSidebarOpen(false)}>
                   <div className="flex h-[60px] flex-shrink-0 items-center gap-[15px] text-base font-bold text-gray-800">
-                    <Icon classNames="h-[16px] w-[16px]" strokeWidth={2.6} />
+                    <Icon className="h-[16px] w-[16px]" strokeWidth={2.6} />
                     <span>{label}</span>
                   </div>
                 </Link>
