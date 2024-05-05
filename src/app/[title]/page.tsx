@@ -1,6 +1,12 @@
 import Image from "next/image";
 
-import { Calender, Star, StarSolid, HalfStarSolid } from "@/components/icons";
+import {
+  Calender,
+  Star,
+  StarSolid,
+  HalfStarSolid,
+  BellSolid,
+} from "@/components/icons";
 import Link from "next/link";
 
 const data = {
@@ -10,6 +16,8 @@ const data = {
   rating: 8.1,
   author: "Momo",
   synonyms: ["Wǔ Liàn Diān Fēng"],
+  reminderText: "A new chapter is coming",
+  chapters: [],
 };
 
 export default function TitlePage() {
@@ -82,7 +90,7 @@ export default function TitlePage() {
 
             <div className="mt-2.5 flex items-center">
               <Link href="/">
-                <div className="flex h-[30px] items-center justify-center rounded-[20px] bg-[var(--app-text-color-right-pink)] px-[15px]">
+                <div className="flex h-[30px] items-center justify-center rounded-[20px] bg-[var(--app-text-color-bright-pink)] px-[15px]">
                   Read Latest Chapter
                 </div>
               </Link>
@@ -97,13 +105,30 @@ export default function TitlePage() {
             {data.title} Chapters
           </p>
           <div className="flex items-center text-[13px] leading-4">
-            <span>Reverse</span>
-            <span className="mx-1">|</span>
-            <span>Positive</span>
+            <span
+              className="cursor-pointer data-[active=true]:text-[var(--app-text-color-vibrant-pink)]"
+              data-active={true}
+            >
+              Reverse
+            </span>
+            <span className="mx-1 text-[var(--app-text-color-pale-silver)]">
+              |
+            </span>
+            <span className="cursor-pointer">Positive</span>
           </div>
         </div>
 
-        <div className="detail-subscribe"></div>
+        <div className="detail-subscribe mx-4 my-2 flex items-center justify-between rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3">
+          <p className="text-sm/[18px] font-[400] text-[var(--app-text-color-medium-gray)]">
+            {data.reminderText}
+          </p>
+          <div className="flex cursor-pointer items-center gap-0.5 text-right text-xs text-[var(--app-text-color-bright-pink)]">
+            <BellSolid className="h-3 w-3" />
+            <span>Update reminder</span>
+          </div>
+        </div>
+
+        <div className="detail-episodes-continer"></div>
       </div>
     </div>
   );

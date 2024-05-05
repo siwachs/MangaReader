@@ -10,21 +10,23 @@
   --app-text-color-red: #ff5454;
   --app-text-color-crimson: #ff204e;
   --app-text-color-red-orange: #ff5b3b;
-  --app-text-color-right-pink: #ff526e;
+  --app-text-color-bright-pink: #ff526e;
   --app-text-color-vibrant-pink: rgb(255, 82, 110);
 
   --app-text-color-black: #000000;
+
   --app-text-color-medium-gray: #999;
   --app-text-color-slate-gray: #888888;
   --app-text-color-light-gray: #c9caca;
   --app-text-color-pale-silver: #eeeeee;
-  --app-text-color-silver-gray: #cccccc;
+  --app-text-color-silver-gray: #1e0808;
   --app-text-medium-dark-gray: #979797;
   --app-text-color-dark-gray: #333;
   --app-text-color-darker-gray: #555;
   --app-text-color-muted: #948084;
   --app-text-color-neutral-gray: #c6c6c6;
   --app-text-color-standard-gray: #666;
+  --app-text-color-very-light-gray: #f9f9f9;
 
   --app-text-color-dark-slate: #404040;
 
