@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   Calender,
@@ -6,10 +7,12 @@ import {
   StarSolid,
   HalfStarSolid,
   BellSolid,
+  ChevronDown,
+  InformationCircle,
 } from "@/components/icons";
-import Link from "next/link";
+import { Content } from "./_types";
 
-const data = {
+const data: Content = {
   poster: "/dummyContent/mp_poster.jpg",
   title: "Martial Peak",
   status: "Ongoing",
@@ -17,7 +20,84 @@ const data = {
   author: "Momo",
   synonyms: ["Wǔ Liàn Diān Fēng"],
   reminderText: "A new chapter is coming",
-  chapters: [],
+  chapters: [
+    {
+      _id: "3738",
+      title: "Martial Peak Ch.3738",
+      releaseDate: "05/05/2024",
+    },
+    {
+      _id: "3737",
+      title: "Martial Peak Ch.3737",
+      releaseDate: "04/05/2024",
+    },
+    {
+      _id: "3736",
+      title: "Martial Peak Ch.3736",
+      releaseDate: "03/05/2024",
+    },
+    {
+      _id: "1",
+      title: "Martial Peak Ch.1",
+      releaseDate: "01/05/2023",
+    },
+    {
+      _id: "2",
+      title: "Martial Peak Ch.2",
+      releaseDate: "02/05/2023",
+    },
+    {
+      _id: "3",
+      title: "Martial Peak Ch.3",
+      releaseDate: "03/05/2023",
+    },
+  ],
+  description: `Martial Peak Manga is a Chinese Manhua series adapted from a novel, set in a fantastical world full of powerful warriors and mystic martial arts. The story follows Yang Kai, a humble youth born into lower society, who unexpectedly discovers the "Nine Yang Divine Technique." This ancient manuscript grants him incredible martial prowess and a chance for a cultivation journey.
+
+  Main Character: Ren Zhi Bai is a character in Martial.Peak Manga. He belongs to the Dawn Squad, under the leadership of Yang Kai, and stands out as one of the most gifted young cultivators in the Blue Sky Pass.`,
+  galleryImages: [
+    "/dummyContent/mp_poster.jpg",
+    "/dummyContent/1.webp",
+    "/dummyContent/2.webp",
+    "/dummyContent/3.webp",
+    "/dummyContent/4.webp",
+    "/dummyContent/5.webp",
+    "/dummyContent/6.webp",
+    "/dummyContent/thumbnail.webp",
+  ],
+  newsList: [
+    { title: "Meng Wu Ya Martial Peak", link: "/" },
+    { title: "Su Yan Martial Peak", link: "/" },
+    { title: "Yang Kai Martial Peak", link: "/" },
+  ],
+  latestUpdates: [
+    { title: "One Piece", link: "https://www.mangago.me/read-manga/one_piece" },
+    { title: "Naruto", link: "https://www.mangago.me/read-manga/naruto" },
+    {
+      title: "Attack on Titan",
+      link: "https://www.mangago.me/read-manga/attack_on_titan",
+    },
+    {
+      title: "My Hero Academia",
+      link: "https://www.mangago.me/read-manga/my_hero_academia",
+    },
+    {
+      title: "Death Note",
+      link: "https://www.mangago.me/read-manga/death_note",
+    },
+    {
+      title: "Demon Slayer: Kimetsu no Yaiba",
+      link: "https://www.mangago.me/read-manga/demon_slayer_kimetsu_no_yaiba",
+    },
+    {
+      title: "Dragon Ball",
+      link: "https://www.mangago.me/read-manga/dragon_ball",
+    },
+    {
+      title: "Fullmetal Alchemist",
+      link: "https://www.mangago.me/read-manga/fullmetal_alchemist",
+    },
+  ],
 };
 
 export default function TitlePage() {
@@ -104,6 +184,7 @@ export default function TitlePage() {
           <p className="ml-4 text-lg font-[700] text-[var(--app-text-color-dark-gray)]">
             {data.title} Chapters
           </p>
+
           <div className="flex items-center text-[13px] leading-4">
             <span
               className="cursor-pointer data-[active=true]:text-[var(--app-text-color-vibrant-pink)]"
@@ -128,8 +209,156 @@ export default function TitlePage() {
           </div>
         </div>
 
-        <div className="detail-episodes-continer"></div>
+        <div className="detail-episodes-continer">
+          {data.chapters.map((chapter, index) => (
+            <div
+              key={chapter._id}
+              className={`${index + 1 > 3 && "hidden"} mx-4 my-2 rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3`}
+            >
+              <div className="flex items-center justify-between">
+                <Link href="/">
+                  <p className="text-sm/[18px] font-[400] text-[var(--app-text-color-dark-gray)]">
+                    {chapter.title}
+                  </p>
+                  <p className="mt-2.5 text-xs font-[400] text-[var(--app-text-color-medium-gray)]">
+                    release date {chapter.releaseDate}
+                  </p>
+                </Link>
+
+                <ChevronDown
+                  className="h-4 w-4 cursor-pointer text-[var(--app-text-color-medium-gray)]"
+                  strokeWidth={2.6}
+                />
+              </div>
+              <div></div>
+            </div>
+          ))}
+
+          <div className="mx-4 my-2 flex items-center justify-center rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-[var(--app-text-color-medium-gray)]">
+            View All Chapters &nbsp; &gt;&gt;&gt;
+          </div>
+        </div>
       </div>
+
+      <div className="detail-description mt-8 px-4">
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-lg font-[700] text-[var(--app-text-color-dark-gray)]">
+            {data.title} Introduction
+          </p>
+        </div>
+
+        <div className="relative">
+          <p className="line-clamp-3 whitespace-pre-line break-words text-[13px]/[18px] font-[400] text-[var(--app-text-color-dark-gray)]">
+            {data.description}
+          </p>
+
+          <ChevronDown
+            className="absolute bottom-0 right-0 h-4 w-4 cursor-pointer bg-white text-[var(--app-text-color-medium-gray)]"
+            strokeWidth={2.6}
+          />
+        </div>
+      </div>
+
+      <div className="detail-gallery mt-8">
+        <Link href="/">
+          <div className="flex items-center justify-between px-4 text-lg">
+            <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
+              {data.title} Images/Wallpapers
+            </p>
+            <ChevronDown
+              className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
+              strokeWidth={2.6}
+            />
+          </div>
+        </Link>
+
+        <div className="hidden-scrollbar mt-2.5 flex overflow-auto pl-4">
+          {data.galleryImages.map((galleryImage, index) => (
+            <Link key={galleryImage} href="/" className="flex-shrink-0">
+              <div className="mr-3 w-[71px]">
+                <Image
+                  src={galleryImage}
+                  alt={`image${index + 1}`}
+                  width={200}
+                  height={200}
+                  className="h-[100px] w-full object-cover"
+                />
+
+                <p className="line-clamp-1 break-words text-center text-[var(--app-text-color-dark-gray)]">
+                  {data.title} - piece {index + 1}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="detail-news mt-8">
+        <Link href="/">
+          <div className="flex items-center justify-between px-4 text-lg">
+            <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
+              {data.title} News
+            </p>
+            <ChevronDown
+              className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
+              strokeWidth={2.6}
+            />
+          </div>
+        </Link>
+
+        {data.newsList.map((news) => (
+          <Link key={news.title} href={news.link}>
+            <div className="mx-4 mt-3 flex items-center border-b border-[var(--app-border-color-light-gray)] pb-3">
+              <Image
+                src="/assets/internet-searchinformation-icon.png"
+                alt="internet-searchinformation"
+                height={20}
+                width={20}
+                className="mr-1 h-4 w-4"
+              />
+              <p className="line-clamp-1 break-words text-[13px] text-[var(--app-text-color-dark-gray)]">
+                {news.title}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      <div className="details-latest-updates mt-8">
+        <Link href="/">
+          <div className="flex items-center justify-between px-4 text-lg">
+            <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
+              Latest Updates
+            </p>
+            <ChevronDown
+              className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
+              strokeWidth={2.6}
+            />
+          </div>
+        </Link>
+
+        <div className="flex flex-wrap items-center justify-between px-4">
+          {data.latestUpdates.map((content) => (
+            <Link
+              key={content.title}
+              href={content.link}
+              className="mt-3 line-clamp-1 w-[48%] break-words text-[13px] font-[400] text-[var(--app-text-color-dark-gray)]"
+            >
+              <p>{content.title}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <Link
+        href="/"
+        className="mb-[30px] mt-8 flex items-center justify-center text-[var(--app-text-color-medium-gray)]"
+      >
+        <p className="mr-2 text-xs font-[400] underline">
+          Have problems with reading?
+        </p>
+        <InformationCircle className="h-[13px] w-[13px]" strokeWidth={2.6} />
+      </Link>
     </div>
   );
 }
