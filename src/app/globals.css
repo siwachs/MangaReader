@@ -18,6 +18,7 @@
   --app-text-color-medium-gray: #999;
   --app-text-color-slate-gray: #888888;
   --app-text-color-light-gray: #c9caca;
+  --app-text-color-gray-light: #ccc;
   --app-text-color-pale-silver: #eeeeee;
   --app-text-color-silver-gray: #1e0808;
   --app-text-medium-dark-gray: #979797;
@@ -31,12 +32,14 @@
   --app-text-color-dark-slate: #404040;
 
   --app-text-color-near-white: #f8f8f8;
+  --app-text-color-almost-white: #fafafa;
 
   --app-border-color-gray: #d8d8d8;
   --app-border-color-light-gray: #eee;
 
   --app-text-color-orange-yellow: #ffbd4f;
   --app-text-color-vibrant-golden: #ffbc00;
+  --app-text-color-yellow: #ffe54c;
 }
 
 body {
