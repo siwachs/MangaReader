@@ -60,6 +60,11 @@ const data: Content = {
       title: "Martial Peak Ch.3",
       releaseDate: "03/05/2023",
     },
+    {
+      _id: "4",
+      title: "Martial Peak Ch.4",
+      releaseDate: "06/05/2023",
+    },
   ],
   totalChapters: 6,
   description: `Martial Peak Manga is a Chinese Manhua series adapted from a novel, set in a fantastical world full of powerful warriors and mystic martial arts. The story follows Yang Kai, a humble youth born into lower society, who unexpectedly discovers the "Nine Yang Divine Technique." This ancient manuscript grants him incredible martial prowess and a chance for a cultivation journey.
@@ -249,12 +254,16 @@ export default function TitlePage() {
         </div>
 
         <div className="detail-episodes mt-[30px]">
-          <div className="detail-title mt-2 flex justify-between px-4">
-            <p className="ml-4 text-lg font-[700] text-[var(--app-text-color-dark-gray)]">
+          <div className="detail-title mx-auto mt-2 flex max-w-[1200px] justify-between px-4 md:mt-3 md:justify-start md:px-0">
+            <p className="ml-4 text-lg font-[700] text-[var(--app-text-color-dark-gray)] md:text-2xl">
               {data.title} Chapters
             </p>
+            <div className="detail-subscribe ml-2.5 hidden cursor-pointer items-center gap-0.5 text-sm font-[400] text-[var(--app-text-color-bright-pink)] md:flex">
+              <BellSolid className="h-3 w-3" />
+              <span>Update reminder</span>
+            </div>
 
-            <div className="flex items-center text-[13px] leading-4">
+            <div className="flex items-center text-[13px] leading-4 md:hidden">
               <span
                 className="cursor-pointer data-[active=true]:text-[var(--app-text-color-vibrant-pink)]"
                 data-active={true}
@@ -268,7 +277,18 @@ export default function TitlePage() {
             </div>
           </div>
 
-          <div className="detail-subscribe mx-4 my-2 flex items-center justify-between rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3">
+          <div className="mx-auto mb-6 hidden max-w-[1200px] items-center justify-end text-lg font-[400] text-[var(--app-text-color-dark-gray)] md:flex">
+            <p
+              className="cursor-pointer data-[active=true]:text-[var(--app-text-color-vibrant-pink)]"
+              data-active={true}
+            >
+              Reverse
+            </p>
+            <p className="text-[var(--app-text-color-pale-silver)]">   |  </p>
+            <p className="cursor-pointer">Positive</p>
+          </div>
+
+          <div className="detail-subscribe mx-4 my-2 flex items-center justify-between rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 md:hidden">
             <p className="text-sm/[18px] font-[400] text-[var(--app-text-color-medium-gray)]">
               {data.reminderText}
             </p>
@@ -278,11 +298,11 @@ export default function TitlePage() {
             </div>
           </div>
 
-          <div className="detail-episodes-continer">
+          <div className="detail-episodes-continer mx-auto max-w-[1200px] flex-wrap justify-between md:flex">
             {data.chapters.map((chapter, index) => (
               <div
                 key={chapter._id}
-                className={`${index + 1 > 3 && "hidden"} mx-4 my-2 rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3`}
+                className={`${index + 1 > 3 && ""} mx-4 my-2 rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 md:m-0 md:mb-4 md:w-80`}
               >
                 <div className="flex items-center justify-between">
                   <Link href="/">
@@ -299,17 +319,21 @@ export default function TitlePage() {
                     strokeWidth={2.6}
                   />
                 </div>
-                <div></div>
               </div>
             ))}
 
-            <div className="mx-4 my-2 flex items-center justify-center rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-[var(--app-text-color-medium-gray)]">
-              View All Chapters &nbsp; &gt;&gt;&gt;
+            <div className="mx-4 my-2 flex cursor-pointer items-center justify-center rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-[var(--app-text-color-medium-gray)] md:m-0 md:mb-4 md:w-80 md:gap-1">
+              View All Chapters
+              <span className="md:hidden"> &nbsp; &gt;&gt;&gt;</span>
+              <ChevronDown
+                className="hidden h-4 w-4 text-[var(--app-text-color-medium-gray)] md:inline-block"
+                strokeWidth={2.6}
+              />
             </div>
           </div>
         </div>
 
-        <div className="detail-description mt-8 px-4">
+        <div className="detail-description mt-8 px-4 md:hidden">
           <div className="mb-2 flex items-center justify-between">
             <p className="text-lg font-[700] text-[var(--app-text-color-dark-gray)]">
               {data.title} Introduction
