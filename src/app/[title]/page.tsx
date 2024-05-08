@@ -81,9 +81,24 @@ const data: Content = {
     "/dummyContent/thumbnail.webp",
   ],
   newsList: [
-    { title: "Meng Wu Ya Martial Peak", link: "/" },
-    { title: "Su Yan Martial Peak", link: "/" },
-    { title: "Yang Kai Martial Peak", link: "/" },
+    {
+      title: "Meng Wu Ya Martial Peak",
+      link: "/",
+      shortDescription:
+        "Exploring the Enigmatic Warrior Embark on a thrilling journey into the world of 'Meng Wu Ya: Martial Peak,' where we unravel the mysteries surrounding an enigmatic warrior. In this captivating tale, we delve into the depths of Meng Wu Ya's intricate personality, admire his compelling appearance, witness his awe-inspiring power and abilities, and explore the profound relationships that shape his destiny.",
+    },
+    {
+      title: "Su Yan Martial Peak",
+      link: "/",
+      shortDescription:
+        "Exploring the Enigmatic World of Han Fei Zi Step into the mesmerizing world of 'Han Fei Zi Martial Peak.' In this article, we take a deep dive into the enigmatic character of Han Fei Zi, his unique appearance, his awe-inspiring martial prowess, and the intricate web of relationships that define his journey. Join us as we unravel the secrets of this captivating martial arts epic.",
+    },
+    {
+      title: "Yang Kai Martial Peak",
+      link: "/",
+      shortDescription:
+        "Unleash the Power Within Embark on an epic journey with 'Yang Kai Martial Peak,' a tale that delves into the world of martial arts, power, and self-discovery like never before.",
+    },
   ],
   latestUpdates: [
     { title: "One Piece", link: "https://www.mangago.me/read-manga/one_piece" },
@@ -255,7 +270,7 @@ export default function TitlePage() {
 
         <div className="detail-episodes mt-[30px]">
           <div className="detail-title mx-auto mt-2 flex max-w-[1200px] justify-between px-4 md:mt-3 md:justify-start md:px-0">
-            <p className="ml-4 text-lg font-[700] text-[var(--app-text-color-dark-gray)] md:text-2xl">
+            <p className="ml-4 text-lg font-[700] text-[var(--app-text-color-dark-gray)] md:ml-0 md:text-2xl">
               {data.title} Chapters
             </p>
             <div className="detail-subscribe ml-2.5 hidden cursor-pointer items-center gap-0.5 text-sm font-[400] text-[var(--app-text-color-bright-pink)] md:flex">
@@ -352,7 +367,7 @@ export default function TitlePage() {
           </div>
         </div>
 
-        <div className="detail-gallery mt-8">
+        <div className="detail-gallery mt-8 max-w-[1200px] md:hidden">
           <Link href="/">
             <div className="flex items-center justify-between px-4 text-lg">
               <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
@@ -386,7 +401,21 @@ export default function TitlePage() {
           </div>
         </div>
 
-        <div className="detail-news mt-8">
+        <div className="detail-title-box mx-auto mb-6 mt-12 hidden max-w-[1200px] items-center justify-between md:flex">
+          <p className="text-2xl font-[700] text-[var(--app-text-color-dark-gray)]">
+            {data.title} Images/Wallpaper
+          </p>
+
+          <Link href="/" className="text-[var(--app-text-color-bright-pink)]">
+            <span>{data.galleryImages.length} Pictures</span>{" "}
+            <ChevronDown
+              className="inline-block h-4 w-4 -rotate-90"
+              strokeWidth={2.6}
+            />
+          </Link>
+        </div>
+
+        <div className="detail-news mt-8 md:hidden">
           <Link href="/">
             <div className="flex items-center justify-between px-4 text-lg">
               <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
@@ -417,7 +446,46 @@ export default function TitlePage() {
           ))}
         </div>
 
-        <div className="details-latest-updates mt-8">
+        <div className="detail-title-box mx-auto mb-6 mt-12 hidden max-w-[1200px] items-center justify-between md:flex">
+          <p className="text-2xl font-[700] text-[var(--app-text-color-dark-gray)]">
+            {data.title} News
+          </p>
+
+          <Link href="/" className="text-[var(--app-text-color-bright-pink)]">
+            <span>{data.newsList.length} Articles</span>{" "}
+            <ChevronDown
+              className="inline-block h-4 w-4 -rotate-90"
+              strokeWidth={2.6}
+            />
+          </Link>
+        </div>
+
+        <div className="mx-auto hidden max-w-[1200px] flex-col md:flex">
+          {data.newsList.map((news) => (
+            <Link href="/" key={news.title}>
+              <div className="border-b border-[var(--app-text-color-pale-silver)] py-3">
+                <div className="mb-2.5 flex items-center">
+                  <Image
+                    src="/assets/internet-searchinformation-icon.png"
+                    alt="internet-searchinformation"
+                    height={20}
+                    width={20}
+                    className="mr-2 h-[18px] w-[18px]"
+                  />
+                  <p className="line-clamp-1 break-words text-left text-lg text-[var(--app-text-color-dark-gray)]">
+                    {news.title}
+                  </p>
+                </div>
+
+                <p className="line-clamp-2 break-words text-sm font-[300] text-[var(--app-text-color-dim-gray)]">
+                  {news.shortDescription}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div className="details-latest-updates mt-8 md:hidden">
           <Link href="/">
             <div className="flex items-center justify-between px-4 text-lg">
               <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
@@ -441,6 +509,30 @@ export default function TitlePage() {
               </Link>
             ))}
           </div>
+        </div>
+
+        <div className="detail-title-box mx-auto mb-6 mt-12 hidden max-w-[1200px] items-center justify-between md:flex">
+          <p className="text-2xl font-[700] text-[var(--app-text-color-dark-gray)]">
+            Latest Updates
+          </p>
+
+          <Link href="/" className="text-[var(--app-text-color-bright-pink)]">
+            <span>More Updates</span>{" "}
+            <ChevronDown
+              className="inline-block h-4 w-4 -rotate-90"
+              strokeWidth={2.6}
+            />
+          </Link>
+        </div>
+
+        <div className="mx-auto hidden min-h-[144px] max-w-[1200px] flex-wrap overflow-hidden md:flex">
+          {data.latestUpdates.map((latestUpdate) => (
+            <Link href="/" key={latestUpdate.title}>
+              <div className="mb-5 mr-6 box-content flex h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-[400] text-[var(--app-text-color-dim-gray)]">
+                {latestUpdate.title }
+              </div>
+            </Link>
+          ))}
         </div>
 
         <Link

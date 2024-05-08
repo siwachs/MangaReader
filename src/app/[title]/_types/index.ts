@@ -1,6 +1,6 @@
 type Chapter = { _id: string; title: string; releaseDate: string };
 
-type News = { title: string; link: string };
+type News = { title: string; link: string; shortDescription: string };
 
 type LatestUpdates = { title: string; link: string };
 
