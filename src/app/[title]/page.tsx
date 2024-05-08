@@ -11,6 +11,7 @@ import {
   InformationCircle,
 } from "@/components/icons";
 import { Content } from "./_types";
+import Description from "./_components/description";
 
 const data: Content = {
   poster: "/dummyContent/mp_poster.jpg",
@@ -130,34 +131,69 @@ const data: Content = {
   ],
 };
 
+const Rating: React.FC<{ rating: number; mobileOnly?: boolean }> = ({
+  rating,
+  mobileOnly,
+}) => {
+  return (
+    <div
+      className={`items-center ${mobileOnly ? "mb-2 flex md:hidden" : "hidden md:flex"}`}
+    >
+      <span className="text-base font-[700] md:mr-3 md:text-lg md:font-[400] lg:text-[var(--app-text-color-standard-gray)]">
+        {rating}
+      </span>
+      <span className="-mt-[1px] text-sm text-[var(--app-text-color-gray-light)] md:hidden">
+          | 
+      </span>
+
+      {[...new Array(5)].map((_, index) => {
+        const uniqueKey = `star${index}`;
+        const effectiveRating = index * 2;
+        let StarIcon;
+
+        if (Math.floor(rating) > effectiveRating) StarIcon = StarSolid;
+        else if (rating > effectiveRating) StarIcon = HalfStarSolid;
+        else StarIcon = Star;
+
+        return (
+          <StarIcon
+            className="h-[15px] w-[15px] text-[var(--app-text-color-vibrant-golden)] md:h-[18px] md:w-[18px]"
+            key={uniqueKey}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
 export default function TitlePage() {
   return (
     <>
       <div className="breadcrum box-content hidden h-[50px] overflow-hidden pt-2.5 md:block">
-        <ul className="mx-auto box-content flex h-[50px] max-w-[1200px] items-center">
+        <ul className="mx-auto box-content flex h-[50px] max-w-[1200px] items-center gap-[5px]">
           <li className="hover:text-[var(--app-text-color-bright-pink)]">
             <Link href="/">Home</Link>
           </li>
-          <li className="ml-[5px] before:text-[var(--app-text-color-medium-gray)] before:content-['_/_'] hover:text-[var(--app-text-color-bright-pink)]">
+          <li className="before:text-[var(--app-text-color-medium-gray)] before:content-['_/_'] hover:text-[var(--app-text-color-bright-pink)]">
             <Link href="/">{data.genres[0]}</Link>
           </li>
-          <li className="ml-[5px] text-[var(--app-text-color-medium-gray)] before:text-[var(--app-text-color-medium-gray)] before:content-['_/_']">
+          <li className="text-[var(--app-text-color-medium-gray)] before:text-[var(--app-text-color-medium-gray)] before:content-['_/_']">
             {data.title}
           </li>
         </ul>
       </div>
 
       <div className="detail-wrapper overflow-hidden">
-        <div className="detail-image relative min-h-[208px] w-screen md:py-8 lg:bg-[var(--app-text-color-almost-white)]">
+        <div className="detail-image relative min-h-[208px] w-full md:py-8 lg:bg-[var(--app-text-color-almost-white)]">
           <Image
             fill
             src={data.poster}
             alt={data.title}
             className="absolute left-0 top-0 h-full w-full object-cover object-center lg:hidden"
           />
-          <div className="absolute top-0 h-full w-full bg-[var(--app-background-overlay-transparent-black)] backdrop-blur-[10px] lg:hidden" />
+          <div className="absolute left-0 top-0 h-full w-full bg-[var(--app-background-overlay-transparent-black)] backdrop-blur-[10px] lg:hidden" />
 
-          <div className="detail-header-content-box relative mx-auto flex w-full max-w-[1200px] gap-4 p-[24px_16px] text-xs text-white md:gap-5 md:p-0 lg:text-[var(--app-text-color-dark-gray)]">
+          <div className="detail-header relative mx-auto flex w-full max-w-[1200px] gap-4 p-[24px_16px] text-xs text-white md:gap-5 md:p-0 lg:text-[var(--app-text-color-dark-gray)]">
             <Image
               src={data.poster}
               alt={data.title}
@@ -166,93 +202,36 @@ export default function TitlePage() {
               className="h-[140px] w-[106px] flex-shrink-0 rounded-lg object-cover md:h-[320px] md:w-[235px]"
             />
 
-            <div className="flex flex-col md:flex-grow md:justify-between">
-              <div className="mb-2.5 hidden items-center gap-[15px] md:flex">
-                <p className="text-2xl font-[700]">{data.title}</p>
-                <div className="flex items-center gap-1">
+            <div className="flex flex-grow flex-col md:justify-between">
+              <div className="mb-2 items-center gap-[15px] md:mb-2.5 md:flex">
+                <p className="text-lg md:text-2xl md:font-[700]">
+                  {data.title}
+                </p>
+
+                <div className="hidden items-center gap-1 md:flex">
                   <Calender className="h-[14px] w-[14px]" />
                   <span>{data.status}</span>
                 </div>
               </div>
-
-              <p className="mb-2 text-lg md:hidden">{data.title}</p>
 
               <div className="mb-2.5 flex items-center gap-1 md:hidden">
                 <Calender className="h-[14px] w-[14px]" />
                 <span>{data.status}</span>
               </div>
 
-              <div className="mb-2 flex items-center md:hidden">
-                <span className="text-base font-[700]">{data.rating}</span>
-                <span className="-mt-[1px] text-sm text-[var(--app-text-color-gray-light)]">
-                    | 
-                </span>
-
-                {[...new Array(5)].map((_, index) => {
-                  const uniqueKey = `star${index}`;
-                  const { rating } = data;
-                  const effectiveRating = index * 2;
-                  let StarIcon;
-
-                  if (Math.floor(rating) > effectiveRating)
-                    StarIcon = StarSolid;
-                  else if (rating > effectiveRating) StarIcon = HalfStarSolid;
-                  else StarIcon = Star;
-
-                  return (
-                    <StarIcon
-                      className="h-[15px] w-[15px] text-[var(--app-text-color-vibrant-golden)]"
-                      key={uniqueKey}
-                    />
-                  );
-                })}
-              </div>
+              <Rating rating={data.rating} mobileOnly />
 
               <div className="mb-1 md:mb-0 md:text-sm/[18px]">
-                <p className="line-clamp-1 break-all">Author: {data.author}</p>
+                <p className="line-clamp-1">Author: {data.author}</p>
               </div>
 
-              <div>
-                <span className="line-clamp-1 font-[400] leading-[15px] md:text-sm/[18px]">
-                  Synonyms: {data.synonyms.join(", ")}
-                </span>
-              </div>
+              <p className="line-clamp-1 font-[400] leading-[15px] md:text-sm/[18px]">
+                Synonyms: {data.synonyms.join(", ")}
+              </p>
 
-              <div className="relative hidden max-w-[800px] md:block">
-                <p className="font-noto-sans-sc line-clamp-5 whitespace-pre-line break-words text-sm font-[400] lg:text-[var(--app-text-color-slate-gray)]">
-                  {data.description}
-                </p>
+              <Description description={data.description} />
 
-                <ChevronDown
-                  className="absolute bottom-1 right-0 h-4 w-4 cursor-pointer rounded-[100px] bg-[var(--app-text-color-medium-gray)] text-white"
-                  strokeWidth={2.6}
-                />
-              </div>
-
-              <div className="mb-2 hidden items-center md:mb-0 md:flex">
-                <span className="mr-3 text-lg font-[400] lg:text-[var(--app-text-color-standard-gray)]">
-                  {data.rating}
-                </span>
-
-                {[...new Array(5)].map((_, index) => {
-                  const uniqueKey = `star${index}`;
-                  const { rating } = data;
-                  const effectiveRating = index * 2;
-                  let StarIcon;
-
-                  if (Math.floor(rating) > effectiveRating)
-                    StarIcon = StarSolid;
-                  else if (rating > effectiveRating) StarIcon = HalfStarSolid;
-                  else StarIcon = Star;
-
-                  return (
-                    <StarIcon
-                      className="h-[18px] w-[18px] text-[var(--app-text-color-vibrant-golden)]"
-                      key={uniqueKey}
-                    />
-                  );
-                })}
-              </div>
+              <Rating rating={data.rating} />
 
               <div className="mt-2.5 flex items-center">
                 <Link href="/">
@@ -529,7 +508,7 @@ export default function TitlePage() {
           {data.latestUpdates.map((latestUpdate) => (
             <Link href="/" key={latestUpdate.title}>
               <div className="mb-5 mr-6 box-content flex h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-[400] text-[var(--app-text-color-dim-gray)]">
-                {latestUpdate.title }
+                {latestUpdate.title}
               </div>
             </Link>
           ))}
