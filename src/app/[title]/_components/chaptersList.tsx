@@ -36,7 +36,7 @@ const ChaptersList: React.FC<{
     initialChaptersPayload,
   );
   const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("reverse");
-  const [infiniteScroll, setInfiniteScroll] = useState(true);
+  const [infiniteScroll, setInfiniteScroll] = useState(false);
   const [showAll, setShowAll] = useState(false);
 
   const changeChapterOrder = (order: ChaptersOrder) => {
@@ -56,12 +56,38 @@ const ChaptersList: React.FC<{
 
     const handleScroll = () => {
       if (!container) return;
+
+      const bottomOffset = container.scrollHeight - container.clientHeight;
+      const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
+      const hasMore = chaptersPayload.pageNumber !== chaptersPayload.totalPages;
+
+      if (scrolledToBottom && hasMore) {
+        setChaptersPayload((prev) => {
+          const startingIndex = (prev.pageNumber + 1) * PAGE_SIZE;
+          const endingIndex = startingIndex + PAGE_SIZE;
+          const nextChapters = chapters.slice(startingIndex, endingIndex);
+
+          return {
+            ...prev,
+            chapters: [...prev.chapters, ...nextChapters],
+            pageNumber: prev.pageNumber + 1,
+          };
+        });
+      }
     };
 
-    container?.addEventListener("scroll", handleScroll);
+    if (infiniteScroll) {
+      container?.addEventListener("scroll", handleScroll);
+    }
 
     return () => container?.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [
+    infiniteScroll,
+    chaptersPayload.pageNumber,
+    chaptersPayload.totalPages,
+    chaptersPayload.chapters,
+    chapters,
+  ]);
 
   return (
     <div className="detail-episodes mt-[30px]">
@@ -157,7 +183,7 @@ const ChaptersList: React.FC<{
               <div className="fixed w-full rounded-t-2xl bg-white text-[var(--app-text-color-dark-gray)]">
                 <p className="m-4 text-center text-base font-[500]">{title}</p>
                 <Close
-                  className="absolute right-4 top-4 h-5 w-5"
+                  className="absolute right-4 top-4 h-5 w-5 cursor-pointer"
                   onClick={() => setInfiniteScroll(false)}
                 />
                 <div className="mt-2 flex items-center justify-between px-4 text-[13px]">
