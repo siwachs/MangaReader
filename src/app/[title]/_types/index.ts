@@ -1,4 +1,4 @@
-type Chapter = { _id: string; title: string; releaseDate: string };
+export type Chapter = { _id: string; title: string; releaseDate: string };
 
 type News = { title: string; link: string; shortDescription: string };
 

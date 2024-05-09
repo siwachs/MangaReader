@@ -1,10 +1,4 @@
-import {
-  Like,
-  CommentSolid,
-  Share,
-  Bookmark,
-  BookOpen,
-} from "@/components/icons";
+import { Like, CommentSolid, Share, Bookmark, Book } from "@/components/icons";
 import {
   contentInteractionButtonClasses,
   contentInteractionButtonTextClasses,
@@ -45,7 +39,7 @@ const ChaptersAndCommentsLoading: React.FC<{
           <div
             className={`pink-lift-shadow ${contentInteractionButtonClasses} w-[60%] animate-pulse bg-[var(--app-text-color-crimson)] text-[var(--app-text-color-near-white)]`}
           >
-            <BookOpen
+            <Book
               className="h-[14px] w-[14px] md:h-[18px] md:w-[18px]"
               strokeWidth={2.1}
             />

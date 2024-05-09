@@ -41,6 +41,8 @@
   --app-text-color-orange-yellow: #ffbd4f;
   --app-text-color-vibrant-golden: #ffbc00;
   --app-text-color-yellow: #ffe54c;
+
+  --app-backdrop-color-black: #00000080;
 }
 
 body {

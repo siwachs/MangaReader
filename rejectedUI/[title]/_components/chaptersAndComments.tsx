@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 import ChapterLink from "./chapterLink";
-import { Share, Bookmark, BookOpen, Close } from "@/components/icons";
+import { Share, Bookmark, Book, Close } from "@/components/icons";
 import {
   contentInteractionButtonClasses,
   contentInteractionButtonTextClasses,
@@ -147,7 +147,7 @@ const ChaptersAndComments: React.FC<{
             href="/"
             className={`pink-lift-shadow ${contentInteractionButtonClasses} w-[60%] bg-[var(--app-text-color-crimson)] text-[var(--app-text-color-near-white)]`}
           >
-            <BookOpen
+            <Book
               className="h-[14px] w-[14px] md:h-[18px] md:w-[18px]"
               strokeWidth={2.1}
             />
