@@ -20,32 +20,20 @@ const chaptersOrderBtnClasses =
 const ChaptersList: React.FC<{
   title: string;
   reminderText: string;
-  allChapters: Chapter[];
-}> = ({ title, reminderText, allChapters }) => {
-  const chapters = allChapters;
+  chapters: Chapter[];
+}> = ({ title, reminderText, chapters }) => {
   const PAGE_SIZE = 18;
-  const initialChaptersPayload: ChaptersPayload = {
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [chaptersPayload, setChaptersPayload] = useState<ChaptersPayload>({
     chapters: chapters.slice(0, PAGE_SIZE),
     pageNumber: 1,
     pageSize: PAGE_SIZE,
     totalPages: chapters.length / PAGE_SIZE,
-  };
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [chaptersPayload, setChaptersPayload] = useState<ChaptersPayload>(
-    initialChaptersPayload,
-  );
+  });
   const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("reverse");
   const [infiniteScroll, setInfiniteScroll] = useState(false);
   const [showAll, setShowAll] = useState(false);
-
-  const changeChapterOrder = (order: ChaptersOrder) => {
-    if (order === chaptersOrder) return;
-    chapters.reverse();
-
-    setChaptersOrder(order);
-    setChaptersPayload(initialChaptersPayload);
-  };
 
   useEffect(() => {
     document.body.style.overflow = infiniteScroll ? "hidden" : "auto";
@@ -88,6 +76,18 @@ const ChaptersList: React.FC<{
     chaptersPayload.chapters,
     chapters,
   ]);
+
+  const changeChapterOrder = (order: ChaptersOrder) => {
+    if (order === chaptersOrder) return;
+
+    chapters.reverse();
+    setChaptersOrder(order);
+    setChaptersPayload((prev) => ({
+      ...prev,
+      chapters: chapters.slice(0, PAGE_SIZE),
+      pageNumber: 1,
+    }));
+  };
 
   return (
     <div className="detail-episodes mt-[30px]">
@@ -151,7 +151,7 @@ const ChaptersList: React.FC<{
       </div>
 
       <div className="detail-episodes-continer mx-auto max-w-[1200px] flex-wrap justify-between md:flex">
-        {chapters.slice(0, showAll ? allChapters.length : 3).map((chapter) => (
+        {chapters.slice(0, showAll ? chapters.length : 3).map((chapter) => (
           <ChapterLink
             key={chapter._id}
             title={chapter.title}

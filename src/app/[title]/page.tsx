@@ -856,6 +856,39 @@ const Rating: React.FC<{ rating: number; mobileOnly?: boolean }> = ({
   );
 };
 
+const TitleBox: React.FC<{ title: string; itemsCountTitle: string }> = ({
+  title,
+  itemsCountTitle,
+}) => {
+  return (
+    <div className="detail-title-box mx-auto mt-8 max-w-[1200px] md:mb-6 md:mt-12 md:flex md:items-center md:justify-between">
+      <Link href="/" className="md:hidden">
+        <div className="flex items-center justify-between px-4 text-lg">
+          <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
+            {title}
+          </p>
+          <ChevronDown
+            className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
+            strokeWidth={2.6}
+          />
+        </div>
+      </Link>
+
+      <p className="hidden text-2xl font-[700] text-[var(--app-text-color-dark-gray)] md:block">
+        {title}
+      </p>
+
+      <Link
+        href="/"
+        className="mx-[5px] hidden text-[var(--app-text-color-bright-pink)] md:inline-flex"
+      >
+        <span>{itemsCountTitle}</span>
+        <ChevronDown className="h-4 w-4 -rotate-90" strokeWidth={2.6} />
+      </Link>
+    </div>
+  );
+};
+
 export default function TitlePage() {
   return (
     <>
@@ -940,7 +973,7 @@ export default function TitlePage() {
         <ChaptersList
           title={data.title}
           reminderText={data.reminderText}
-          allChapters={data.chapters}
+          chapters={data.chapters}
         />
 
         <div className="detail-description mt-8 px-4 md:hidden">
@@ -950,64 +983,34 @@ export default function TitlePage() {
             </p>
           </div>
 
-          <div className="relative">
-            <p className="line-clamp-3 whitespace-pre-line break-words text-[13px]/[18px] font-[400] text-[var(--app-text-color-dark-gray)]">
-              {data.description}
-            </p>
-
-            <ChevronDown
-              className="absolute bottom-0 right-0 h-4 w-4 cursor-pointer bg-white text-[var(--app-text-color-medium-gray)]"
-              strokeWidth={2.6}
-            />
-          </div>
+          <Description description={data.description} mobileOnly />
         </div>
 
-        <div className="detail-gallery mt-8 max-w-[1200px] md:hidden">
-          <Link href="/">
-            <div className="flex items-center justify-between px-4 text-lg">
-              <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
-                {data.title} Images/Wallpapers
-              </p>
-              <ChevronDown
-                className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
-                strokeWidth={2.6}
-              />
-            </div>
-          </Link>
+        <TitleBox
+          title={`${data.title} Images/Wallpapers`}
+          itemsCountTitle={`${data.galleryImages.length} Pictures`}
+        />
 
+        <div className="detail-gallery mx-auto mt-2.5 max-w-[1200px] md:mt-0">
           <div className="hidden-scrollbar mt-2.5 flex overflow-auto pl-4">
             {data.galleryImages.map((galleryImage, index) => (
               <Link key={galleryImage} href="/" className="flex-shrink-0">
-                <div className="mr-3 w-[71px]">
+                <div className="mr-3">
                   <Image
                     src={galleryImage}
                     alt={`image${index + 1}`}
                     width={200}
                     height={200}
-                    className="h-[100px] w-full object-cover"
+                    className="h-[42vw] w-full object-cover object-center"
                   />
 
-                  <p className="line-clamp-1 break-words text-center text-[var(--app-text-color-dark-gray)]">
-                    {data.title} - piece {index + 1}
+                  <p>
+                    {data.title} - Piece {index + 1}
                   </p>
                 </div>
               </Link>
             ))}
           </div>
-        </div>
-
-        <div className="detail-title-box mx-auto mb-6 mt-12 hidden max-w-[1200px] items-center justify-between md:flex">
-          <p className="text-2xl font-[700] text-[var(--app-text-color-dark-gray)]">
-            {data.title} Images/Wallpaper
-          </p>
-
-          <Link href="/" className="text-[var(--app-text-color-bright-pink)]">
-            <span>{data.galleryImages.length} Pictures</span>{" "}
-            <ChevronDown
-              className="inline-block h-4 w-4 -rotate-90"
-              strokeWidth={2.6}
-            />
-          </Link>
         </div>
 
         <div className="detail-news mt-8 md:hidden">
