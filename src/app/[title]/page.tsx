@@ -1,3 +1,6 @@
+import React from "react";
+
+import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -856,9 +859,10 @@ const Rating: React.FC<{ rating: number; mobileOnly?: boolean }> = ({
   );
 };
 
-const TitleBox: React.FC<{ title: string; itemsCountTitle: string }> = ({
+const TitleBox: React.FC<{ title: string; subTitle: string; href: string }> = ({
   title,
-  itemsCountTitle,
+  subTitle,
+  href,
 }) => {
   return (
     <div className="detail-title-box mx-auto mt-8 max-w-[1200px] md:mb-6 md:mt-12 md:flex md:items-center md:justify-between">
@@ -879,17 +883,24 @@ const TitleBox: React.FC<{ title: string; itemsCountTitle: string }> = ({
       </p>
 
       <Link
-        href="/"
-        className="mx-[5px] hidden text-[var(--app-text-color-bright-pink)] md:inline-flex"
+        href={href}
+        className="hidden items-center gap-[5px] text-[var(--app-text-color-bright-pink)] md:inline-flex"
       >
-        <span>{itemsCountTitle}</span>
+        <span>{subTitle}</span>
         <ChevronDown className="h-4 w-4 -rotate-90" strokeWidth={2.6} />
       </Link>
     </div>
   );
 };
 
-export default function TitlePage() {
+export default function TitlePage(req: {
+  params: { title: string };
+  searchParams: { content_id: string };
+}) {
+  if (!req.searchParams.content_id) {
+    return notFound();
+  }
+
   return (
     <>
       <div className="breadcrum box-content hidden h-[50px] overflow-hidden pt-2.5 md:block">
@@ -988,23 +999,24 @@ export default function TitlePage() {
 
         <TitleBox
           title={`${data.title} Images/Wallpapers`}
-          itemsCountTitle={`${data.galleryImages.length} Pictures`}
+          subTitle={`${data.galleryImages.length} Pictures`}
+          href="/"
         />
 
         <div className="detail-gallery mx-auto mt-2.5 max-w-[1200px] md:mt-0">
-          <div className="hidden-scrollbar mt-2.5 flex overflow-auto pl-4">
+          <div className="hidden-scrollbar mt-2.5 flex overflow-auto pl-4 md:flex-wrap md:overflow-auto md:pl-0">
             {data.galleryImages.map((galleryImage, index) => (
               <Link key={galleryImage} href="/" className="flex-shrink-0">
-                <div className="mr-3">
+                <div className="mr-3 w-24 md:mr-5">
                   <Image
                     src={galleryImage}
                     alt={`image${index + 1}`}
-                    width={200}
-                    height={200}
-                    className="h-[42vw] w-full object-cover object-center"
+                    width={120}
+                    height={146}
+                    className="h-32 w-full rounded object-cover object-center"
                   />
 
-                  <p>
+                  <p className="line-clamp-1 break-words text-center text-[var(--app-text-color-dark-gray)] md:mt-2">
                     {data.title} - Piece {index + 1}
                   </p>
                 </div>
@@ -1013,62 +1025,36 @@ export default function TitlePage() {
           </div>
         </div>
 
-        <div className="detail-news mt-8 md:hidden">
-          <Link href="/">
-            <div className="flex items-center justify-between px-4 text-lg">
-              <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
-                {data.title} News
-              </p>
-              <ChevronDown
-                className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
-                strokeWidth={2.6}
-              />
-            </div>
-          </Link>
+        <TitleBox
+          title={`${data.title} News`}
+          subTitle={`${data.newsList.length} Articles`}
+          href="/"
+        />
 
+        <div className="mx-auto flex max-w-[1200px] flex-col">
           {data.newsList.map((news) => (
             <Link key={news.title} href={news.link}>
-              <div className="mx-4 mt-3 flex items-center border-b border-[var(--app-border-color-light-gray)] pb-3">
+              <div className="mx-4 mt-3 flex items-center gap-1 border-b border-[var(--app-border-color-light-gray)] pb-3 md:hidden">
                 <Image
                   src="/assets/internet-searchinformation-icon.png"
                   alt="internet-searchinformation"
                   height={20}
                   width={20}
-                  className="mr-1 h-4 w-4"
+                  className="h-4 w-4"
                 />
                 <p className="line-clamp-1 break-words text-[13px] text-[var(--app-text-color-dark-gray)]">
                   {news.title}
                 </p>
               </div>
-            </Link>
-          ))}
-        </div>
 
-        <div className="detail-title-box mx-auto mb-6 mt-12 hidden max-w-[1200px] items-center justify-between md:flex">
-          <p className="text-2xl font-[700] text-[var(--app-text-color-dark-gray)]">
-            {data.title} News
-          </p>
-
-          <Link href="/" className="text-[var(--app-text-color-bright-pink)]">
-            <span>{data.newsList.length} Articles</span>{" "}
-            <ChevronDown
-              className="inline-block h-4 w-4 -rotate-90"
-              strokeWidth={2.6}
-            />
-          </Link>
-        </div>
-
-        <div className="mx-auto hidden max-w-[1200px] flex-col md:flex">
-          {data.newsList.map((news) => (
-            <Link href="/" key={news.title}>
-              <div className="border-b border-[var(--app-text-color-pale-silver)] py-3">
-                <div className="mb-2.5 flex items-center">
+              <div className="hidden border-b border-[var(--app-text-color-pale-silver)] py-3 md:block">
+                <div className="mb-2.5 flex items-center gap-2">
                   <Image
                     src="/assets/internet-searchinformation-icon.png"
                     alt="internet-searchinformation"
                     height={20}
                     width={20}
-                    className="mr-2 h-[18px] w-[18px]"
+                    className="h-[18px] w-[18px]"
                   />
                   <p className="line-clamp-1 break-words text-left text-lg text-[var(--app-text-color-dark-gray)]">
                     {news.title}
@@ -1083,53 +1069,25 @@ export default function TitlePage() {
           ))}
         </div>
 
-        <div className="details-latest-updates mt-8 md:hidden">
-          <Link href="/">
-            <div className="flex items-center justify-between px-4 text-lg">
-              <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
-                Latest Updates
-              </p>
-              <ChevronDown
-                className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
-                strokeWidth={2.6}
-              />
-            </div>
-          </Link>
+        <TitleBox title="Latest Updates" subTitle="More Updates" href="/" />
 
-          <div className="flex flex-wrap items-center justify-between px-4">
-            {data.latestUpdates.map((content) => (
-              <Link
-                key={content.title}
-                href={content.link}
-                className="mt-3 line-clamp-1 w-[48%] break-words text-[13px] font-[400] text-[var(--app-text-color-dark-gray)]"
-              >
-                <p>{content.title}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="detail-title-box mx-auto mb-6 mt-12 hidden max-w-[1200px] items-center justify-between md:flex">
-          <p className="text-2xl font-[700] text-[var(--app-text-color-dark-gray)]">
-            Latest Updates
-          </p>
-
-          <Link href="/" className="text-[var(--app-text-color-bright-pink)]">
-            <span>More Updates</span>{" "}
-            <ChevronDown
-              className="inline-block h-4 w-4 -rotate-90"
-              strokeWidth={2.6}
-            />
-          </Link>
-        </div>
-
-        <div className="mx-auto hidden min-h-[144px] max-w-[1200px] flex-wrap overflow-hidden md:flex">
+        <div className="details-latest-updates mx-auto flex min-h-[144px] max-w-[1200px] flex-wrap justify-between overflow-hidden px-4 md:justify-start md:px-0">
           {data.latestUpdates.map((latestUpdate) => (
-            <Link href="/" key={latestUpdate.title}>
-              <div className="mb-5 mr-6 box-content flex h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-[400] text-[var(--app-text-color-dim-gray)]">
-                {latestUpdate.title}
-              </div>
-            </Link>
+            <React.Fragment key={latestUpdate.title}>
+              <Link
+                key={latestUpdate.title}
+                href={latestUpdate.link}
+                className="mt-3 line-clamp-1 w-[48%] break-words text-[13px] font-[400] text-[var(--app-text-color-dark-gray)] md:hidden"
+              >
+                <p>{latestUpdate.title}</p>
+              </Link>
+
+              <Link href={latestUpdate.link}>
+                <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-[400] text-[var(--app-text-color-dim-gray)] md:flex">
+                  {latestUpdate.title}
+                </div>
+              </Link>
+            </React.Fragment>
           ))}
         </div>
 
