@@ -42,6 +42,30 @@ export default function HomePage() {
 
         <div className="search-page mx-[5%] w-[90%] md:mx-0 md:w-full">
           <div className="no-results mx-auto w-full max-w-[1200px]">
+            <div className="no-result-word font-noto-sans-sc py-[35px] text-center text-xs/[15px] font-normal text-[var(--app-text-color-medium-gray)] md:py-[130px] md:text-2xl">
+              <Image
+                priority
+                src="/assets/nothing.png"
+                alt="no-results"
+                width={200}
+                height={200}
+                className="mx-auto h-[120px] w-[120px] md:h-[240px] md:w-[240px]"
+              />
+
+              <div>
+                <p>
+                  Nothing found. Please change to another word or try again
+                  later!
+                </p>
+              </div>
+              <Link href="/">
+                <p className="text-[11px] text-[var(--app-text-color-red)] underline">
+                  Can&apos;t find the work you want? Ask help from MangaToon and
+                  we will get it for you.
+                </p>
+              </Link>
+            </div>
+
             <div className="no-result-recommend-title font-noto-sans-sc mb-5 mt-[15px] text-xl font-medium leading-9 text-[var(--app-text-color-dark-gray)] md:mb-[30px] md:mt-5 md:text-2xl">
               <span>Recommended For You</span>
             </div>
