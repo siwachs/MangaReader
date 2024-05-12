@@ -27,12 +27,12 @@ const Sidebar: React.FC<{
           />
         </div>
 
-        <Link href="en/search">
+        <Link href="/search">
           <div className="m-5 flex h-[42px] flex-shrink-0 items-center justify-between overflow-hidden rounded-[10px] border border-[var(--app-text-medium-dark-gray)] text-lg text-gray-300">
             <div className="ml-2.5 text-lg">Search</div>
 
             <div className="mr-2.5">
-              <SearchGlass classNames="h-[18px] w-[18px]" strokeWidth={2.6} />
+              <SearchGlass className="h-[18px] w-[18px]" strokeWidth={2.6} />
             </div>
           </div>
         </Link>

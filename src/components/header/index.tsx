@@ -90,7 +90,7 @@ const Header: React.FC = () => {
               href="/search"
               className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-red-500 text-red-500"
             >
-              <SearchGlass classNames="h-5 w-5" strokeWidth={2.3} />
+              <SearchGlass className="h-5 w-5" strokeWidth={2.3} />
             </Link>
 
             <Link

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import React from "react";
 
 import { notFound } from "next/navigation";
@@ -822,6 +823,11 @@ const data: Content = {
       link: "https://www.mangago.me/read-manga/fullmetal_alchemist",
     },
   ],
+};
+
+export const metadata: Metadata = {
+  title: `${data.title} - MangaToon`,
+  description: data.description,
 };
 
 const Rating: React.FC<{ rating: number; mobileOnly?: boolean }> = ({

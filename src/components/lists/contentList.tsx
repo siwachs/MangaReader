@@ -39,13 +39,13 @@ const ContentList: React.FC<{
               <Link
                 href={`${"Your Turn to Chase After Me".toLocaleLowerCase().replaceAll(" ", "-")}?content_id=1753528`}
               >
-                <div className="h-[140px] w-full overflow-hidden rounded md:h-[233px]">
+                <div className="h-[140px] w-full overflow-hidden md:h-[233px]">
                   <Image
                     src={content}
                     alt={`content${index + 1}`}
                     height={240}
                     width={200}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full rounded object-cover"
                   />
                 </div>
 

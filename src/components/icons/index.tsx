@@ -79,8 +79,8 @@ const ChevronRight: React.FC<{
   );
 };
 
-const SearchGlass: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
-  classNames = "h-5 w-5",
+const SearchGlass: React.FC<{ className?: string; strokeWidth?: number }> = ({
+  className = "h-5 w-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -90,7 +90,7 @@ const SearchGlass: React.FC<{ classNames?: string; strokeWidth?: number }> = ({
       viewBox="0 0 24 24"
       strokeWidth={strokeWidth}
       stroke="currentColor"
-      className={classNames}
+      className={className}
     >
       <path
         strokeLinecap="round"
