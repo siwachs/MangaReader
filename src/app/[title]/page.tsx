@@ -900,8 +900,8 @@ const TitleBox: React.FC<{ title: string; subTitle: string; href: string }> = ({
 };
 
 export default function TitlePage(req: {
-  params: { title: string };
-  searchParams: { content_id: string };
+  readonly params: { title: string };
+  readonly searchParams: { content_id: string };
 }) {
   if (!req.searchParams.content_id) {
     return notFound();
