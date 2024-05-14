@@ -62,7 +62,7 @@ export default function GenrePage() {
           {dummyContent.map((content, index) => (
             <Link key={content} href="/">
               <div className="mb-5 grid grid-cols-[32%_60%] gap-[4%] overflow-hidden md:mb-0 md:block">
-                <div className="w-[175px]">
+                <div className="md:w-[175px]">
                   <div className="content-image w-full md:h-[233px]">
                     <Image
                       src={content}
@@ -111,7 +111,21 @@ export default function GenrePage() {
           ))}
         </div>
 
-        <div className="page"></div>
+        <div className="page mx-auto my-[25px] flex max-w-[1200px] overflow-hidden border-y border-[var(--app-border-color-gray)] py-2.5 md:justify-center md:gap-5 md:border-none">
+          <Link
+            aria-disabled={true}
+            href="/"
+            className="pointer-events-none flex h-[50px] w-[50%] items-center justify-center border-r border-[var(--app-border-color-gray)] text-center text-sm text-[var(--app-text-color-gray-light)] md:w-[180px] md:rounded-[25px] md:border md:border-[var(--app-text-color-gray-light)]"
+          >
+            <span>Last Page</span>
+          </Link>
+          <Link
+            href="/"
+            className="flex h-[50px] w-[50%] items-center justify-center text-center text-sm md:w-[180px] md:rounded-[25px] md:border md:border-[var(--app-text-color-dim-gray)]"
+          >
+            <span>Next Page</span>
+          </Link>
+        </div>
       </div>
     </>
   );
