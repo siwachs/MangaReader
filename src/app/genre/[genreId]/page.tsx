@@ -57,28 +57,38 @@ export default function GenrePage() {
         <Channels title="Status" channels={status} />
       </div>
 
-      <div className="mx-auto mt-5 w-full max-w-full overflow-hidden md:mb-5 md:mt-[50px]">
-        <div className="items mx-auto w-[90%]">
+      <div className="mx-auto mt-5 w-full max-w-[1200px] overflow-hidden md:mb-5 md:mt-[50px]">
+        <div className="items mx-auto w-[90%] md:flex md:w-full md:flex-wrap md:gap-[30px]">
           {dummyContent.map((content, index) => (
             <Link key={content} href="/">
-              <div className="mb-5 overflow-hidden">
-                <div className="float-left w-[32%]">
-                  <div className="content-image w-full">
+              <div className="mb-5 grid grid-cols-[32%_60%] gap-[4%] overflow-hidden md:mb-0 md:block">
+                <div className="w-[175px]">
+                  <div className="content-image w-full md:h-[233px]">
                     <Image
                       src={content}
                       alt={`content${index + 1}`}
                       height={240}
                       width={200}
-                      className="h-auto max-w-full rounded object-cover" // height 150px
+                      className="h-auto max-w-full rounded object-cover md:h-[233px]"
                     />
                   </div>
 
-                  <div className="content-title"></div>
-                  <div className="content-icons"></div>
-                  <div className="content-genres"></div>
+                  <div className="content-title hide-text mt-2.5 hidden text-lg/[22px] md:block">
+                    <span>Martial Peak</span>
+                  </div>
+                  <div className="content-icons mt-2.5 hidden items-center gap-[5px] text-[13px] text-[var(--app-text-color-red)] md:flex">
+                    <View className="-mt-[1px] mr-[5px] h-[15px] w-[15px]" />
+                    <span>30.4M</span>
+                  </div>
+                  <div className="content-genres font-noto-sans-sc hide-text mt-[5px] hidden text-sm font-normal text-[var(--app-text-color-slate-gray)] md:block">
+                    <span>
+                      School life/Romance/TimeTravel/Comedy/Urban Romance/Girl
+                      Power/Game/Sweet/Counterattack/School Hunk
+                    </span>
+                  </div>
                 </div>
 
-                <div className="float-left ml-[4%] w-[60%] overflow-hidden">
+                <div className="overflow-hidden md:hidden">
                   <div className="content-title hide-text text-lg/[30px] font-bold">
                     <span>Martial Peak</span>
                   </div>
@@ -100,6 +110,7 @@ export default function GenrePage() {
             </Link>
           ))}
         </div>
+
         <div className="page"></div>
       </div>
     </>
