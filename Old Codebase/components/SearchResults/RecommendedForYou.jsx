@@ -15,7 +15,7 @@ const RecommendedForYou = ({ contentPage, recommended }) => {
       <div className="m-auto w-full max-w-[1200px]">
         <div>
           <div
-            className={`mb-5 text-xl font-[500] leading-9 text-[var(--text-color-black)] dark:text-white lg:mb-[1.875rem] lg:text-2xl ${
+            className={`mb-5 text-xl font-medium leading-9 text-[var(--text-color-black)] dark:text-white lg:mb-[1.875rem] lg:text-2xl ${
               contentPage ? "font-extrabold" : ""
             }`}
             style={{ fontFamily: "Noto Sans SC" }}

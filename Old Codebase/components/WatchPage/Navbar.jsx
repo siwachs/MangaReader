@@ -70,7 +70,7 @@ const Navbar = ({ chapterTitle, contentTitle, populatedChapters }) => {
           <div className="middle mt-[0.125rem] w-1/2 overflow-hidden">
             <div className="flex justify-center text-[var(--text-color-black-secondary)] dark:text-white">
               <Tooltip arrow title={chapterTitle}>
-                <div className="one-line-text mr-[0.4375rem] text-[0.9375rem] font-[500] sm:text-base md:text-[1.0625rem] lg:text-xl">
+                <div className="one-line-text mr-[0.4375rem] text-[0.9375rem] font-medium sm:text-base md:text-[1.0625rem] lg:text-xl">
                   {chapterTitle}
                 </div>
               </Tooltip>

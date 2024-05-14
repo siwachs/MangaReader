@@ -65,7 +65,7 @@ const BannerAndContentInfo = ({
         <div className="info-container w-full overflow-hidden lg:max-w-[880px]">
           <HeaderTitle title={title} status={status} />
           <div
-            className="tags mb-1.5 w-full text-xs font-[400] capitalize text-[var(--text-color-stats)] dark:text-gray-100 sm:mb-2 sm:text-sm md:text-base lg:mb-[0.75rem] lg:mt-[0.5rem] lg:max-w-[700px]"
+            className="tags mb-1.5 w-full text-xs font-normal capitalize text-[var(--text-color-stats)] dark:text-gray-100 sm:mb-2 sm:text-sm md:text-base lg:mb-[0.75rem] lg:mt-[0.5rem] lg:max-w-[700px]"
             style={{ fontFamily: "Noto Sans SC" }}
           >
             <span>{genreArray.join(" / ")}</span>
@@ -74,7 +74,7 @@ const BannerAndContentInfo = ({
           <Stats rating={rating || 0} likes={likes} views={views} />
 
           <div
-            className="author-name mt-1.5 text-sm font-[400] text-[var(--pagination-nav-color)] dark:text-gray-100 sm:text-base lg:mt-5 lg:text-[1.0625rem]"
+            className="author-name mt-1.5 text-sm font-normal text-[var(--pagination-nav-color)] dark:text-gray-100 sm:text-base lg:mt-5 lg:text-[1.0625rem]"
             style={{ fontFamily: "Noto Sans SC" }}
           >
             <span className="capitalize">Author Name: {author}</span>
@@ -102,7 +102,7 @@ const BannerAndContentInfo = ({
       />
 
       <div
-        className="mt-2.5 text-xs font-[400] text-[var(--text-color-secondary)] dark:text-gray-100 sm:hidden"
+        className="mt-2.5 text-xs font-normal text-[var(--text-color-secondary)] dark:text-gray-100 sm:hidden"
         style={{ fontFamily: "Noto Sans SC" }}
       >
         <span>Updated up to Chapter {totalChapters}</span>

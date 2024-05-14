@@ -23,7 +23,7 @@ const SearchPage = ({ keyword, recommended, searchResultes }) => {
       if (value === "") return;
       router.push(`/search?keyword=${transformText(value)}`);
     }, 200),
-    []
+    [],
   );
 
   const searchHandler = (event) => {
@@ -41,7 +41,7 @@ const SearchPage = ({ keyword, recommended, searchResultes }) => {
 
   return (
     <main>
-      <div className="flex h-[6.25rem] w-full items-center justify-center overflow-hidden bg-[var(--bg-searchbox)] dark:bg-gray-900 lg:h-[9.375rem]">
+      <div className="flex h-[6.25rem] w-full items-center justify-center overflow-hidden bg-[var(--bg-searchbox)] lg:h-[9.375rem] dark:bg-gray-900">
         <form
           onSubmit={searchHandler}
           style={{ fontFamily: "sans-serif" }}
@@ -76,7 +76,7 @@ const SearchPage = ({ keyword, recommended, searchResultes }) => {
             </>
           ) : (
             <div
-              className="py-[2.1875rem] text-center text-lg font-[400] leading-9 text-[var(--text-color-secondary)] md:py-[8.125rem] lg:text-2xl"
+              className="py-[2.1875rem] text-center text-lg font-normal leading-9 text-[var(--text-color-secondary)] md:py-[8.125rem] lg:text-2xl"
               style={{ fontFamily: "Noto Sans SC" }}
             >
               search for content, enter content names or enter the author name

@@ -13,7 +13,7 @@ const Description: React.FC<{ description: string; mobileOnly?: boolean }> = ({
   return mobileOnly ? (
     <div className="relative">
       <p
-        className={`${seeAll ? "" : "line-clamp-3"} whitespace-pre-line break-words text-[13px]/[18px] font-[400] text-[var(--app-text-color-dark-gray)]`}
+        className={`${seeAll ? "" : "line-clamp-3"} whitespace-pre-line break-words text-[13px]/[18px] font-normal`}
       >
         {description}
       </p>
@@ -38,7 +38,7 @@ const Description: React.FC<{ description: string; mobileOnly?: boolean }> = ({
   ) : (
     <div className="relative hidden max-w-[800px] md:block">
       <p
-        className={`lg:font-noto-sans-sc ${seeAll ? "" : "line-clamp-5"} whitespace-pre-line break-words text-sm font-[400] lg:text-[var(--app-text-color-slate-gray)]`}
+        className={`lg:font-noto-sans-sc ${seeAll ? "" : "line-clamp-5"} whitespace-pre-line break-words text-sm font-normal lg:text-[var(--app-text-color-slate-gray)]`}
       >
         {description}
       </p>

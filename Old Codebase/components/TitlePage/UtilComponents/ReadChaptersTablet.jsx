@@ -31,7 +31,7 @@ const ReadChaptersTablet = ({ isDisabled, content_id, chapter_id }) => {
       >
         <ImportContacts fontSize="inherit" />
         <span
-          className="ml-2.5 text-sm font-[500] md:text-base"
+          className="ml-2.5 text-sm font-medium md:text-base"
           style={{ fontFamily: "Noto Sans SC" }}
         >
           {currentChapter ? "Continue Reading" : "Read CH.1"}
@@ -43,7 +43,7 @@ const ReadChaptersTablet = ({ isDisabled, content_id, chapter_id }) => {
           fontSize="inherit"
           className="text-[var(--text-color-darkred)]"
         />
-        <span className="ml-2.5 text-base font-[500] text-[var(--text-color-darkred)]">
+        <span className="ml-2.5 text-base font-medium text-[var(--text-color-darkred)]">
           Subscribe
         </span>
       </button>
@@ -53,7 +53,7 @@ const ReadChaptersTablet = ({ isDisabled, content_id, chapter_id }) => {
           fontSize="inherit"
           className="text-[var(--text-color-darkred)]"
         />
-        <span className="ml-2.5 text-base font-[500] text-[var(--text-color-darkred)]">
+        <span className="ml-2.5 text-base font-medium text-[var(--text-color-darkred)]">
           Share
         </span>
       </button>

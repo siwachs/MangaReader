@@ -8,7 +8,7 @@ const HottestComics: React.FC = () => {
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
       <div className="relative mx-auto my-5 w-full max-w-[1200px] overflow-hidden md:my-[30px]">
-        <h2 className="hide-text w-[70%] text-[22px] font-bold text-[var(--app-text-color-dark-gray)] md:text-[28px]">
+        <h2 className="hide-text w-[70%] text-[22px] font-bold md:text-[28px]">
           Hottest Comics
         </h2>
 
@@ -36,11 +36,11 @@ const HottestComics: React.FC = () => {
                 </div>
 
                 <div className="float-left ml-[3%] w-1/2 overflow-hidden md:m-[10px_30px_20px_17px] lg:w-[328px]">
-                  <div className="hide-text font-noto-sans-sc h-[29px] w-[70%] text-base/[29px] font-[500] text-[var(--app-text-color-black)] md:text-xl/[29px]">
+                  <div className="hide-text font-noto-sans-sc h-[29px] w-[70%] text-base/[29px] font-medium text-black md:text-xl/[29px]">
                     <span>Your Turn to Chase After Me</span>
                   </div>
 
-                  <div className="hide-text font-noto-sans-sc h-5 w-[80%] text-sm/[20px] font-[400] text-[var(--app-text-color-slate-gray)]">
+                  <div className="hide-text font-noto-sans-sc h-5 w-[80%] text-sm/[20px] font-normal text-[var(--app-text-color-slate-gray)]">
                     <span>
                       School life / Romance / TimeTravel / Comedy / Urban /
                       Romance / Game
@@ -59,7 +59,7 @@ const HottestComics: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="font-noto-sans-sc mt-5 line-clamp-4 w-[70%] text-xs/[18px] font-[400] text-[var(--app-text-color-slate-gray)] md:w-full md:text-sm">
+                  <div className="font-noto-sans-sc mt-5 line-clamp-4 w-[70%] text-xs/[18px] font-normal text-[var(--app-text-color-slate-gray)] md:w-full md:text-sm">
                     <span>
                       {`Qu Yan is a well-known charming and “willful” beauty among
                       the transmigration agents. She never failed a single

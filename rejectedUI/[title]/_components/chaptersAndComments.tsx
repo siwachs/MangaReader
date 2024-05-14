@@ -14,7 +14,7 @@ import { MenuType, ChaptersPayload } from "../_types";
 const menuTypeClasses =
   "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=true]:text-[var(--app-text-color-red)] md:h-20 md:w-auto md:border-none md:text-xl/[80px]";
 const chaptersOrderClasses =
-  "font-noto-sans-sc select-none font-[400] data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-crimson)]";
+  "font-noto-sans-sc select-none font-normal data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-crimson)]";
 
 const ChaptersAndComments: React.FC<{
   initialChaptersPayload: ChaptersPayload;
@@ -151,7 +151,7 @@ const ChaptersAndComments: React.FC<{
               className="h-[14px] w-[14px] md:h-[18px] md:w-[18px]"
               strokeWidth={2.1}
             />
-            <span className="font-noto-sans-sc ml-2.5 inline-block text-[13px]/[37px] font-[500] md:h-[29px] md:text-base/[29px]">
+            <span className="font-noto-sans-sc ml-2.5 inline-block text-[13px]/[37px] font-medium md:h-[29px] md:text-base/[29px]">
               Read Now
             </span>
           </Link>
@@ -178,9 +178,7 @@ const ChaptersAndComments: React.FC<{
               Updated to Chapter {chaptersPayload.totalChapters}
             </span>
 
-            <span className="mx-3.5 hidden text-[var(--app-text-color-black)] md:inline-block">
-              /
-            </span>
+            <span className="mx-3.5 hidden text-black md:inline-block">/</span>
 
             <div
               role="button"
@@ -218,7 +216,7 @@ const ChaptersAndComments: React.FC<{
               <span>Positive</span>
             </div>
 
-            <span className="text-[var(--app-text-color-black)]">/</span>
+            <span className="text-black">/</span>
 
             <div
               role="button"
@@ -237,7 +235,7 @@ const ChaptersAndComments: React.FC<{
           </div>
         </div>
 
-        <div className="font-noto-sans-sc float-left my-1 w-[90%] text-xs font-[400] text-[var(--app-text-color-slate-gray)] md:hidden">
+        <div className="font-noto-sans-sc float-left my-1 w-[90%] text-xs font-normal text-[var(--app-text-color-slate-gray)] md:hidden">
           <span>Updated to Chapter {chaptersPayload.totalChapters}</span>
         </div>
       </div>
@@ -278,18 +276,18 @@ const ChaptersAndComments: React.FC<{
           className="fixed bottom-0 left-0 z-[60] max-h-[90vh] w-full overflow-auto rounded-t-[16px] bg-white"
         >
           <div className="fixed w-full rounded-t-[16px] bg-white">
-            <p className="m-4 mt-4 text-center text-base font-[500] text-[var(--app-text-color-dark-gray)]">
+            <p className="m-4 mt-4 text-center text-base font-medium">
               Popular Princess
             </p>
 
             <Close
               onClick={() => setSeeAll(false)}
-              className="absolute right-4 top-4 h-[18px] w-[18px] cursor-pointer text-[var(--app-text-color-dark-gray)]"
+              className="absolute right-4 top-4 h-[18px] w-[18px] cursor-pointer"
               strokeWidth={2}
             />
 
             <div className="mt-[8px] flex items-center justify-between px-4">
-              <p className="text-[13px] text-[var(--app-text-color-dark-gray)]">
+              <p className="text-[13px]">
                 Updated to Chapter {chaptersPayload.totalChapters}
               </p>
 

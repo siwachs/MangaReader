@@ -8,7 +8,7 @@ const Description = ({ description }) => {
   return (
     <div className="relative mt-1.5 overflow-hidden lg:mt-2">
       <div
-        className={`desc mr-[0.9375rem] whitespace-pre-line text-xs font-[400] leading-5 text-[var(--text-color-black)] dark:text-white sm:text-sm md:mr-4 md:text-[0.9375rem] lg:text-[var(--text-color-secondary)] ${
+        className={`desc mr-[0.9375rem] whitespace-pre-line text-xs font-normal leading-5 text-[var(--text-color-black)] dark:text-white sm:text-sm md:mr-4 md:text-[0.9375rem] lg:text-[var(--text-color-secondary)] ${
           !isShowMore ? "line-clamp-2" : ""
         }`}
       >

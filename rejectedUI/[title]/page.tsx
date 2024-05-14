@@ -128,7 +128,7 @@ export default async function TitlePage() {
   return (
     <>
       <div className="breadcrum hidden h-[50px] w-full pt-2.5 md:block">
-        <ul className="mx-auto h-[50px] max-w-[1200px] leading-[50px] text-[var(--app-text-color-dark-gray)]">
+        <ul className="mx-auto h-[50px] max-w-[1200px] leading-[50px]">
           <li className="inline-block hover:text-[var(--app-text-color-red)]">
             <Link href="/">Home</Link>
           </li>
@@ -171,7 +171,7 @@ export default async function TitlePage() {
 
           <div className="detail-info inline-block w-full max-w-[880px] overflow-hidden md:h-[345px] md:w-[calc(100%-305px)]">
             <div className="detail-title flex items-center overflow-hidden py-2.5 md:mb-[4px] md:h-[29px] md:py-0">
-              <span className="hide-text font-noto-sans-sc mr-[80px] w-full text-lg/[24px] font-[500] md:mr-[15px] md:h-[29px] md:w-auto md:text-xl/[29px]">
+              <span className="hide-text font-noto-sans-sc mr-[80px] w-full text-lg/[24px] font-medium md:mr-[15px] md:h-[29px] md:w-auto md:text-xl/[29px]">
                 {data.title}
               </span>
 
@@ -191,7 +191,7 @@ export default async function TitlePage() {
               ))}
             </div>
 
-            <div className="detail-stats flex items-center text-[13px] text-[var(--app-text-color-darker-gray)] md:text-base md:text-[var(--app-text-color-black)]">
+            <div className="detail-stats md:text-balck flex items-center text-[13px] text-[var(--app-text-color-darker-gray)] md:text-base">
               <View className="-mt-0.5 mr-0.5 h-[13px] w-[13px] md:mr-1 md:h-[18px] md:w-[18px]" />
               <span>{data.noOfViews}</span>
 

@@ -7,7 +7,7 @@ const HeaderTitle = ({ title, status }) => {
     <div className="flex justify-between py-2.5 sm:pt-[0.9375rem] lg:max-w-[700px] lg:items-center lg:justify-start lg:py-0">
       <Tooltip arrow title={capitalizeText(title)}>
         <span
-          className="text-lg font-[500] capitalize lg:mr-4 lg:text-xl"
+          className="text-lg font-medium capitalize lg:mr-4 lg:text-xl"
           style={{ fontFamily: "Noto Sans SC" }}
         >
           {title}

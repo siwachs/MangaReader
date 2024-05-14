@@ -73,7 +73,7 @@
   }
 
   .mobile-navlinks {
-    @apply text-sm font-[500] text-[var(--text-color-primary)] dark:text-white sm:text-base;
+    @apply text-sm font-medium text-[var(--text-color-primary)] sm:text-base dark:text-white;
   }
 
   .mobile-footer-link {
@@ -81,7 +81,7 @@
   }
 
   .pagination-button {
-    @apply inline-flex h-[3.125rem] items-center justify-center text-sm text-black disabled:text-[var(--pagination-nav-color)]  dark:text-white dark:disabled:text-[var(--pagination-nav-color)] md:text-base lg:max-w-[11.25rem] lg:rounded-3xl lg:border lg:border-black lg:disabled:border-[var(--borer-color-primary)];
+    @apply inline-flex h-[3.125rem] items-center justify-center text-sm text-black disabled:text-[var(--pagination-nav-color)]  md:text-base lg:max-w-[11.25rem] lg:rounded-3xl lg:border lg:border-black lg:disabled:border-[var(--borer-color-primary)] dark:text-white dark:disabled:text-[var(--pagination-nav-color)];
   }
 
   .chapter-controller-button {

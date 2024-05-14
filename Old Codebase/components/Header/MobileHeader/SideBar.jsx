@@ -123,7 +123,7 @@ const SideBarNavLink = ({
       <div className="flex h-[3.75rem] items-center space-x-3 border-b text-base md:text-lg">
         <Icon />
         <span
-          className={`font-[500] ${
+          className={`font-medium ${
             textColor ? "text-[var(--text-color)]" : ""
           }`}
         >

@@ -5,7 +5,7 @@ import Link from "next/link";
 const ContactDetailsMobile = ({ title, contactDetails }) => {
   return (
     <div className="contact-item mb-3">
-      <div className="mt-5 h-5 text-center text-base font-[500] leading-5 text-white sm:text-lg sm:leading-6 md:text-xl md:leading-7">
+      <div className="mt-5 h-5 text-center text-base font-medium leading-5 text-white sm:text-lg sm:leading-6 md:text-xl md:leading-7">
         {title}
       </div>
 

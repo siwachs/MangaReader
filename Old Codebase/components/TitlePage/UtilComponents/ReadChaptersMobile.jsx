@@ -45,7 +45,7 @@ const ReadChaptersMobile = ({ isDisabled, content_id, chapter_id }) => {
       >
         <ImportContacts fontSize="inherit" />
         <span
-          className="ml-2.5 text-sm font-[500]"
+          className="ml-2.5 text-sm font-medium"
           style={{ fontFamily: "Noto Sans SC" }}
         >
           {currentChapter ? "Continue Reading" : "Read CH.1"}

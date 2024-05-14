@@ -34,7 +34,7 @@ const TrendingMangaRow = ({
         <div className="ml-[3%] w-1/2 lg:mb-5 lg:ml-[17px] lg:mr-[30px] lg:mt-2.5 lg:w-[328px]">
           <Tooltip arrow title={title}>
             <div
-              className="one-line-text w-[70%] text-base font-[500] capitalize text-[var(--text-color-black-secondary)] sm:text-lg lg:h-[29px] lg:w-full lg:text-xl lg:leading-[29px]"
+              className="one-line-text w-[70%] text-base font-medium capitalize text-[var(--text-color-black-secondary)] sm:text-lg lg:h-[29px] lg:w-full lg:text-xl lg:leading-[29px]"
               style={{ fontFamily: "Noto Sans SC" }}
             >
               <span>{title}</span>

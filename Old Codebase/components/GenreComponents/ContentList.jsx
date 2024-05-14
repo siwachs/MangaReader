@@ -58,7 +58,7 @@ const ContentList = ({ contentList, tagId, page, totalPages }) => {
                 </div>
 
                 <div
-                  className="one-line-text mt-0.5 text-sm font-[400] capitalize text-[var(--text-color-secondary)] dark:text-gray-100"
+                  className="one-line-text mt-0.5 text-sm font-normal capitalize text-[var(--text-color-secondary)] dark:text-gray-100"
                   style={{ fontFamily: "Noto Sans SC" }}
                 >
                   <span>

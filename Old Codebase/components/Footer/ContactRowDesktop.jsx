@@ -7,7 +7,7 @@ const ContactRowDesktop = ({ Icon, title, contactDetails }) => {
     <div className="contact-item mb-[10px] flex items-center">
       <div className="contact-item-left ml-[30px] w-[200px] text-center">
         <Icon />
-        <div className="text-sm font-[500]">{title}</div>
+        <div className="text-sm font-medium">{title}</div>
       </div>
 
       <div className="contact-item-right">

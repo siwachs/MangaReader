@@ -1,1 +1,0 @@
-type ChaptersOrder = "positive" | "reverse";

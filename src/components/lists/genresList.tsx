@@ -68,7 +68,7 @@ const GernresList: React.FC<{
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
       <div className="mx-auto w-full max-w-[1380px] bg-[url('/assets/genre-bg.png')] bg-[length:100%_100%]">
         <div className="relative mx-auto my-5 w-full max-w-[1200px] overflow-hidden md:my-[30px]">
-          <h2 className="hide-text w-[70%] text-[22px] font-bold text-[var(--app-text-color-dark-gray)] md:text-[28px]">
+          <h2 className="hide-text w-[70%] text-[22px] font-bold md:text-[28px]">
             {title}
           </h2>
 
@@ -116,7 +116,7 @@ const GernresList: React.FC<{
                     />
                   </div>
 
-                  <div className="hide-text font-noto-sans-sc mt-[5px] overflow-hidden text-xs/[13px] text-[var(--app-text-color-dark-gray)] md:mt-2.5 md:text-lg/[22px]">
+                  <div className="hide-text font-noto-sans-sc mt-[5px] overflow-hidden text-xs/[13px] md:mt-2.5 md:text-lg/[22px]">
                     <span>Your Turn to Chase After Me</span>
                   </div>
 

@@ -13,7 +13,7 @@ const ChapterLink: React.FC<{
   return (
     <Link
       href="/"
-      className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-[var(--app-text-color-black)] md:min-h-[60px] md:w-[285px] md:p-[6px_0_8px_15px]"
+      className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-black md:min-h-[60px] md:w-[285px] md:p-[6px_0_8px_15px]"
     >
       <div className="h-[24px] text-xs md:text-sm">
         <span className="mr-5">

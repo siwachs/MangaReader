@@ -21,7 +21,7 @@ const HaveResults: React.FC<{ title: string }> = ({ title }) => {
           <span className="text-xl/[36px] font-medium text-[var(--app-text-color-red)] md:text-2xl/[36px]">
             {title}
           </span>
-          <span className="mx-[5%] text-sm text-[var(--app-text-color-dark-gray)] md:mx-0 md:text-base">
+          <span className="mx-[5%] text-sm md:mx-0 md:text-base">
             &nbsp;&nbsp;{dummyContent.length} results for &apos;martial&apos;
           </span>
         </div>
@@ -41,7 +41,7 @@ const HaveResults: React.FC<{ title: string }> = ({ title }) => {
                 </div>
               </Link>
 
-              <div className="hide-text h-[30px] w-[95%] px-[5px] text-left text-sm/[30px] text-[var(--app-text-color-dark-gray)] md:w-[160px] md:text-base/[30px]">
+              <div className="hide-text h-[30px] w-[95%] px-[5px] text-left text-sm/[30px] md:w-[160px] md:text-base/[30px]">
                 <span>Martial Arts Peak</span>
               </div>
             </div>
@@ -78,7 +78,7 @@ const NoResults: React.FC = () => {
         </Link>
       </div>
 
-      <div className="no-result-recommend-title font-noto-sans-sc mb-5 mt-[15px] text-xl font-medium leading-9 text-[var(--app-text-color-dark-gray)] md:mb-[30px] md:mt-5 md:text-2xl">
+      <div className="no-result-recommend-title font-noto-sans-sc mb-5 mt-[15px] text-xl font-medium leading-9 md:mb-[30px] md:mt-5 md:text-2xl">
         <span>Recommended For You</span>
       </div>
 
@@ -97,7 +97,7 @@ const NoResults: React.FC = () => {
               </div>
             </Link>
 
-            <div className="recommend-comics-title hide-text mt-1.5 h-[30px] w-[95%] px-[5px] text-sm/[30px] text-[var(--app-text-color-dark-gray)] md:w-[160px] md:text-base/[30px]">
+            <div className="recommend-comics-title hide-text mt-1.5 h-[30px] w-[95%] px-[5px] text-sm/[30px] md:w-[160px] md:text-base/[30px]">
               <span>Your Turn to Chase After Me</span>
             </div>
 

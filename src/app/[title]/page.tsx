@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import React from "react";
+import type { Metadata } from "next";
 
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -13,9 +13,10 @@ import {
   ChevronDown,
   InformationCircle,
 } from "@/components/icons";
-import { Content } from "./_types";
+import { Content, reqObject } from "./_types";
 import Description from "./_components/description";
 import ChaptersList from "./_components/chaptersList";
+import BreadCrum from "@/components/breadcrum";
 
 const data: Content = {
   poster: "/dummyContent/mp_poster.jpg",
@@ -830,6 +831,203 @@ export const metadata: Metadata = {
   description: data.description,
 };
 
+export default function TitlePage(req: Readonly<reqObject>) {
+  if (!req.searchParams.content_id) {
+    return notFound();
+  }
+
+  return (
+    <>
+      <BreadCrum
+        titleOne={data.genres[0]}
+        titleOneLink="/"
+        titleTwo={data.title}
+      />
+
+      <div className="detail-wrapper overflow-hidden">
+        <div className="detail-image relative min-h-[208px] w-full md:py-8 lg:bg-[var(--app-text-color-almost-white)]">
+          <Image
+            fill
+            src={data.poster}
+            alt={data.title}
+            className="absolute left-0 top-0 h-full w-full object-cover object-center lg:hidden"
+          />
+          <div className="absolute left-0 top-0 h-full w-full bg-[var(--app-background-overlay-transparent-black)] backdrop-blur-[10px] lg:hidden" />
+
+          <div className="detail-header relative mx-auto flex w-full max-w-[1200px] gap-4 p-[24px_16px] text-xs text-white md:gap-5 md:p-0 lg:text-[var(--app-text-color-primary)]">
+            <Image
+              src={data.poster}
+              alt={data.title}
+              width={200}
+              height={200}
+              className="h-[140px] w-[106px] flex-shrink-0 rounded-lg object-cover md:h-[320px] md:w-[235px]"
+            />
+
+            <div className="flex flex-grow flex-col md:justify-between">
+              <div className="mb-2 items-center gap-[15px] md:mb-2.5 md:flex">
+                <p className="text-lg md:text-2xl md:font-bold">{data.title}</p>
+
+                <div className="hidden items-center gap-1 md:flex">
+                  <Calender className="h-[14px] w-[14px]" />
+                  <span>{data.status}</span>
+                </div>
+              </div>
+
+              <div className="mb-2.5 flex items-center gap-1 md:hidden">
+                <Calender className="h-[14px] w-[14px]" />
+                <span>{data.status}</span>
+              </div>
+
+              <Rating rating={data.rating} mobileOnly />
+
+              <div className="mb-1 md:mb-0 md:text-sm/[18px]">
+                <p className="line-clamp-1">Author: {data.author}</p>
+              </div>
+
+              <p className="line-clamp-1 font-normal leading-[15px] md:text-sm/[18px]">
+                Synonyms: {data.synonyms.join(", ")}
+              </p>
+
+              <Description description={data.description} />
+
+              <Rating rating={data.rating} />
+
+              <div className="mt-2.5 flex items-center">
+                <Link href="/">
+                  <div className="box-content flex h-[30px] max-w-80 items-center justify-center break-words rounded-[20px] bg-[var(--app-text-color-bright-pink)] px-[15px] md:h-[33px] md:px-5 md:py-1.5 md:text-base lg:text-white">
+                    Read Latest Chapter{" "}
+                    <span className="hidden md:inline">
+                      : Chapter {data.totalChapters}
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ChaptersList
+          title={data.title}
+          reminderText={data.reminderText}
+          chapters={data.chapters}
+        />
+
+        <div className="detail-description mt-8 px-4 md:hidden">
+          <div className="mb-2 flex items-center justify-between">
+            <p className="text-lg font-bold">{data.title} Introduction</p>
+          </div>
+
+          <Description description={data.description} mobileOnly />
+        </div>
+
+        <TitleBox
+          title={`${data.title} Images/Wallpapers`}
+          subTitle={`${data.galleryImages.length} Pictures`}
+          href="/"
+        />
+
+        <div className="detail-gallery mx-auto mt-2.5 max-w-[1200px] md:mt-0">
+          <div className="hidden-scrollbar mt-2.5 flex overflow-auto pl-4 md:flex-wrap md:overflow-auto md:pl-0">
+            {data.galleryImages.map((galleryImage, index) => (
+              <Link key={galleryImage} href="/" className="flex-shrink-0">
+                <div className="mr-3 w-24 md:mr-5">
+                  <Image
+                    src={galleryImage}
+                    alt={`image${index + 1}`}
+                    width={120}
+                    height={146}
+                    className="h-32 w-full rounded object-cover object-center"
+                  />
+
+                  <p className="line-clamp-1 break-words text-center md:mt-2">
+                    {data.title} - Piece {index + 1}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <TitleBox
+          title={`${data.title} News`}
+          subTitle={`${data.newsList.length} Articles`}
+          href="/"
+        />
+
+        <div className="mx-auto flex max-w-[1200px] flex-col">
+          {data.newsList.map((news) => (
+            <Link key={news.title} href={news.link}>
+              <div className="mx-4 mt-3 flex items-center gap-1 border-b border-[var(--app-border-color-light-gray)] pb-3 md:hidden">
+                <Image
+                  src="/assets/internet-searchinformation-icon.png"
+                  alt="internet-searchinformation"
+                  height={20}
+                  width={20}
+                  className="h-4 w-4"
+                />
+                <p className="line-clamp-1 break-words text-[13px]">
+                  {news.title}
+                </p>
+              </div>
+
+              <div className="hidden border-b border-[var(--app-text-color-pale-silver)] py-3 md:block">
+                <div className="mb-2.5 flex items-center gap-2">
+                  <Image
+                    src="/assets/internet-searchinformation-icon.png"
+                    alt="internet-searchinformation"
+                    height={20}
+                    width={20}
+                    className="h-[18px] w-[18px]"
+                  />
+                  <p className="line-clamp-1 break-words text-left text-lg">
+                    {news.title}
+                  </p>
+                </div>
+
+                <p className="line-clamp-2 break-words text-sm font-[300] text-[var(--app-text-color-dim-gray)]">
+                  {news.shortDescription}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <TitleBox title="Latest Updates" subTitle="More Updates" href="/" />
+
+        <div className="details-latest-updates mx-auto flex min-h-[144px] max-w-[1200px] flex-wrap justify-between overflow-hidden px-4 md:justify-start md:px-0">
+          {data.latestUpdates.map((latestUpdate) => (
+            <React.Fragment key={latestUpdate.title}>
+              <Link
+                key={latestUpdate.title}
+                href={latestUpdate.link}
+                className="mt-3 line-clamp-1 w-[48%] break-words text-[13px] font-normal md:hidden"
+              >
+                <p>{latestUpdate.title}</p>
+              </Link>
+
+              <Link href={latestUpdate.link}>
+                <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-normal text-[var(--app-text-color-dim-gray)] md:flex">
+                  {latestUpdate.title}
+                </div>
+              </Link>
+            </React.Fragment>
+          ))}
+        </div>
+
+        <Link
+          href="/"
+          className="mb-[30px] mt-8 flex items-center justify-center text-[var(--app-text-color-medium-gray)]"
+        >
+          <p className="mr-2 text-xs font-normal underline">
+            Have problems with reading?
+          </p>
+          <InformationCircle className="h-[13px] w-[13px]" strokeWidth={2.6} />
+        </Link>
+      </div>
+    </>
+  );
+}
+
 const Rating: React.FC<{ rating: number; mobileOnly?: boolean }> = ({
   rating,
   mobileOnly,
@@ -838,7 +1036,7 @@ const Rating: React.FC<{ rating: number; mobileOnly?: boolean }> = ({
     <div
       className={`items-center ${mobileOnly ? "mb-2 flex md:hidden" : "hidden md:flex"}`}
     >
-      <span className="text-base font-[700] md:mr-3 md:text-lg md:font-[400] lg:text-[var(--app-text-color-standard-gray)]">
+      <span className="text-base font-bold md:mr-3 md:text-lg md:font-normal lg:text-[var(--app-text-color-standard-gray)]">
         {rating}
       </span>
       <span className="-mt-[1px] text-sm text-[var(--app-text-color-gray-light)] md:hidden">
@@ -874,9 +1072,7 @@ const TitleBox: React.FC<{ title: string; subTitle: string; href: string }> = ({
     <div className="detail-title-box mx-auto mt-8 max-w-[1200px] md:mb-6 md:mt-12 md:flex md:items-center md:justify-between">
       <Link href="/" className="md:hidden">
         <div className="flex items-center justify-between px-4 text-lg">
-          <p className="font-[700] text-[var(--app-text-color-dark-gray)]">
-            {title}
-          </p>
+          <p className="font-bold">{title}</p>
           <ChevronDown
             className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
             strokeWidth={2.6}
@@ -884,9 +1080,7 @@ const TitleBox: React.FC<{ title: string; subTitle: string; href: string }> = ({
         </div>
       </Link>
 
-      <p className="hidden text-2xl font-[700] text-[var(--app-text-color-dark-gray)] md:block">
-        {title}
-      </p>
+      <p className="hidden text-2xl font-bold md:block">{title}</p>
 
       <Link
         href={href}
@@ -898,215 +1092,3 @@ const TitleBox: React.FC<{ title: string; subTitle: string; href: string }> = ({
     </div>
   );
 };
-
-export default function TitlePage(req: {
-  readonly params: { title: string };
-  readonly searchParams: { content_id: string };
-}) {
-  if (!req.searchParams.content_id) {
-    return notFound();
-  }
-
-  return (
-    <>
-      <div className="breadcrum box-content hidden h-[50px] overflow-hidden pt-2.5 md:block">
-        <ul className="mx-auto box-content flex h-[50px] max-w-[1200px] items-center gap-[5px]">
-          <li className="hover:text-[var(--app-text-color-bright-pink)]">
-            <Link href="/">Home</Link>
-          </li>
-          <li className="before:text-[var(--app-text-color-medium-gray)] before:content-['_/_'] hover:text-[var(--app-text-color-bright-pink)]">
-            <Link href="/">{data.genres[0]}</Link>
-          </li>
-          <li className="text-[var(--app-text-color-medium-gray)] before:text-[var(--app-text-color-medium-gray)] before:content-['_/_']">
-            {data.title}
-          </li>
-        </ul>
-      </div>
-
-      <div className="detail-wrapper overflow-hidden">
-        <div className="detail-image relative min-h-[208px] w-full md:py-8 lg:bg-[var(--app-text-color-almost-white)]">
-          <Image
-            fill
-            src={data.poster}
-            alt={data.title}
-            className="absolute left-0 top-0 h-full w-full object-cover object-center lg:hidden"
-          />
-          <div className="absolute left-0 top-0 h-full w-full bg-[var(--app-background-overlay-transparent-black)] backdrop-blur-[10px] lg:hidden" />
-
-          <div className="detail-header relative mx-auto flex w-full max-w-[1200px] gap-4 p-[24px_16px] text-xs text-white md:gap-5 md:p-0 lg:text-[var(--app-text-color-dark-gray)]">
-            <Image
-              src={data.poster}
-              alt={data.title}
-              width={200}
-              height={200}
-              className="h-[140px] w-[106px] flex-shrink-0 rounded-lg object-cover md:h-[320px] md:w-[235px]"
-            />
-
-            <div className="flex flex-grow flex-col md:justify-between">
-              <div className="mb-2 items-center gap-[15px] md:mb-2.5 md:flex">
-                <p className="text-lg md:text-2xl md:font-[700]">
-                  {data.title}
-                </p>
-
-                <div className="hidden items-center gap-1 md:flex">
-                  <Calender className="h-[14px] w-[14px]" />
-                  <span>{data.status}</span>
-                </div>
-              </div>
-
-              <div className="mb-2.5 flex items-center gap-1 md:hidden">
-                <Calender className="h-[14px] w-[14px]" />
-                <span>{data.status}</span>
-              </div>
-
-              <Rating rating={data.rating} mobileOnly />
-
-              <div className="mb-1 md:mb-0 md:text-sm/[18px]">
-                <p className="line-clamp-1">Author: {data.author}</p>
-              </div>
-
-              <p className="line-clamp-1 font-[400] leading-[15px] md:text-sm/[18px]">
-                Synonyms: {data.synonyms.join(", ")}
-              </p>
-
-              <Description description={data.description} />
-
-              <Rating rating={data.rating} />
-
-              <div className="mt-2.5 flex items-center">
-                <Link href="/">
-                  <div className="box-content flex h-[30px] max-w-80 items-center justify-center break-words rounded-[20px] bg-[var(--app-text-color-bright-pink)] px-[15px] md:h-[33px] md:px-5 md:py-1.5 md:text-base lg:text-white">
-                    Read Latest Chapter{" "}
-                    <span className="hidden md:inline">
-                      : Chapter {data.totalChapters}
-                    </span>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <ChaptersList
-          title={data.title}
-          reminderText={data.reminderText}
-          chapters={data.chapters}
-        />
-
-        <div className="detail-description mt-8 px-4 md:hidden">
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-lg font-[700] text-[var(--app-text-color-dark-gray)]">
-              {data.title} Introduction
-            </p>
-          </div>
-
-          <Description description={data.description} mobileOnly />
-        </div>
-
-        <TitleBox
-          title={`${data.title} Images/Wallpapers`}
-          subTitle={`${data.galleryImages.length} Pictures`}
-          href="/"
-        />
-
-        <div className="detail-gallery mx-auto mt-2.5 max-w-[1200px] md:mt-0">
-          <div className="hidden-scrollbar mt-2.5 flex overflow-auto pl-4 md:flex-wrap md:overflow-auto md:pl-0">
-            {data.galleryImages.map((galleryImage, index) => (
-              <Link key={galleryImage} href="/" className="flex-shrink-0">
-                <div className="mr-3 w-24 md:mr-5">
-                  <Image
-                    src={galleryImage}
-                    alt={`image${index + 1}`}
-                    width={120}
-                    height={146}
-                    className="h-32 w-full rounded object-cover object-center"
-                  />
-
-                  <p className="line-clamp-1 break-words text-center text-[var(--app-text-color-dark-gray)] md:mt-2">
-                    {data.title} - Piece {index + 1}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <TitleBox
-          title={`${data.title} News`}
-          subTitle={`${data.newsList.length} Articles`}
-          href="/"
-        />
-
-        <div className="mx-auto flex max-w-[1200px] flex-col">
-          {data.newsList.map((news) => (
-            <Link key={news.title} href={news.link}>
-              <div className="mx-4 mt-3 flex items-center gap-1 border-b border-[var(--app-border-color-light-gray)] pb-3 md:hidden">
-                <Image
-                  src="/assets/internet-searchinformation-icon.png"
-                  alt="internet-searchinformation"
-                  height={20}
-                  width={20}
-                  className="h-4 w-4"
-                />
-                <p className="line-clamp-1 break-words text-[13px] text-[var(--app-text-color-dark-gray)]">
-                  {news.title}
-                </p>
-              </div>
-
-              <div className="hidden border-b border-[var(--app-text-color-pale-silver)] py-3 md:block">
-                <div className="mb-2.5 flex items-center gap-2">
-                  <Image
-                    src="/assets/internet-searchinformation-icon.png"
-                    alt="internet-searchinformation"
-                    height={20}
-                    width={20}
-                    className="h-[18px] w-[18px]"
-                  />
-                  <p className="line-clamp-1 break-words text-left text-lg text-[var(--app-text-color-dark-gray)]">
-                    {news.title}
-                  </p>
-                </div>
-
-                <p className="line-clamp-2 break-words text-sm font-[300] text-[var(--app-text-color-dim-gray)]">
-                  {news.shortDescription}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <TitleBox title="Latest Updates" subTitle="More Updates" href="/" />
-
-        <div className="details-latest-updates mx-auto flex min-h-[144px] max-w-[1200px] flex-wrap justify-between overflow-hidden px-4 md:justify-start md:px-0">
-          {data.latestUpdates.map((latestUpdate) => (
-            <React.Fragment key={latestUpdate.title}>
-              <Link
-                key={latestUpdate.title}
-                href={latestUpdate.link}
-                className="mt-3 line-clamp-1 w-[48%] break-words text-[13px] font-[400] text-[var(--app-text-color-dark-gray)] md:hidden"
-              >
-                <p>{latestUpdate.title}</p>
-              </Link>
-
-              <Link href={latestUpdate.link}>
-                <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-[400] text-[var(--app-text-color-dim-gray)] md:flex">
-                  {latestUpdate.title}
-                </div>
-              </Link>
-            </React.Fragment>
-          ))}
-        </div>
-
-        <Link
-          href="/"
-          className="mb-[30px] mt-8 flex items-center justify-center text-[var(--app-text-color-medium-gray)]"
-        >
-          <p className="mr-2 text-xs font-[400] underline">
-            Have problems with reading?
-          </p>
-          <InformationCircle className="h-[13px] w-[13px]" strokeWidth={2.6} />
-        </Link>
-      </div>
-    </>
-  );
-}

@@ -19,7 +19,7 @@ const LanguagePicker: React.FC = () => {
   return (
     <div className="absolute right-5 top-0.5 md:relative md:right-0 md:top-0">
       <button
-        className="flex cursor-pointer select-none items-center gap-1 text-xs text-[var(--app-text-color-dark-gray)] md:text-sm"
+        className="flex cursor-pointer select-none items-center gap-1 text-xs md:text-sm"
         onClick={() => setLanguagePickerOpen((prev) => !prev)}
       >
         <span>English</span>
@@ -38,9 +38,7 @@ const LanguagePicker: React.FC = () => {
             data-language-code={language.dataLanguageCode}
             className={`inline-block h-7 w-full px-4 py-1 ${language.name === "English" && "bg-gray-100"}`}
           >
-            <span className="ml-2.5 text-sm text-[var(--app-text-color-dark-gray)]">
-              {language.name}
-            </span>
+            <span className="ml-2.5 text-sm">{language.name}</span>
           </Link>
         ))}
       </div>

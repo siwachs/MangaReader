@@ -8,7 +8,7 @@ import { Chapter } from "../_types";
 const menuTypeClasses =
   "inline-block h-10 w-1/3 select-none text-center text-xs/[40px] pointer-events-none  md:h-20 md:w-auto md:text-xl/[80px]";
 const chaptersOrderClasses =
-  "font-noto-sans-sc select-none font-[400] pointer-events-none";
+  "font-noto-sans-sc select-none font-normal pointer-events-none";
 
 const ChaptersAndCommentsLoading: React.FC<{
   chapters: Chapter[];
@@ -43,7 +43,7 @@ const ChaptersAndCommentsLoading: React.FC<{
               className="h-[14px] w-[14px] md:h-[18px] md:w-[18px]"
               strokeWidth={2.1}
             />
-            <span className="font-noto-sans-sc ml-2.5 inline-block text-[13px]/[37px] font-[500] md:h-[29px] md:text-base/[29px]">
+            <span className="font-noto-sans-sc ml-2.5 inline-block text-[13px]/[37px] font-medium md:h-[29px] md:text-base/[29px]">
               Read Now
             </span>
           </div>
@@ -61,9 +61,7 @@ const ChaptersAndCommentsLoading: React.FC<{
               Updated to Chapter {totalChapters}
             </span>
 
-            <span className="mx-3.5 hidden text-[var(--app-text-color-black)] md:inline-block">
-              /
-            </span>
+            <span className="mx-3.5 hidden text-black md:inline-block">/</span>
 
             <div className={`${menuTypeClasses} ml-5 md:ml-0 md:pr-2.5`}>
               <span>Comments</span>
@@ -81,7 +79,7 @@ const ChaptersAndCommentsLoading: React.FC<{
               <span>Positive</span>
             </div>
 
-            <span className="text-[var(--app-text-color-black)]">/</span>
+            <span className="text-black">/</span>
 
             <div className={chaptersOrderClasses}>
               <span>Reverse</span>
@@ -89,7 +87,7 @@ const ChaptersAndCommentsLoading: React.FC<{
           </div>
         </div>
 
-        <div className="font-noto-sans-sc float-left my-1 w-[90%] animate-pulse text-xs font-[400] text-[var(--app-text-color-slate-gray)] md:hidden">
+        <div className="font-noto-sans-sc float-left my-1 w-[90%] animate-pulse text-xs font-normal text-[var(--app-text-color-slate-gray)] md:hidden">
           <span>Updated to Chapter {totalChapters}</span>
         </div>
       </div>
@@ -99,7 +97,7 @@ const ChaptersAndCommentsLoading: React.FC<{
           {chapters.map((chapter, index) => (
             <div
               key={chapter._id}
-              className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] animate-pulse rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-[var(--app-text-color-black)] md:min-h-[60px] md:w-[285px] md:p-[6px_0_8px_15px]"
+              className="m-[8px_8px_0_0] inline-block min-h-10 w-[45.8%] animate-pulse rounded-[10px] bg-[var(--app-text-color-near-white)] pb-2.5 pl-2.5 pt-[6px] text-black md:min-h-[60px] md:w-[285px] md:p-[6px_0_8px_15px]"
             >
               <div className="h-[24px] text-xs md:text-sm">
                 <span className="mr-5">{index + 1}</span>

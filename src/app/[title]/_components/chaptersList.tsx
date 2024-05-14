@@ -92,11 +92,11 @@ const ChaptersList: React.FC<{
   return (
     <div className="detail-episodes mt-[30px]">
       <div className="detail-title mx-auto mt-2 flex max-w-[1200px] justify-between px-4 md:mt-3 md:justify-start md:px-0">
-        <p className="ml-4 text-lg font-[700] text-[var(--app-text-color-dark-gray)] md:ml-0 md:text-2xl">
+        <p className="ml-4 text-lg font-bold md:ml-0 md:text-2xl">
           {title} Chapters
         </p>
 
-        <div className="detail-subscribe ml-2.5 hidden cursor-pointer items-center gap-0.5 text-sm font-[400] text-[var(--app-text-color-bright-pink)] md:flex">
+        <div className="detail-subscribe ml-2.5 hidden cursor-pointer items-center gap-0.5 text-sm font-normal text-[var(--app-text-color-bright-pink)] md:flex">
           <BellSolid className="h-3 w-3" />
           <span>Update reminder</span>
         </div>
@@ -107,7 +107,7 @@ const ChaptersList: React.FC<{
         />
       </div>
 
-      <div className="mx-auto mb-6 hidden max-w-[1200px] items-center justify-end text-lg font-[400] text-[var(--app-text-color-dark-gray)] md:flex">
+      <div className="mx-auto mb-6 hidden max-w-[1200px] items-center justify-end text-lg font-normal md:flex">
         <span
           role="button"
           tabIndex={0}
@@ -140,7 +140,7 @@ const ChaptersList: React.FC<{
       </div>
 
       <div className="detail-subscribe mx-4 my-2 flex items-center justify-between rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 md:hidden">
-        <p className="text-sm/[18px] font-[400] text-[var(--app-text-color-medium-gray)]">
+        <p className="text-sm/[18px] font-normal text-[var(--app-text-color-medium-gray)]">
           {reminderText}
         </p>
 
@@ -180,8 +180,8 @@ const ChaptersList: React.FC<{
               ref={containerRef}
               className="fixed bottom-0 left-0 right-0 h-[90vh] overflow-auto rounded-t-2xl bg-white"
             >
-              <div className="fixed w-full rounded-t-2xl bg-white text-[var(--app-text-color-dark-gray)]">
-                <p className="m-4 text-center text-base font-[500]">{title}</p>
+              <div className="fixed w-full rounded-t-2xl bg-white">
+                <p className="m-4 text-center text-base font-medium">{title}</p>
                 <Close
                   className="absolute right-4 top-4 h-5 w-5 cursor-pointer"
                   onClick={() => setInfiniteScroll(false)}
@@ -280,10 +280,8 @@ const ChapterLink: React.FC<{
     <div className="mx-4 my-2 rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 md:m-0 md:mb-4 md:w-80">
       <div className="flex items-center justify-between">
         <Link href={href}>
-          <p className="text-sm/[18px] font-[400] text-[var(--app-text-color-dark-gray)]">
-            {title}
-          </p>
-          <p className="mt-2.5 text-xs font-[400] text-[var(--app-text-color-medium-gray)]">
+          <p className="text-sm/[18px] font-normal">{title}</p>
+          <p className="mt-2.5 text-xs font-normal text-[var(--app-text-color-medium-gray)]">
             release date {releaseDate}
           </p>
         </Link>

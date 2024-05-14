@@ -10,7 +10,7 @@ const SearchResultes = ({ title, keyword, content }) => {
       <div className="mt-[5%] lg:mt-[1.875rem]">
         <span
           style={{ fontFamily: "Noto Sans SC" }}
-          className="text-xl font-[500] leading-[2.25rem] text-[var(--text-color-darkred)] lg:text-2xl"
+          className="text-xl font-medium leading-[2.25rem] text-[var(--text-color-darkred)] lg:text-2xl"
         >
           {title}
         </span>

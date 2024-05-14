@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 :root {
+  --app-bg-color-primary: #f5f5fa;
+  --app-text-color-primary: #333333;
+
   --app-background-overlay-transparent-black: #0000009e;
 
   --app-navlink-color: #4d5168;
@@ -13,17 +16,14 @@
   --app-text-color-bright-pink: #ff526e;
   --app-text-color-vibrant-pink: rgb(255, 82, 110);
 
-  --app-text-color-black: #000000;
-
+  --app-text-color-stone-gray: #9d9d9d;
   --app-text-color-medium-gray: #999;
   --app-text-color-slate-gray: #888888;
   --app-text-color-light-gray: #c9caca;
   --app-text-color-gray-light: #ccc;
-  --app-text-color-pale-silver: #eeeeee;
   --app-text-color-silver-gray: #1e0808;
   --app-text-medium-dark-gray: #979797;
   --app-text-color-dim-gray: #666666;
-  --app-text-color-dark-gray: #333;
   --app-text-color-darker-gray: #555;
   --app-text-color-charcoal-gray: #717171;
   --app-text-color-muted: #948084;
@@ -31,10 +31,14 @@
   --app-text-color-standard-gray: #666;
   --app-text-color-very-light-gray: #f9f9f9;
 
+  --app-text-color-pale-silver: #eeeeee;
+
   --app-text-color-dark-slate: #404040;
 
   --app-text-color-near-white: #f8f8f8;
   --app-text-color-almost-white: #fafafa;
+
+  --app-text-color-lavender-offwhite: #faf9fd;
 
   --app-border-color-gray: #d8d8d8;
   --app-border-color-light-gray: #eee;
@@ -47,8 +51,10 @@
 }
 
 body {
-  @apply bg-white text-gray-900;
+  @apply bg-white text-[var(--app-text-color-primary)];
 }
+
+/* Utils CSS */
 
 .font-noto-sans-sc {
   font-family: Noto Sans SC;
@@ -67,10 +73,13 @@ body {
   @apply overflow-hidden overflow-ellipsis whitespace-nowrap;
 }
 
+/* App Container CSS */
+
 #page-content {
   @apply relative mt-[60px] md:mt-[120px];
 }
 
+/* Shadows */
 .soft-edge-shadow {
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
 }
