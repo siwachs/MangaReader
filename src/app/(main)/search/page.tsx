@@ -114,7 +114,7 @@ const NoResults: React.FC = () => {
   );
 };
 
-export default function HomePage() {
+export default function SearchPage() {
   const haveResult = false;
 
   return (

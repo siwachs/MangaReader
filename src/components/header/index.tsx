@@ -2,8 +2,8 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
-import SidebarLoading from "../loading/sidebarLoading";
-import LanguagePickerLoading from "../loading/languagePickerLoading";
+import SidebarLoading from "./sidebarLoading";
+import LanguagePickerLoading from "./languagePickerLoading";
 
 import { navLinks } from "@/data/navlinks";
 import { SearchGlass } from "../icons";
@@ -20,7 +20,7 @@ const LanguagePicker = dynamic(() => import("./languagePicker"), {
 
 const Header: React.FC = () => {
   return (
-    <header className="fixed top-0 z-50 w-full bg-white">
+    <header className="fixed left-0 top-0 z-50 w-full bg-white">
       <div
         id="nav"
         className="relative mx-auto w-full max-w-[1200px] md:mb-5 md:mt-2.5 md:h-[90px]"

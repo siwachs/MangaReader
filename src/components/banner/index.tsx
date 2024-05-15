@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "./slider.css";
-import { ChevronLeft, ChevronRight } from "../icons";
+import { ChevronDown } from "../icons";
 
 const images = [
   "https://cn-e-pic.mangatoon.mobi/pictures_library/7d7ed86c8b538179dc2c34bbdb9db293.webp",
@@ -35,6 +35,18 @@ const Banner: React.FC = () => {
     if (index === currentSlide) return;
 
     setCurrentSlide(index);
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % images.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => {
+      if (prev - 1 < 0) return images.length - 1;
+
+      return prev - 1;
+    });
   };
 
   return (
@@ -72,21 +84,33 @@ const Banner: React.FC = () => {
           </div>
         </div>
 
-        <ChevronLeft
-          onClick={() =>
-            setCurrentSlide((prev) => {
-              if (prev - 1 < 0) return images.length - 1;
-
-              return prev - 1;
-            })
-          }
+        <span
           className="navigationButton -left-[150px]"
-        />
+          role="button"
+          tabIndex={0}
+          onClick={prevSlide}
+          onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
+            if (e.key === "Enter") {
+              prevSlide();
+            }
+          }}
+        >
+          <ChevronDown className="h-[100px] w-[100px] rotate-90" />
+        </span>
 
-        <ChevronRight
-          onClick={() => setCurrentSlide((prev) => (prev + 1) % images.length)}
+        <span
           className="navigationButton -right-[150px]"
-        />
+          role="button"
+          tabIndex={0}
+          onClick={nextSlide}
+          onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
+            if (e.key === "Enter") {
+              nextSlide();
+            }
+          }}
+        >
+          <ChevronDown className="h-[100px] w-[100px] -rotate-90" />
+        </span>
       </div>
     </div>
   );

@@ -156,7 +156,7 @@ const ChaptersList: React.FC<{
             key={chapter._id}
             title={chapter.title}
             releaseDate={chapter.releaseDate}
-            href="/"
+            href="/watch/892982/38938"
           />
         ))}
 
@@ -202,7 +202,7 @@ const ChaptersList: React.FC<{
                     key={chapter._id}
                     title={chapter.title}
                     releaseDate={chapter.releaseDate}
-                    href="/"
+                    href="/watch/89982/983"
                   />
                 ))}
               </div>
