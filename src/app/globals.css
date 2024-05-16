@@ -15,6 +15,7 @@
   --app-text-color-red-orange: #ff5b3b;
   --app-text-color-bright-pink: #ff526e;
   --app-text-color-vibrant-pink: rgb(255, 82, 110);
+  --app-text-color-pinkish-red: rgba(255, 32, 78, 1);
 
   --app-text-color-stone-gray: #9d9d9d;
   --app-text-color-medium-gray: #999;
@@ -42,6 +43,7 @@
 
   --app-border-color-gray: #d8d8d8;
   --app-border-color-light-gray: #eee;
+  --app-border-color-medium-gray: #707070;
 
   --app-text-color-orange-yellow: #ffbd4f;
   --app-text-color-vibrant-golden: #ffbc00;

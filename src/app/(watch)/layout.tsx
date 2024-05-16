@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { nunito } from "@/utils/fonts";
+
 import Header from "@/components/(watch)/header";
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={nunito.className}>
         <Header />
-        <main>{children}</main>
+        <main id="page-content">{children}</main>
       </body>
     </html>
   );
