@@ -29,8 +29,8 @@ export default function WatchPage() {
 
 const ChaptersPagination: React.FC = () => {
   return (
-    <div className="box-content h-[50px] w-full">
-      <div className="flex h-full items-center justify-around px-[10%]">
+    <div className="box-content h-[50px] w-full md:-mt-5 md:h-[100px]">
+      <div className="mx-auto box-content flex h-full items-center justify-around px-[10%] md:h-[100px] md:w-[500px]">
         <Link data-active={false} href="/" className={paginationButtonClasses}>
           <span>Previous Episode</span>
         </Link>

@@ -32,10 +32,10 @@ const Header: React.FC = () => {
   return (
     <header
       ref={containerRef}
-      className="fixed left-0 top-0 z-10 w-full bg-white"
+      className="fixed left-0 top-0 z-10 w-full bg-white transition-[top]"
     >
       <div className="mx-auto flex h-[60px] max-w-[1600px] items-center justify-between md:h-[100px]">
-        <div className="ml-[15px] flex-1 md:flex md:items-center md:gap-2.5">
+        <div className="ml-5 flex-1 md:flex md:items-center">
           <Link href="/">
             <ChevronLeft className="h-[26px] w-[26px] text-[var(--app-text-color-slate-gray)] md:h-10 md:w-10 md:text-[var(--app-text-color-crimson)]" />
           </Link>
@@ -47,7 +47,7 @@ const Header: React.FC = () => {
               alt="mangatoon"
               width={200}
               height={60}
-              className="-mb-1 h-[27px] w-[131px] lg:-mb-2.5 lg:h-[40px] lg:w-[194px]"
+              className="-mb-1 ml-[8px] h-[27px] w-[131px] lg:-mb-2.5 lg:ml-[63px] lg:h-[40px] lg:w-[194px]"
             />
           </Link>
         </div>
