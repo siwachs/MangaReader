@@ -19,6 +19,37 @@ const ChevronDown: React.FC<{ className?: string; strokeWidth?: number }> = ({
   );
 };
 
+const ChevronLeft: React.FC<{ className?: string; fill?: string }> = ({
+  className = "h-5 w-5",
+}) => {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+      <g
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke="currentColor"
+        strokeWidth="1.6799999999999997"
+      />
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M15 6L9 12L15 18"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+};
+
 const SearchGlass: React.FC<{ className?: string; strokeWidth?: number }> = ({
   className = "h-5 w-5",
   strokeWidth = 1.5,
@@ -663,6 +694,7 @@ const InformationCircleSolid: React.FC<{
 
 export {
   ChevronDown,
+  ChevronLeft,
   Bars3,
   Close,
   SearchGlass,

@@ -11,7 +11,7 @@ export default function WatchPage() {
       <div className="pictures grid">
         {[...new Array(11)].map((_, index) => (
           <Image
-            priority={true}
+            priority
             key={index}
             src={`/chapter/${index + 1}.jpg`}
             alt={`image-${index + 1}`}
