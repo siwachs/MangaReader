@@ -5,7 +5,7 @@ import { nunito } from "@/utils/fonts";
 import Header from "@/components/(watch)/header";
 
 export const metadata: Metadata = {
-  title: "Manga Reader - Read Manga, Anime, Manhua, and Donghua Online",
+  title: "Chapter 1 - Tales of Demons and Gods - MangaToon",
 };
 
 export default function RootLayout({
