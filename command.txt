@@ -1,1 +1,3 @@
 kill -9 $(lsof -t -i:3000)
+
+sudo netstat -tulnp | grep ':3000\|:3001\|:3002'

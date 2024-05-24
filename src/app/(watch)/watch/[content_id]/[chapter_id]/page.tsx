@@ -1,8 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import ScrollToTop from "../../_components/scrollToTop";
 
-export default function WatchPage() {
+import { reqObj } from "../../_types";
+import ScrollToTop from "../../_components/scrollToTop";
+import NestedCommentSystem from "@/components/nestedCommentSystem";
+
+export default function WatchPage(req: Readonly<reqObj>) {
   return (
     <>
       <ChaptersPagination />
@@ -22,6 +25,11 @@ export default function WatchPage() {
       </div>
       <ChaptersPagination />
       <div className="mb-[60px]" />
+
+      <NestedCommentSystem
+        contentId={req.params.content_id}
+        chapterId={req.params.content_id}
+      />
     </>
   );
 }
