@@ -1,5 +1,5 @@
 const ChevronDown: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -20,7 +20,7 @@ const ChevronDown: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const ChevronLeft: React.FC<{ className?: string }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
 }) => {
   return (
     <svg
@@ -51,7 +51,7 @@ const ChevronLeft: React.FC<{ className?: string }> = ({
 };
 
 const ArrowUp: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -73,7 +73,7 @@ const ArrowUp: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const SearchGlass: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -94,7 +94,7 @@ const SearchGlass: React.FC<{ className?: string; strokeWidth?: number }> = ({
   );
 };
 
-const Bars3: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
+const Bars3: React.FC<{ className?: string }> = ({ className = "size-5" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +115,7 @@ const Close: React.FC<{
   className?: string;
   strokeWidth?: number;
   onClick?: () => void;
-}> = ({ className = "h-5 w-5", strokeWidth = 1.5, onClick }) => {
+}> = ({ className = "size-5", strokeWidth = 1.5, onClick }) => {
   return (
     <svg
       tabIndex={0}
@@ -142,7 +142,7 @@ const Close: React.FC<{
 };
 
 const Home: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -164,7 +164,7 @@ const Home: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const Clock: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -186,7 +186,7 @@ const Clock: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const Book: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -208,7 +208,7 @@ const Book: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const Trophy: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -230,7 +230,7 @@ const Trophy: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const NotePad: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -252,7 +252,7 @@ const NotePad: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const Game: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -274,7 +274,7 @@ const Game: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const Star: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -296,7 +296,7 @@ const Star: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const SignIn: React.FC<{ className?: string; strokeWidth?: number }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   strokeWidth = 1.5,
 }) => {
   return (
@@ -318,7 +318,7 @@ const SignIn: React.FC<{ className?: string; strokeWidth?: number }> = ({
 };
 
 const Like: React.FC<{ className?: string; fill?: string }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   fill = "#ff204e",
 }) => {
   return (
@@ -350,7 +350,7 @@ const Like: React.FC<{ className?: string; fill?: string }> = ({
   );
 };
 
-const View: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
+const View: React.FC<{ className?: string }> = ({ className = "size-5" }) => {
   return (
     <svg
       className={className}
@@ -380,7 +380,7 @@ const View: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
   );
 };
 
-const Heart: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
+const Heart: React.FC<{ className?: string }> = ({ className = "size-5" }) => {
   return (
     <svg
       className={className}
@@ -405,7 +405,7 @@ const Heart: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => {
 };
 
 const CommentSolid: React.FC<{ className?: string; fill?: string }> = ({
-  className = "h-5 w-5",
+  className = "size-5",
   fill = "#ff204e",
 }) => {
   return (
@@ -441,7 +441,7 @@ const CommentSolid: React.FC<{ className?: string; fill?: string }> = ({
 const StarSolid: React.FC<{
   className?: string;
   fill?: string;
-}> = ({ className = "h-5 w-5", fill = "#FFBC00" }) => {
+}> = ({ className = "size-5", fill = "#FFBC00" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -461,7 +461,7 @@ const StarSolid: React.FC<{
 const HalfStarSolid: React.FC<{
   className?: string;
   fill?: string;
-}> = ({ className = "h-5 w-5", fill = "#FFBC00" }) => {
+}> = ({ className = "size-5", fill = "#FFBC00" }) => {
   return (
     <svg
       fill={fill}
@@ -485,7 +485,7 @@ const HalfStarSolid: React.FC<{
 const Pencil: React.FC<{
   className?: string;
   strokeWidth?: number;
-}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+}> = ({ className = "size-5", strokeWidth = 1.5 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -506,7 +506,7 @@ const Pencil: React.FC<{
 
 const ArrowDownCircle: React.FC<{
   className?: string;
-}> = ({ className = "h-5 w-5" }) => {
+}> = ({ className = "size-5" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -525,7 +525,7 @@ const ArrowDownCircle: React.FC<{
 
 const CloseCircle: React.FC<{
   className?: string;
-}> = ({ className = "h-5 w-5" }) => {
+}> = ({ className = "size-5" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -545,7 +545,7 @@ const CloseCircle: React.FC<{
 const Share: React.FC<{
   className?: string;
   strokeWidth?: number;
-}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+}> = ({ className = "size-5", strokeWidth = 1.5 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -567,7 +567,7 @@ const Share: React.FC<{
 const Bookmark: React.FC<{
   className?: string;
   strokeWidth?: number;
-}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+}> = ({ className = "size-5", strokeWidth = 1.5 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -589,7 +589,7 @@ const Bookmark: React.FC<{
 const Calender: React.FC<{
   className?: string;
   strokeWidth?: number;
-}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+}> = ({ className = "size-5", strokeWidth = 1.5 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -611,7 +611,7 @@ const Calender: React.FC<{
 const BellSolid: React.FC<{
   className?: string;
   fill?: string;
-}> = ({ className = "h-5 w-5", fill = "#ff526e" }) => {
+}> = ({ className = "size-5", fill = "#ff526e" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -631,7 +631,7 @@ const BellSolid: React.FC<{
 const InformationCircle: React.FC<{
   className?: string;
   strokeWidth?: number;
-}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+}> = ({ className = "size-5", strokeWidth = 1.5 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -653,7 +653,7 @@ const InformationCircle: React.FC<{
 const Download: React.FC<{
   className?: string;
   strokeWidth?: number;
-}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+}> = ({ className = "size-5", strokeWidth = 1.5 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -675,7 +675,7 @@ const Download: React.FC<{
 const HeartOutline: React.FC<{
   className?: string;
   strokeWidth?: number;
-}> = ({ className = "h-5 w-5", strokeWidth = 1.5 }) => {
+}> = ({ className = "size-5", strokeWidth = 1.5 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -697,7 +697,7 @@ const HeartOutline: React.FC<{
 const InformationCircleSolid: React.FC<{
   className?: string;
   fill?: string;
-}> = ({ className = "h-5 w-5", fill = "#888888" }) => {
+}> = ({ className = "size-5", fill = "#888888" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -708,6 +708,26 @@ const InformationCircleSolid: React.FC<{
       <path
         fillRule="evenodd"
         d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+};
+
+const ChatBubbleSolid: React.FC<{
+  className?: string;
+  fill?: string;
+}> = ({ className = "size-5", fill = "#f05f70" }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill={fill}
+      className={className}
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.337 21.718a6.707 6.707 0 0 1-.533-.074.75.75 0 0 1-.44-1.223 3.73 3.73 0 0 0 .814-1.686c.023-.115-.022-.317-.254-.543C3.274 16.587 2.25 14.41 2.25 12c0-5.03 4.428-9 9.75-9s9.75 3.97 9.75 9c0 5.03-4.428 9-9.75 9-.833 0-1.643-.097-2.417-.279a6.721 6.721 0 0 1-4.246.997Z"
         clipRule="evenodd"
       />
     </svg>
@@ -746,4 +766,5 @@ export {
   Download,
   HeartOutline,
   InformationCircleSolid,
+  ChatBubbleSolid,
 };
