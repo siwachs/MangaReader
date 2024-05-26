@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { NestedCommentProvider } from "@/context/nestedCommentContext";
+import { roboto } from "@/utils/fonts";
 import { ChatBubbleSolid } from "../icons";
 import CommentForm from "./commentForm";
 
@@ -19,7 +20,7 @@ const NestedCommentSystem: React.FC<{
 
 const NestedCommentsContainer: React.FC = () => {
   return (
-    <div>
+    <div className={roboto.className}>
       <header className="mb-6">
         <div className="flex justify-between border-b-2 border-[var(--app-border-color-slightly-blue-gray)] py-3 font-bold text-[var(--app-text-color-dark-grayish-green)]">
           <span>31 Comments</span>
@@ -38,8 +39,6 @@ const NestedCommentsContainer: React.FC = () => {
 
       <section>
         <CommentForm />
-
-        
       </section>
     </div>
   );

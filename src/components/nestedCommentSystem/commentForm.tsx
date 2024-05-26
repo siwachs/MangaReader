@@ -1,5 +1,17 @@
 import { useState } from "react";
 
+import {
+  Bold,
+  Gif,
+  Google,
+  ImageUpload,
+  Italic,
+  LinkIcon,
+  Spoiler,
+  StrikeThrough,
+  Underline,
+} from "../icons";
+
 const CommentForm: React.FC<{ initialMessage?: string }> = ({
   initialMessage = "",
 }) => {
@@ -15,7 +27,7 @@ const CommentForm: React.FC<{ initialMessage?: string }> = ({
   return (
     <form className="mb-[1em] flex flex-col">
       {error && <p>{error}</p>}
-      <div className="flex items-center">
+      <div className="flex">
         <div className="avatar"></div>
 
         <div className="w-full rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)]">
@@ -23,15 +35,62 @@ const CommentForm: React.FC<{ initialMessage?: string }> = ({
             placeholder="Join the discussion…"
             value={message}
             onChange={onChangeMessgae}
-            className="h-auto min-h-[122px] w-full break-words rounded-t-2xl border-b-2 border-[var(--app-border-color-grayish-blue)] p-5 text-[15px] leading-[1.4] text-[var(--app-text-color-dark-grayish-green)] outline-none placeholder:font-thin"
+            className="h-auto min-h-[122px] w-full break-words rounded-t-2xl border-b-2 border-[var(--app-border-color-grayish-blue)] p-5 text-[15px] leading-[1.4] text-[var(--app-text-color-dark-grayish-green)] outline-none"
           />
 
           <div className="relative h-[36px]">
-            <div className="wysiwyg absolute left-1.5 top-1.5 flex h-[24px]">
-              <div className="divider mx-[5px] border-r-2 border-[var(--app-border-color-grayish-blue)]" />
+            <div className="wysiwyg absolute left-1.5 top-1.5 flex h-[24px] gap-3">
+              <button className="opacity-60 transition-opacity hover:opacity-100">
+                <Gif className="size-[22px]" />
+              </button>
+
+              <button className="opacity-60 transition-opacity hover:opacity-100">
+                <ImageUpload className="size-[22px]" />
+              </button>
+              <div className="divider border-r-2 border-[var(--app-border-color-grayish-blue)]" />
+
+              <button className="opacity-60 transition-opacity hover:opacity-100">
+                <Bold className="size-4" />
+              </button>
+              <button className="opacity-60 transition-opacity hover:opacity-100">
+                <Italic className="size-4" />
+              </button>
+              <button className="opacity-60 transition-opacity hover:opacity-100">
+                <Underline className="size-4" />
+              </button>
+              <button className="opacity-60 transition-opacity hover:opacity-100">
+                <StrikeThrough className="size-4" />
+              </button>
+              <button className="opacity-60 transition-opacity hover:opacity-100">
+                <LinkIcon className="size-4" />
+              </button>
+              <button className="opacity-60 transition-opacity hover:opacity-100">
+                <Spoiler className="size-4" />
+              </button>
             </div>
+
+            <button
+              type="submit"
+              className="float-right mr-0.5 mt-[1px] rounded-[14px] bg-[rgb(51,51,51)] p-[4px_15px] text-[15px] font-bold text-white"
+            >
+              Comment
+            </button>
           </div>
         </div>
+      </div>
+
+      <div className="pt-2.5">
+        <h6 className="mb-2.5 text-[11px] font-bold uppercase text-[var(--app-text-color-blue-gray)]">
+          Log in with
+        </h6>
+
+        <ul className="mb-[18px]">
+          <li>
+            <button className="opacity-90 transition-opacity hover:opacity-100">
+              <Google className="size-9" />
+            </button>
+          </li>
+        </ul>
       </div>
     </form>
   );

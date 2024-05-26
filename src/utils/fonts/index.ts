@@ -1,4 +1,4 @@
-import { Comic_Neue } from "next/font/google";
+import { Comic_Neue, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 const nunito = localFont({
@@ -17,4 +17,11 @@ const comicNeue = Comic_Neue({
   preload: true,
 });
 
-export { nunito, comicNeue };
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+  preload: true,
+});
+
+export { nunito, comicNeue, roboto };
