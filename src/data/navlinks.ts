@@ -8,13 +8,14 @@ import {
   Star,
   SignIn,
 } from "@/components/icons";
-interface NavLink {
+
+type NavLink = {
   key: string;
   Icon?: any;
   sidebarOnly?: boolean;
   label: string;
   link: string;
-}
+};
 
 export const navLinks: NavLink[] = [
   { key: "home", Icon: Home, label: "Home", link: "/" },

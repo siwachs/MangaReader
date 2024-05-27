@@ -25,10 +25,10 @@ const CommentForm: React.FC<{ initialMessage?: string }> = ({
   };
 
   return (
-    <form className="mb-[1em] flex flex-col">
+    <form className="mb-[1em]">
       {error && <p>{error}</p>}
       <div className="flex">
-        <div className="avatar"></div>
+        <div></div>
 
         <div className="w-full rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)]">
           <textarea
@@ -71,7 +71,7 @@ const CommentForm: React.FC<{ initialMessage?: string }> = ({
 
             <button
               type="submit"
-              className="float-right mr-0.5 mt-[1px] rounded-[14px] bg-[rgb(51,51,51)] p-[4px_15px] text-[15px] font-bold text-white"
+              className="float-right mr-0.5 mt-[1px] rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[4px_15px] text-[15px] font-bold text-white"
             >
               Comment
             </button>

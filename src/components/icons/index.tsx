@@ -1032,6 +1032,66 @@ const ImageUpload: React.FC<{
   );
 };
 
+const AddUser: React.FC<{
+  className?: string;
+  [key: string]: any;
+}> = ({ className = "size-5", ...props }) => {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M5.25 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM2.25 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM18.75 7.5a.75.75 0 0 0-1.5 0v2.25H15a.75.75 0 0 0 0 1.5h2.25v2.25a.75.75 0 0 0 1.5 0v-2.25H21a.75.75 0 0 0 0-1.5h-2.25V7.5Z" />
+    </svg>
+  );
+};
+
+const Minus: React.FC<{
+  className?: string;
+  [key: string]: any;
+}> = ({ className = "size-6", ...props }) => {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path
+        fillRule="evenodd"
+        d="M4.25 12a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+};
+
+const Flag: React.FC<{
+  className?: string;
+  fill?: string;
+  [key: string]: any;
+}> = ({ className = "size-6", fill = "currentColor", ...props }) => {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill={fill}
+      className={className}
+    >
+      <path
+        fillRule="evenodd"
+        d="M3 2.25a.75.75 0 0 1 .75.75v.54l1.838-.46a9.75 9.75 0 0 1 6.725.738l.108.054A8.25 8.25 0 0 0 18 4.524l3.11-.732a.75.75 0 0 1 .917.81 47.784 47.784 0 0 0 .005 10.337.75.75 0 0 1-.574.812l-3.114.733a9.75 9.75 0 0 1-6.594-.77l-.108-.054a8.25 8.25 0 0 0-5.69-.625l-2.202.55V21a.75.75 0 0 1-1.5 0V3A.75.75 0 0 1 3 2.25Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+};
+
 export {
   ChevronDown,
   ChevronLeft,
@@ -1074,4 +1134,7 @@ export {
   Spoiler,
   Gif,
   ImageUpload,
+  AddUser,
+  Minus,
+  Flag,
 };

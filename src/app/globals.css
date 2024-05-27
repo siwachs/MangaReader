@@ -52,8 +52,11 @@
   --app-backdrop-color-black: #00000080;
 
   /* Nested Comment System Variables */
+  --app-text-color-cool-tone-grayish-blue: #656c7a;
+  --app-text-color-muted-blue-gray: #494e58;
   --app-text-color-dark-grayish-green: #2a2e2e;
   --app-text-color-blue-gray: #687a86;
+  --app-text-color-gunmelt-gray: rgb(51, 51, 51);
 
   --app-border-color-slightly-blue-gray: #c2c6cc;
   --app-border-color-grayish-blue: #dbdfe4;

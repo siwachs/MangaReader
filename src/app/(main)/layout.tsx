@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import { nunito } from "@/utils/fonts";
+import { nunito } from "@/lib/fonts";
 
 import Header from "@/components/header";
 
