@@ -36,6 +36,7 @@ const getComments = async (req: NextRequest) => {
           ? { createdAt: 1 }
           : { likes: -1, createdAt: -1 };
 
+    await connectToMongoDb();
     const aggregatedData = await Comment.aggregate([
       {
         $facet: {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 
 type ContextType = {};
 
@@ -23,6 +23,8 @@ export function NestedCommentProvider({
   chapterId?: string;
   children: React.ReactNode;
 }>) {
+  useEffect(() => {}, [chapterId, contentId]);
+
   const contextValue = useMemo(() => ({}), []);
 
   return (
