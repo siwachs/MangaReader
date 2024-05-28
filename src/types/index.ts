@@ -12,4 +12,6 @@ export type CommentType = {
   likes: number;
   dislikes: number;
   flag: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
