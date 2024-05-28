@@ -6,7 +6,15 @@ import Image from "next/image";
 import { CommentType } from "@/types";
 import { NestedCommentProvider } from "@/context/nestedCommentContext";
 import { roboto } from "@/lib/fonts";
-import { AddUser, ChatBubbleSolid, Flag, HeartOutline, Minus } from "../icons";
+import {
+  AddUser,
+  ChatBubbleSolid,
+  DislikeOutline,
+  Flag,
+  HeartOutline,
+  LikeOutline,
+  Minus,
+} from "../icons";
 import CommentForm from "./commentForm";
 
 const NestedCommentSystem: React.FC<{
@@ -24,11 +32,13 @@ const rootComments: CommentType[] = [
   {
     _id: "1",
     parentId: null,
-    message: "1st root message",
+    message:
+      "I've gotten used to the new MC, will feel weird when he returns to normal nie li, also wouldn't mind if he doesn't at all",
     contentId: "1",
     chapterId: "1",
     user: { _id: "1", name: "user 1", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -39,6 +49,7 @@ const rootComments: CommentType[] = [
     chapterId: "2",
     user: { _id: "2", name: "user 2", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -49,6 +60,7 @@ const rootComments: CommentType[] = [
     chapterId: "3",
     user: { _id: "3", name: "user 3", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -59,6 +71,7 @@ const rootComments: CommentType[] = [
     chapterId: "4",
     user: { _id: "4", name: "user 4", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -69,6 +82,7 @@ const rootComments: CommentType[] = [
     chapterId: "5",
     user: { _id: "5", name: "user 5", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -79,6 +93,7 @@ const rootComments: CommentType[] = [
     chapterId: "6",
     user: { _id: "6", name: "user 6", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -89,6 +104,7 @@ const rootComments: CommentType[] = [
     chapterId: "7",
     user: { _id: "7", name: "user 7", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -99,6 +115,7 @@ const rootComments: CommentType[] = [
     chapterId: "8",
     user: { _id: "8", name: "user 8", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -109,6 +126,7 @@ const rootComments: CommentType[] = [
     chapterId: "9",
     user: { _id: "9", name: "user 9", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
   {
@@ -119,6 +137,7 @@ const rootComments: CommentType[] = [
     chapterId: "10",
     user: { _id: "10", name: "user 10", avatar: "/assets/avatar.jpg" },
     likes: 0,
+    dislikes: 0,
     flag: false,
   },
 ];
@@ -214,9 +233,23 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
         </div>
       </div>
 
-      <div className="body"></div>
+      <p className="body break-words text-[15px] leading-[21px]">
+        {comment.message}
+      </p>
 
-      <div className="footer"></div>
+      <div className="footer mt-1.5 flex h-[2em] items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
+        <button className="flex items-center">
+          <LikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+          <span>{comment.likes}</span>
+        </button>
+
+        <button className="flex items-center">
+          <DislikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+          <span>{comment.dislikes}</span>
+        </button>
+
+        <button className="mx-3.5 text-sm">Reply</button>
+      </div>
     </div>
   );
 };

@@ -10,5 +10,6 @@ export type CommentType = {
     avatar: string;
   };
   likes: number;
+  dislikes: number;
   flag: boolean;
 };

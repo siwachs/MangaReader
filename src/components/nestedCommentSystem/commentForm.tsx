@@ -71,7 +71,8 @@ const CommentForm: React.FC<{ initialMessage?: string }> = ({
 
             <button
               type="submit"
-              className="float-right mr-0.5 mt-[1px] rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[4px_15px] text-[15px] font-bold text-white"
+              className="float-right mr-0.5 mt-[1px] rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[4px_15px] text-[15px] font-bold text-white disabled:bg-gray-400"
+              disabled={message.trim() === ""}
             >
               Comment
             </button>

@@ -8,6 +8,7 @@ const CommentSchema = new Schema(
     chapterId: { type: String, default: null },
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     likes: { type: Number, default: 0 },
+    dislikes: { type: Number, default: 0 },
     flag: { type: Boolean, default: false },
   },
   { timestamps: true },
