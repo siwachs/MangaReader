@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
-if (!MONGODB_URI) {
-  throw new Error("MongoDB Env URI not found.");
+const uri = process.env.MONGODB_URI as string;
+if (!uri) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
 }
 
 /**
@@ -16,7 +16,7 @@ if (!cached) {
   cached = (global as any).mongoose = { conn: null, promise: null };
 }
 
-async function connectToMongoDb() {
+async function connectToMongoDB() {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
@@ -24,7 +24,7 @@ async function connectToMongoDb() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(uri, opts).then((mongoose) => {
       return mongoose;
     });
   }
@@ -39,4 +39,4 @@ async function connectToMongoDb() {
   return cached.conn;
 }
 
-export default connectToMongoDb;
+export default connectToMongoDB;

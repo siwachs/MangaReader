@@ -1,4 +1,4 @@
-import connectToMongoDb from "@/lib/connectToMongoDB";
+import connectToMongoDB from "@/lib/connectToMongoDB";
 import Comment from "@/models/Comment";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -36,7 +36,7 @@ const getComments = async (req: NextRequest) => {
           ? { createdAt: 1 }
           : { likes: -1, createdAt: -1 };
 
-    await connectToMongoDb();
+    await connectToMongoDB();
     const aggregatedData = await Comment.aggregate([
       {
         $facet: {
@@ -91,7 +91,7 @@ const addComment = async (req: NextRequest) => {
       );
     }
 
-    await connectToMongoDb();
+    await connectToMongoDB();
     const comment = await Comment.create({
       parentId,
       message,
