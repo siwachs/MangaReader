@@ -41,11 +41,7 @@ class MongoDBSingleton {
   }
 }
 
-const clientPromise =
-  process.env.NODE_ENV === "development" && global._mongoClientPromise
-    ? global._mongoClientPromise
-    : MongoDBSingleton.getInstance();
-
-export default async function getMongoDBClient() {
-  return await clientPromise;
-}
+export default process.env.NODE_ENV === "development" &&
+global._mongoClientPromise !== null
+  ? global._mongoClientPromise
+  : MongoDBSingleton.getInstance();
