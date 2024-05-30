@@ -14,5 +14,4 @@ const CommentSchema = new Schema(
   { timestamps: true },
 );
 
-const Comment = models.Comment || model("Comment", CommentSchema, "Comments");
-export default Comment;
+export default models.Comment || model("Comment", CommentSchema, "Comments");
