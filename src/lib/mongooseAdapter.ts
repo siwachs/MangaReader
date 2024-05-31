@@ -3,6 +3,7 @@ import {
   AdapterAccount,
   AdapterSession,
   AdapterUser,
+  Adapter,
 } from "next-auth/adapters";
 import connectToMongoDB from "./connectToMongoDB";
 
@@ -46,27 +47,26 @@ function _id(hex?: string) {
   return hex?.length === 24 ? new Types.ObjectId(hex) : new Types.ObjectId();
 }
 
-/** @return { import("next-auth/adapters").Adapter } */
-export default function mongooseAdapter() {
+export default function mongooseAdapter(): Adapter {
   return {
     async createUser(user: AdapterUser) {
-      const { image, ...restOfUser } = user;
-      const newUser = await User.create({ ...restOfUser, avatar: image });
-      return format.from(newUser.toObject());
+      const { image, ...restOfuser } = user;
+      const newUser = await User.create({ ...restOfuser, avatar: image });
+      return format.from<AdapterUser>(newUser.toObject());
     },
 
     async getUser(id: string) {
       const user = await User.findById(id).select(
         "-likedChapters -subscriptions -password",
       );
-      return user ? format.from(user.toObject()) : null;
+      return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
 
     async getUserByEmail(email: string) {
       const user = await User.findOne({ email }).select(
         "-likedChapters -subscriptions -password",
       );
-      return user ? format.from(user.toObject()) : null;
+      return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
 
     async getUserByAccount({
@@ -81,14 +81,17 @@ export default function mongooseAdapter() {
       const user = await User.findById(account.userId).select(
         "-likedChapters -subscriptions -password",
       );
-      return user ? format.from(user.toObject()) : null;
+      return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
 
-    async updateUser(user: AdapterUser) {
+    async updateUser(
+      user: Partial<AdapterUser> & Pick<AdapterUser, "id">,
+    ): Promise<AdapterUser> {
       const updatedUser = await User.findByIdAndUpdate(user.id, user, {
         new: true,
       });
-      return updatedUser ? format.from(updatedUser.toObject()) : null;
+
+      return format.from<AdapterUser>(updatedUser.toObject());
     },
 
     async deleteUser(userId: string) {
@@ -97,7 +100,7 @@ export default function mongooseAdapter() {
 
     async linkAccount(account: AdapterAccount) {
       const newAccount = await Account.create(account);
-      return format.from(newAccount.toObject());
+      return format.from<AdapterAccount>(newAccount.toObject());
     },
 
     async unlinkAccount({
@@ -112,7 +115,7 @@ export default function mongooseAdapter() {
 
     async createSession(session: AdapterSession) {
       const newSession = await Session.create(session);
-      return format.from(newSession.toObject());
+      return format.from<AdapterSession>(newSession.toObject());
     },
 
     async getSessionAndUser(sessionToken: string) {
@@ -121,9 +124,10 @@ export default function mongooseAdapter() {
       const user = await User.findById(session.userId).select(
         "-likedChapters -subscriptions -password",
       );
+      if (!user) return null;
       return {
-        session: format.from(session.toObject()),
-        user: user ? format.from(user.toObject()) : null,
+        session: format.from<AdapterSession>(session.toObject()),
+        user: format.from<AdapterUser>(user.toObject()),
       };
     },
 
@@ -133,7 +137,9 @@ export default function mongooseAdapter() {
         session,
         { new: true },
       );
-      return updatedSession ? format.from(updatedSession.toObject()) : null;
+      return updatedSession
+        ? format.from<AdapterSession>(updatedSession.toObject())
+        : null;
     },
 
     async deleteSession(sessionToken: string) {
