@@ -1,4 +1,6 @@
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
+"use client";
+
+import { createContext, useContext, useEffect, useMemo } from "react";
 
 type ContextType = {};
 

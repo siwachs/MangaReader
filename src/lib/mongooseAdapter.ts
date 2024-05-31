@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import {
   AdapterAccount,
   AdapterSession,
@@ -11,22 +12,61 @@ import User from "@/models/User";
 
 connectToMongoDB();
 
+const format = {
+  from<T = Record<string, unknown>>(object: Record<string, any>): T {
+    const newObject: Record<string, unknown> = {};
+    for (const key in object) {
+      const value = object[key];
+      if (key === "_id") {
+        newObject.id = value.toString();
+      } else if (key === "userId") {
+        newObject[key] = value.toString();
+      } else {
+        newObject[key] = value;
+      }
+    }
+    return newObject as T;
+  },
+
+  to<T = Record<string, unknown>>(object: Record<string, any>) {
+    const newObject: Record<string, unknown> = {
+      _id: _id(object.id),
+    };
+    for (const key in object) {
+      const value = object[key];
+      if (key === "userId") newObject[key] = _id(value);
+      else if (key === "id") continue;
+      else newObject[key] = value;
+    }
+    return newObject as T & { _id: Types.ObjectId };
+  },
+};
+
+function _id(hex?: string) {
+  return hex?.length === 24 ? new Types.ObjectId(hex) : new Types.ObjectId();
+}
+
 /** @return { import("next-auth/adapters").Adapter } */
 export default function mongooseAdapter() {
   return {
     async createUser(user: AdapterUser) {
       const { image, ...restOfUser } = user;
-      return await User.create({ ...restOfUser, avatar: image });
+      const newUser = await User.create({ ...restOfUser, avatar: image });
+      return format.from(newUser.toObject());
     },
 
     async getUser(id: string) {
-      return await User.findById(id).select("-likedChapters -subscriptions");
+      const user = await User.findById(id).select(
+        "-likedChapters -subscriptions -password",
+      );
+      return user ? format.from(user.toObject()) : null;
     },
 
     async getUserByEmail(email: string) {
-      return await User.findOne({ email }).select(
-        "-likedChapters -subscriptions",
+      const user = await User.findOne({ email }).select(
+        "-likedChapters -subscriptions -password",
       );
+      return user ? format.from(user.toObject()) : null;
     },
 
     async getUserByAccount({
@@ -38,11 +78,17 @@ export default function mongooseAdapter() {
     }) {
       const account = await Account.findOne({ provider, providerAccountId });
       if (!account) return null;
-      return await User.findById(account.userId);
+      const user = await User.findById(account.userId).select(
+        "-likedChapters -subscriptions -password",
+      );
+      return user ? format.from(user.toObject()) : null;
     },
 
     async updateUser(user: AdapterUser) {
-      return await User.findByIdAndUpdate(user.id, user, { new: true });
+      const updatedUser = await User.findByIdAndUpdate(user.id, user, {
+        new: true,
+      });
+      return updatedUser ? format.from(updatedUser.toObject()) : null;
     },
 
     async deleteUser(userId: string) {
@@ -50,7 +96,8 @@ export default function mongooseAdapter() {
     },
 
     async linkAccount(account: AdapterAccount) {
-      return await Account.create(account);
+      const newAccount = await Account.create(account);
+      return format.from(newAccount.toObject());
     },
 
     async unlinkAccount({
@@ -64,24 +111,29 @@ export default function mongooseAdapter() {
     },
 
     async createSession(session: AdapterSession) {
-      return await Session.create(session);
+      const newSession = await Session.create(session);
+      return format.from(newSession.toObject());
     },
 
     async getSessionAndUser(sessionToken: string) {
       const session = await Session.findOne({ sessionToken });
       if (!session) return null;
       const user = await User.findById(session.userId).select(
-        "-likedChapters -subscriptions",
+        "-likedChapters -subscriptions -password",
       );
-      return { session, user };
+      return {
+        session: format.from(session.toObject()),
+        user: user ? format.from(user.toObject()) : null,
+      };
     },
 
     async updateSession(session: AdapterSession) {
-      return await Session.findOneAndUpdate(
+      const updatedSession = await Session.findOneAndUpdate(
         { sessionToken: session.sessionToken },
         session,
         { new: true },
       );
+      return updatedSession ? format.from(updatedSession.toObject()) : null;
     },
 
     async deleteSession(sessionToken: string) {
