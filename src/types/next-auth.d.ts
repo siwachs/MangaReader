@@ -1,10 +1,10 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 
 import { AdapterUser } from "next-auth/adapters";
 
 declare module "next-auth" {
   interface User {
-    _id: string;
+    id: string;
     name: string;
     email: string;
     avatar: string | null;
@@ -12,5 +12,17 @@ declare module "next-auth" {
     emailVerified?: boolean | null;
     createdAt: string;
     updatedAt: string;
+  }
+
+  interface Session {
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      avatar: string | null;
+      isAdmin?: boolean;
+    };
+    accessToken?: string;
+    expires: DefaultSession["expires"];
   }
 }

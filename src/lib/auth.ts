@@ -8,7 +8,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: mongooseAdapter(),
   callbacks: {
     async session({ session }) {
-      return session;
+      return {
+        user: {
+          id: "slkd",
+          name: "x",
+          email: "y",
+          avatar: "sd",
+          isAdmin: false,
+        },
+        expires: "sdds",
+        accessToken: "sdkm",
+      };
     },
   },
   providers: [Google],
