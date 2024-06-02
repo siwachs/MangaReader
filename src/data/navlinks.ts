@@ -74,9 +74,4 @@ export const homeNavLinks: NavLink[] = [
     label: "Sign In",
     link: "/api/auth/signin",
   },
-  {
-    key: "signout",
-    label: "Sign Out",
-    link: "/api/auth/signout",
-  },
 ];

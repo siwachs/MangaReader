@@ -15,14 +15,8 @@ declare module "next-auth" {
   }
 
   interface Session {
-    user: {
-      id: string;
-      name: string;
-      email: string;
-      avatar: string | null;
-      isAdmin?: boolean;
-    };
-    accessToken?: string;
-    expires: DefaultSession["expires"];
+    id: string;
+    user: User;
+    expires: string;
   }
 }

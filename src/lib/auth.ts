@@ -9,15 +9,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async session({ session }) {
       return {
-        user: {
-          id: "slkd",
-          name: "x",
-          email: "y",
-          avatar: "sd",
-          isAdmin: false,
-        },
-        expires: "sdds",
-        accessToken: "sdkm",
+        id: session.id,
+        user: session.user,
+        expires: session.expires,
       };
     },
   },
