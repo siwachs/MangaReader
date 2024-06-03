@@ -1,4 +1,4 @@
-import { signIn } from "@/lib/auth";
+import { signIn, signOut } from "@/lib/auth";
 
 const SignIn: React.FC<{ [key: string]: any }> = ({ ...props }) => {
   return (
@@ -15,4 +15,17 @@ const SignIn: React.FC<{ [key: string]: any }> = ({ ...props }) => {
   );
 };
 
-export default SignIn;
+const SignOut = () => {
+  return (
+    <form
+      action={async () => {
+        "use server";
+        await signOut();
+      }}
+    >
+      <button type="submit">Sign In</button>
+    </form>
+  );
+};
+
+export { signIn, signOut };

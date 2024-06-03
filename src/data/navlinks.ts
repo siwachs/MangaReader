@@ -1,3 +1,4 @@
+import { LinkObject } from "@/types";
 import {
   Home,
   Clock,
@@ -9,15 +10,7 @@ import {
   SignIn,
 } from "@/components/icons";
 
-type NavLink = {
-  key: string;
-  Icon?: any;
-  sidebarOnly?: boolean;
-  label: string;
-  link: string;
-};
-
-export const navLinks: NavLink[] = [
+export const navLinks: LinkObject[] = [
   { key: "home", Icon: Home, label: "Home", link: "/" },
   {
     key: "history",
@@ -64,7 +57,7 @@ export const navLinks: NavLink[] = [
   },
 ];
 
-export const homeNavLinks: NavLink[] = [
+export const homeNavLinks: LinkObject[] = [
   { key: "home", label: "Home", link: "/" },
   { key: "comics", label: "Comics", link: "/genre/all" },
   { key: "search", label: "Search", link: "/search" },

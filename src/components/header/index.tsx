@@ -5,6 +5,7 @@ import Image from "next/image";
 import SidebarLoading from "./sidebarLoading";
 import LanguagePickerLoading from "./languagePickerLoading";
 
+import ClientAuth from "../buttons/clientAuth";
 import { navLinks } from "@/data/navlinks";
 import { SearchGlass } from "../icons";
 
@@ -31,9 +32,8 @@ const Header: React.FC = () => {
         >
           <MenuToggler />
 
-          <Link className="hidden md:inline" href="/signin">
-            Sign In
-          </Link>
+          <ClientAuth profileContainerClasses="hidden size-[42px] flex-shrink-0 md:inline" />
+
           <Link className="hidden md:inline" href="/history">
             History
           </Link>

@@ -1,3 +1,11 @@
+export type LinkObject = {
+  key: string;
+  Icon?: any;
+  sidebarOnly?: boolean;
+  label: string;
+  link: string;
+};
+
 export type CommentType = {
   _id: string;
   parentId: null | string;
