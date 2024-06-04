@@ -32,7 +32,10 @@ const Header: React.FC = () => {
         >
           <MenuToggler />
 
-          <ClientAuth profileContainerClasses="hidden size-[42px] flex-shrink-0 md:inline" />
+          <ClientAuth
+            profileContainerClasses="hidden size-[42px] flex-shrink-0 md:inline"
+            signInButtonClasses="hidden md:inline"
+          />
 
           <Link className="hidden md:inline" href="/history">
             History

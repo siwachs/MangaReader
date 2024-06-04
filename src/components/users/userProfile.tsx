@@ -14,6 +14,8 @@ const profileMenuLinks: LinkObject[] = [
 ];
 
 const UserProfile: React.FC<{
+  profileMenuPositionTop: number;
+  profileMenuPositionRight: number;
   status: "loading" | "authenticated" | "unauthenticated";
   avatarUrl: string | null | undefined;
   profileName: string | undefined | null;
@@ -21,6 +23,8 @@ const UserProfile: React.FC<{
   height?: number;
   callbackUrl?: string;
 }> = ({
+  profileMenuPositionRight,
+  profileMenuPositionTop,
   status,
   avatarUrl,
   profileName,
@@ -28,7 +32,7 @@ const UserProfile: React.FC<{
   height = 40,
   callbackUrl = "/",
 }) => {
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(true);
 
   return status === "loading" ? (
     <div className="h-full w-full animate-pulse rounded-full bg-gray-400" />
@@ -44,7 +48,7 @@ const UserProfile: React.FC<{
       />
 
       <div
-        className={`absolute right-2.5 top-10 z-50 w-[190px] ${isProfileMenuOpen ? "block" : "hidden"} rounded-xl border bg-white p-2.5 md:rounded-[10px]`}
+        className={`absolute right-[${profileMenuPositionRight.toString()}px] top-[${profileMenuPositionTop.toString()}px] z-50 w-[190px] ${isProfileMenuOpen ? "block" : "hidden"} rounded-xl border bg-white p-2.5 md:rounded-[10px]`}
       >
         {profileMenuLinks.map((profileMenuLink) => (
           <Link
