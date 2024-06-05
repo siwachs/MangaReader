@@ -6,14 +6,12 @@ import { signIn, useSession } from "next-auth/react";
 import UserProfile from "../users/userProfile";
 
 const ClientAuth: React.FC<{
-  profileMenuPositionTop?: number;
-  profileMenuPositionRight?: number;
+  profileMenuPositionClasses?: string;
   authProvider?: string;
   profileContainerClasses?: string;
   signInButtonClasses?: string;
 }> = ({
-  profileMenuPositionRight = 10,
-  profileMenuPositionTop = 40,
+  profileMenuPositionClasses = "right-2.5 top-10",
   authProvider = "google",
   profileContainerClasses,
   signInButtonClasses,
@@ -21,16 +19,12 @@ const ClientAuth: React.FC<{
   const currentUrl = usePathname();
 
   const session = useSession();
-  const { data, status } = session;
+  const { status } = session;
 
   return status === "loading" || status === "authenticated" ? (
     <div className={profileContainerClasses}>
       <UserProfile
-        profileMenuPositionRight={profileMenuPositionRight}
-        profileMenuPositionTop={profileMenuPositionTop}
-        status={status}
-        avatarUrl={data?.user.avatar}
-        profileName={data?.user.name}
+        profileMenuPositionClasses={profileMenuPositionClasses}
         callbackUrl={currentUrl}
       />
     </div>

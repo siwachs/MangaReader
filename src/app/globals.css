@@ -41,13 +41,16 @@
 
   --app-text-color-lavender-offwhite: #faf9fd;
 
-  --app-border-color-gray: #d8d8d8;
-  --app-border-color-light-gray: #eee;
-  --app-border-color-medium-gray: #707070;
-
   --app-text-color-orange-yellow: #ffbd4f;
   --app-text-color-vibrant-golden: #ffbc00;
   --app-text-color-yellow: #ffe54c;
+
+  --app-text-color-medium-dark-blue: #0b57d0;
+
+  --app-border-color-gray: #d8d8d8;
+  --app-border-color-light-gray: #eee;
+  --app-border-color-medium-gray: #707070;
+  --app-border-color-medium-dark-gray: #747775;
 
   --app-backdrop-color-black: #00000080;
 
