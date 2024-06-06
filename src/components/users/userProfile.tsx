@@ -3,18 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 import { roboto } from "@/lib/fonts";
-import { Close } from "../icons";
-import { LinkObject } from "@/types";
-
-const profileMenuLinks: LinkObject[] = [
-  { key: "mangageaccount", label: "Manage your account", link: "" },
-  { key: "subscriptions", label: "Subscriptions", link: "" },
-  { key: "likedchapters", label: "Liked Chapters", link: "" },
-  { key: "signout", label: "Sign Out", link: "/api/auth/signout" },
-];
+import { Close, SignOut } from "../icons";
 
 const UserProfile: React.FC<{
   profileMenuPositionClasses: string;
@@ -68,17 +60,36 @@ const UserProfile: React.FC<{
           Hi!, {data?.user.name?.split(" ")[0]}!
         </div>
 
-        <div>
-          <div className="mx-auto mb-4 mt-0.5 max-w-[326px] rounded">
-            <Link
-              href=""
-              className="inline-block w-full rounded-[100px] border border-[var(--app-border-color-medium-dark-gray)] px-[23px] py-[9px]"
-            >
-              <div className="text-center text-sm font-medium tracking-normal text-[var(--app-text-color-medium-dark-blue)]">
-                Manage your Account
-              </div>
-            </Link>
-          </div>
+        <div className="mx-auto mb-4 mt-0.5 max-w-[326px] rounded">
+          <Link
+            href=""
+            className="inline-block w-full rounded-[100px] border border-[var(--app-border-color-medium-dark-gray)] px-[23px] py-[9px]"
+          >
+            <div className="text-center text-sm font-medium tracking-normal text-[var(--app-text-color-medium-dark-blue)]">
+              Manage your Account
+            </div>
+          </Link>
+        </div>
+
+        <div className="mx-auto mb-4 mt-3 flex max-w-[326px] rounded-[30px]">
+          <Link
+            href=""
+            className="mr-0.5 flex h-[60px] w-[calc(50%-2px)] items-center justify-center rounded-l-[30px] rounded-r border border-[var(--app-border-color-medium-dark-gray)] px-[15px]"
+          >
+            <div className="text-sm font-medium tracking-normal text-[var(--app-text-color-dark-gray)]">
+              Subscriptions
+            </div>
+          </Link>
+
+          <button
+            onClick={() => signOut({ callbackUrl })}
+            className="flex h-[60px] w-[calc(50%-2px)] items-center justify-center rounded-l rounded-r-[30px] border border-[var(--app-border-color-medium-dark-gray)] px-[15px]"
+          >
+            <div className="flex items-center gap-2 text-sm font-medium tracking-normal text-[var(--app-text-color-dark-gray)]">
+              <SignOut className="size-[22px] -scale-x-100" />
+              <span>Sign Out</span>
+            </div>
+          </button>
         </div>
       </div>
     </div>
