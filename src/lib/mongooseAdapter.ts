@@ -11,8 +11,6 @@ import Account from "@/models/Account";
 import Session from "@/models/Session";
 import User from "@/models/User";
 
-connectToMongoDB();
-
 const format = {
   /** Takes a MongoDB object and returns a plain old JavaScript object */
   from<T = Record<string, unknown>>(object: Record<string, any>): T {
@@ -52,12 +50,14 @@ function _id(hex?: string) {
 export default function mongooseAdapter(): Adapter {
   return {
     async createUser(data) {
+      await connectToMongoDB();
       const { image, ...restOfuser } = data;
       const newUser = await User.create({ ...restOfuser, avatar: image });
       return format.from<AdapterUser>(newUser.toObject());
     },
 
     async getUser(id: string) {
+      await connectToMongoDB();
       const user = await User.findById(id).select(
         "-likedChapters -subscriptions -password",
       );
@@ -65,6 +65,7 @@ export default function mongooseAdapter(): Adapter {
     },
 
     async getUserByEmail(email: string) {
+      await connectToMongoDB();
       const user = await User.findOne({ email }).select(
         "-likedChapters -subscriptions -password",
       );
@@ -78,6 +79,7 @@ export default function mongooseAdapter(): Adapter {
       providerAccountId: string;
       provider: string;
     }) {
+      await connectToMongoDB();
       const account = await Account.findOne({ provider, providerAccountId });
       if (!account) return null;
       const user = await User.findById(account.userId).select(
@@ -87,6 +89,7 @@ export default function mongooseAdapter(): Adapter {
     },
 
     async updateUser(data) {
+      await connectToMongoDB();
       const { _id, ...user } = format.to<AdapterUser>(data);
       const updatedUser = await User.findByIdAndUpdate(user.id, user, {
         new: true,
@@ -96,10 +99,12 @@ export default function mongooseAdapter(): Adapter {
     },
 
     async deleteUser(userId: string) {
+      await connectToMongoDB();
       await User.findByIdAndDelete(userId);
     },
 
     async linkAccount(data) {
+      await connectToMongoDB();
       const account = format.to<AdapterAccount>(data);
       const newAccount = await Account.create(account);
       return format.from<AdapterAccount>(newAccount.toObject());
@@ -112,16 +117,19 @@ export default function mongooseAdapter(): Adapter {
       providerAccountId: string;
       provider: string;
     }) {
+      await connectToMongoDB();
       await Account.findOneAndDelete({ provider, providerAccountId });
     },
 
     async createSession(data) {
+      await connectToMongoDB();
       const session = format.to<AdapterSession>(data);
       const newSession = await Session.create(session);
       return format.from<AdapterSession>(newSession.toObject());
     },
 
     async getSessionAndUser(sessionToken: string) {
+      await connectToMongoDB();
       const session = await Session.findOne({ sessionToken });
       if (!session) return null;
       const user = await User.findById(session.userId).select(
@@ -135,6 +143,7 @@ export default function mongooseAdapter(): Adapter {
     },
 
     async updateSession(data) {
+      await connectToMongoDB();
       const { _id, ...session } = format.to<AdapterSession>(data);
       const updatedSession = await Session.findOneAndUpdate(
         { sessionToken: session.sessionToken },
@@ -147,6 +156,7 @@ export default function mongooseAdapter(): Adapter {
     },
 
     async deleteSession(sessionToken: string) {
+      await connectToMongoDB();
       await Session.findOneAndDelete({ sessionToken });
     },
   };

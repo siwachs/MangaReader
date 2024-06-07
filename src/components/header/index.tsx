@@ -33,6 +33,7 @@ const Header: React.FC = () => {
           <MenuToggler />
 
           <ClientAuth
+            profileMenuPositionClasses="right-2.5 top-12"
             profileContainerClasses="hidden size-[42px] flex-shrink-0 md:inline"
             signInButtonClasses="hidden md:inline"
           />
