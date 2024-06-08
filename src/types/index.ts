@@ -1,3 +1,10 @@
+export type pageReqObj = {
+  params: { content_id?: string; chapter_id?: string };
+  searchParams: {
+    content_id?: string;
+  };
+};
+
 export type LinkObject = {
   key: string;
   Icon?: any;

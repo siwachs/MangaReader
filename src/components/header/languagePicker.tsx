@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 
+import useOutsideClick from "@/hooks/useOutsideClick";
 import { ChevronDown } from "../icons";
 
 const languages = [
@@ -14,13 +15,21 @@ const languages = [
 ];
 
 const LanguagePicker: React.FC = () => {
-  const [languagePickerOpen, setLanguagePickerOpen] = useState<boolean>(false);
+  const languagesContainerRef = useRef<HTMLDivElement>(null);
+  const [isLanguagePickerOpen, setIsLanguagePickerOpen] = useState(false);
+
+  useOutsideClick(languagesContainerRef, isLanguagePickerOpen, () =>
+    setIsLanguagePickerOpen(false),
+  );
 
   return (
-    <div className="absolute right-5 top-0.5 md:relative md:right-0 md:top-0">
+    <div
+      className="absolute right-5 top-0.5 md:relative md:right-0 md:top-0"
+      ref={languagesContainerRef}
+    >
       <button
         className="flex cursor-pointer select-none items-center gap-1 text-xs md:text-sm"
-        onClick={() => setLanguagePickerOpen((prev) => !prev)}
+        onClick={() => setIsLanguagePickerOpen((prev) => !prev)}
       >
         <span>English</span>
         <ChevronDown className="h-4 w-4 md:h-5 md:w-5" />
@@ -28,7 +37,7 @@ const LanguagePicker: React.FC = () => {
 
       <div
         id="languages-list"
-        className={`absolute -right-5 top-[30px] z-10 ${languagePickerOpen ? "block" : "hidden"} w-[120px] rounded-xl border border-[var(--app-border-color-gray)] bg-white py-2.5 text-xs md:left-1/2 md:right-0 md:w-[150px] md:-translate-x-1/2 md:rounded-[10px] md:text-sm`}
+        className={`absolute -right-5 top-[30px] z-10 ${isLanguagePickerOpen ? "block" : "hidden"} w-[120px] rounded-xl border border-[var(--app-border-color-gray)] bg-white py-2.5 text-xs md:left-1/2 md:right-0 md:w-[150px] md:-translate-x-1/2 md:rounded-[10px] md:text-sm`}
       >
         {languages.map((language) => (
           <Link

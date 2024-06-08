@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import { nunito } from "@/lib/fonts";
+import { nunito } from "@/libs/fonts";
 
 import Header from "@/components/header";
-import { NextAuthProvider } from "@/context/nextAuthContext";
+import { NextAuthProvider } from "@/contexts/nextAuthContext";
 
 export const metadata: Metadata = {
   title: "Manga Reader - Read Manga, Anime, Manhua, and Donghua Online",

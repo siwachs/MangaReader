@@ -13,7 +13,8 @@ import {
   ChevronDown,
   InformationCircle,
 } from "@/components/icons";
-import { Content, reqObject } from "./_types";
+import { pageReqObj } from "@/types";
+import { Content } from "./_types";
 import Description from "./_components/description";
 import ChaptersList from "./_components/chaptersList";
 import BreadCrum from "@/components/breadcrum";
@@ -831,7 +832,7 @@ export const metadata: Metadata = {
   description: data.description,
 };
 
-export default function TitlePage(req: Readonly<reqObject>) {
+export default function TitlePage(req: Readonly<pageReqObj>) {
   if (!req.searchParams.content_id) {
     return notFound();
   }

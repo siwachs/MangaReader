@@ -4,8 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { CommentType } from "@/types";
-import { NestedCommentProvider } from "@/context/nestedCommentContext";
-import { roboto } from "@/lib/fonts";
+import { NestedCommentProvider } from "@/contexts/nestedCommentContext";
+import { roboto } from "@/libs/fonts";
 import {
   AddUser,
   ChatBubbleSolid,

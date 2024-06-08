@@ -1,11 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { reqObj } from "../../_types";
-import ScrollToTop from "../../_components/scrollToTop";
+import { pageReqObj } from "@/types";
 import NestedCommentSystem from "@/components/nestedCommentSystem";
 
-export default function WatchPage(req: Readonly<reqObj>) {
+export default function WatchPage(req: Readonly<pageReqObj>) {
   return (
     <>
       <ChaptersPagination />
@@ -20,15 +19,13 @@ export default function WatchPage(req: Readonly<reqObj>) {
             className={`h-auto max-w-full border-x ${index === 11 - 1 ? "border-b" : ""} ${index === 0 ? "border-t" : ""} border-[var(--app-border-color-medium-gray)]`}
           />
         ))}
-
-        <ScrollToTop />
       </div>
       <ChaptersPagination />
       <div className="mb-[60px]" />
 
       <NestedCommentSystem
-        contentId={req.params.content_id}
-        chapterId={req.params.content_id}
+        contentId={req.params.content_id!}
+        chapterId={req.params.chapter_id}
       />
     </>
   );

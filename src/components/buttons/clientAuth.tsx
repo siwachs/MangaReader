@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { signIn, useSession, signOut } from "next-auth/react";
 
-import { roboto } from "@/lib/fonts";
+import useOutsideClick from "@/hooks/useOutsideClick";
+import { roboto } from "@/libs/fonts";
 import { Close, SignOut } from "../icons";
 
 const ClientAuth: React.FC<{
@@ -20,11 +21,16 @@ const ClientAuth: React.FC<{
   profileContainerClasses,
   signInButtonClasses,
 }) => {
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(true);
+  const profileContainerRef = useRef<HTMLDivElement>(null);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const currentUrl = usePathname();
   const session = useSession();
   const { status, data } = session;
+
+  useOutsideClick(profileContainerRef, isProfileMenuOpen, () =>
+    setIsProfileMenuOpen(false),
+  );
 
   if (status === "unauthenticated")
     return (
@@ -47,7 +53,7 @@ const ClientAuth: React.FC<{
     const { user } = data;
 
     return (
-      <div className={profileContainerClasses}>
+      <div className={profileContainerClasses} ref={profileContainerRef}>
         <div className={roboto.className}>
           <Image
             onClick={() => setIsProfileMenuOpen((prev) => !prev)}
