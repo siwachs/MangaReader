@@ -7,6 +7,7 @@ const UserSchema = new Schema(
     avatar: { type: String },
     subscriptions: [{ type: Schema.Types.ObjectId, ref: "Content" }],
     likedChapters: [{ type: Schema.Types.ObjectId, ref: "Chapter" }],
+    likedComments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     emailVerified: { type: Boolean, default: null },
     isAdmin: { type: Boolean, default: false },
   },

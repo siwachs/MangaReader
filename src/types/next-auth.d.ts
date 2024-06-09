@@ -9,7 +9,6 @@ declare module "next-auth" {
     email: string;
     avatar: string | null;
     isAdmin?: boolean;
-    emailVerified?: boolean | null;
     createdAt: string;
     updatedAt: string;
   }

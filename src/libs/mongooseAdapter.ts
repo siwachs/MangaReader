@@ -59,7 +59,7 @@ export default function mongooseAdapter(): Adapter {
     async getUser(id: string) {
       await connectToMongoDB();
       const user = await User.findById(id).select(
-        "-likedChapters -subscriptions -password",
+        "-likedChapters -subscriptions -likedComments -password -emailVerified",
       );
       return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
@@ -67,7 +67,7 @@ export default function mongooseAdapter(): Adapter {
     async getUserByEmail(email: string) {
       await connectToMongoDB();
       const user = await User.findOne({ email }).select(
-        "-likedChapters -subscriptions -password",
+        "-likedChapters -subscriptions -likedComments -password -emailVerified",
       );
       return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
@@ -83,7 +83,7 @@ export default function mongooseAdapter(): Adapter {
       const account = await Account.findOne({ provider, providerAccountId });
       if (!account) return null;
       const user = await User.findById(account.userId).select(
-        "-likedChapters -subscriptions -password",
+        "-likedChapters -subscriptions -likedComments -password -emailVerified",
       );
       return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
@@ -133,7 +133,7 @@ export default function mongooseAdapter(): Adapter {
       const session = await Session.findOne({ sessionToken });
       if (!session) return null;
       const user = await User.findById(session.userId).select(
-        "-likedChapters -subscriptions -password",
+        "-likedChapters -subscriptions -likedComments -password -emailVerified",
       );
       if (!user) return null;
       return {

@@ -1,6 +1,9 @@
+import { NextRequest, NextResponse } from "next/server";
+
+import getServerSession from "@/libs/getServerSession";
 import connectToMongoDB from "@/libs/connectToMongoDB";
 import Comment from "@/models/Comment";
-import { NextRequest, NextResponse } from "next/server";
+import User from "@/models/User";
 
 const PAGE_NUMBER = 1;
 const PAGE_SIZE = 36;
@@ -17,15 +20,14 @@ const getComments = async (req: NextRequest) => {
     const commentSortKey =
       req.nextUrl.searchParams.get("commentSortKey") ?? COMMENT_SORT_KEY;
 
-    if (!contentId) {
+    if (!contentId)
       return NextResponse.json(
         {
           error: true,
-          errorMessage: "Invalid Query Parameters",
+          errorMessage: "Invalid query parameters contentId is required.",
         },
         { status: 400 },
       );
-    }
 
     const matchConditions = [{ contentId }, { chapterId }];
 
@@ -54,7 +56,7 @@ const getComments = async (req: NextRequest) => {
       },
     ]);
 
-    const { totalComments } = aggregatedData[0].metaData[0] ?? pageSize;
+    const { totalComments = 0 } = aggregatedData[0].metaData[0] ?? {};
     const comments = aggregatedData[0].data ?? [];
 
     return NextResponse.json(
@@ -81,17 +83,33 @@ const addComment = async (req: NextRequest) => {
   try {
     const { contentId, chapterId, userId, parentId, message } =
       await req.json();
-    if (!contentId || !userId || !message.trim()) {
+    if (!contentId || !userId || !message.trim())
       return NextResponse.json(
         {
           error: true,
-          errorMessage: "Invalid Body Bad Request",
+          errorMessage: "Invalid body bad request.",
         },
         { status: 400 },
       );
-    }
+
+    const serverSession = await getServerSession(userId);
+    if (!serverSession)
+      return NextResponse.json(
+        { error: true, errorMessage: "401 Unauthorized user." },
+        { status: 401 },
+      );
 
     await connectToMongoDB();
+    const user = await User.findById(userId);
+    if (!user)
+      return NextResponse.json(
+        {
+          error: true,
+          errorMessage: "User not found.",
+        },
+        { status: 404 },
+      );
+
     const comment = await Comment.create({
       parentId,
       message,
