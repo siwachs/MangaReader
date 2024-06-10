@@ -121,10 +121,10 @@ const addComment = async (req: NextRequest) => {
       chapterId,
       user: userId,
     });
-    console.log("formatted comment is =>", formatMongooseDoc(comment));
+    await comment.populate({ path: "user", select: "username avatar -_id" });
 
     return NextResponse.json(
-      { error: false, comment: formatMongooseDoc(comment) },
+      { error: false, comment: formatMongooseDoc(comment.toObject()) },
       { status: 201 },
     );
   } catch (error: any) {
