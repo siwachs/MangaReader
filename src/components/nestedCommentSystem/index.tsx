@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { CommentType } from "@/types";
 import { NestedCommentProvider } from "@/contexts/nestedCommentContext";
 import { roboto } from "@/libs/fonts";
 import {
@@ -28,7 +27,7 @@ const NestedCommentSystem: React.FC<{
   );
 };
 
-const rootComments: CommentType[] = [
+const rootComments: any = [
   {
     _id: "1",
     parentId: null,
@@ -193,15 +192,15 @@ const NestedCommentsContainer: React.FC = () => {
   );
 };
 
-const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
-  return comments.map((comment) => (
+const CommentList: React.FC<{ comments: any }> = ({ comments }) => {
+  return comments.map((comment: any) => (
     <li key={comment._id} className="mb-4">
       <Comment comment={comment} />
     </li>
   ));
 };
 
-const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
+const Comment: React.FC<{ comment: any }> = ({ comment }) => {
   return (
     <div>
       <div className="header flex">

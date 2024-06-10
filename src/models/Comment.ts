@@ -16,8 +16,4 @@ const CommentSchema = new Schema(
   { timestamps: true },
 );
 
-CommentSchema.virtual("id", function (this: any) {
-  return this._id.toHexString();
-});
-
 export default models.Comment || model("Comment", CommentSchema, "Comments");

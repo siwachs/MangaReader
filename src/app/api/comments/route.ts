@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import formatMongooseDoc from "@/libs/formatMongooseDoc";
 import getServerSession from "@/libs/getServerSession";
 import connectToMongoDB from "@/libs/connectToMongoDB";
 import Comment from "@/models/Comment";
@@ -7,7 +8,7 @@ import User from "@/models/User";
 
 const PAGE_NUMBER = 1;
 const PAGE_SIZE = 36;
-const COMMENT_SORT_KEY = "BEST";
+const COMMENTS_SORT_KEY = "BEST";
 
 const getComments = async (req: NextRequest) => {
   try {
@@ -17,8 +18,8 @@ const getComments = async (req: NextRequest) => {
       parseInt(req.nextUrl.searchParams.get("pageNumber")!) || PAGE_NUMBER;
     const pageSize =
       parseInt(req.nextUrl.searchParams.get("pageSize")!) || PAGE_SIZE;
-    const commentSortKey =
-      req.nextUrl.searchParams.get("commentSortKey") ?? COMMENT_SORT_KEY;
+    const commentsSortKey =
+      req.nextUrl.searchParams.get("commentsSortKey") ?? COMMENTS_SORT_KEY;
 
     if (!contentId)
       return NextResponse.json(
@@ -31,12 +32,10 @@ const getComments = async (req: NextRequest) => {
 
     const matchConditions = [{ contentId }, { chapterId }];
 
-    const sortingConditions: Record<string, 1 | -1> =
-      commentSortKey === "NEWEST"
-        ? { createdAt: -1 }
-        : commentSortKey === "OLDEST"
-          ? { createdAt: 1 }
-          : { likes: -1, createdAt: -1 };
+    let sortingConditions: Record<string, 1 | -1> = {};
+    if (commentsSortKey === "NEWEST") sortingConditions = { createdAt: -1 };
+    else if (commentsSortKey === "OLDEST") sortingConditions = { createdAt: 1 };
+    else sortingConditions = { likes: -1, createdAt: -1 };
 
     await connectToMongoDB();
     const aggregatedData = await Comment.aggregate([
@@ -57,14 +56,19 @@ const getComments = async (req: NextRequest) => {
     ]);
 
     const { totalComments = 0 } = aggregatedData[0].metaData[0] ?? {};
-    const comments = aggregatedData[0].data ?? [];
+    const comments =
+      aggregatedData[0].data?.map((comment: any) =>
+        formatMongooseDoc(comment),
+      ) ?? [];
 
     return NextResponse.json(
       {
+        error: false,
         totalPages: Math.ceil(totalComments / pageSize),
         totalComments,
         pageNumber,
         comments,
+        sortKey: commentsSortKey,
       },
       { status: 200 },
     );
@@ -93,11 +97,11 @@ const addComment = async (req: NextRequest) => {
       );
 
     const serverSession = await getServerSession(userId);
-    if (!serverSession)
-      return NextResponse.json(
-        { error: true, errorMessage: "401 Unauthorized user." },
-        { status: 401 },
-      );
+    // if (!serverSession)
+    //   return NextResponse.json(
+    //     { error: true, errorMessage: "401 Unauthorized user." },
+    //     { status: 401 },
+    //   );
 
     await connectToMongoDB();
     const user = await User.findById(userId);
@@ -111,14 +115,18 @@ const addComment = async (req: NextRequest) => {
       );
 
     const comment = await Comment.create({
-      parentId,
+      parentId: parentId ?? "root",
       message,
       contentId,
       chapterId,
-      userId,
+      user: userId,
     });
+    console.log("formatted comment is =>", formatMongooseDoc(comment));
 
-    return NextResponse.json({ error: false, comment }, { status: 201 });
+    return NextResponse.json(
+      { error: false, comment: formatMongooseDoc(comment) },
+      { status: 201 },
+    );
   } catch (error: any) {
     return NextResponse.json(
       {

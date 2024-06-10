@@ -17,6 +17,7 @@ const format = {
     const newObject: Record<string, unknown> = {};
     for (const key in object) {
       const value = object[key];
+      if (key === "__v") continue;
       if (key === "_id") {
         newObject.id = value.toString();
       } else if (key === "userId") {

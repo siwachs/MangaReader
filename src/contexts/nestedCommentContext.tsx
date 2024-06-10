@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo } from "react";
+import { CommentsPayload } from "@/types";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 type ContextType = {};
 
@@ -25,6 +26,8 @@ export function NestedCommentProvider({
   chapterId?: string;
   children: React.ReactNode;
 }>) {
+  const [commentsPayload, setCommentsPayload] = useState<CommentsPayload>({});
+
   useEffect(() => {}, [chapterId, contentId]);
 
   const contextValue = useMemo(() => ({}), []);
