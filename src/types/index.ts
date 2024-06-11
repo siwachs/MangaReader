@@ -13,11 +13,30 @@ export type LinkObject = {
   link: string;
 };
 
+export type Comment = {
+  id: string;
+  parentId: string;
+  message: string;
+  contentId: string;
+  chapterId?: string;
+  user: {
+    username: string;
+    avatar: string;
+  };
+  likes: number;
+  dislikes: number;
+  isEdited: boolean;
+  isReported: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type CommentsPayload = {
   error: boolean;
   errorMessage?: string;
   totalPages: number;
   pageNumber: number;
-  comments: [];
+  comments: Comment[];
   sortKey: string;
 };

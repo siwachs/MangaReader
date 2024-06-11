@@ -13,14 +13,6 @@ const COMMENTS_SORT_KEY = "BEST";
 const getComments = async (req: NextRequest) => {
   try {
     const contentId = req.nextUrl.searchParams.get("contentId");
-    const chapterId = req.nextUrl.searchParams.get("chapterId");
-    const pageNumber =
-      parseInt(req.nextUrl.searchParams.get("pageNumber")!) || PAGE_NUMBER;
-    const pageSize =
-      parseInt(req.nextUrl.searchParams.get("pageSize")!) || PAGE_SIZE;
-    const commentsSortKey =
-      req.nextUrl.searchParams.get("commentsSortKey") ?? COMMENTS_SORT_KEY;
-
     if (!contentId)
       return NextResponse.json(
         {
@@ -29,6 +21,19 @@ const getComments = async (req: NextRequest) => {
         },
         { status: 400 },
       );
+
+    const chapterId = !req.nextUrl.searchParams.get("chapterId")
+      ? null
+      : req.nextUrl.searchParams.get("chapterId");
+
+    const pageNumber =
+      parseInt(req.nextUrl.searchParams.get("pageNumber")!) || PAGE_NUMBER;
+    const pageSize =
+      parseInt(req.nextUrl.searchParams.get("pageSize")!) || PAGE_SIZE;
+
+    const commentsSortKey = !req.nextUrl.searchParams.get("commentsSortKey")
+      ? COMMENTS_SORT_KEY
+      : req.nextUrl.searchParams.get("commentsSortKey");
 
     const matchConditions = [{ contentId }, { chapterId }];
 
@@ -97,11 +102,11 @@ const addComment = async (req: NextRequest) => {
       );
 
     const serverSession = await getServerSession(userId);
-    // if (!serverSession)
-    //   return NextResponse.json(
-    //     { error: true, errorMessage: "401 Unauthorized user." },
-    //     { status: 401 },
-    //   );
+    if (!serverSession)
+      return NextResponse.json(
+        { error: true, errorMessage: "401 Unauthorized user." },
+        { status: 401 },
+      );
 
     await connectToMongoDB();
     const user = await User.findById(userId);
@@ -118,7 +123,7 @@ const addComment = async (req: NextRequest) => {
       parentId: parentId ?? "root",
       message,
       contentId,
-      chapterId,
+      chapterId: chapterId ?? null,
       user: userId,
     });
     await comment.populate({ path: "user", select: "username avatar -_id" });
