@@ -20,7 +20,7 @@ export type Comment = {
   contentId: string;
   chapterId?: string;
   user: {
-    username: string;
+    username: string | null;
     avatar: string;
   };
   likes: number;
@@ -33,6 +33,7 @@ export type Comment = {
 };
 
 export type CommentsPayload = {
+  loading: boolean;
   error: boolean;
   errorMessage?: string;
   totalPages: number;

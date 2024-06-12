@@ -55,6 +55,38 @@ const getComments = async (req: NextRequest) => {
             { $sort: sortingConditions },
             { $skip: (pageNumber - 1) * pageSize },
             { $limit: pageSize },
+            {
+              $lookup: {
+                from: "Users",
+                localField: "user",
+                foreignField: "_id",
+                as: "user",
+              },
+            },
+            {
+              $addFields: {
+                user: {
+                  $arrayElemAt: ["$user", 0],
+                },
+              },
+            },
+            {
+              $project: {
+                parentId: 1,
+                message: 1,
+                contentId: 1,
+                chapterId: 1,
+                "user.username": 1,
+                "user.avatar": 1,
+                likes: 1,
+                dislikes: 1,
+                isEdited: 1,
+                isReported: 1,
+                isDeleted: 1,
+                createdAt: 1,
+                updatedAt: 1,
+              },
+            },
           ],
         },
       },

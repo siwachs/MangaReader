@@ -3,8 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { NestedCommentProvider } from "@/contexts/nestedCommentContext";
+import { formatDistanceToNow, parseISO } from "date-fns";
 import { roboto } from "@/libs/fonts";
+import { Comment as CommentType } from "@/types";
+
+import {
+  NestedCommentProvider,
+  useNestedCommentSystem,
+} from "@/contexts/nestedCommentContext";
 import {
   AddUser,
   ChatBubbleSolid,
@@ -27,121 +33,9 @@ const NestedCommentSystem: React.FC<{
   );
 };
 
-const rootComments: any = [
-  {
-    _id: "1",
-    parentId: null,
-    message:
-      "I've gotten used to the new MC, will feel weird when he returns to normal nie li, also wouldn't mind if he doesn't at all",
-    contentId: "1",
-    chapterId: "1",
-    user: { _id: "1", name: "user 1", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "2",
-    parentId: null,
-    message: "2nd root message",
-    contentId: "2",
-    chapterId: "2",
-    user: { _id: "2", name: "user 2", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "3",
-    parentId: null,
-    message: "3rd root message",
-    contentId: "3",
-    chapterId: "3",
-    user: { _id: "3", name: "user 3", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "4",
-    parentId: null,
-    message: "4th root message",
-    contentId: "4",
-    chapterId: "4",
-    user: { _id: "4", name: "user 4", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "5",
-    parentId: null,
-    message: "5th root message",
-    contentId: "5",
-    chapterId: "5",
-    user: { _id: "5", name: "user 5", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "6",
-    parentId: null,
-    message: "6th root message",
-    contentId: "6",
-    chapterId: "6",
-    user: { _id: "6", name: "user 6", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "7",
-    parentId: null,
-    message: "7th root message",
-    contentId: "7",
-    chapterId: "7",
-    user: { _id: "7", name: "user 7", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "8",
-    parentId: null,
-    message: "8th root message",
-    contentId: "8",
-    chapterId: "8",
-    user: { _id: "8", name: "user 8", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "9",
-    parentId: null,
-    message: "9th root message",
-    contentId: "9",
-    chapterId: "9",
-    user: { _id: "9", name: "user 9", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-  {
-    _id: "10",
-    parentId: null,
-    message: "10th root message",
-    contentId: "10",
-    chapterId: "10",
-    user: { _id: "10", name: "user 10", avatar: "/assets/avatar.jpg" },
-    likes: 0,
-    dislikes: 0,
-    flag: false,
-  },
-];
-
 const NestedCommentsContainer: React.FC = () => {
+  const { rootComments } = useNestedCommentSystem();
+
   return (
     <div
       className={`${roboto.className} text-[var(--app-text-color-dark-grayish-green)]`}
@@ -192,22 +86,25 @@ const NestedCommentsContainer: React.FC = () => {
   );
 };
 
-const CommentList: React.FC<{ comments: any }> = ({ comments }) => {
+const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
   return comments.map((comment: any) => (
-    <li key={comment._id} className="mb-4">
+    <div key={comment.id} className="mb-4">
       <Comment comment={comment} />
-    </li>
+    </div>
   ));
 };
 
-const Comment: React.FC<{ comment: any }> = ({ comment }) => {
+const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
+  const parsedDate = parseISO(comment.createdAt);
+  const timeAgo = formatDistanceToNow(parsedDate, { addSuffix: true });
+
   return (
     <div>
       <div className="header flex">
         <div className="avatar mb-[9px] mr-2.5 h-[52px] w-[52px] rounded-2xl">
           <Image
             src={comment.user.avatar}
-            alt={comment.user.name}
+            alt={comment.user.username ?? "Invalid username"}
             width={60}
             height={60}
             className="h-full w-full rounded-[inherit] object-cover object-center"
@@ -216,13 +113,13 @@ const Comment: React.FC<{ comment: any }> = ({ comment }) => {
 
         <div className="mt-1">
           <div className="truncate text-[15px]/[18px] font-bold">
-            {comment.user.name}
+            {comment.user.username ?? "Invalid username"}
             <AddUser className="ml-1.5 inline-block size-4 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
           </div>
 
           <span className="text-xs/[21px] font-medium text-[var(--app-text-color-muted-blue-gray)]">
-            <span>5 days ago</span>
-            <span className="ml-3">edited</span>
+            <span>{timeAgo}</span>
+            {comment.isEdited && <span className="ml-3">edited</span>}
           </span>
         </div>
 

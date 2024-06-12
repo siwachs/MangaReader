@@ -10,16 +10,23 @@ import {
   useState,
 } from "react";
 
-type ContextType = { commentsPayload: CommentsPayload };
+type ContextType = {
+  commentsPayload: CommentsPayload;
+  rootComments: Comment[];
+  getReplies: any;
+};
 
 const NestedCommentSystemContext = createContext<ContextType>({
   commentsPayload: {
+    loading: true,
     error: false,
     totalPages: 0,
     pageNumber: 1,
     comments: [],
     sortKey: "BEST",
   },
+  rootComments: [],
+  getReplies: null,
 });
 
 export function useNestedCommentSystem() {
@@ -42,6 +49,7 @@ export function NestedCommentProvider({
   children: React.ReactNode;
 }>) {
   const [commentsPayload, setCommentsPayload] = useState<CommentsPayload>({
+    loading: true,
     error: false,
     totalPages: 0,
     pageNumber: 1,
@@ -77,6 +85,8 @@ export function NestedCommentProvider({
           error: true,
           errorMessage: error.message,
         }));
+      } finally {
+        setCommentsPayload((prev) => ({ ...prev, loading: false }));
       }
     };
 
@@ -86,7 +96,7 @@ export function NestedCommentProvider({
   const getCommentsByParentId = useMemo(() => {
     const groups: Record<string, Comment[]> = {};
 
-    commentsPayload.comments.map((comment) => {
+    commentsPayload?.comments.map((comment) => {
       groups[comment.parentId] ||= [];
       groups[comment.parentId].push(comment);
     });
@@ -96,12 +106,15 @@ export function NestedCommentProvider({
 
   const getReplies = useCallback(
     (parentId = "root") => {
-      return getCommentsByParentId[parentId];
+      return getCommentsByParentId[parentId] ?? [];
     },
     [getCommentsByParentId],
   );
 
-  const contextValue = useMemo(() => ({ commentsPayload }), [commentsPayload]);
+  const contextValue = useMemo(
+    () => ({ commentsPayload, rootComments: getReplies(), getReplies }),
+    [commentsPayload, getReplies],
+  );
 
   return (
     <NestedCommentSystemContext.Provider value={contextValue}>
