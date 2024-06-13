@@ -32,6 +32,8 @@ export type Comment = {
   updatedAt: string;
 };
 
+export type SortKey = "BEST" | "NEWEST" | "OLDEST";
+
 export type CommentsPayload = {
   loading: boolean;
   error: boolean;
@@ -39,5 +41,5 @@ export type CommentsPayload = {
   totalPages: number;
   pageNumber: number;
   comments: Comment[];
-  sortKey: string;
+  sortKey: SortKey;
 };

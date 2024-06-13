@@ -22,6 +22,9 @@ import {
 } from "../icons";
 import CommentForm from "./commentForm";
 
+const sortButtonClasses =
+  "text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-[var(--app-text-color-gunmelt-gray)]";
+
 const NestedCommentSystem: React.FC<{
   contentId: string;
   chapterId?: string;
@@ -34,7 +37,8 @@ const NestedCommentSystem: React.FC<{
 };
 
 const NestedCommentsContainer: React.FC = () => {
-  const { rootComments } = useNestedCommentSystem();
+  const { rootComments, commentsPayload, changeCommentsOrder } =
+    useNestedCommentSystem();
 
   return (
     <div
@@ -68,13 +72,26 @@ const NestedCommentsContainer: React.FC = () => {
 
           <div className="mb-3 flex items-center gap-4 pt-[3px]">
             <button
-              data-active={true}
-              className="text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-[var(--app-text-color-gunmelt-gray)]"
+              onClick={() => changeCommentsOrder("BEST")}
+              data-active={commentsPayload.sortKey === "BEST"}
+              className={sortButtonClasses}
             >
               Best
             </button>
-            <button className="text-sm/[19px] font-semibold">Newest</button>
-            <button className="text-sm/[19px] font-semibold">Oldest</button>
+            <button
+              onClick={() => changeCommentsOrder("NEWEST")}
+              data-active={commentsPayload.sortKey === "NEWEST"}
+              className={sortButtonClasses}
+            >
+              Newest
+            </button>
+            <button
+              onClick={() => changeCommentsOrder("OLDEST")}
+              data-active={commentsPayload.sortKey === "OLDEST"}
+              className={sortButtonClasses}
+            >
+              Oldest
+            </button>
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { CommentsPayload, Comment } from "@/types";
+import { CommentsPayload, Comment, SortKey } from "@/types";
 import {
   createContext,
   useCallback,
@@ -14,11 +14,12 @@ type ContextType = {
   commentsPayload: CommentsPayload;
   rootComments: Comment[];
   getReplies: any;
+  changeCommentsOrder: any;
 };
 
 const NestedCommentSystemContext = createContext<ContextType>({
   commentsPayload: {
-    loading: true,
+    loading: false,
     error: false,
     totalPages: 0,
     pageNumber: 1,
@@ -27,6 +28,7 @@ const NestedCommentSystemContext = createContext<ContextType>({
   },
   rootComments: [],
   getReplies: null,
+  changeCommentsOrder: null,
 });
 
 export function useNestedCommentSystem() {
@@ -49,7 +51,7 @@ export function NestedCommentProvider({
   children: React.ReactNode;
 }>) {
   const [commentsPayload, setCommentsPayload] = useState<CommentsPayload>({
-    loading: true,
+    loading: false,
     error: false,
     totalPages: 0,
     pageNumber: 1,
@@ -60,6 +62,7 @@ export function NestedCommentProvider({
   useEffect(() => {
     const getInitialComments = async () => {
       try {
+        setCommentsPayload((prev) => ({ ...prev, loading: true }));
         const commentsSortKey = commentsPayload.sortKey || "BEST";
         const queryParams = new URLSearchParams(
           chapterId
@@ -93,6 +96,10 @@ export function NestedCommentProvider({
     getInitialComments();
   }, [chapterId, contentId, commentsPayload.sortKey]);
 
+  const changeCommentsOrder = (sortKey: SortKey) => {
+    setCommentsPayload((prev) => ({ ...prev, sortKey }));
+  };
+
   const getCommentsByParentId = useMemo(() => {
     const groups: Record<string, Comment[]> = {};
 
@@ -112,7 +119,12 @@ export function NestedCommentProvider({
   );
 
   const contextValue = useMemo(
-    () => ({ commentsPayload, rootComments: getReplies(), getReplies }),
+    () => ({
+      commentsPayload,
+      rootComments: getReplies(),
+      getReplies,
+      changeCommentsOrder,
+    }),
     [commentsPayload, getReplies],
   );
 
