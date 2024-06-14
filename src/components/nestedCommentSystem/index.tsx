@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -112,6 +113,7 @@ const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
 };
 
 const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
+  const [isReplying, setIsReplying] = useState(false);
   const parsedDate = parseISO(comment.createdAt);
   const timeAgo = formatDistanceToNow(parsedDate, { addSuffix: true });
 
@@ -161,8 +163,20 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
           <span>{comment.dislikes}</span>
         </button>
 
-        <button className="mx-3.5 text-sm">Reply</button>
+        <button
+          onClick={() => setIsReplying((prev) => !prev)}
+          className="mx-3.5 text-sm"
+        >
+          Reply
+        </button>
       </div>
+
+      {isReplying && (
+        <CommentForm
+          parentId={comment.id}
+          callback={() => setIsReplying(false)}
+        />
+      )}
     </div>
   );
 };

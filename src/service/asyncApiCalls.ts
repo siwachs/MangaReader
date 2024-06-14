@@ -1,13 +1,9 @@
-export default async function makePostPutRequest(
+async function makePostPutRequest(
   apiEndpoint: string,
   method: "POST" | "PUT",
   body: Record<string, any>,
-  validationCallback: () => boolean,
 ) {
   try {
-    if (!validationCallback())
-      return { error: true, errorMessage: "Invalid body bad request." };
-
     const requestResponse = await fetch(apiEndpoint, {
       method,
       headers: { "Content-Type": "application/json" },
@@ -18,3 +14,5 @@ export default async function makePostPutRequest(
     return { error: true, errorMessage: error.message };
   }
 }
+
+export { makePostPutRequest };

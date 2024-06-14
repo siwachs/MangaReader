@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { nunito } from "@/libs/fonts";
+import { NextAuthProvider } from "@/contexts/nextAuthContext";
 
 import Header from "@/components/header";
-import { NextAuthProvider } from "@/contexts/nextAuthContext";
 
 export const metadata: Metadata = {
   title: "Manga Reader - Read Manga, Anime, Manhua, and Donghua Online",
@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={nunito.className}>
         <NextAuthProvider>
           <Header />
-          <div id="sidebar-portal"></div>
+          <div id="sidebar-portal" />
           <main id="page-content">{children}</main>
         </NextAuthProvider>
       </body>

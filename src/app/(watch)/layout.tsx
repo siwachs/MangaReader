@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { nunito } from "@/libs/fonts";
+import { NextAuthProvider } from "@/contexts/nextAuthContext";
 
 import Header from "@/components/(watch)/header";
 
@@ -16,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <Header />
-        <main id="page-content">{children}</main>
+        <NextAuthProvider>
+          <Header />
+          <main id="page-content">{children}</main>
+        </NextAuthProvider>
       </body>
     </html>
   );

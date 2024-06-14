@@ -9,15 +9,23 @@ import {
   useMemo,
   useState,
 } from "react";
+import { makePostPutRequest } from "@/service/asyncApiCalls";
 
 type ContextType = {
+  contentId: any;
+  chapterId: any;
   commentsPayload: CommentsPayload;
   rootComments: Comment[];
   getReplies: any;
   changeCommentsOrder: any;
+  makeComment: any;
 };
 
+const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT_COMMENTS as string;
+
 const NestedCommentSystemContext = createContext<ContextType>({
+  contentId: null,
+  chapterId: null,
   commentsPayload: {
     loading: false,
     error: false,
@@ -29,6 +37,7 @@ const NestedCommentSystemContext = createContext<ContextType>({
   rootComments: [],
   getReplies: null,
   changeCommentsOrder: null,
+  makeComment: null,
 });
 
 export function useNestedCommentSystem() {
@@ -78,7 +87,7 @@ export function NestedCommentProvider({
         ).toString();
 
         const commentsPayloadResponse = await fetch(
-          `/api/comments?${queryParams}`,
+          `${apiEndpoint}?${queryParams}`,
         );
         const commentsPayloadParsed = await commentsPayloadResponse.json();
         setCommentsPayload(commentsPayloadParsed);
@@ -118,14 +127,65 @@ export function NestedCommentProvider({
     [getCommentsByParentId],
   );
 
+  // Nested Comment System CRUD
+  const makeComment = async (body: Record<string, any>) => {
+    const { contentId, userId, message } = body;
+    if (!contentId || !userId || !message.trim())
+      return { error: true, errorMessage: "Invalid body bad request." };
+
+    const requestResponse = await makePostPutRequest(apiEndpoint, "POST", body);
+
+    if (!requestResponse.error) {
+      const { comment } = requestResponse;
+
+      setCommentsPayload((prev) => {
+        if (prev.sortKey === "NEWEST")
+          return {
+            ...prev,
+            comments: [comment, ...prev.comments],
+          };
+        else if (prev.sortKey === "OLDEST")
+          return {
+            ...prev,
+            comments: [...prev.comments, comment],
+          };
+        else {
+          const commentWithZeroLikes = prev.comments.findIndex(
+            (c) => c.likes === 0,
+          );
+
+          if (commentWithZeroLikes !== -1) {
+            return {
+              ...prev,
+              comments: [
+                ...prev.comments.slice(0, commentWithZeroLikes),
+                comment,
+                ...prev.comments.slice(commentWithZeroLikes),
+              ],
+            };
+          } else
+            return {
+              ...prev,
+              comments: { ...prev.comments, comment },
+            };
+        }
+      });
+    }
+
+    return requestResponse;
+  };
+
   const contextValue = useMemo(
     () => ({
+      contentId,
+      chapterId,
       commentsPayload,
       rootComments: getReplies(),
       getReplies,
       changeCommentsOrder,
+      makeComment,
     }),
-    [commentsPayload, getReplies],
+    [contentId, chapterId, commentsPayload, getReplies],
   );
 
   return (
