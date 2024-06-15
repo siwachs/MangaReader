@@ -175,4 +175,34 @@ const addComment = async (req: NextRequest) => {
   }
 };
 
-export { getComments as GET, addComment as POST };
+const editComment = async (req: NextRequest) => {
+  try {
+    const reqBody = await req.json();
+    const { contentId, chapterId, userId, message } = reqBody;
+    if (!contentId || !userId || !message.trim())
+      return NextResponse.json(
+        {
+          error: true,
+          errorMessage: "Invalid body bad request.",
+        },
+        { status: 400 },
+      );
+
+    const serverSession = await getServerSession(userId);
+    if (!serverSession)
+      return NextResponse.json(
+        { error: true, errorMessage: "401 Unauthorized user." },
+        { status: 401 },
+      );
+  } catch (error: any) {
+    return NextResponse.json(
+      {
+        error: true,
+        errorMessage: error.message,
+      },
+      { status: 500 },
+    );
+  }
+};
+
+export { getComments as GET, addComment as POST, editComment as PUT };

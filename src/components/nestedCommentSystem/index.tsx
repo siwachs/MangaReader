@@ -113,9 +113,12 @@ const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
 };
 
 const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
+  const { getReplies } = useNestedCommentSystem();
   const [isReplying, setIsReplying] = useState(false);
   const parsedDate = parseISO(comment.createdAt);
   const timeAgo = formatDistanceToNow(parsedDate, { addSuffix: true });
+
+  const childComments = getReplies(comment.id);
 
   return (
     <div>
@@ -176,6 +179,13 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
           parentId={comment.id}
           callback={() => setIsReplying(false)}
         />
+      )}
+
+      {/* Child comments recursive */}
+      {childComments.length > 0 && (
+        <div className="border-l-2 border-[var(--app-border-color-periwinkle)] pl-3.5">
+          <CommentList comments={childComments} />
+        </div>
       )}
     </div>
   );
