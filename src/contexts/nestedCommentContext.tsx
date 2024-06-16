@@ -118,7 +118,7 @@ export function NestedCommentProvider({
     });
 
     return groups;
-  }, [commentsPayload.comments]);
+  }, [commentsPayload?.comments]);
 
   const getReplies = useCallback(
     (parentId = "root") => {
@@ -130,7 +130,7 @@ export function NestedCommentProvider({
   // Nested Comment System CRUD
   const makeComment = async (body: Record<string, any>) => {
     const { contentId, userId, message } = body;
-    if (!contentId || !userId || !message.trim())
+    if (!contentId || !userId || !message?.trim())
       return { error: true, errorMessage: "Invalid body bad request." };
 
     const requestResponse = await makePostPutRequest(apiEndpoint, "POST", body);
@@ -150,29 +150,33 @@ export function NestedCommentProvider({
             comments: [...prev.comments, comment],
           };
         else {
-          const commentWithZeroLikes = prev.comments.findIndex(
-            (c) => c.likes === 0,
+          const commentWithZeroUpVotes = prev.comments.findIndex(
+            (c) => c.upVotes === 0,
           );
 
-          if (commentWithZeroLikes !== -1) {
+          if (commentWithZeroUpVotes !== -1) {
             return {
               ...prev,
               comments: [
-                ...prev.comments.slice(0, commentWithZeroLikes),
+                ...prev.comments.slice(0, commentWithZeroUpVotes),
                 comment,
-                ...prev.comments.slice(commentWithZeroLikes),
+                ...prev.comments.slice(commentWithZeroUpVotes),
               ],
             };
           } else
             return {
               ...prev,
-              comments: { ...prev.comments, comment },
+              comments: [...prev.comments, comment],
             };
         }
       });
+    } else {
+      setCommentsPayload((prev) => ({
+        ...prev,
+        error: true,
+        errorMessage: requestResponse.errorMessage,
+      }));
     }
-
-    return requestResponse;
   };
 
   const contextValue = useMemo(

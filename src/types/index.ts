@@ -23,8 +23,8 @@ export type Comment = {
     username: string | null;
     avatar: string;
   };
-  likes: number;
-  dislikes: number;
+  upVotes: number;
+  downVotes: number;
   isEdited: boolean;
   isReported: boolean;
   isDeleted: boolean;

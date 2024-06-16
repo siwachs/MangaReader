@@ -96,9 +96,15 @@ const NestedCommentsContainer: React.FC = () => {
           </div>
         </div>
 
-        <ul>
-          {rootComments.length > 0 && <CommentList comments={rootComments} />}
-        </ul>
+        {commentsPayload.loading ? (
+          <div className="h-[107px] bg-[url('/assets/loading-gear.gif')] bg-center bg-no-repeat" />
+        ) : rootComments.length > 0 ? (
+          <CommentList comments={rootComments} />
+        ) : (
+          <div className="text-center leading-[107px] opacity-60">
+            Be the first to comment.
+          </div>
+        )}
       </section>
     </div>
   );
@@ -158,12 +164,12 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
       <div className="footer mt-1.5 flex h-[2em] items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
         <button className="flex items-center">
           <LikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
-          <span>{comment.likes}</span>
+          <span>{comment.upVotes}</span>
         </button>
 
         <button className="flex items-center">
           <DislikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
-          <span>{comment.dislikes}</span>
+          <span>{comment.downVotes}</span>
         </button>
 
         <button

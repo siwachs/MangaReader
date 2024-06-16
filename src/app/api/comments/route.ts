@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import {
+  invalidBody,
+  invalidQuery,
+  notFound,
+  serverError,
+  unauthorizedUser,
+} from "@/libs/apiErrorResponse";
 import formatMongooseDoc from "@/libs/formatMongooseDoc";
 import getServerSession from "@/libs/getServerSession";
 import connectToMongoDB from "@/libs/connectToMongoDB";
@@ -13,14 +20,7 @@ const COMMENTS_SORT_KEY = "BEST";
 const getComments = async (req: NextRequest) => {
   try {
     const contentId = req.nextUrl.searchParams.get("contentId");
-    if (!contentId)
-      return NextResponse.json(
-        {
-          error: true,
-          errorMessage: "Invalid query parameters contentId is required.",
-        },
-        { status: 400 },
-      );
+    if (!contentId) return invalidQuery(["contentId"]);
 
     const chapterId = !req.nextUrl.searchParams.get("chapterId")
       ? null
@@ -40,7 +40,7 @@ const getComments = async (req: NextRequest) => {
     let sortingConditions: Record<string, 1 | -1> = {};
     if (commentsSortKey === "NEWEST") sortingConditions = { createdAt: -1 };
     else if (commentsSortKey === "OLDEST") sortingConditions = { createdAt: 1 };
-    else sortingConditions = { likes: -1, createdAt: -1 };
+    else sortingConditions = { upVotes: -1, createdAt: -1 };
 
     await connectToMongoDB();
     const aggregatedData = await Comment.aggregate([
@@ -78,8 +78,8 @@ const getComments = async (req: NextRequest) => {
                 chapterId: 1,
                 "user.username": 1,
                 "user.avatar": 1,
-                likes: 1,
-                dislikes: 1,
+                upVotes: 1,
+                downVotes: 1,
                 isEdited: 1,
                 isReported: 1,
                 isDeleted: 1,
@@ -110,13 +110,7 @@ const getComments = async (req: NextRequest) => {
       { status: 200 },
     );
   } catch (error: any) {
-    return NextResponse.json(
-      {
-        error: true,
-        errorMessage: error.message,
-      },
-      { status: 500 },
-    );
+    return serverError(error.message);
   }
 };
 
@@ -124,32 +118,15 @@ const addComment = async (req: NextRequest) => {
   try {
     const { contentId, chapterId, userId, parentId, message } =
       await req.json();
-    if (!contentId || !userId || !message.trim())
-      return NextResponse.json(
-        {
-          error: true,
-          errorMessage: "Invalid body bad request.",
-        },
-        { status: 400 },
-      );
+    if (!contentId || !userId || !message?.trim())
+      return invalidBody(["contentId", "userId", "message"]);
 
     const serverSession = await getServerSession(userId);
-    if (!serverSession)
-      return NextResponse.json(
-        { error: true, errorMessage: "401 Unauthorized user." },
-        { status: 401 },
-      );
+    if (!serverSession) return unauthorizedUser();
 
     await connectToMongoDB();
     const user = await User.findById(userId);
-    if (!user)
-      return NextResponse.json(
-        {
-          error: true,
-          errorMessage: "User not found.",
-        },
-        { status: 404 },
-      );
+    if (!user) return notFound(["User"]);
 
     const comment = await Comment.create({
       parentId: parentId ?? "root",
@@ -165,44 +142,8 @@ const addComment = async (req: NextRequest) => {
       { status: 201 },
     );
   } catch (error: any) {
-    return NextResponse.json(
-      {
-        error: true,
-        errorMessage: error.message,
-      },
-      { status: 500 },
-    );
+    return serverError(error.message);
   }
 };
 
-const editComment = async (req: NextRequest) => {
-  try {
-    const reqBody = await req.json();
-    const { contentId, chapterId, userId, message } = reqBody;
-    if (!contentId || !userId || !message.trim())
-      return NextResponse.json(
-        {
-          error: true,
-          errorMessage: "Invalid body bad request.",
-        },
-        { status: 400 },
-      );
-
-    const serverSession = await getServerSession(userId);
-    if (!serverSession)
-      return NextResponse.json(
-        { error: true, errorMessage: "401 Unauthorized user." },
-        { status: 401 },
-      );
-  } catch (error: any) {
-    return NextResponse.json(
-      {
-        error: true,
-        errorMessage: error.message,
-      },
-      { status: 500 },
-    );
-  }
-};
-
-export { getComments as GET, addComment as POST, editComment as PUT };
+export { getComments as GET, addComment as POST };

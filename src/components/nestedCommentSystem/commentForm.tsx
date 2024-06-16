@@ -20,7 +20,8 @@ const CommentForm: React.FC<{
   callback?: () => void;
 }> = ({ initialMessage = "", parentId = "root", callback }) => {
   const session = useSession();
-  const { contentId, chapterId, makeComment } = useNestedCommentSystem();
+  const { commentsPayload, contentId, chapterId, makeComment } =
+    useNestedCommentSystem();
 
   const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
@@ -48,9 +49,9 @@ const CommentForm: React.FC<{
         message,
       };
 
-      const { error, errorMessage } = await makeComment(body);
-      if (error) {
-        setError(errorMessage);
+      await makeComment(body);
+      if (commentsPayload.error) {
+        setError(commentsPayload.errorMessage);
       } else {
         setError(undefined);
       }
