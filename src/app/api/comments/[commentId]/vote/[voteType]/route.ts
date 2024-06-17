@@ -6,6 +6,7 @@ import {
   notFound,
   unauthorizedUser,
 } from "@/libs/apiErrorResponse";
+import { partialUserWithVotedComments } from "@/libs/mongooseSelect";
 import formatMongooseDoc from "@/libs/formatMongooseDoc";
 import getServerSession from "@/libs/getServerSession";
 import connectToMongoDB from "@/libs/connectToMongoDB";
@@ -17,13 +18,16 @@ const upVote = async (
   dynamicRouteValue: { params: { commentId: string; voteType: "up" | "down" } },
 ) => {
   try {
-    const reqBody = await req.json();
-    const { userId } = reqBody;
+    const { userId } = await req.json();
+    const voteType = dynamicRouteValue.params.voteType;
 
-    if (!userId) return invalidBody(["userId"]);
+    if (!userId || (voteType !== "up" && voteType !== "down"))
+      return invalidBody(["userId", "voteType"]);
 
     await connectToMongoDB();
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select(
+      partialUserWithVotedComments,
+    );
     if (!user) return notFound(["User"]);
 
     // const serverSession = await getServerSession(userId);
@@ -33,7 +37,11 @@ const upVote = async (
     const comment = await Comment.findById(commentId);
     if (!comment) return notFound(["Comment"]);
 
-    const voteType = dynamicRouteValue.params.voteType;
+    const alreadyVoted = user.votedComments.find(
+      (votedComment: { commentId: string; type: "up" | "down" }) =>
+        votedComment.commentId === commentId,
+    );
+
     if (voteType === "up") {
       if (comment.downVotes < 0) {
         comment.downVotes += 1;
@@ -47,7 +55,10 @@ const upVote = async (
 
       comment.downVotes -= 1;
     }
+    user.votedComments.push({ commentId, voteType });
+
     await comment.save();
+    await user.save();
 
     return NextResponse.json(
       { error: false, comment: formatMongooseDoc(comment) },

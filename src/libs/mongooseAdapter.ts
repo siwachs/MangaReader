@@ -7,6 +7,7 @@ import {
 } from "next-auth/adapters";
 import connectToMongoDB from "./connectToMongoDB";
 
+import { partialUser } from "@/libs/mongooseSelect";
 import Account from "@/models/Account";
 import Session from "@/models/Session";
 import User from "@/models/User";
@@ -59,17 +60,13 @@ export default function mongooseAdapter(): Adapter {
 
     async getUser(id: string) {
       await connectToMongoDB();
-      const user = await User.findById(id).select(
-        "-likedChapters -subscriptions -likedComments -password -emailVerified",
-      );
+      const user = await User.findById(id).select(partialUser);
       return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
 
     async getUserByEmail(email: string) {
       await connectToMongoDB();
-      const user = await User.findOne({ email }).select(
-        "-likedChapters -subscriptions -likedComments -password -emailVerified",
-      );
+      const user = await User.findOne({ email }).select(partialUser);
       return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
 
@@ -83,9 +80,7 @@ export default function mongooseAdapter(): Adapter {
       await connectToMongoDB();
       const account = await Account.findOne({ provider, providerAccountId });
       if (!account) return null;
-      const user = await User.findById(account.userId).select(
-        "-likedChapters -subscriptions -likedComments -password -emailVerified",
-      );
+      const user = await User.findById(account.userId).select(partialUser);
       return user ? format.from<AdapterUser>(user.toObject()) : null;
     },
 
@@ -133,9 +128,7 @@ export default function mongooseAdapter(): Adapter {
       await connectToMongoDB();
       const session = await Session.findOne({ sessionToken });
       if (!session) return null;
-      const user = await User.findById(session.userId).select(
-        "-likedChapters -subscriptions -likedComments -password -emailVerified",
-      );
+      const user = await User.findById(session.userId).select(partialUser);
       if (!user) return null;
       return {
         session: format.from<AdapterSession>(session.toObject()),
