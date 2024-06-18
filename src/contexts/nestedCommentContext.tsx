@@ -1,6 +1,6 @@
 "use client";
 
-import { CommentsPayload, Comment, SortKey } from "@/types";
+import { CommentsPayload, Comment, SortKey, VoteType } from "@/types";
 import {
   createContext,
   useCallback,
@@ -19,6 +19,7 @@ type ContextType = {
   getReplies: any;
   changeCommentsOrder: any;
   makeComment: any;
+  voteComment: any;
 };
 
 const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT_COMMENTS as string;
@@ -27,7 +28,7 @@ const NestedCommentSystemContext = createContext<ContextType>({
   contentId: null,
   chapterId: null,
   commentsPayload: {
-    loading: false,
+    loading: true,
     error: false,
     totalPages: 0,
     pageNumber: 1,
@@ -38,6 +39,7 @@ const NestedCommentSystemContext = createContext<ContextType>({
   getReplies: null,
   changeCommentsOrder: null,
   makeComment: null,
+  voteComment: null,
 });
 
 export function useNestedCommentSystem() {
@@ -60,7 +62,7 @@ export function NestedCommentProvider({
   children: React.ReactNode;
 }>) {
   const [commentsPayload, setCommentsPayload] = useState<CommentsPayload>({
-    loading: false,
+    loading: true,
     error: false,
     totalPages: 0,
     pageNumber: 1,
@@ -112,7 +114,7 @@ export function NestedCommentProvider({
   const getCommentsByParentId = useMemo(() => {
     const groups: Record<string, Comment[]> = {};
 
-    commentsPayload?.comments.map((comment) => {
+    commentsPayload?.comments?.map((comment) => {
       groups[comment.parentId] ||= [];
       groups[comment.parentId].push(comment);
     });
@@ -142,11 +144,13 @@ export function NestedCommentProvider({
         if (prev.sortKey === "NEWEST")
           return {
             ...prev,
+            error: false,
             comments: [comment, ...prev.comments],
           };
         else if (prev.sortKey === "OLDEST")
           return {
             ...prev,
+            error: false,
             comments: [...prev.comments, comment],
           };
         else {
@@ -157,6 +161,7 @@ export function NestedCommentProvider({
           if (commentWithZeroUpVotes !== -1) {
             return {
               ...prev,
+              error: false,
               comments: [
                 ...prev.comments.slice(0, commentWithZeroUpVotes),
                 comment,
@@ -166,6 +171,7 @@ export function NestedCommentProvider({
           } else
             return {
               ...prev,
+              error: false,
               comments: [...prev.comments, comment],
             };
         }
@@ -179,6 +185,28 @@ export function NestedCommentProvider({
     }
   };
 
+  const voteComment = async (
+    body: Record<string, any>,
+    commentId: string,
+    voteType: VoteType,
+  ) => {
+    const { userId } = body;
+    if (!userId)
+      return { error: true, errorMessage: "Invalid body bad request." };
+
+    const requestResponse = await makePostPutRequest(
+      `${apiEndpoint}/${commentId}/vote/${voteType}`,
+      "PUT",
+      body,
+    );
+
+    if (!requestResponse.error) {
+      const updatedComment = requestResponse.comment;
+
+      setCommentsPayload((prev) => ({ ...prev ,comments:prev.comments.map(comment=>)}));
+    }
+  };
+
   const contextValue = useMemo(
     () => ({
       contentId,
@@ -188,6 +216,7 @@ export function NestedCommentProvider({
       getReplies,
       changeCommentsOrder,
       makeComment,
+      voteComment,
     }),
     [contentId, chapterId, commentsPayload, getReplies],
   );

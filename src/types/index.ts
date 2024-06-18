@@ -34,6 +34,8 @@ export type Comment = {
 
 export type SortKey = "BEST" | "NEWEST" | "OLDEST";
 
+export type VoteType = "up" | "down";
+
 export type CommentsPayload = {
   loading: boolean;
   error: boolean;

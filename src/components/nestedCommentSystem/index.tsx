@@ -41,6 +41,29 @@ const NestedCommentsContainer: React.FC = () => {
   const { rootComments, commentsPayload, changeCommentsOrder } =
     useNestedCommentSystem();
 
+  function renderComments() {
+    if (commentsPayload.loading)
+      return (
+        <div className="h-[107px] bg-[url('/assets/loading-gear.gif')] bg-center bg-no-repeat" />
+      );
+
+    if (commentsPayload.error)
+      return (
+        <div className="flex min-h-[107px] items-center justify-center leading-7 text-red-600">
+          {commentsPayload.errorMessage}
+        </div>
+      );
+
+    if (rootComments.length === 0)
+      return (
+        <div className="text-center leading-[107px] opacity-60">
+          Be the first to comment.
+        </div>
+      );
+
+    return <CommentList comments={rootComments} />;
+  }
+
   return (
     <div
       className={`${roboto.className} text-[var(--app-text-color-dark-grayish-green)]`}
@@ -96,15 +119,7 @@ const NestedCommentsContainer: React.FC = () => {
           </div>
         </div>
 
-        {commentsPayload.loading ? (
-          <div className="h-[107px] bg-[url('/assets/loading-gear.gif')] bg-center bg-no-repeat" />
-        ) : rootComments.length > 0 ? (
-          <CommentList comments={rootComments} />
-        ) : (
-          <div className="text-center leading-[107px] opacity-60">
-            Be the first to comment.
-          </div>
-        )}
+        {renderComments()}
       </section>
     </div>
   );

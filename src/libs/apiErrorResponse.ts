@@ -1,20 +1,32 @@
 import { NextResponse } from "next/server";
 
 export function invalidQuery(parameters: string[] = []) {
+  const baseErrorMessage = "Invalid query parameters.";
+  const errorMessage =
+    parameters.length > 0
+      ? `${baseErrorMessage} ${parameters.join(", ")} are required.`
+      : `${baseErrorMessage}.`;
+
   return NextResponse.json(
     {
       error: true,
-      errorMessage: `Invalid query parameters${parameters.length === 0 ? "." : ` ${parameters.join(", ")} are required.`}`,
+      errorMessage,
     },
     { status: 400 },
   );
 }
 
 export function invalidBody(parameters: string[] = []) {
+  const baseErrorMessage = "Invalid body bad request.";
+  const errorMessage =
+    parameters.length > 0
+      ? `${baseErrorMessage} ${parameters.join(", ")} are required.`
+      : baseErrorMessage;
+
   return NextResponse.json(
     {
       error: true,
-      errorMessage: `Invalid body bad request.${parameters.length === 0 ? "" : ` ${parameters.join(", ")} are required.`}`,
+      errorMessage,
     },
     { status: 400 },
   );
@@ -28,10 +40,13 @@ export function unauthorizedUser() {
 }
 
 export function notFound(resource: string[] = []) {
+  const errorMessage =
+    resource.length === 0 ? "Not found." : `${resource.join(", ")} not found.`;
+
   return NextResponse.json(
     {
       error: true,
-      errorMessage: `${resource.length === 0 ? "" : `${resource.join(", ")} `}not found.`,
+      errorMessage,
     },
     { status: 404 },
   );

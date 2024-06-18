@@ -34,7 +34,7 @@ const editComment = async (
 
     const editedComment = await Comment.findByIdAndUpdate(
       commentId,
-      { message },
+      { message, isEdited: true },
       { new: true },
     );
 

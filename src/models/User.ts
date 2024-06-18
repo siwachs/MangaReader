@@ -1,5 +1,13 @@
 import { Schema, models, model } from "mongoose";
 
+const VotedCommentSchema = new Schema(
+  {
+    commentId: String,
+    voteType: { type: String, enum: ["up", "down"] },
+  },
+  { _id: false },
+);
+
 const UserSchema = new Schema(
   {
     name: { type: String, required: true },
@@ -7,9 +15,7 @@ const UserSchema = new Schema(
     avatar: { type: String },
     subscriptions: [{ type: Schema.Types.ObjectId, ref: "Content" }],
     likedChapters: [{ type: Schema.Types.ObjectId, ref: "Chapter" }],
-    votedComments: [
-      { commentId: String, voteType: { type: String, enum: ["up", "down"] } },
-    ],
+    votedComments: [VotedCommentSchema],
     emailVerified: { type: Boolean, default: null },
     isAdmin: { type: Boolean, default: false },
   },
