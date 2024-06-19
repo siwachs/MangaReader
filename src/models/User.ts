@@ -2,7 +2,9 @@ import { Schema, models, model } from "mongoose";
 
 const VotedCommentSchema = new Schema(
   {
-    commentId: String,
+    commentId: { type: String, required: true },
+    contentId: { type: String, required: true },
+    chapterId: { type: String, default: null },
     voteType: { type: String, enum: ["up", "down"] },
   },
   { _id: false },

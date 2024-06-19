@@ -73,11 +73,16 @@ const upVote = async (
   dynamicRouteValue: { params: { commentId: string; voteType: VoteType } },
 ) => {
   try {
-    const { userId } = await req.json();
+    const { userId, contentId, chapterId } = await req.json();
     const voteType = dynamicRouteValue.params.voteType;
 
-    if (!userId || (voteType !== "up" && voteType !== "down"))
-      return invalidBody(["userId", "voteType"]);
+    if (
+      !userId ||
+      !contentId ||
+      !chapterId ||
+      (voteType !== "up" && voteType !== "down")
+    )
+      return invalidBody(["userId", "contentId", "chapterId", "voteType"]);
 
     await connectToMongoDB();
     const user = await User.findById(userId).select(
@@ -116,7 +121,7 @@ const upVote = async (
       const addedVote = addVote(comment, voteType);
       comment.upVotes = addedVote.upVotes;
       comment.downVotes = addedVote.downVotes;
-      user.votedComments.push({ commentId, voteType });
+      user.votedComments.push({ commentId, contentId, chapterId, voteType });
     }
 
     await comment.save();

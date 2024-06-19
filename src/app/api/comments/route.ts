@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Types } from "mongoose";
 
+import { Comment as CommentType, VoteType } from "@/types";
+import { auth } from "@/libs/auth";
 import {
   invalidBody,
   invalidQuery,
@@ -43,7 +46,7 @@ const getComments = async (req: NextRequest) => {
     else sortingConditions = { upVotes: -1, createdAt: -1 };
 
     await connectToMongoDB();
-    const aggregatedData = await Comment.aggregate([
+    const aggregatedComments = await Comment.aggregate([
       {
         $facet: {
           metaData: [
@@ -85,6 +88,7 @@ const getComments = async (req: NextRequest) => {
                 isDeleted: 1,
                 createdAt: 1,
                 updatedAt: 1,
+                votedComments: 1,
               },
             },
           ],
@@ -92,11 +96,55 @@ const getComments = async (req: NextRequest) => {
       },
     ]);
 
-    const { totalComments = 0 } = aggregatedData[0].metaData[0] ?? {};
+    const { totalComments = 0 } = aggregatedComments[0].metaData[0] ?? {};
     const comments =
-      aggregatedData[0].data?.map((comment: any) =>
+      aggregatedComments[0].data?.map((comment: any) =>
         formatMongooseDoc(comment),
       ) ?? [];
+
+    const serverSession = await auth();
+    if (serverSession) {
+      const aggregatedUser = await User.aggregate([
+        {
+          $match: { _id: new Types.ObjectId(serverSession.user.id) },
+        },
+        {
+          $addFields: {
+            votedComments: {
+              $filter: {
+                input: "$votedComments",
+                as: "votedComment",
+                cond: {
+                  $and: [
+                    { $eq: ["$$votedComment.contentId", contentId] },
+                    { $eq: ["$$votedComment.chapterId", chapterId] },
+                  ],
+                },
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            votedComments: 1,
+          },
+        },
+      ]);
+
+      const votedComments = aggregatedUser[0]?.votedComments ?? [];
+
+      if (votedComments.length) {
+        comments.map((comment: CommentType, index: number) => {
+          const votedComment: { voteType: VoteType } = votedComments.find(
+            (c: { commentId: string }) => c.commentId === comment.id,
+          );
+
+          if (votedComment)
+            comments[index] = { ...comment, voteType: votedComment.voteType };
+        });
+      }
+    }
 
     return NextResponse.json(
       {

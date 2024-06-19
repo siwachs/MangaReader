@@ -134,7 +134,8 @@ const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
 };
 
 const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
-  const { getReplies } = useNestedCommentSystem();
+  const { getReplies, voteComment, userId, contentId, chapterId } =
+    useNestedCommentSystem();
   const [isReplying, setIsReplying] = useState(false);
   const parsedDate = parseISO(comment.createdAt);
   const timeAgo = formatDistanceToNow(parsedDate, { addSuffix: true });
@@ -177,12 +178,22 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
       </p>
 
       <div className="footer mt-1.5 flex h-[2em] items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
-        <button className="flex items-center">
+        <button
+          onClick={() =>
+            voteComment({ userId, contentId, chapterId }, comment.id, "up")
+          }
+          className="flex items-center"
+        >
           <LikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
           <span>{comment.upVotes}</span>
         </button>
 
-        <button className="flex items-center">
+        <button
+          onClick={() =>
+            voteComment({ userId, contentId, chapterId }, comment.id, "down")
+          }
+          className="flex items-center"
+        >
           <DislikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
           <span>{comment.downVotes}</span>
         </button>

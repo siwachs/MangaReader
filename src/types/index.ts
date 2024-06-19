@@ -30,6 +30,7 @@ export type Comment = {
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
+  voteType?: VoteType;
 };
 
 export type SortKey = "BEST" | "NEWEST" | "OLDEST";

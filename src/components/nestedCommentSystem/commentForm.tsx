@@ -36,7 +36,7 @@ const CommentForm: React.FC<{
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session) return;
+    if (!session?.data) return;
 
     try {
       setLoading(true);
@@ -131,11 +131,11 @@ const CommentForm: React.FC<{
               </button>
             </div>
 
-            {session && (
+            {session?.data && (
               <button
                 type="submit"
                 className="float-right mr-0.5 mt-[1px] rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[4px_15px] text-[15px] font-bold text-white disabled:bg-gray-400"
-                disabled={!message || loading || !session}
+                disabled={!message || loading || !session?.data}
               >
                 Comment
               </button>

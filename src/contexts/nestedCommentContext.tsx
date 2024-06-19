@@ -1,5 +1,7 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import { useSession, signIn } from "next-auth/react";
 import { CommentsPayload, Comment, SortKey, VoteType } from "@/types";
 import {
   createContext,
@@ -20,6 +22,7 @@ type ContextType = {
   changeCommentsOrder: any;
   makeComment: any;
   voteComment: any;
+  userId?: string;
 };
 
 const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT_COMMENTS as string;
@@ -61,6 +64,8 @@ export function NestedCommentProvider({
   chapterId?: string;
   children: React.ReactNode;
 }>) {
+  const currentUrl = usePathname();
+  const session = useSession();
   const [commentsPayload, setCommentsPayload] = useState<CommentsPayload>({
     loading: true,
     error: false,
@@ -69,6 +74,7 @@ export function NestedCommentProvider({
     comments: [],
     sortKey: "BEST",
   });
+  console.log(commentsPayload.comments);
 
   useEffect(() => {
     const getInitialComments = async () => {
@@ -129,83 +135,112 @@ export function NestedCommentProvider({
     [getCommentsByParentId],
   );
 
+  const getSignInConfirm = useCallback(() => {
+    if (!session?.data) {
+      if (confirm("Sign in with Google?")) {
+        signIn("google", { callbackUrl: currentUrl });
+      }
+
+      return false;
+    }
+
+    return true;
+  }, [currentUrl, session?.data]);
+
   // Nested Comment System CRUD
-  const makeComment = async (body: Record<string, any>) => {
-    const { contentId, userId, message } = body;
-    if (!contentId || !userId || !message?.trim())
-      return { error: true, errorMessage: "Invalid body bad request." };
+  const makeComment = useCallback(
+    async (body: Record<string, any>) => {
+      if (!getSignInConfirm()) return;
+      const { contentId, userId, message } = body;
+      if (!contentId || !userId || !message?.trim())
+        return { error: true, errorMessage: "Invalid body bad request." };
 
-    const requestResponse = await makePostPutRequest(apiEndpoint, "POST", body);
+      const requestResponse = await makePostPutRequest(
+        apiEndpoint,
+        "POST",
+        body,
+      );
 
-    if (!requestResponse.error) {
-      const { comment } = requestResponse;
+      if (!requestResponse.error) {
+        const { comment } = requestResponse;
 
-      setCommentsPayload((prev) => {
-        if (prev.sortKey === "NEWEST")
-          return {
-            ...prev,
-            error: false,
-            comments: [comment, ...prev.comments],
-          };
-        else if (prev.sortKey === "OLDEST")
-          return {
-            ...prev,
-            error: false,
-            comments: [...prev.comments, comment],
-          };
-        else {
-          const commentWithZeroUpVotes = prev.comments.findIndex(
-            (c) => c.upVotes === 0,
-          );
-
-          if (commentWithZeroUpVotes !== -1) {
+        setCommentsPayload((prev) => {
+          if (prev.sortKey === "NEWEST")
             return {
               ...prev,
               error: false,
-              comments: [
-                ...prev.comments.slice(0, commentWithZeroUpVotes),
-                comment,
-                ...prev.comments.slice(commentWithZeroUpVotes),
-              ],
+              comments: [comment, ...prev.comments],
             };
-          } else
+          else if (prev.sortKey === "OLDEST")
             return {
               ...prev,
               error: false,
               comments: [...prev.comments, comment],
             };
-        }
-      });
-    } else {
-      setCommentsPayload((prev) => ({
-        ...prev,
-        error: true,
-        errorMessage: requestResponse.errorMessage,
-      }));
-    }
-  };
+          else {
+            const commentWithZeroUpVotes = prev.comments.findIndex(
+              (c) => c.upVotes === 0,
+            );
 
-  const voteComment = async (
-    body: Record<string, any>,
-    commentId: string,
-    voteType: VoteType,
-  ) => {
-    const { userId } = body;
-    if (!userId)
-      return { error: true, errorMessage: "Invalid body bad request." };
+            if (commentWithZeroUpVotes !== -1) {
+              return {
+                ...prev,
+                error: false,
+                comments: [
+                  ...prev.comments.slice(0, commentWithZeroUpVotes),
+                  comment,
+                  ...prev.comments.slice(commentWithZeroUpVotes),
+                ],
+              };
+            } else
+              return {
+                ...prev,
+                error: false,
+                comments: [...prev.comments, comment],
+              };
+          }
+        });
+      } else {
+        setCommentsPayload((prev) => ({
+          ...prev,
+          error: true,
+          errorMessage: requestResponse.errorMessage,
+        }));
+      }
+    },
+    [getSignInConfirm],
+  );
 
-    const requestResponse = await makePostPutRequest(
-      `${apiEndpoint}/${commentId}/vote/${voteType}`,
-      "PUT",
-      body,
-    );
+  const voteComment = useCallback(
+    async (
+      body: Record<string, any>,
+      commentId: string,
+      voteType: VoteType,
+    ) => {
+      if (!getSignInConfirm()) return;
+      const { userId } = body;
+      if (!userId)
+        return { error: true, errorMessage: "Invalid body bad request." };
 
-    if (!requestResponse.error) {
-      const updatedComment = requestResponse.comment;
+      const requestResponse = await makePostPutRequest(
+        `${apiEndpoint}/${commentId}/vote/${voteType}`,
+        "PUT",
+        body,
+      );
 
-      setCommentsPayload((prev) => ({ ...prev ,comments:prev.comments.map(comment=>)}));
-    }
-  };
+      if (!requestResponse.error) {
+        const updatedComment = requestResponse.comment;
+
+        setCommentsPayload((prev) => ({
+          ...prev,
+          comments: prev.comments.map((comment) =>
+            comment.id === updatedComment.id ? updatedComment : comment,
+          ),
+        }));
+      }
+    },
+    [getSignInConfirm],
+  );
 
   const contextValue = useMemo(
     () => ({
@@ -217,8 +252,17 @@ export function NestedCommentProvider({
       changeCommentsOrder,
       makeComment,
       voteComment,
+      userId: session.data?.user.id,
     }),
-    [contentId, chapterId, commentsPayload, getReplies],
+    [
+      contentId,
+      chapterId,
+      commentsPayload,
+      getReplies,
+      makeComment,
+      voteComment,
+      session.data?.user.id,
+    ],
   );
 
   return (
