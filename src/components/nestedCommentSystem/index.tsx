@@ -16,9 +16,11 @@ import {
   AddUser,
   ChatBubbleSolid,
   DislikeOutline,
+  DislikeFilled,
   Flag,
   HeartOutline,
   LikeOutline,
+  LikeFilled,
   Minus,
 } from "../icons";
 import CommentForm from "./commentForm";
@@ -137,6 +139,7 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
   const { getReplies, voteComment, userId, contentId, chapterId } =
     useNestedCommentSystem();
   const [isReplying, setIsReplying] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const parsedDate = parseISO(comment.createdAt);
   const timeAgo = formatDistanceToNow(parsedDate, { addSuffix: true });
 
@@ -184,7 +187,11 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
           }
           className="flex items-center"
         >
-          <LikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+          {comment?.voteType === "up" ? (
+            <LikeFilled className="mx-2 size-5" />
+          ) : (
+            <LikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+          )}
           <span>{comment.upVotes}</span>
         </button>
 
@@ -194,7 +201,11 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
           }
           className="flex items-center"
         >
-          <DislikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+          {comment?.voteType === "down" ? (
+            <DislikeFilled className="mx-2 size-5" />
+          ) : (
+            <DislikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+          )}
           <span>{comment.downVotes}</span>
         </button>
 
@@ -204,12 +215,28 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
         >
           Reply
         </button>
+
+        <button
+          onClick={() => setIsEditing((prev) => !prev)}
+          className="mx-1.5 text-sm"
+        >
+          Edit
+        </button>
       </div>
 
       {isReplying && (
         <CommentForm
           parentId={comment.id}
           callback={() => setIsReplying(false)}
+        />
+      )}
+
+      {isEditing && (
+        <CommentForm
+          initialMessage={comment.message}
+          commentId={comment.id}
+          editMode
+          callback={() => setIsEditing(false)}
         />
       )}
 

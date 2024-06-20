@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 
 import {
@@ -17,13 +16,19 @@ import {
 const CommentForm: React.FC<{
   initialMessage?: string;
   parentId?: string;
+  commentId?: string;
   callback?: () => void;
-}> = ({ initialMessage = "", parentId = "root", callback }) => {
-  const session = useSession();
-  const { commentsPayload, contentId, chapterId, makeComment } =
+  editMode?: boolean;
+}> = ({
+  initialMessage = "",
+  parentId = "root",
+  commentId,
+  callback,
+  editMode,
+}) => {
+  const { contentId, chapterId, makeComment, userId, editComment } =
     useNestedCommentSystem();
 
-  const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(initialMessage);
 
@@ -36,36 +41,35 @@ const CommentForm: React.FC<{
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session?.data) return;
+    if (!userId) return;
 
     try {
       setLoading(true);
 
-      const body = {
-        contentId,
-        chapterId,
-        userId: session.data?.user.id,
-        parentId,
-        message,
-      };
+      const body = editMode
+        ? { userId, message }
+        : {
+            contentId,
+            chapterId,
+            userId,
+            parentId,
+            message,
+          };
 
-      await makeComment(body);
-      if (commentsPayload.error) {
-        setError(commentsPayload.errorMessage);
-      } else {
-        setError(undefined);
-      }
+      if (editMode) await editComment(body, commentId);
+      else await makeComment(body);
     } catch (error: any) {
     } finally {
       if (callback) callback();
-      setMessage("");
-      setLoading(false);
+      else {
+        setLoading(false);
+        setMessage("");
+      }
     }
   };
 
   return (
     <form onSubmit={submitComment} className="my-[1em]">
-      {error && <p className="mb-[1em]">{error}</p>}
       <div className="flex">
         <div className="w-full rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)]">
           <textarea
@@ -131,11 +135,11 @@ const CommentForm: React.FC<{
               </button>
             </div>
 
-            {session?.data && (
+            {userId && (
               <button
                 type="submit"
                 className="float-right mr-0.5 mt-[1px] rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[4px_15px] text-[15px] font-bold text-white disabled:bg-gray-400"
-                disabled={!message || loading || !session?.data}
+                disabled={!message || loading}
               >
                 Comment
               </button>

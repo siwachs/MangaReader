@@ -14,7 +14,11 @@ import connectToMongoDB from "@/libs/connectToMongoDB";
 import Comment from "@/models/Comment";
 import User from "@/models/User";
 
-type CommentType = { downVotes: number; upVotes: number; isUpdated?: boolean };
+type CommentType = {
+  downVotes: number;
+  upVotes: number;
+  isUpdated?: boolean;
+};
 
 const addVote = (comment: CommentType, voteType: VoteType): CommentType => {
   if (voteType === "up") {
@@ -56,7 +60,10 @@ const editVote = (
   if (voteType === alreadyVotedVoteType) {
     const removedVote = removeVote(comment, voteType);
 
-    return { upVotes: removedVote.upVotes, downVotes: removedVote.downVotes };
+    return {
+      upVotes: removedVote.upVotes,
+      downVotes: removedVote.downVotes,
+    };
   }
 
   const removedVote = removeVote(comment, alreadyVotedVoteType);
@@ -105,6 +112,7 @@ const upVote = async (
         votedComment.commentId === commentId,
     );
 
+    let voteRemoved = false;
     if (alreadyVotedIndex !== -1) {
       const editedVote = editVote(
         comment,
@@ -116,7 +124,10 @@ const upVote = async (
 
       if (editedVote.isUpdated)
         user.votedComments[alreadyVotedIndex].voteType = voteType;
-      else user.votedComments.splice(alreadyVotedIndex, 1);
+      else {
+        voteRemoved = true;
+        user.votedComments.splice(alreadyVotedIndex, 1);
+      }
     } else {
       const addedVote = addVote(comment, voteType);
       comment.upVotes = addedVote.upVotes;
@@ -128,7 +139,13 @@ const upVote = async (
     await user.save();
 
     return NextResponse.json(
-      { error: false, comment: formatMongooseDoc(comment.toObject()) },
+      {
+        error: false,
+        comment: {
+          ...formatMongooseDoc(comment.toObject()),
+          voteType: voteRemoved ? undefined : voteType,
+        },
+      },
       { status: 200 },
     );
   } catch (error: any) {

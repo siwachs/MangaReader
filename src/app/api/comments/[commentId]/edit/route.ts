@@ -36,7 +36,7 @@ const editComment = async (
       commentId,
       { message, isEdited: true },
       { new: true },
-    );
+    ).populate("user", "username avatar -_id");
 
     return NextResponse.json(
       { error: false, comment: formatMongooseDoc(editedComment.toObject()) },

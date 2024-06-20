@@ -23,6 +23,7 @@ type ContextType = {
   makeComment: any;
   voteComment: any;
   userId?: string;
+  editComment: any;
 };
 
 const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT_COMMENTS as string;
@@ -43,6 +44,7 @@ const NestedCommentSystemContext = createContext<ContextType>({
   changeCommentsOrder: null,
   makeComment: null,
   voteComment: null,
+  editComment: null,
 });
 
 export function useNestedCommentSystem() {
@@ -74,7 +76,6 @@ export function NestedCommentProvider({
     comments: [],
     sortKey: "BEST",
   });
-  console.log(commentsPayload.comments);
 
   useEffect(() => {
     const getInitialComments = async () => {
@@ -153,7 +154,11 @@ export function NestedCommentProvider({
       if (!getSignInConfirm()) return;
       const { contentId, userId, message } = body;
       if (!contentId || !userId || !message?.trim())
-        return { error: true, errorMessage: "Invalid body bad request." };
+        return {
+          error: true,
+          errorMessage:
+            "Invalid body bad request contentId, userId and message are required.",
+        };
 
       const requestResponse = await makePostPutRequest(
         apiEndpoint,
@@ -200,12 +205,6 @@ export function NestedCommentProvider({
               };
           }
         });
-      } else {
-        setCommentsPayload((prev) => ({
-          ...prev,
-          error: true,
-          errorMessage: requestResponse.errorMessage,
-        }));
       }
     },
     [getSignInConfirm],
@@ -220,7 +219,10 @@ export function NestedCommentProvider({
       if (!getSignInConfirm()) return;
       const { userId } = body;
       if (!userId)
-        return { error: true, errorMessage: "Invalid body bad request." };
+        return {
+          error: true,
+          errorMessage: "Invalid body bad request userId is required.",
+        };
 
       const requestResponse = await makePostPutRequest(
         `${apiEndpoint}/${commentId}/vote/${voteType}`,
@@ -242,6 +244,42 @@ export function NestedCommentProvider({
     [getSignInConfirm],
   );
 
+  const editComment = useCallback(
+    async (body: Record<string, any>, commentId: string) => {
+      if (!getSignInConfirm()) return;
+      const { userId, message } = body;
+      if (!userId || !message.trim())
+        return {
+          error: true,
+          errorMessage:
+            "Invalid body bad request userId and message are required.",
+        };
+
+      const requestResponse = await makePostPutRequest(
+        `${apiEndpoint}/${commentId}/edit`,
+        "PUT",
+        body,
+      );
+
+      if (!requestResponse.error) {
+        const editedComment = requestResponse.comment;
+
+        setCommentsPayload((prev) => ({
+          ...prev,
+          comments: prev.comments.map((comment) =>
+            comment.id === editedComment.id
+              ? {
+                  ...comment,
+                  ...editedComment,
+                }
+              : comment,
+          ),
+        }));
+      }
+    },
+    [getSignInConfirm],
+  );
+
   const contextValue = useMemo(
     () => ({
       contentId,
@@ -253,6 +291,7 @@ export function NestedCommentProvider({
       makeComment,
       voteComment,
       userId: session.data?.user.id,
+      editComment,
     }),
     [
       contentId,
@@ -262,6 +301,7 @@ export function NestedCommentProvider({
       makeComment,
       voteComment,
       session.data?.user.id,
+      editComment,
     ],
   );
 

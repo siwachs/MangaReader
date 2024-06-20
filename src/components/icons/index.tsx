@@ -1122,6 +1122,39 @@ const LikeOutline: React.FC<{
   );
 };
 
+const LikeFilled: React.FC<{
+  className?: string;
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+  [key: string]: any;
+}> = ({
+  className = "size-6",
+  fill = "#ff5454",
+  stroke = "none",
+  strokeWidth = 0,
+  ...props
+}) => {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth={strokeWidth}>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M15.9 4.5C15.9 3 14.418 2 13.26 2c-.806 0-.869.612-.993 1.82-.055.53-.121 1.174-.267 1.93-.386 2.002-1.72 4.56-2.996 5.325V17C9 19.25 9.75 20 13 20h3.773c2.176 0 2.703-1.433 2.899-1.964l.013-.036c.114-.306.358-.547.638-.82.31-.306.664-.653.927-1.18.311-.623.27-1.177.233-1.67-.023-.299-.044-.575.017-.83.064-.27.146-.475.225-.671.143-.356.275-.686.275-1.329 0-1.5-.748-2.498-2.315-2.498H15.5S15.9 6 15.9 4.5zM5.5 10A1.5 1.5 0 0 0 4 11.5v7a1.5 1.5 0 0 0 3 0v-7A1.5 1.5 0 0 0 5.5 10z"
+          fill={fill}
+        />
+      </g>
+    </svg>
+  );
+};
+
 const DislikeOutline: React.FC<{
   className?: string;
   fill?: string;
@@ -1150,6 +1183,45 @@ const DislikeOutline: React.FC<{
         strokeLinejoin="round"
         d="M7.498 15.25H4.372c-1.026 0-1.945-.694-2.054-1.715a12.137 12.137 0 0 1-.068-1.285c0-2.848.992-5.464 2.649-7.521C5.287 4.247 5.886 4 6.504 4h4.016a4.5 4.5 0 0 1 1.423.23l3.114 1.04a4.5 4.5 0 0 0 1.423.23h1.294M7.498 15.25c.618 0 .991.724.725 1.282A7.471 7.471 0 0 0 7.5 19.75 2.25 2.25 0 0 0 9.75 22a.75.75 0 0 0 .75-.75v-.633c0-.573.11-1.14.322-1.672.304-.76.93-1.33 1.653-1.715a9.04 9.04 0 0 0 2.86-2.4c.498-.634 1.226-1.08 2.032-1.08h.384m-10.253 1.5H9.7m8.075-9.75c.01.05.027.1.05.148.593 1.2.925 2.55.925 3.977 0 1.487-.36 2.89-.999 4.125m.023-8.25c-.076-.365.183-.75.575-.75h.908c.889 0 1.713.518 1.972 1.368.339 1.11.521 2.287.521 3.507 0 1.553-.295 3.036-.831 4.398-.306.774-1.086 1.227-1.918 1.227h-1.053c-.472 0-.745-.556-.5-.96a8.95 8.95 0 0 0 .303-.54"
       />
+    </svg>
+  );
+};
+
+const DislikeFilled: React.FC<{
+  className?: string;
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+  [key: string]: any;
+}> = ({
+  className = "size-6",
+  fill = "#ff5454",
+  stroke = "none",
+  strokeWidth = 0,
+  ...props
+}) => {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M8.1 20.5c0 1.5 1.482 2.5 2.64 2.5.806 0 .869-.613.993-1.82.055-.53.121-1.174.267-1.93.386-2.002 1.72-4.56 2.996-5.325V8C15 5.75 14.25 5 11 5H7.227C5.051 5 4.524 6.432 4.328 6.964A15.85 15.85 0 0 1 4.315 7c-.114.306-.358.546-.638.82-.31.306-.664.653-.927 1.18-.311.623-.27 1.177-.233 1.67.023.299.044.575-.017.83-.064.27-.146.475-.225.671-.143.356-.275.686-.275 1.329 0 1.5.748 2.498 2.315 2.498H8.5S8.1 19 8.1 20.5zM18.5 15a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-3 0v7a1.5 1.5 0 0 0 1.5 1.5z"
+          fill={fill}
+        />
+      </g>
     </svg>
   );
 };
@@ -1232,6 +1304,8 @@ export {
   Minus,
   Flag,
   LikeOutline,
+  LikeFilled,
   DislikeOutline,
+  DislikeFilled,
   SignOut,
 };
