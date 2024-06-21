@@ -79,6 +79,7 @@ const getComments = async (req: NextRequest) => {
                 message: 1,
                 contentId: 1,
                 chapterId: 1,
+                "user._id": 1,
                 "user.username": 1,
                 "user.avatar": 1,
                 upVotes: 1,
@@ -99,7 +100,7 @@ const getComments = async (req: NextRequest) => {
     const { totalComments = 0 } = aggregatedComments[0].metaData[0] ?? {};
     const comments =
       aggregatedComments[0].data?.map((comment: any) =>
-        formatMongooseDoc(comment),
+        formatMongooseDoc(comment, "Comment"),
       ) ?? [];
 
     const serverSession = await auth();

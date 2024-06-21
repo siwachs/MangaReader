@@ -11,7 +11,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { makePostPutRequest } from "@/service/asyncApiCalls";
+import { makeDeleteRequest, makePostPutRequest } from "@/service/asyncApiCalls";
 
 type ContextType = {
   contentId: any;
@@ -24,6 +24,7 @@ type ContextType = {
   voteComment: any;
   userId?: string;
   editComment: any;
+  deleteComment: any;
 };
 
 const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT_COMMENTS as string;
@@ -45,6 +46,7 @@ const NestedCommentSystemContext = createContext<ContextType>({
   makeComment: null,
   voteComment: null,
   editComment: null,
+  deleteComment: null,
 });
 
 export function useNestedCommentSystem() {
@@ -157,7 +159,7 @@ export function NestedCommentProvider({
         return {
           error: true,
           errorMessage:
-            "Invalid body bad request contentId, userId and message are required.",
+            "Invalid body bad request. contentId, userId and message are required.",
         };
 
       const requestResponse = await makePostPutRequest(
@@ -210,6 +212,17 @@ export function NestedCommentProvider({
     [getSignInConfirm],
   );
 
+  const updateComments = (updatedComment: Comment) => {
+    setCommentsPayload((prev) => ({
+      ...prev,
+      comments: prev.comments.map((comment) =>
+        comment.id === updatedComment.id
+          ? { ...comment, ...updatedComment }
+          : comment,
+      ),
+    }));
+  };
+
   const voteComment = useCallback(
     async (
       body: Record<string, any>,
@@ -221,7 +234,7 @@ export function NestedCommentProvider({
       if (!userId)
         return {
           error: true,
-          errorMessage: "Invalid body bad request userId is required.",
+          errorMessage: "Invalid body bad request. userId is required.",
         };
 
       const requestResponse = await makePostPutRequest(
@@ -232,7 +245,6 @@ export function NestedCommentProvider({
 
       if (!requestResponse.error) {
         const updatedComment = requestResponse.comment;
-
         setCommentsPayload((prev) => ({
           ...prev,
           comments: prev.comments.map((comment) =>
@@ -252,7 +264,7 @@ export function NestedCommentProvider({
         return {
           error: true,
           errorMessage:
-            "Invalid body bad request userId and message are required.",
+            "Invalid body bad request. userId and message are required.",
         };
 
       const requestResponse = await makePostPutRequest(
@@ -263,18 +275,31 @@ export function NestedCommentProvider({
 
       if (!requestResponse.error) {
         const editedComment = requestResponse.comment;
+        updateComments(editedComment);
+      }
+    },
+    [getSignInConfirm],
+  );
 
-        setCommentsPayload((prev) => ({
-          ...prev,
-          comments: prev.comments.map((comment) =>
-            comment.id === editedComment.id
-              ? {
-                  ...comment,
-                  ...editedComment,
-                }
-              : comment,
-          ),
-        }));
+  const deleteComment = useCallback(
+    async (headers: Record<string, any>, commentId: string) => {
+      if (!getSignInConfirm()) return;
+
+      if (!headers["x-user-id"])
+        return {
+          error: true,
+          errorMessage: "Invalid headers. x-user-id is required.",
+        };
+
+      const requestResponse = await makeDeleteRequest(
+        `${apiEndpoint}/${commentId}/delete`,
+        "DELETE",
+        headers,
+      );
+
+      if (!requestResponse.error) {
+        const deletedComment = requestResponse.comment;
+        updateComments(deletedComment);
       }
     },
     [getSignInConfirm],
@@ -292,6 +317,7 @@ export function NestedCommentProvider({
       voteComment,
       userId: session.data?.user.id,
       editComment,
+      deleteComment,
     }),
     [
       contentId,
@@ -302,6 +328,7 @@ export function NestedCommentProvider({
       voteComment,
       session.data?.user.id,
       editComment,
+      deleteComment,
     ],
   );
 

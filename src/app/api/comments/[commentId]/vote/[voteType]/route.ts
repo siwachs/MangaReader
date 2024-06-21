@@ -5,6 +5,7 @@ import {
   serverError,
   notFound,
   unauthorizedUser,
+  methodNotAllowed,
 } from "@/libs/apiErrorResponse";
 import { VoteType } from "@/types";
 import { partialUserWithVotedComments } from "@/libs/mongooseSelect";
@@ -103,9 +104,10 @@ const upVote = async (
     const commentId = dynamicRouteValue.params.commentId;
     const comment = await Comment.findById(commentId).populate(
       "user",
-      "username avatar -_id",
+      "username avatar",
     );
     if (!comment) return notFound(["Comment"]);
+    if (comment.isDeleted) return methodNotAllowed();
 
     const alreadyVotedIndex = user.votedComments.findIndex(
       (votedComment: { commentId: string; type: "up" | "down" }) =>

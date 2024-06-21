@@ -20,6 +20,7 @@ export type Comment = {
   contentId: string;
   chapterId?: string;
   user: {
+    id: string;
     username: string | null;
     avatar: string;
   };

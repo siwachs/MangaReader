@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import {
   invalidBody,
+  methodNotAllowed,
   notFound,
   serverError,
   unauthorizedUser,
@@ -31,12 +32,13 @@ const editComment = async (
     const commentId = dynamicRouteValue.params.commentId;
     const comment = await Comment.findById(commentId);
     if (!comment) return notFound(["Comment"]);
+    if (comment.isDeleted) return methodNotAllowed();
 
     const editedComment = await Comment.findByIdAndUpdate(
       commentId,
       { message, isEdited: true },
       { new: true },
-    ).populate("user", "username avatar -_id");
+    ).populate("user", "username avatar");
 
     return NextResponse.json(
       { error: false, comment: formatMongooseDoc(editedComment.toObject()) },

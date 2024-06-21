@@ -32,6 +32,22 @@ export function invalidBody(parameters: string[] = []) {
   );
 }
 
+export function invalidHeaders(parameters: string[] = []) {
+  const baseErrorMessage = "Invalid headers.";
+  const errorMessage =
+    parameters.length > 0
+      ? `${baseErrorMessage} ${parameters.join(", ")} are required.`
+      : baseErrorMessage;
+
+  return NextResponse.json(
+    {
+      error: true,
+      errorMessage,
+    },
+    { status: 400 },
+  );
+}
+
 export function unauthorizedUser() {
   return NextResponse.json(
     { error: true, errorMessage: "401 Unauthorized user." },
@@ -59,5 +75,15 @@ export function serverError(errorMessage: string) {
       errorMessage,
     },
     { status: 500 },
+  );
+}
+
+export function methodNotAllowed() {
+  return NextResponse.json(
+    {
+      error: true,
+      errorMessage: "Method not allowed.",
+    },
+    { status: 405 },
   );
 }

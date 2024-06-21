@@ -15,5 +15,20 @@ async function makePostPutRequest(
   }
 }
 
+async function makeDeleteRequest(
+  apiEndpoint: string,
+  method: "DELETE",
+  headers: Record<string, any>,
+) {
+  try {
+    const requestResponse = await fetch(apiEndpoint, {
+      method,
+      headers,
+    });
+    return await requestResponse.json();
+  } catch (error: any) {
+    return { error: true, errorMessage: error.message };
+  }
+}
 
-export { makePostPutRequest };
+export { makePostPutRequest, makeDeleteRequest };

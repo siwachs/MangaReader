@@ -136,8 +136,14 @@ const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
 };
 
 const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
-  const { getReplies, voteComment, userId, contentId, chapterId } =
-    useNestedCommentSystem();
+  const {
+    getReplies,
+    voteComment,
+    deleteComment,
+    userId,
+    contentId,
+    chapterId,
+  } = useNestedCommentSystem();
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const parsedDate = parseISO(comment.createdAt);
@@ -176,13 +182,20 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
         </div>
       </div>
 
-      <p className="body break-words text-[15px] leading-[21px]">
-        {comment.message}
-      </p>
+      {comment.isDeleted ? (
+        <p className="body break-words text-[15px] leading-[21px] line-through">
+          This message has been deleted.
+        </p>
+      ) : (
+        <p className="body break-words text-[15px] leading-[21px]">
+          {comment.message}
+        </p>
+      )}
 
       <div className="footer mt-1.5 flex h-[2em] items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
         <button
           onClick={() =>
+            !comment.isDeleted &&
             voteComment({ userId, contentId, chapterId }, comment.id, "up")
           }
           className="flex items-center"
@@ -197,6 +210,7 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
 
         <button
           onClick={() =>
+            !comment.isDeleted &&
             voteComment({ userId, contentId, chapterId }, comment.id, "down")
           }
           className="flex items-center"
@@ -216,12 +230,29 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
           Reply
         </button>
 
-        <button
-          onClick={() => setIsEditing((prev) => !prev)}
-          className="mx-1.5 text-sm"
-        >
-          Edit
-        </button>
+        {!comment.isDeleted && comment.user.id === userId && (
+          <button
+            onClick={() => setIsEditing((prev) => !prev)}
+            className="mx-1.5 text-sm"
+          >
+            Edit
+          </button>
+        )}
+
+        {comment.user.id === userId && (
+          <button
+            onClick={() =>
+              comment.isDeleted
+                ? deleteComment({ "x-user-id": userId }, comment.id)
+                : confirm(
+                    "You cannot delete a comment. You can only hide it.",
+                  ) && deleteComment({ "x-user-id": userId }, comment.id)
+            }
+            className={`mx-1.5 text-sm ${comment.isDeleted ? "text-[var(--app-text-color-medium-dark-blue)]" : "text-red-600"}`}
+          >
+            {comment.isDeleted ? "Undo" : "Delete"}
+          </button>
+        )}
       </div>
 
       {isReplying && (
