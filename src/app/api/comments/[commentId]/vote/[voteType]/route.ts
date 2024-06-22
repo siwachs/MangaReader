@@ -76,7 +76,7 @@ const editVote = (
   };
 };
 
-const upVote = async (
+const voteComment = async (
   req: NextRequest,
   dynamicRouteValue: { params: { commentId: string; voteType: VoteType } },
 ) => {
@@ -155,4 +155,4 @@ const upVote = async (
   }
 };
 
-export { upVote as PUT };
+export { voteComment as PUT };

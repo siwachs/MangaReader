@@ -17,7 +17,8 @@ import Comment from "@/models/Comment";
 import User from "@/models/User";
 
 const PAGE_NUMBER = 1;
-const PAGE_SIZE = 36;
+// const PAGE_SIZE = 50;
+const PAGE_SIZE = 8;
 const COMMENTS_SORT_KEY = "BEST";
 
 const getComments = async (req: NextRequest) => {

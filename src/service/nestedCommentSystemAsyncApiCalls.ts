@@ -1,4 +1,19 @@
-async function makePostPutRequest(
+export async function makeGetRequest(
+  apiEndpoint: string,
+  queryParams: string,
+  callback: () => void,
+) {
+  try {
+    const requestResponse = await fetch(`${apiEndpoint}?${queryParams}`);
+    return await requestResponse.json();
+  } catch (error: any) {
+    return { error: true, errorMessage: error.message };
+  } finally {
+    callback();
+  }
+}
+
+export async function makePostPutRequest(
   apiEndpoint: string,
   method: "POST" | "PUT",
   body: Record<string, any>,
@@ -15,7 +30,7 @@ async function makePostPutRequest(
   }
 }
 
-async function makeDeleteRequest(
+export async function makeDeleteRequest(
   apiEndpoint: string,
   method: "DELETE",
   headers: Record<string, any>,
@@ -30,5 +45,3 @@ async function makeDeleteRequest(
     return { error: true, errorMessage: error.message };
   }
 }
-
-export { makePostPutRequest, makeDeleteRequest };

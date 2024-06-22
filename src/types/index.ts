@@ -46,4 +46,5 @@ export type CommentsPayload = {
   pageNumber: number;
   comments: Comment[];
   sortKey: SortKey;
+  loadMoreCommentsLoding: boolean;
 };

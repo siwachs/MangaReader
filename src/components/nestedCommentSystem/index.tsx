@@ -40,8 +40,12 @@ const NestedCommentSystem: React.FC<{
 };
 
 const NestedCommentsContainer: React.FC = () => {
-  const { rootComments, commentsPayload, changeCommentsOrder } =
-    useNestedCommentSystem();
+  const {
+    rootComments,
+    commentsPayload,
+    changeCommentsOrder,
+    loadMoreComments,
+  } = useNestedCommentSystem();
 
   function renderComments() {
     if (commentsPayload.loading)
@@ -122,6 +126,20 @@ const NestedCommentsContainer: React.FC = () => {
         </div>
 
         {renderComments()}
+
+        {commentsPayload.pageNumber !== commentsPayload.totalPages && (
+          <button
+            onClick={() => loadMoreComments(commentsPayload.pageNumber + 1)}
+            disabled={
+              commentsPayload.loading || commentsPayload.loadMoreCommentsLoding
+            }
+            className="my-1.5 w-full rounded-[15px] border border-[var(--app-text-color-gunmelt-gray)] pb-[8px] pt-[9px] text-center text-lg/[21px] font-bold text-[var(--app-text-color-gunmelt-gray)] transition-all duration-200 hover:bg-[var(--app-text-color-gunmelt-gray)] hover:text-white disabled:pointer-events-none"
+          >
+            Load more comments
+          </button>
+        )}
+
+        <div className="mb-5 border border-[#dcdde7]" />
       </section>
     </div>
   );
@@ -129,9 +147,7 @@ const NestedCommentsContainer: React.FC = () => {
 
 const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
   return comments.map((comment: any) => (
-    <div key={comment.id} className="mb-4">
-      <Comment comment={comment} />
-    </div>
+    <Comment key={comment.id} comment={comment} />
   ));
 };
 
@@ -152,7 +168,7 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
   const childComments = getReplies(comment.id);
 
   return (
-    <div>
+    <div className="my-4">
       <div className="header flex">
         <div className="avatar mb-[9px] mr-2.5 h-[52px] w-[52px] rounded-2xl">
           <Image
@@ -271,9 +287,8 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
         />
       )}
 
-      {/* Child comments recursive */}
       {childComments.length > 0 && (
-        <div className="border-l-2 border-[var(--app-border-color-periwinkle)] pl-3.5">
+        <div className="border-l-2 border-[var(--app-border-color-periwinkle)] pl-6">
           <CommentList comments={childComments} />
         </div>
       )}

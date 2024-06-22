@@ -11,7 +11,11 @@ import {
   useMemo,
   useState,
 } from "react";
-import { makeDeleteRequest, makePostPutRequest } from "@/service/asyncApiCalls";
+import {
+  makeDeleteRequest,
+  makePostPutRequest,
+  makeGetRequest,
+} from "@/service/nestedCommentSystemAsyncApiCalls";
 
 type ContextType = {
   contentId: any;
@@ -25,6 +29,7 @@ type ContextType = {
   userId?: string;
   editComment: any;
   deleteComment: any;
+  loadMoreComments: any;
 };
 
 const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT_COMMENTS as string;
@@ -39,6 +44,7 @@ const NestedCommentSystemContext = createContext<ContextType>({
     pageNumber: 1,
     comments: [],
     sortKey: "BEST",
+    loadMoreCommentsLoding: false,
   },
   rootComments: [],
   getReplies: null,
@@ -47,6 +53,7 @@ const NestedCommentSystemContext = createContext<ContextType>({
   voteComment: null,
   editComment: null,
   deleteComment: null,
+  loadMoreComments: null,
 });
 
 export function useNestedCommentSystem() {
@@ -77,6 +84,7 @@ export function NestedCommentProvider({
     pageNumber: 1,
     comments: [],
     sortKey: "BEST",
+    loadMoreCommentsLoding: false,
   });
 
   useEffect(() => {
@@ -151,6 +159,44 @@ export function NestedCommentProvider({
   }, [currentUrl, session?.data]);
 
   // Nested Comment System CRUD
+  const loadMoreComments = useCallback(
+    async (pageNumber: string) => {
+      setCommentsPayload((prev) => ({ ...prev, loadMoreCommentsLoding: true }));
+      const commentsSortKey = commentsPayload.sortKey || "BEST";
+      const queryParams = new URLSearchParams(
+        chapterId
+          ? {
+              contentId,
+              chapterId,
+              commentsSortKey,
+              pageNumber,
+            }
+          : {
+              contentId,
+              commentsSortKey,
+              pageNumber,
+            },
+      ).toString();
+      const requestResponse = await makeGetRequest(
+        apiEndpoint,
+        queryParams,
+        () => {
+          setCommentsPayload((prev) => ({
+            ...prev,
+            loadMoreCommentsLoding: false,
+          }));
+        },
+      );
+
+      setCommentsPayload((prev) => ({
+        ...prev,
+        ...requestResponse,
+        comments: [...prev.comments, ...requestResponse?.comments],
+      }));
+    },
+    [chapterId, contentId, commentsPayload.sortKey],
+  );
+
   const makeComment = useCallback(
     async (body: Record<string, any>) => {
       if (!getSignInConfirm()) return;
@@ -318,6 +364,7 @@ export function NestedCommentProvider({
       userId: session.data?.user.id,
       editComment,
       deleteComment,
+      loadMoreComments,
     }),
     [
       contentId,
@@ -329,6 +376,7 @@ export function NestedCommentProvider({
       session.data?.user.id,
       editComment,
       deleteComment,
+      loadMoreComments,
     ],
   );
 
