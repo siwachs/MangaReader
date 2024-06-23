@@ -17,8 +17,7 @@ import Comment from "@/models/Comment";
 import User from "@/models/User";
 
 const PAGE_NUMBER = 1;
-// const PAGE_SIZE = 50;
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 50;
 const COMMENTS_SORT_KEY = "BEST";
 
 const getComments = async (req: NextRequest) => {
@@ -185,7 +184,7 @@ const addComment = async (req: NextRequest) => {
       chapterId: chapterId ?? null,
       user: userId,
     });
-    await comment.populate({ path: "user", select: "username avatar -_id" });
+    await comment.populate({ path: "user", select: "username avatar" });
 
     return NextResponse.json(
       { error: false, comment: formatMongooseDoc(comment.toObject()) },

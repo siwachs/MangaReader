@@ -41,7 +41,10 @@ const editComment = async (
     ).populate("user", "username avatar");
 
     return NextResponse.json(
-      { error: false, comment: formatMongooseDoc(editedComment.toObject()) },
+      {
+        error: false,
+        comment: formatMongooseDoc(editedComment.toObject()),
+      },
       { status: 200 },
     );
   } catch (error: any) {

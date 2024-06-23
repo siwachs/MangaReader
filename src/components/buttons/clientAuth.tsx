@@ -15,11 +15,13 @@ const ClientAuth: React.FC<{
   authProvider?: string;
   profileContainerClasses?: string;
   signInButtonClasses?: string;
+  signInButtonComponent?: React.ReactNode;
 }> = ({
   profileMenuPositionClasses = "right-2.5 top-10",
   authProvider = "google",
-  profileContainerClasses,
+  profileContainerClasses = "relative",
   signInButtonClasses,
+  signInButtonComponent,
 }) => {
   const profileContainerRef = useRef<HTMLDivElement>(null);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -32,21 +34,21 @@ const ClientAuth: React.FC<{
     setIsProfileMenuOpen(false),
   );
 
+  if (status === "loading")
+    return (
+      <div className={profileContainerClasses}>
+        <div className="h-full w-full animate-pulse rounded-full bg-gray-400" />
+      </div>
+    );
+
   if (status === "unauthenticated")
     return (
       <button
         className={signInButtonClasses}
         onClick={() => signIn(authProvider, { callbackUrl: currentUrl })}
       >
-        Sign In
+        {signInButtonComponent ? signInButtonComponent : "Sign In"}
       </button>
-    );
-
-  if (status === "loading")
-    return (
-      <div className={profileContainerClasses}>
-        <div className="h-full w-full animate-pulse rounded-full bg-gray-400" />
-      </div>
     );
 
   if (status === "authenticated") {
@@ -65,7 +67,7 @@ const ClientAuth: React.FC<{
           />
 
           <div
-            className={`absolute ${profileMenuPositionClasses} z-50 w-full max-w-[360px] ${isProfileMenuOpen ? "block" : "hidden"} rounded-2xl border bg-white`}
+            className={`absolute ${profileMenuPositionClasses} z-50 w-full min-w-[360px] max-w-[360px] ${isProfileMenuOpen ? "block" : "hidden"} rounded-2xl border bg-white`}
           >
             <div className="relative mx-auto mt-[18px] h-[22px] max-w-[calc(100%-64px)] text-center text-sm font-medium tracking-normal">
               {user.email}

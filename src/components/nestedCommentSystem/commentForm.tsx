@@ -32,11 +32,12 @@ const CommentForm: React.FC<{
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(initialMessage);
 
-  const onChangeMessgae = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
-    if (e.target.scrollHeight <= 122) return;
-    e.target.style.height = "auto";
-    e.target.style.height = `${Math.min(e.target.scrollHeight, 390)}px`;
+    if (e.target.scrollHeight > 122) {
+      e.target.style.height = "auto";
+      e.target.style.height = `${Math.min(e.target.scrollHeight, 390)}px`;
+    }
   };
 
   const submitComment = async (e: React.FormEvent) => {
@@ -75,7 +76,7 @@ const CommentForm: React.FC<{
           <textarea
             placeholder="Join the discussion…"
             value={message}
-            onChange={onChangeMessgae}
+            onChange={onChangeMessage}
             className="h-auto min-h-[122px] w-full break-words rounded-t-2xl border-b-2 border-[var(--app-border-color-grayish-blue)] p-5 text-[15px] leading-[1.4] text-[var(--app-text-color-dark-grayish-green)] outline-none"
           />
 

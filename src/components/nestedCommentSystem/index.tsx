@@ -24,6 +24,7 @@ import {
   Minus,
 } from "../icons";
 import CommentForm from "./commentForm";
+import ClientAuth from "../buttons/clientAuth";
 
 const sortButtonClasses =
   "text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-[var(--app-text-color-gunmelt-gray)]";
@@ -41,6 +42,7 @@ const NestedCommentSystem: React.FC<{
 
 const NestedCommentsContainer: React.FC = () => {
   const {
+    userId,
     rootComments,
     commentsPayload,
     changeCommentsOrder,
@@ -75,23 +77,40 @@ const NestedCommentsContainer: React.FC = () => {
       className={`${roboto.className} text-[var(--app-text-color-dark-grayish-green)]`}
     >
       <header className="mb-6">
-        <div className="flex justify-between border-b-2 border-[var(--app-border-color-slightly-blue-gray)] py-3 font-bold">
-          <span>31 Comments</span>
+        <div className="flex items-center justify-between border-b-2 border-[var(--app-border-color-slightly-blue-gray)] py-3 font-bold">
+          <span
+            className={
+              commentsPayload.loading
+                ? "animate-pulse rounded-sm bg-gray-400 text-gray-400"
+                : undefined
+            }
+          >
+            {commentsPayload?.comments.length ?? 0} Comments
+          </span>
 
-          <Link href="/" className="flex items-center gap-1.5">
-            <div className="relative">
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
-                1
-              </span>
-              <ChatBubbleSolid className="size-[22px]" />
-            </div>
-            <span>Sign In</span>
-          </Link>
+          <ClientAuth
+            profileContainerClasses="relative size-9"
+            profileMenuPositionClasses="right-0 top-10"
+            signInButtonClasses="flex items-center gap-1.5"
+            signInButtonComponent={
+              <>
+                <div className="relative">
+                  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
+                    1
+                  </span>
+                  <ChatBubbleSolid className="size-[22px]" />
+                </div>
+
+                <span>Sign In</span>
+              </>
+            }
+          />
         </div>
       </header>
 
       <section>
         <CommentForm />
+
         <div className="mb-2 flex items-center justify-between">
           <div className="mb-3 flex items-center gap-2.5 p-[7px_14px]">
             <button>

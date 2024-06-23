@@ -18,15 +18,15 @@ import {
 } from "@/service/nestedCommentSystemAsyncApiCalls";
 
 type ContextType = {
-  contentId: any;
-  chapterId: any;
+  contentId: string | undefined | null;
+  chapterId: string | undefined | null;
   commentsPayload: CommentsPayload;
   rootComments: Comment[];
   getReplies: any;
   changeCommentsOrder: any;
   makeComment: any;
   voteComment: any;
-  userId?: string;
+  userId?: string | undefined | null;
   editComment: any;
   deleteComment: any;
   loadMoreComments: any;
@@ -258,6 +258,7 @@ export function NestedCommentProvider({
     [getSignInConfirm],
   );
 
+  // For Edited and deleted comments
   const updateComments = (updatedComment: Comment) => {
     setCommentsPayload((prev) => ({
       ...prev,
@@ -320,8 +321,7 @@ export function NestedCommentProvider({
       );
 
       if (!requestResponse.error) {
-        const editedComment = requestResponse.comment;
-        updateComments(editedComment);
+        updateComments(requestResponse.comment);
       }
     },
     [getSignInConfirm],
@@ -344,8 +344,7 @@ export function NestedCommentProvider({
       );
 
       if (!requestResponse.error) {
-        const deletedComment = requestResponse.comment;
-        updateComments(deletedComment);
+        updateComments(requestResponse.comment);
       }
     },
     [getSignInConfirm],
