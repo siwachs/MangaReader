@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 
 import { formatDistanceToNow, parseISO } from "date-fns";
@@ -26,9 +25,6 @@ import {
 import CommentForm from "./commentForm";
 import ClientAuth from "../buttons/clientAuth";
 
-const sortButtonClasses =
-  "text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-[var(--app-text-color-gunmelt-gray)]";
-
 const NestedCommentSystem: React.FC<{
   contentId: string;
   chapterId?: string;
@@ -40,9 +36,11 @@ const NestedCommentSystem: React.FC<{
   );
 };
 
+const sortButtonClasses =
+  "text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-[var(--app-text-color-gunmelt-gray)]";
+
 const NestedCommentsContainer: React.FC = () => {
   const {
-    userId,
     rootComments,
     commentsPayload,
     changeCommentsOrder,
@@ -116,25 +114,31 @@ const NestedCommentsContainer: React.FC = () => {
             <button>
               <HeartOutline className="size-4" />
             </button>
-            <span className="text-xs/[18px] font-bold">7</span>
+
+            <span className="text-xs/[18px] font-bold">0</span>
           </div>
 
           <div className="mb-3 flex items-center gap-4 pt-[3px]">
             <button
+              type="button"
               onClick={() => changeCommentsOrder("BEST")}
               data-active={commentsPayload.sortKey === "BEST"}
               className={sortButtonClasses}
             >
               Best
             </button>
+
             <button
+              type="button"
               onClick={() => changeCommentsOrder("NEWEST")}
               data-active={commentsPayload.sortKey === "NEWEST"}
               className={sortButtonClasses}
             >
               Newest
             </button>
+
             <button
+              type="button"
               onClick={() => changeCommentsOrder("OLDEST")}
               data-active={commentsPayload.sortKey === "OLDEST"}
               className={sortButtonClasses}
@@ -148,6 +152,7 @@ const NestedCommentsContainer: React.FC = () => {
 
         {commentsPayload.pageNumber !== commentsPayload.totalPages && (
           <button
+            type="button"
             onClick={() => loadMoreComments(commentsPayload.pageNumber + 1)}
             disabled={
               commentsPayload.loading || commentsPayload.loadMoreCommentsLoding
@@ -189,7 +194,7 @@ const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
   return (
     <div className="my-4">
       <div className="header flex">
-        <div className="avatar mb-[9px] mr-2.5 h-[52px] w-[52px] rounded-2xl">
+        <div className="avatar mb-[9px] mr-2.5 size-[52px] flex-shrink-0 rounded-2xl">
           <Image
             src={comment.user.avatar}
             alt={comment.user.username ?? "Invalid username"}

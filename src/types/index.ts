@@ -21,7 +21,7 @@ export type Comment = {
   chapterId?: string;
   user: {
     id: string;
-    username: string | null;
+    username?: string;
     avatar: string;
   };
   upVotes: number;

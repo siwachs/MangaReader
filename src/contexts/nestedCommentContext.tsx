@@ -26,7 +26,7 @@ type ContextType = {
   changeCommentsOrder: any;
   makeComment: any;
   voteComment: any;
-  userId?: string | undefined | null;
+  userId?: string | null;
   editComment: any;
   deleteComment: any;
   loadMoreComments: any;
@@ -191,7 +191,7 @@ export function NestedCommentProvider({
       setCommentsPayload((prev) => ({
         ...prev,
         ...requestResponse,
-        comments: [...prev.comments, ...requestResponse?.comments],
+        comments: [...prev.comments, ...(requestResponse?.comments || [])],
       }));
     },
     [chapterId, contentId, commentsPayload.sortKey],
@@ -254,6 +254,8 @@ export function NestedCommentProvider({
           }
         });
       }
+
+      return requestResponse;
     },
     [getSignInConfirm],
   );
@@ -323,6 +325,8 @@ export function NestedCommentProvider({
       if (!requestResponse.error) {
         updateComments(requestResponse.comment);
       }
+
+      return requestResponse;
     },
     [getSignInConfirm],
   );

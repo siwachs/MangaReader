@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 
 import {
@@ -13,6 +14,8 @@ import {
   Underline,
 } from "../icons";
 
+const wysiwygButtonClasses = "opacity-60 transition-opacity hover:opacity-100";
+
 const CommentForm: React.FC<{
   initialMessage?: string;
   parentId?: string;
@@ -26,10 +29,13 @@ const CommentForm: React.FC<{
   callback,
   editMode,
 }) => {
-  const { contentId, chapterId, makeComment, userId, editComment } =
+  const { data } = useSession();
+  const userId = data?.user.id;
+
+  const { contentId, chapterId, makeComment, editComment } =
     useNestedCommentSystem();
 
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [message, setMessage] = useState(initialMessage);
 
   const onChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -45,8 +51,6 @@ const CommentForm: React.FC<{
     if (!userId) return;
 
     try {
-      setLoading(true);
-
       const body = editMode
         ? { userId, message }
         : {
@@ -57,95 +61,86 @@ const CommentForm: React.FC<{
             message,
           };
 
-      if (editMode) await editComment(body, commentId);
-      else await makeComment(body);
-    } catch (error: any) {
-    } finally {
-      if (callback) callback();
-      else {
-        setLoading(false);
-        setMessage("");
+      setMessage("");
+      const requestResponse = { error: false, errorMessage: "" };
+
+      if (editMode) {
+        const editResponse = await editComment(body, commentId);
+        if (editResponse.error) {
+          requestResponse.error = editResponse.error;
+          requestResponse.errorMessage = editResponse.errorMessage;
+        }
+      } else {
+        const makeResponse = await makeComment(body);
+        if (makeResponse.error) {
+          requestResponse.error = makeResponse.error;
+          requestResponse.errorMessage = makeResponse.errorMessage;
+        }
       }
+
+      if (requestResponse.error) {
+        setError(requestResponse.errorMessage);
+      } else {
+        if (callback) callback();
+        setError("");
+      }
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
   return (
-    <form onSubmit={submitComment} className="my-[1em]">
-      <div className="flex">
-        <div className="w-full rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)]">
-          <textarea
-            placeholder="Join the discussion…"
-            value={message}
-            onChange={onChangeMessage}
-            className="h-auto min-h-[122px] w-full break-words rounded-t-2xl border-b-2 border-[var(--app-border-color-grayish-blue)] p-5 text-[15px] leading-[1.4] text-[var(--app-text-color-dark-grayish-green)] outline-none"
-          />
+    <form onSubmit={submitComment} className="my-4">
+      {error && <p className="my-1.5 text-sm text-red-600">{error}</p>}
 
-          <div className="relative h-[36px]">
-            <div className="wysiwyg absolute left-1.5 top-1.5 flex h-[24px] gap-3">
-              <button
-                type="button"
-                className="opacity-60 transition-opacity hover:opacity-100"
-              >
-                <Gif className="size-[22px]" />
-              </button>
+      <div className="w-full rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)]">
+        <textarea
+          placeholder="Join the discussion…"
+          value={message}
+          onChange={onChangeMessage}
+          className="h-auto min-h-[122px] w-full break-words rounded-t-2xl border-b-2 border-[var(--app-border-color-grayish-blue)] p-5 text-[15px] leading-[1.4] text-[var(--app-text-color-dark-grayish-green)] outline-none"
+        />
 
-              <button
-                type="button"
-                className="opacity-60 transition-opacity hover:opacity-100"
-              >
-                <ImageUpload className="size-[22px]" />
-              </button>
+        <div className="wysiwyg hidden-scrollbar ml-1.5 flex h-[36px] items-center overflow-auto">
+          <div className="flex h-[24px] flex-1 gap-3.5">
+            <button type="button" className={wysiwygButtonClasses}>
+              <Gif className="size-[22px]" />
+            </button>
+            <button type="button" className={wysiwygButtonClasses}>
+              <ImageUpload className="size-[22px]" />
+            </button>
 
-              <div className="divider border-r-2 border-[var(--app-border-color-grayish-blue)]" />
+            <div className="divider border-r-2 border-[var(--app-border-color-grayish-blue)]" />
 
-              <button
-                type="button"
-                className="opacity-60 transition-opacity hover:opacity-100"
-              >
-                <Bold className="size-4" />
-              </button>
-              <button
-                type="button"
-                className="opacity-60 transition-opacity hover:opacity-100"
-              >
-                <Italic className="size-4" />
-              </button>
-              <button
-                type="button"
-                className="opacity-60 transition-opacity hover:opacity-100"
-              >
-                <Underline className="size-4" />
-              </button>
-              <button
-                type="button"
-                className="opacity-60 transition-opacity hover:opacity-100"
-              >
-                <StrikeThrough className="size-4" />
-              </button>
-              <button
-                type="button"
-                className="opacity-60 transition-opacity hover:opacity-100"
-              >
-                <LinkIcon className="size-4" />
-              </button>
-              <button
-                type="button"
-                className="opacity-60 transition-opacity hover:opacity-100"
-              >
-                <Spoiler className="size-4" />
-              </button>
-            </div>
-
-            {userId && (
-              <button
-                type="submit"
-                className="float-right mr-0.5 mt-[1px] rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[4px_15px] text-[15px] font-bold text-white disabled:bg-gray-400"
-                disabled={!message || loading}
-              >
-                Comment
-              </button>
-            )}
+            <button type="button" className={wysiwygButtonClasses}>
+              <Bold className="size-4" />
+            </button>
+            <button type="button" className={wysiwygButtonClasses}>
+              <Italic className="size-4" />
+            </button>
+            <button type="button" className={wysiwygButtonClasses}>
+              <Underline className="size-4" />
+            </button>
+            <button type="button" className={wysiwygButtonClasses}>
+              <StrikeThrough className="size-4" />
+            </button>
+            <button type="button" className={wysiwygButtonClasses}>
+              <LinkIcon className="size-4" />
+            </button>
+            <button type="button" className={wysiwygButtonClasses}>
+              <Spoiler className="size-4" />
+            </button>
           </div>
+
+          {userId && (
+            <button
+              type="submit"
+              className="ml-3.5 mr-0.5 rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[4px_15px] text-[15px] font-bold text-white disabled:bg-gray-400"
+              disabled={!message.trim()}
+            >
+              Comment
+            </button>
+          )}
         </div>
       </div>
 
