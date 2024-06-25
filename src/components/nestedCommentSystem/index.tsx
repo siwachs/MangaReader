@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
 import { formatDistanceToNow, parseISO } from "date-fns";
@@ -175,149 +175,159 @@ const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
   ));
 };
 
-const Comment: React.FC<{ comment: CommentType }> = ({ comment }) => {
-  const {
-    getReplies,
-    voteComment,
-    deleteComment,
-    userId,
-    contentId,
-    chapterId,
-  } = useNestedCommentSystem();
-  const [isReplying, setIsReplying] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const parsedDate = parseISO(comment.createdAt);
-  const timeAgo = formatDistanceToNow(parsedDate, { addSuffix: true });
+const Comment: React.FC<{ comment: CommentType }> = React.memo(
+  ({ comment }) => {
+    const {
+      getReplies,
+      voteComment,
+      deleteComment,
+      userId,
+      contentId,
+      chapterId,
+    } = useNestedCommentSystem();
+    const [isReplying, setIsReplying] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const parsedDate = parseISO(comment.createdAt);
+    const timeAgo = formatDistanceToNow(parsedDate, { addSuffix: true });
 
-  const childComments = getReplies(comment.id);
+    const childComments = getReplies(comment.id);
 
-  return (
-    <div className="my-4">
-      <div className="header flex">
-        <div className="avatar mb-[9px] mr-2.5 size-[52px] flex-shrink-0 rounded-2xl">
-          <Image
-            src={comment.user.avatar}
-            alt={comment.user.username ?? "Invalid username"}
-            width={60}
-            height={60}
-            className="h-full w-full rounded-[inherit] object-cover object-center"
-          />
-        </div>
-
-        <div className="mt-1">
-          <div className="truncate text-[15px]/[18px] font-bold">
-            {comment.user.username ?? "Invalid username"}
-            <AddUser className="ml-1.5 inline-block size-4 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+    return (
+      <div className="my-4">
+        <div className="header flex flex-wrap">
+          {/* Avatar */}
+          <div className="avatar mb-[9px] mr-2.5 size-[52px] flex-shrink-0 rounded-2xl">
+            <Image
+              src={comment.user.avatar}
+              alt={comment.user.username ?? "profile-pic"}
+              width={60}
+              height={60}
+              className="h-full w-full rounded-[inherit] object-cover object-center"
+            />
           </div>
 
-          <span className="text-xs/[21px] font-medium text-[var(--app-text-color-muted-blue-gray)]">
-            <span>{timeAgo}</span>
-            {comment.isEdited && <span className="ml-3">edited</span>}
-          </span>
+          {/* Username and Timestamp */}
+          <div className="mt-1 flex-1">
+            <div className="pr-[15px] text-[15px]/[18px] font-bold">
+              <span>{comment.user.username ?? "Invalid username"}</span>
+              <AddUser className="ml-1.5 inline-block size-4 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+            </div>
+
+            <span className="text-xs/[21px] font-medium text-[var(--app-text-color-muted-blue-gray)]">
+              <span>{timeAgo}</span>
+              {comment.isEdited && <span className="ml-3">edited</span>}
+            </span>
+          </div>
+
+          {/* Flag and collapse */}
+          <div className="flex gap-2.5 p-[0_6px_12px_10px] text-[var(--app-text-color-cool-tone-grayish-blue)]">
+            <Minus className="size-[18px] cursor-pointer opacity-60 hover:opacity-100" />
+            <Flag className="mt-0.5 size-[14px] cursor-pointer opacity-60 hover:opacity-100" />
+          </div>
         </div>
 
-        <div className="mb-2.5 ml-auto mr-3 flex gap-2.5 text-[var(--app-text-color-muted-blue-gray)]">
-          <Minus className="size-[18px] opacity-60" />
-          <Flag className="mt-0.5 size-3 opacity-60" />
-        </div>
-      </div>
-
-      {comment.isDeleted ? (
-        <p className="body break-words text-[15px] leading-[21px] line-through">
-          This message has been deleted.
-        </p>
-      ) : (
-        <p className="body break-words text-[15px] leading-[21px]">
-          {comment.message}
-        </p>
-      )}
-
-      <div className="footer mt-1.5 flex h-[2em] items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
-        <button
-          onClick={() =>
-            !comment.isDeleted &&
-            voteComment({ userId, contentId, chapterId }, comment.id, "up")
-          }
-          className="flex items-center"
-        >
-          {comment?.voteType === "up" ? (
-            <LikeFilled className="mx-2 size-5" />
-          ) : (
-            <LikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
-          )}
-          <span>{comment.upVotes}</span>
-        </button>
-
-        <button
-          onClick={() =>
-            !comment.isDeleted &&
-            voteComment({ userId, contentId, chapterId }, comment.id, "down")
-          }
-          className="flex items-center"
-        >
-          {comment?.voteType === "down" ? (
-            <DislikeFilled className="mx-2 size-5" />
-          ) : (
-            <DislikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
-          )}
-          <span>{comment.downVotes}</span>
-        </button>
-
-        <button
-          onClick={() => setIsReplying((prev) => !prev)}
-          className="mx-3.5 text-sm"
-        >
-          Reply
-        </button>
-
-        {!comment.isDeleted && comment.user.id === userId && (
-          <button
-            onClick={() => setIsEditing((prev) => !prev)}
-            className="mx-1.5 text-sm"
-          >
-            Edit
-          </button>
+        {/* Message */}
+        {comment.isDeleted ? (
+          <p className="body break-words text-[15px] leading-[21px] line-through">
+            This message has been deleted.
+          </p>
+        ) : (
+          <p className="body whitespace-pre-wrap break-words text-[15px] leading-[21px]">
+            {comment.message}
+          </p>
         )}
 
-        {comment.user.id === userId && (
+        {/* Votes, Edit and Delete Comment */}
+        <div className="footer mt-2 flex h-[26px] flex-wrap items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
           <button
             onClick={() =>
-              comment.isDeleted
-                ? deleteComment({ "x-user-id": userId }, comment.id)
-                : confirm(
-                    "You cannot delete a comment. You can only hide it.",
-                  ) && deleteComment({ "x-user-id": userId }, comment.id)
+              !comment.isDeleted &&
+              voteComment({ userId, contentId, chapterId }, comment.id, "up")
             }
-            className={`mx-1.5 text-sm ${comment.isDeleted ? "text-[var(--app-text-color-medium-dark-blue)]" : "text-red-600"}`}
+            className="flex items-center"
           >
-            {comment.isDeleted ? "Undo" : "Delete"}
+            {comment?.voteType === "up" ? (
+              <LikeFilled className="mx-2 size-5" />
+            ) : (
+              <LikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+            )}
+            <span>{comment.upVotes}</span>
           </button>
+
+          <button
+            onClick={() =>
+              !comment.isDeleted &&
+              voteComment({ userId, contentId, chapterId }, comment.id, "down")
+            }
+            className="flex items-center"
+          >
+            {comment?.voteType === "down" ? (
+              <DislikeFilled className="mx-2 size-5" />
+            ) : (
+              <DislikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+            )}
+            <span>{comment.downVotes}</span>
+          </button>
+
+          <button
+            onClick={() => setIsReplying((prev) => !prev)}
+            className="mx-3.5 text-sm"
+          >
+            Reply
+          </button>
+
+          {!comment.isDeleted && comment.user.id === userId && (
+            <button
+              onClick={() => setIsEditing((prev) => !prev)}
+              className="mx-1.5 text-sm"
+            >
+              Edit
+            </button>
+          )}
+
+          {comment.user.id === userId && (
+            <button
+              onClick={() =>
+                comment.isDeleted
+                  ? deleteComment({ "x-user-id": userId }, comment.id)
+                  : confirm(
+                      "You cannot delete a comment. You can only hide it.",
+                    ) && deleteComment({ "x-user-id": userId }, comment.id)
+              }
+              className={`mx-1.5 text-sm ${comment.isDeleted ? "text-[var(--app-text-color-medium-dark-blue)]" : "text-red-600"}`}
+            >
+              {comment.isDeleted ? "Undo" : "Delete"}
+            </button>
+          )}
+        </div>
+
+        {isReplying && (
+          <CommentForm
+            parentId={comment.id}
+            callback={() => setIsReplying(false)}
+          />
+        )}
+
+        {isEditing && (
+          <CommentForm
+            initialMessage={comment.message}
+            commentId={comment.id}
+            editMode
+            callback={() => setIsEditing(false)}
+          />
+        )}
+
+        {/* Render Child Comments */}
+        {childComments.length > 0 && (
+          <div className="border-l-2 border-[var(--app-border-color-periwinkle)] pl-6">
+            <CommentList comments={childComments} />
+          </div>
         )}
       </div>
+    );
+  },
+);
 
-      {isReplying && (
-        <CommentForm
-          parentId={comment.id}
-          callback={() => setIsReplying(false)}
-        />
-      )}
-
-      {isEditing && (
-        <CommentForm
-          initialMessage={comment.message}
-          commentId={comment.id}
-          editMode
-          callback={() => setIsEditing(false)}
-        />
-      )}
-
-      {childComments.length > 0 && (
-        <div className="border-l-2 border-[var(--app-border-color-periwinkle)] pl-6">
-          <CommentList comments={childComments} />
-        </div>
-      )}
-    </div>
-  );
-};
+Comment.displayName = "Comment";
 
 export default NestedCommentSystem;
