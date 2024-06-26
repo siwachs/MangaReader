@@ -11,19 +11,15 @@ import {
   NestedCommentProvider,
   useNestedCommentSystem,
 } from "@/contexts/nestedCommentContext";
-import {
-  AddUser,
-  ChatBubbleSolid,
-  DislikeOutline,
-  DislikeFilled,
-  Flag,
-  HeartOutline,
-  LikeOutline,
-  LikeFilled,
-  Minus,
-} from "../icons";
 import CommentForm from "./commentForm";
 import ClientAuth from "../buttons/clientAuth";
+
+import { HiUserAdd } from "react-icons/hi";
+import { IoChatbubble } from "react-icons/io5";
+import { FaRegHeart } from "react-icons/fa";
+import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
+import { FaMinus, FaPlus } from "react-icons/fa6";
+import { TiFlag } from "react-icons/ti";
 
 const NestedCommentSystem: React.FC<{
   contentId: string;
@@ -83,7 +79,7 @@ const NestedCommentsContainer: React.FC = () => {
                 : undefined
             }
           >
-            {commentsPayload?.comments.length ?? 0} Comments
+            {commentsPayload.comments?.length ?? 0} Comments
           </span>
 
           <ClientAuth
@@ -96,7 +92,7 @@ const NestedCommentsContainer: React.FC = () => {
                   <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
                     1
                   </span>
-                  <ChatBubbleSolid className="size-[22px]" />
+                  <IoChatbubble className="size-[22px]" />
                 </div>
 
                 <span>Sign In</span>
@@ -111,9 +107,7 @@ const NestedCommentsContainer: React.FC = () => {
 
         <div className="mb-2 flex items-center justify-between">
           <div className="mb-3 flex items-center gap-2.5 p-[7px_14px]">
-            <button>
-              <HeartOutline className="size-4" />
-            </button>
+            <FaRegHeart className="4" />
 
             <span className="text-xs/[18px] font-bold">0</span>
           </div>
@@ -185,6 +179,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
       contentId,
       chapterId,
     } = useNestedCommentSystem();
+    const [isChildrenCollapsed, setIsChildrenCollapsed] = useState(false);
     const [isReplying, setIsReplying] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const parsedDate = parseISO(comment.createdAt);
@@ -196,7 +191,9 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
       <div className="my-4">
         <div className="header flex flex-wrap">
           {/* Avatar */}
-          <div className="avatar mb-[9px] mr-2.5 size-[52px] flex-shrink-0 rounded-2xl">
+          <div
+            className={`avatar mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
+          >
             <Image
               src={comment.user.avatar}
               alt={comment.user.username ?? "profile-pic"}
@@ -210,7 +207,13 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
           <div className="mt-1 flex-1">
             <div className="pr-[15px] text-[15px]/[18px] font-bold">
               <span>{comment.user.username ?? "Invalid username"}</span>
-              <AddUser className="ml-1.5 inline-block size-4 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+              <HiUserAdd
+                className="ml-1.5 inline-block size-4 text-[var(--app-text-color-cool-tone-grayish-blue)] opacity-60 hover:opacity-100"
+                tabIndex={0}
+                role="button"
+                aria-label="Add user"
+                onClick={() => {}}
+              />
             </div>
 
             <span className="text-xs/[21px] font-medium text-[var(--app-text-color-muted-blue-gray)]">
@@ -221,21 +224,42 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
           {/* Flag and collapse */}
           <div className="flex gap-2.5 p-[0_6px_12px_10px] text-[var(--app-text-color-cool-tone-grayish-blue)]">
-            <Minus className="size-[18px] cursor-pointer opacity-60 hover:opacity-100" />
-            <Flag className="mt-0.5 size-[14px] cursor-pointer opacity-60 hover:opacity-100" />
+            {isChildrenCollapsed ? (
+              <FaPlus
+                className="size-4 opacity-60 hover:opacity-100"
+                tabIndex={0}
+                role="button"
+                aria-label="Expand Children"
+                onClick={() => setIsChildrenCollapsed(false)}
+              />
+            ) : (
+              <FaMinus
+                className="size-[18px] opacity-60 hover:opacity-100"
+                tabIndex={0}
+                role="button"
+                aria-label="Collapse Children"
+                onClick={() => setIsChildrenCollapsed(true)}
+              />
+            )}
+
+            <TiFlag
+              className="mt-0.5 size-4 opacity-60 hover:opacity-100"
+              tabIndex={0}
+              role="button"
+              aria-label="Flag Comment"
+              onClick={() => {}}
+            />
           </div>
         </div>
 
         {/* Message */}
-        {comment.isDeleted ? (
-          <p className="body break-words text-[15px] leading-[21px] line-through">
-            This message has been deleted.
-          </p>
-        ) : (
-          <p className="body whitespace-pre-wrap break-words text-[15px] leading-[21px]">
-            {comment.message}
-          </p>
-        )}
+        <p
+          className={`${isChildrenCollapsed ? "hidden" : ""} break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
+        >
+          {comment.isDeleted
+            ? "This message has been deleted."
+            : comment.message}
+        </p>
 
         {/* Votes, Edit and Delete Comment */}
         <div className="footer mt-2 flex h-[26px] flex-wrap items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
@@ -247,9 +271,9 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
             className="flex items-center"
           >
             {comment?.voteType === "up" ? (
-              <LikeFilled className="mx-2 size-5" />
+              <BiSolidLike className="mx-2 size-5 text-[var(--app-text-color-red)]" />
             ) : (
-              <LikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+              <BiLike className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
             )}
             <span>{comment.upVotes}</span>
           </button>
@@ -262,9 +286,9 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
             className="flex items-center"
           >
             {comment?.voteType === "down" ? (
-              <DislikeFilled className="mx-2 size-5" />
+              <BiSolidDislike className="mx-2 size-5 text-[var(--app-text-color-red)]" />
             ) : (
-              <DislikeOutline className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+              <BiDislike className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
             )}
             <span>{comment.downVotes}</span>
           </button>
@@ -319,7 +343,9 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
         {/* Render Child Comments */}
         {childComments.length > 0 && (
-          <div className="border-l-2 border-[var(--app-border-color-periwinkle)] pl-6">
+          <div
+            className={`${isChildrenCollapsed ? "hidden" : ""} border-l-2 border-[var(--app-border-color-periwinkle)] pl-6`}
+          >
             <CommentList comments={childComments} />
           </div>
         )}
