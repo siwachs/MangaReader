@@ -1,8 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useSession, signIn } from "next-auth/react";
-import { CommentsPayload, Comment, SortKey, VoteType } from "@/types";
 import {
   createContext,
   useCallback,
@@ -11,11 +8,17 @@ import {
   useMemo,
   useState,
 } from "react";
+import { usePathname } from "next/navigation";
+import { useSession, signIn } from "next-auth/react";
+import { CommentsPayload, Comment, SortKey, VoteType } from "@/types";
+
 import {
   makeDeleteRequest,
   makePostPutRequest,
   makeGetRequest,
 } from "@/service/nestedCommentSystemAsyncApiCalls";
+
+import "@/customHtmlElements/SpoilerElement";
 
 type ContextType = {
   contentId: string | undefined | null;

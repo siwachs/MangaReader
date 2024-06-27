@@ -16,7 +16,7 @@ import ClientAuth from "../buttons/clientAuth";
 
 import { HiUserAdd } from "react-icons/hi";
 import { IoChatbubble } from "react-icons/io5";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaEdit, FaTrash } from "react-icons/fa";
 import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { TiFlag } from "react-icons/ti";
@@ -262,13 +262,16 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
         </p>
 
         {/* Votes, Edit and Delete Comment */}
-        <div className="footer mt-2 flex h-[26px] flex-wrap items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
+        <div className="footer mt-2 flex min-h-[26px] flex-wrap items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
           <button
             onClick={() =>
               !comment.isDeleted &&
               voteComment({ userId, contentId, chapterId }, comment.id, "up")
             }
             className="flex items-center"
+            aria-label={
+              comment?.voteType === "up" ? "Remove Upvote" : "Upvote Comment"
+            }
           >
             {comment?.voteType === "up" ? (
               <BiSolidLike className="mx-2 size-5 text-[var(--app-text-color-red)]" />
@@ -284,6 +287,11 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
               voteComment({ userId, contentId, chapterId }, comment.id, "down")
             }
             className="flex items-center"
+            aria-label={
+              comment?.voteType === "down"
+                ? "Remove Downvote"
+                : "Downvote Comment"
+            }
           >
             {comment?.voteType === "down" ? (
               <BiSolidDislike className="mx-2 size-5 text-[var(--app-text-color-red)]" />
@@ -301,12 +309,15 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
           </button>
 
           {!comment.isDeleted && comment.user.id === userId && (
-            <button
-              onClick={() => setIsEditing((prev) => !prev)}
+            <FaEdit
               className="mx-1.5 text-sm"
-            >
-              Edit
-            </button>
+              tabIndex={0}
+              role="button"
+              aria-label="Edit Comment"
+              onClick={() => {
+                setIsEditing((prev) => !prev);
+              }}
+            />
           )}
 
           {comment.user.id === userId && (
@@ -319,8 +330,9 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                     ) && deleteComment({ "x-user-id": userId }, comment.id)
               }
               className={`mx-1.5 text-sm ${comment.isDeleted ? "text-[var(--app-text-color-medium-dark-blue)]" : "text-red-600"}`}
+              aria-label={comment.isDeleted ? "Unde Delete" : "Delete Comment"}
             >
-              {comment.isDeleted ? "Undo" : "Delete"}
+              {comment.isDeleted ? "Undo" : <FaTrash />}
             </button>
           )}
         </div>
