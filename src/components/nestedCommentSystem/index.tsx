@@ -169,6 +169,10 @@ const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
   ));
 };
 
+const spoiler: React.FC = () => {
+  return <span></span>;
+};
+
 const Comment: React.FC<{ comment: CommentType }> = React.memo(
   ({ comment }) => {
     const {
