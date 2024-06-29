@@ -18,6 +18,8 @@ import {
   makeGetRequest,
 } from "@/service/nestedCommentSystemAsyncApiCalls";
 
+import "@/customHtmlElements/SpoilerElement";
+
 type ContextType = {
   contentId: string | undefined | null;
   chapterId: string | undefined | null;

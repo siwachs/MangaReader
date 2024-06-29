@@ -169,10 +169,6 @@ const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
   ));
 };
 
-const spoiler: React.FC = () => {
-  return <span></span>;
-};
-
 const Comment: React.FC<{ comment: CommentType }> = React.memo(
   ({ comment }) => {
     const {
@@ -259,11 +255,13 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
         {/* Message */}
         <p
           className={`${isChildrenCollapsed ? "hidden" : ""} break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
-        >
-          {comment.isDeleted
-            ? "This message has been deleted."
-            : comment.message}
-        </p>
+          dangerouslySetInnerHTML={{
+            __html: comment.isDeleted
+              ? "This message has been deleted."
+              : comment.message,
+          }}
+        />
+        <spoiler-span>New X</spoiler-span>
 
         {/* Votes, Edit and Delete Comment */}
         <div className="footer mt-2 flex min-h-[26px] flex-wrap items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
