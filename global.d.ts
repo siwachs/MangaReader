@@ -1,6 +1,6 @@
 declare module JSX {
   interface IntrinsicElements {
-    "spoiler-span": React.DetailedHTMLProps<
+    "spoiler-tag": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement
     >;

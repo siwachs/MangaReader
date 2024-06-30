@@ -1,5 +1,5 @@
 customElements.define(
-  "spoiler-span",
+  "spoiler-tag",
   class extends HTMLElement {
     constructor() {
       super();
