@@ -101,7 +101,6 @@ body {
 }
 
 /* App Container CSS */
-
 #page-content {
   @apply relative mt-[60px] md:mt-[120px];
 }

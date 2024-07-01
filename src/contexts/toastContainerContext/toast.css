@@ -1,0 +1,88 @@
+.toast-container {
+  @apply fixed z-[1000] max-h-full p-2;
+}
+
+.toast {
+  @apply mb-2 flex h-16 w-[360px] rounded;
+  box-shadow: rgba(0, 0, 0, 0.175) 0px 3px 8px;
+}
+
+.toast .timer {
+  @apply w-[30px] flex-shrink-0;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.toast .text {
+  @apply min-h-10 flex-1 px-3 py-2 text-sm/[1.4];
+}
+
+.toast .close {
+  @apply px-3 py-2;
+}
+
+.toast[data-type="success"] {
+  --bg-color: rgb(227, 252, 239);
+  --text-color: rgb(0, 102, 68);
+  @apply bg-[var(--bg-success)] text-[--text-success];
+}
+
+.toast[data-type="success"] .timer {
+  --bg-timer: rgb(54, 179, 126);
+  @apply bg-[--bg-timer];
+}
+
+.toast[data-type="error"] {
+  --bg-color: rgb(255, 235, 230);
+  --text-color: rgb(191, 38, 0);
+  @apply bg-[var(--bg-success)] text-[--text-success];
+}
+
+.toast[data-type="error"] .timer {
+  --bg-timer: rgb(255, 86, 48);
+  @apply bg-[--bg-timer];
+}
+
+.toast[data-type="warning"] {
+  --bg-color: rgb(255, 250, 230);
+  --text-color: rgb(255, 139, 0);
+  @apply bg-[var(--bg-success)] text-[--text-success];
+}
+
+.toast[data-type="warning"] .timer {
+  --bg-timer: rgb(255, 171, 0);
+  @apply bg-[--bg-timer];
+}
+
+.toast[data-type="info"] {
+  --text-color: rgb(80, 95, 121);
+  @apply bg-white text-[--text-success];
+}
+
+.toast[data-type="info"] .timer {
+  --bg-timer: rgb(38, 132, 255);
+  @apply bg-[--bg-timer];
+}
+
+/* Container Position Regex Start*/
+.toast-container[data-position^="top-"] {
+  top: 0;
+}
+
+.toast-container[data-position^="bottom-"] {
+  bottom: 0;
+}
+
+.toast-container[data-position$="-right"] {
+  right: 0;
+}
+
+.toast-container[data-position$="-left"] {
+  left: 0;
+}
+
+.toast-container[data-position$="-center"] {
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* Container Position Regex End*/
