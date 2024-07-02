@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+
+import { useToastContainer } from "@/contexts/toastContainerContext";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 
 import {
@@ -29,6 +31,7 @@ const CommentForm: React.FC<{
   callback,
   editMode,
 }) => {
+  const { addToast } = useToastContainer();
   const { data } = useSession();
   const userId = data?.user.id;
 
@@ -49,6 +52,12 @@ const CommentForm: React.FC<{
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) return;
+
+    addToast({ id: 1, type: "error", text: "Invalid Args" });
+    addToast({ id: 2, type: "info", text: "Invalid Args" });
+    addToast({ id: 3, type: "warning", text: "Invalid Args" });
+    addToast({ id: 4, type: "success", text: "Invalid Args" });
+    return;
 
     try {
       const body = editMode

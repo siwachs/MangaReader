@@ -1,10 +1,6 @@
 customElements.define(
   "spoiler-tag",
   class extends HTMLElement {
-    constructor() {
-      super();
-    }
-
     connectedCallback() {
       this.setAttribute("tabindex", "0");
 

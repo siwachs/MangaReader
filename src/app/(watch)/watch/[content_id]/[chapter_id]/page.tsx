@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { pageReqObj } from "@/types";
+
+import { ToastContainerProvider } from "@/contexts/toastContainerContext";
 import NestedCommentSystem from "@/components/nestedCommentSystem";
 
 export default function WatchPage(req: Readonly<pageReqObj>) {
@@ -23,10 +25,12 @@ export default function WatchPage(req: Readonly<pageReqObj>) {
       <ChaptersPagination />
       <div className="mb-[60px]" />
 
-      <NestedCommentSystem
-        contentId={req.params.content_id!}
-        chapterId={req.params.chapter_id}
-      />
+      <ToastContainerProvider autoDismiss={false}>
+        <NestedCommentSystem
+          contentId={req.params.content_id!}
+          chapterId={req.params.chapter_id}
+        />
+      </ToastContainerProvider>
     </>
   );
 }

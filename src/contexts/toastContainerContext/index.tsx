@@ -1,10 +1,12 @@
 "use client";
 
 import { createContext, useContext, useState, useMemo, useEffect } from "react";
+
+import { TiTimes } from "react-icons/ti";
 import "./toast.css";
 
 type ToastMessage = {
-  id: Date;
+  id: string | number;
   type: "success" | "error" | "warning" | "info";
   text: string;
 };
@@ -49,20 +51,32 @@ const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
     <div className="toast" data-type={toast.type}>
       <div className="timer" />
       <div className="text">{toast.text}</div>
-      <div className="close"></div>
+      <div
+        role="button"
+        tabIndex={0}
+        className="close"
+        onClick={() => removeToast(toast)}
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.key === "Enter") {
+            removeToast(toast);
+          }
+        }}
+      >
+        <TiTimes className="size-5" />
+      </div>
     </div>
   );
 };
 
 export function ToastContainerProvider({
   children,
-  position,
+  position = "top-right",
   autoDismiss = true,
   timeOut = 5000,
   latestMessageFirst = true,
 }: Readonly<{
   children: React.ReactNode;
-  position:
+  position?:
     | "top-right"
     | "top-left"
     | "bottom-left"
@@ -81,15 +95,9 @@ export function ToastContainerProvider({
   };
 
   const removeToast = (toast: ToastMessage) => {
-    const removedToastIndex = toasts.findIndex(
-      (currentToast) =>
-        currentToast.id === toast.id &&
-        currentToast.text === toast.text &&
-        currentToast.type === toast.type,
+    setToasts((prev) =>
+      prev.filter((currentToast) => currentToast.id !== toast.id),
     );
-
-    if (removedToastIndex !== -1)
-      setToasts((prev) => prev.splice(removedToastIndex, 1));
   };
 
   const contextValue = useMemo(
@@ -99,14 +107,14 @@ export function ToastContainerProvider({
 
   return (
     <ToastContainerContext.Provider value={contextValue}>
-      <>
+      {toasts.length > 0 && (
         <div className="toast-container" data-position={position}>
           {toasts.map((toast) => (
             <Toast key={toast.id.toString()} toast={toast} />
           ))}
         </div>
-        {children}
-      </>
+      )}
+      {children}
     </ToastContainerContext.Provider>
   );
 }

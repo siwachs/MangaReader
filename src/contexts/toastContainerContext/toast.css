@@ -18,13 +18,13 @@
 }
 
 .toast .close {
-  @apply px-3 py-2;
+  @apply flex-shrink-0 px-3 py-2 opacity-50 transition-opacity hover:opacity-100;
 }
 
 .toast[data-type="success"] {
   --bg-color: rgb(227, 252, 239);
   --text-color: rgb(0, 102, 68);
-  @apply bg-[var(--bg-success)] text-[--text-success];
+  @apply bg-[--bg-color] text-[--text-color];
 }
 
 .toast[data-type="success"] .timer {
@@ -35,7 +35,7 @@
 .toast[data-type="error"] {
   --bg-color: rgb(255, 235, 230);
   --text-color: rgb(191, 38, 0);
-  @apply bg-[var(--bg-success)] text-[--text-success];
+  @apply bg-[--bg-color] text-[--text-color];
 }
 
 .toast[data-type="error"] .timer {
@@ -46,7 +46,7 @@
 .toast[data-type="warning"] {
   --bg-color: rgb(255, 250, 230);
   --text-color: rgb(255, 139, 0);
-  @apply bg-[var(--bg-success)] text-[--text-success];
+  @apply bg-[--bg-color] text-[--text-color];
 }
 
 .toast[data-type="warning"] .timer {
@@ -56,7 +56,7 @@
 
 .toast[data-type="info"] {
   --text-color: rgb(80, 95, 121);
-  @apply bg-white text-[--text-success];
+  @apply bg-white text-[--text-color];
 }
 
 .toast[data-type="info"] .timer {
