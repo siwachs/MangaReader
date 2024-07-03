@@ -2,24 +2,26 @@
 
 import { createContext, useContext, useState, useMemo, useEffect } from "react";
 
-import { TiTimes } from "react-icons/ti";
+import { IoCloseSharp } from "react-icons/io5";
 import "./toast.css";
 
 type ToastMessage = {
   id: string | number;
   type: "success" | "error" | "warning" | "info";
   text: string;
+  autoDismiss?: boolean;
+  timeOut?: number;
 };
+
+const DEFAULT_TOAST_AUTODISMISS = true;
+const DEFAUL_TOAST_TIMEOUT = 5000;
+
 type ContextType = {
-  autoDismiss: boolean;
-  timeOut: number;
   addToast: (toast: ToastMessage) => void;
   removeToast: (toast: ToastMessage) => void;
 };
 
 const ToastContainerContext = createContext<ContextType>({
-  autoDismiss: true,
-  timeOut: 5000,
   addToast: (toast: ToastMessage) => {},
   removeToast: (toast: ToastMessage) => {},
 });
@@ -35,34 +37,54 @@ export function useToastContainer() {
 }
 
 const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
-  const { autoDismiss, timeOut, removeToast } = useToastContainer();
+  const [showToast, setShowToast] = useState(false);
+  const [remainingTimePercentage, setRemainingTimePercentage] = useState(100);
+  const { removeToast } = useToastContainer();
+
+  const autoDismiss = toast.autoDismiss ?? DEFAULT_TOAST_AUTODISMISS;
+  const timeOut = toast.timeOut ?? DEFAUL_TOAST_TIMEOUT;
+
+  const closeToast = () => {
+    setShowToast(false);
+    removeToast(toast);
+  };
 
   useEffect(() => {
-    if (autoDismiss) {
-      const timeOutId = setTimeout(() => {
-        removeToast(toast);
-      }, timeOut);
+    setShowToast(true);
+    if (autoDismiss && timeOut > 0) {
+      const startTime = Date.now();
 
-      return () => clearTimeout(timeOutId);
+      const intervalId = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, timeOut - elapsedTime);
+        setRemainingTimePercentage((remainingTime / timeOut) * 100);
+
+        if (remainingTime <= 0) closeToast();
+      }, 100);
+
+      return () => clearInterval(intervalId);
     }
   }, []);
 
   return (
-    <div className="toast" data-type={toast.type}>
-      <div className="timer" />
+    <div className={`${showToast ? "show" : ""} toast`} data-type={toast.type}>
+      <div
+        className="timer"
+        style={{ height: `${remainingTimePercentage}%` }}
+      />
       <div className="text">{toast.text}</div>
       <div
         role="button"
         tabIndex={0}
         className="close"
-        onClick={() => removeToast(toast)}
+        onClick={closeToast}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === "Enter") {
-            removeToast(toast);
+            closeToast();
           }
         }}
       >
-        <TiTimes className="size-5" />
+        <IoCloseSharp className="size-[18px]" />
       </div>
     </div>
   );
@@ -71,8 +93,6 @@ const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
 export function ToastContainerProvider({
   children,
   position = "top-right",
-  autoDismiss = true,
-  timeOut = 5000,
   latestMessageFirst = true,
 }: Readonly<{
   children: React.ReactNode;
@@ -83,8 +103,6 @@ export function ToastContainerProvider({
     | "bottom-right"
     | "top-center"
     | "bottom-center";
-  autoDismiss?: boolean;
-  timeOut?: number;
   latestMessageFirst?: boolean;
 }>) {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -100,10 +118,7 @@ export function ToastContainerProvider({
     );
   };
 
-  const contextValue = useMemo(
-    () => ({ autoDismiss, timeOut, addToast, removeToast }),
-    [],
-  );
+  const contextValue = useMemo(() => ({ addToast, removeToast }), []);
 
   return (
     <ToastContainerContext.Provider value={contextValue}>

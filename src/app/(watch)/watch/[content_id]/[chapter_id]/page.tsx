@@ -25,7 +25,7 @@ export default function WatchPage(req: Readonly<pageReqObj>) {
       <ChaptersPagination />
       <div className="mb-[60px]" />
 
-      <ToastContainerProvider autoDismiss={false}>
+      <ToastContainerProvider>
         <NestedCommentSystem
           contentId={req.params.content_id!}
           chapterId={req.params.chapter_id}
