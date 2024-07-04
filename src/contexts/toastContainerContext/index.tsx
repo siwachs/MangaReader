@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useMemo, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useMemo,
+  useEffect,
+} from "react";
 
 import { IoCloseSharp } from "react-icons/io5";
 import "./toast.css";
@@ -37,6 +44,7 @@ export function useToastContainer() {
 }
 
 const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
+  const toastRef = useRef<HTMLDivElement>(null);
   const [showToast, setShowToast] = useState(false);
   const [remainingTimePercentage, setRemainingTimePercentage] = useState(100);
   const { removeToast } = useToastContainer();
@@ -46,7 +54,10 @@ const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
 
   const closeToast = () => {
     setShowToast(false);
-    removeToast(toast);
+
+    toastRef.current?.addEventListener("transitionend", () => {
+      removeToast(toast);
+    });
   };
 
   useEffect(() => {
@@ -62,12 +73,21 @@ const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
         if (remainingTime <= 0) closeToast();
       }, 100);
 
-      return () => clearInterval(intervalId);
+      return () => {
+        toastRef.current?.removeEventListener("transitionend", () => {
+          removeToast(toast);
+        });
+        clearInterval(intervalId);
+      };
     }
   }, []);
 
   return (
-    <div className={`${showToast ? "show" : ""} toast`} data-type={toast.type}>
+    <div
+      ref={toastRef}
+      className={`${showToast ? "show" : ""} toast`}
+      data-type={toast.type}
+    >
       <div
         className="timer"
         style={{ height: `${remainingTimePercentage}%` }}
