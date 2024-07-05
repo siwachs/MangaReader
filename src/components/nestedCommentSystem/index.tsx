@@ -79,7 +79,7 @@ const NestedCommentsContainer: React.FC = () => {
                 : undefined
             }
           >
-            {commentsPayload.comments?.length ?? 0} Comments
+            {commentsPayload.totalComments} Comments
           </span>
 
           <ClientAuth
@@ -106,10 +106,10 @@ const NestedCommentsContainer: React.FC = () => {
         <CommentForm />
 
         <div className="mb-2 flex items-center justify-between">
-          <div className="mb-3 flex items-center gap-2.5 p-[7px_14px]">
-            <FaRegHeart className="4" />
+          <div className="mb-3 ml-3 flex items-center gap-2.5">
+            <FaRegHeart />
 
-            <span className="text-xs/[18px] font-bold">0</span>
+            <span className="text-xs/[18px] font-bold">6</span>
           </div>
 
           <div className="mb-3 flex items-center gap-4 pt-[3px]">
@@ -179,6 +179,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
       contentId,
       chapterId,
     } = useNestedCommentSystem();
+
     const [isChildrenCollapsed, setIsChildrenCollapsed] = useState(false);
     const [isReplying, setIsReplying] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -189,6 +190,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
     return (
       <div className="my-4">
+        {/* Header */}
         <div className="header flex flex-wrap">
           {/* Avatar */}
           <div
@@ -252,7 +254,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
           </div>
         </div>
 
-        {/* Message */}
+        {/* message */}
         <p
           className={`${isChildrenCollapsed ? "hidden" : ""} break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
           dangerouslySetInnerHTML={{

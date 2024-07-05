@@ -28,10 +28,12 @@ type ContextType = {
   removeToast: (toast: ToastMessage) => void;
 };
 
-const ToastContainerContext = createContext<ContextType>({
+const initialContextValue = {
   addToast: (toast: ToastMessage) => {},
   removeToast: (toast: ToastMessage) => {},
-});
+};
+
+const ToastContainerContext = createContext<ContextType>(initialContextValue);
 
 export function useToastContainer() {
   const context = useContext(ToastContainerContext);
