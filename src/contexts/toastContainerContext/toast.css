@@ -3,7 +3,7 @@
 }
 
 .toast {
-  @apply mb-2 flex h-16 w-[360px] overflow-hidden rounded transition-transform;
+  @apply mb-2 flex h-16 w-[360px] overflow-hidden rounded transition-transform delay-0 duration-[220ms] ease-[cubic-bezier(0.2,0,0,1)];
   box-shadow: rgba(0, 0, 0, 0.175) 0px 3px 8px;
 }
 

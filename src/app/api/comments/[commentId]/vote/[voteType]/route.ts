@@ -76,6 +76,7 @@ const editVote = (
   };
 };
 
+// PUT request handler
 const voteComment = async (
   req: NextRequest,
   dynamicRouteValue: { params: { commentId: string; voteType: VoteType } },

@@ -85,7 +85,7 @@ const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
   return (
     <div
       ref={toastRef}
-      className={`${showToast ? "show" : ""} toast`}
+      className={`${showToast ? "show toast" : "toast"}`}
       data-type={toast.type}
     >
       <div

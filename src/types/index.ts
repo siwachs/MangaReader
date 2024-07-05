@@ -43,6 +43,7 @@ export type CommentsPayload = {
   error: boolean;
   errorMessage?: string;
   totalPages: number;
+  totalComments: number;
   pageNumber: number;
   comments: Comment[];
   sortKey: SortKey;

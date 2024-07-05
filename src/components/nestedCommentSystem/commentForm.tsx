@@ -57,20 +57,17 @@ const CommentForm: React.FC<{
       id: 1,
       type: "error",
       text: "Invalid Args",
-      autoDismiss: false,
     });
-    addToast({ id: 2, type: "info", text: "Invalid Args", autoDismiss: false });
+    addToast({ id: 2, type: "info", text: "Invalid Args" });
     addToast({
       id: 3,
       type: "warning",
       text: "Invalid Args",
-      autoDismiss: false,
     });
     addToast({
       id: 4,
       type: "success",
       text: "Invalid Args",
-      autoDismiss: false,
     });
     return;
 
