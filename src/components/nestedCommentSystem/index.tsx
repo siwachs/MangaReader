@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 
 import { formatDistanceToNow, parseISO } from "date-fns";
@@ -20,6 +21,8 @@ import { FaRegHeart, FaEdit, FaTrash } from "react-icons/fa";
 import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { TiFlag } from "react-icons/ti";
+import { IoMdShareAlt } from "react-icons/io";
+import { usePathname } from "next/navigation";
 
 const NestedCommentSystem: React.FC<{
   contentId: string;
@@ -189,13 +192,13 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
     const childComments = getReplies(comment.id);
 
     return (
-      <div className="my-4">
+      <div className="mb-4" id={comment.id}>
         {/* Header */}
-        <div className="header flex flex-wrap">
-          {/* Avatar */}
+        <div className="flex flex-wrap">
           <div
-            className={`avatar mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
+            className={`relative mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
           >
+            <div className="absolute left-0 top-0 hidden h-[52px] w-[5px] rounded-[3px] bg-[var(--app-text-color-gunmelt-gray)]" />
             <Image
               src={comment.user.avatar}
               alt={comment.user.username ?? "profile-pic"}
@@ -206,29 +209,43 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
           </div>
 
           {/* Username and Timestamp */}
-          <div className="mt-1 flex-1">
-            <div className="pr-[15px] text-[15px]/[18px] font-bold">
-              <span>{comment.user.username ?? "Invalid username"}</span>
+          <div className="my-1 min-h-5 flex-1 text-xs/[21px]">
+            <div className="flex flex-wrap items-center">
+              <span className="mr-1 text-[15px] font-bold text-[var(--app-text-color-gunmelt-gray)]">
+                {comment.user.username ?? "Invalid username"}
+              </span>
+
               <HiUserAdd
-                className="ml-1.5 inline-block size-4 text-[var(--app-text-color-cool-tone-grayish-blue)] opacity-60 hover:opacity-100"
+                className="mr-1 size-[18px] text-[var(--app-text-color-cool-tone-grayish-blue)] opacity-60 hover:opacity-100"
                 tabIndex={0}
                 role="button"
                 aria-label="Add user"
                 onClick={() => {}}
               />
+
+              {comment.parentId !== "root" && (
+                <Link
+                  href={`#${comment.parentId}`}
+                  className="ml-2 mr-2 select-none font-medium text-[var(--app-text-color-very-dary-steel-blue)]"
+                >
+                  <IoMdShareAlt className="inline-flex size-4" />
+                  &nbsp;
+                  {comment.user.username ?? "Invalid User"}
+                </Link>
+              )}
             </div>
 
-            <span className="text-xs/[21px] font-medium text-[var(--app-text-color-muted-blue-gray)]">
+            <span className="font-medium text-[var(--app-text-color-very-dary-steel-blue)]">
               <span>{timeAgo}</span>
               {comment.isEdited && <span className="ml-3">edited</span>}
             </span>
           </div>
 
           {/* Flag and collapse */}
-          <div className="flex gap-2.5 p-[0_6px_12px_10px] text-[var(--app-text-color-cool-tone-grayish-blue)]">
+          <div className="my-1 mr-3 flex min-h-5 text-[var(--app-text-color-cool-tone-grayish-blue)]">
             {isChildrenCollapsed ? (
               <FaPlus
-                className="size-4 opacity-60 hover:opacity-100"
+                className="mr-2.5 size-4 opacity-60 hover:opacity-100"
                 tabIndex={0}
                 role="button"
                 aria-label="Expand Children"
@@ -236,7 +253,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
               />
             ) : (
               <FaMinus
-                className="size-[18px] opacity-60 hover:opacity-100"
+                className="mr-2.5 size-[18px] opacity-60 hover:opacity-100"
                 tabIndex={0}
                 role="button"
                 aria-label="Collapse Children"
