@@ -193,13 +193,13 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
     return (
       <div className="mb-4" id={comment.id}>
-        {/* Header */}
-        <div className="flex flex-wrap">
+        <div className="flex">
           <div
+            data-role="avatar-container"
             className={`relative mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
           >
             <div className="absolute left-0 top-0 hidden h-[52px] w-[5px] rounded-[3px] bg-[var(--app-text-color-gunmelt-gray)]" />
-            <Image
+            <Image // ml-3
               src={comment.user.avatar}
               alt={comment.user.username ?? "profile-pic"}
               width={60}
@@ -208,153 +208,173 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
             />
           </div>
 
-          {/* Username and Timestamp */}
-          <div className="my-1 min-h-5 flex-1 text-xs/[21px]">
-            <div className="flex flex-wrap items-center">
-              <span className="mr-1 text-[15px] font-bold text-[var(--app-text-color-gunmelt-gray)]">
-                {comment.user.username ?? "Invalid username"}
-              </span>
+          <div data-role="body-container">
+            <div data-role="username-and-meta">
+              <div className="my-1 min-h-5 flex-1 text-xs/[21px]">
+                <div className="flex flex-wrap items-center">
+                  <span className="mr-1 text-[15px] font-bold text-[var(--app-text-color-gunmelt-gray)]">
+                    {comment.user.username ?? "username"}
+                  </span>
 
-              <HiUserAdd
-                className="mr-1 size-[18px] text-[var(--app-text-color-cool-tone-grayish-blue)] opacity-60 hover:opacity-100"
-                tabIndex={0}
-                role="button"
-                aria-label="Add user"
-                onClick={() => {}}
-              />
+                  <HiUserAdd
+                    className="mr-1 size-[18px] text-[var(--app-text-color-cool-tone-grayish-blue)] opacity-60 hover:opacity-100"
+                    tabIndex={0}
+                    role="button"
+                    aria-label="Add user"
+                    onClick={() => {}}
+                  />
 
-              {comment.parentId !== "root" && (
-                <Link
-                  href={`#${comment.parentId}`}
-                  className="ml-2 mr-2 select-none font-medium text-[var(--app-text-color-very-dary-steel-blue)]"
-                >
-                  <IoMdShareAlt className="inline-flex size-4" />
-                  &nbsp;
-                  {comment.user.username ?? "Invalid User"}
-                </Link>
-              )}
+                  {comment.parentId !== "root" && (
+                    <Link
+                      href={`#${comment.parentId}`}
+                      className="ml-2 mr-2 select-none font-medium text-[var(--app-text-color-very-dary-steel-blue)]"
+                    >
+                      <IoMdShareAlt className="inline-flex size-4" />
+                      &nbsp;
+                      {comment.user.username ?? "username"}
+                    </Link>
+                  )}
+                </div>
+
+                <span className="font-medium text-[var(--app-text-color-very-dary-steel-blue)]">
+                  <span>{timeAgo}</span>
+                  {comment.isEdited && <span className="ml-3">edited</span>}
+                </span>
+              </div>
+
+              <div className="my-1 mr-3 flex min-h-5 text-[var(--app-text-color-cool-tone-grayish-blue)]">
+                {isChildrenCollapsed ? (
+                  <FaPlus
+                    className="mr-2.5 size-4 opacity-60 hover:opacity-100"
+                    tabIndex={0}
+                    role="button"
+                    aria-label="Expand Children"
+                    onClick={() => setIsChildrenCollapsed(false)}
+                  />
+                ) : (
+                  <FaMinus
+                    className="mr-2.5 size-[18px] opacity-60 hover:opacity-100"
+                    tabIndex={0}
+                    role="button"
+                    aria-label="Collapse Children"
+                    onClick={() => setIsChildrenCollapsed(true)}
+                  />
+                )}
+
+                <TiFlag
+                  className="mt-0.5 size-4 opacity-60 hover:opacity-100"
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Flag Comment"
+                  onClick={() => {}}
+                />
+              </div>
             </div>
 
-            <span className="font-medium text-[var(--app-text-color-very-dary-steel-blue)]">
-              <span>{timeAgo}</span>
-              {comment.isEdited && <span className="ml-3">edited</span>}
-            </span>
-          </div>
-
-          {/* Flag and collapse */}
-          <div className="my-1 mr-3 flex min-h-5 text-[var(--app-text-color-cool-tone-grayish-blue)]">
-            {isChildrenCollapsed ? (
-              <FaPlus
-                className="mr-2.5 size-4 opacity-60 hover:opacity-100"
-                tabIndex={0}
-                role="button"
-                aria-label="Expand Children"
-                onClick={() => setIsChildrenCollapsed(false)}
+            <div data-role="message-and-votes">
+              <p
+                className={`${isChildrenCollapsed ? "hidden" : ""} break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
+                dangerouslySetInnerHTML={{
+                  __html: comment.isDeleted
+                    ? "This message has been deleted."
+                    : comment.message,
+                }}
               />
-            ) : (
-              <FaMinus
-                className="mr-2.5 size-[18px] opacity-60 hover:opacity-100"
-                tabIndex={0}
-                role="button"
-                aria-label="Collapse Children"
-                onClick={() => setIsChildrenCollapsed(true)}
-              />
-            )}
 
-            <TiFlag
-              className="mt-0.5 size-4 opacity-60 hover:opacity-100"
-              tabIndex={0}
-              role="button"
-              aria-label="Flag Comment"
-              onClick={() => {}}
-            />
+              {/* Votes, Edit and Delete Comment */}
+              <div className="my-2 flex min-h-[26px] flex-wrap items-center gap-2 text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
+                <div className="flex flex-wrap items-center">
+                  <button
+                    onClick={() =>
+                      !comment.isDeleted &&
+                      voteComment(
+                        { userId, contentId, chapterId },
+                        comment.id,
+                        "up",
+                      )
+                    }
+                    className="flex items-center"
+                    aria-label={
+                      comment?.voteType === "up"
+                        ? "Remove Upvote"
+                        : "Upvote Comment"
+                    }
+                  >
+                    {comment?.voteType === "up" ? (
+                      <BiSolidLike className="mx-2 size-5 text-[var(--app-text-color-red)]" />
+                    ) : (
+                      <BiLike className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+                    )}
+                    <span>{comment.upVotes}</span>
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      !comment.isDeleted &&
+                      voteComment(
+                        { userId, contentId, chapterId },
+                        comment.id,
+                        "down",
+                      )
+                    }
+                    className="flex items-center"
+                    aria-label={
+                      comment?.voteType === "down"
+                        ? "Remove Downvote"
+                        : "Downvote Comment"
+                    }
+                  >
+                    {comment?.voteType === "down" ? (
+                      <BiSolidDislike className="mx-2 size-5 text-[var(--app-text-color-red)]" />
+                    ) : (
+                      <BiDislike className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
+                    )}
+                    <span>{comment.downVotes}</span>
+                  </button>
+                </div>
+
+                <div className="flex flex-wrap items-center">
+                  <button
+                    onClick={() => setIsReplying((prev) => !prev)}
+                    className="ml-2 mr-3.5 text-sm"
+                  >
+                    Reply
+                  </button>
+
+                  {!comment.isDeleted && comment.user.id === userId && (
+                    <FaEdit
+                      className="mx-1.5 text-sm"
+                      tabIndex={0}
+                      role="button"
+                      aria-label="Edit Comment"
+                      onClick={() => {
+                        setIsEditing((prev) => !prev);
+                      }}
+                    />
+                  )}
+
+                  {comment.user.id === userId && (
+                    <button
+                      onClick={() =>
+                        comment.isDeleted
+                          ? deleteComment({ "x-user-id": userId }, comment.id)
+                          : confirm(
+                              "You cannot delete a comment. You can only hide it.",
+                            ) &&
+                            deleteComment({ "x-user-id": userId }, comment.id)
+                      }
+                      className={`mx-1.5 text-sm ${comment.isDeleted ? "text-[var(--app-text-color-medium-dark-blue)]" : "text-red-600"}`}
+                      aria-label={
+                        comment.isDeleted ? "Unde Delete" : "Delete Comment"
+                      }
+                    >
+                      {comment.isDeleted ? "Undo" : <FaTrash />}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* message */}
-        <p
-          className={`${isChildrenCollapsed ? "hidden" : ""} break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
-          dangerouslySetInnerHTML={{
-            __html: comment.isDeleted
-              ? "This message has been deleted."
-              : comment.message,
-          }}
-        />
-
-        {/* Votes, Edit and Delete Comment */}
-        <div className="footer mt-2 flex min-h-[26px] flex-wrap items-center text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
-          <button
-            onClick={() =>
-              !comment.isDeleted &&
-              voteComment({ userId, contentId, chapterId }, comment.id, "up")
-            }
-            className="flex items-center"
-            aria-label={
-              comment?.voteType === "up" ? "Remove Upvote" : "Upvote Comment"
-            }
-          >
-            {comment?.voteType === "up" ? (
-              <BiSolidLike className="mx-2 size-5 text-[var(--app-text-color-red)]" />
-            ) : (
-              <BiLike className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
-            )}
-            <span>{comment.upVotes}</span>
-          </button>
-
-          <button
-            onClick={() =>
-              !comment.isDeleted &&
-              voteComment({ userId, contentId, chapterId }, comment.id, "down")
-            }
-            className="flex items-center"
-            aria-label={
-              comment?.voteType === "down"
-                ? "Remove Downvote"
-                : "Downvote Comment"
-            }
-          >
-            {comment?.voteType === "down" ? (
-              <BiSolidDislike className="mx-2 size-5 text-[var(--app-text-color-red)]" />
-            ) : (
-              <BiDislike className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
-            )}
-            <span>{comment.downVotes}</span>
-          </button>
-
-          <button
-            onClick={() => setIsReplying((prev) => !prev)}
-            className="mx-3.5 text-sm"
-          >
-            Reply
-          </button>
-
-          {!comment.isDeleted && comment.user.id === userId && (
-            <FaEdit
-              className="mx-1.5 text-sm"
-              tabIndex={0}
-              role="button"
-              aria-label="Edit Comment"
-              onClick={() => {
-                setIsEditing((prev) => !prev);
-              }}
-            />
-          )}
-
-          {comment.user.id === userId && (
-            <button
-              onClick={() =>
-                comment.isDeleted
-                  ? deleteComment({ "x-user-id": userId }, comment.id)
-                  : confirm(
-                      "You cannot delete a comment. You can only hide it.",
-                    ) && deleteComment({ "x-user-id": userId }, comment.id)
-              }
-              className={`mx-1.5 text-sm ${comment.isDeleted ? "text-[var(--app-text-color-medium-dark-blue)]" : "text-red-600"}`}
-              aria-label={comment.isDeleted ? "Unde Delete" : "Delete Comment"}
-            >
-              {comment.isDeleted ? "Undo" : <FaTrash />}
-            </button>
-          )}
         </div>
 
         {isReplying && (
@@ -373,7 +393,6 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
           />
         )}
 
-        {/* Render Child Comments */}
         {childComments.length > 0 && (
           <div
             className={`${isChildrenCollapsed ? "hidden" : ""} border-l-2 border-[var(--app-border-color-periwinkle)] pl-6`}

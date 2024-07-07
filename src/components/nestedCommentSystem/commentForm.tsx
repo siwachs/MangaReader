@@ -53,23 +53,23 @@ const CommentForm: React.FC<{
     e.preventDefault();
     if (!userId) return;
 
-    addToast({
-      id: 1,
-      type: "error",
-      text: "Invalid Args",
-    });
-    addToast({ id: 2, type: "info", text: "Invalid Args" });
-    addToast({
-      id: 3,
-      type: "warning",
-      text: "Invalid Args",
-    });
-    addToast({
-      id: 4,
-      type: "success",
-      text: "Invalid Args",
-    });
-    return;
+    // addToast({
+    //   id: 1,
+    //   type: "error",
+    //   text: "Invalid Args",
+    // });
+    // addToast({ id: 2, type: "info", text: "Invalid Args" });
+    // addToast({
+    //   id: 3,
+    //   type: "warning",
+    //   text: "Invalid Args",
+    // });
+    // addToast({
+    //   id: 4,
+    //   type: "success",
+    //   text: "Invalid Args",
+    // });
+    // return;
 
     try {
       const body = editMode
@@ -87,16 +87,16 @@ const CommentForm: React.FC<{
 
       if (editMode) {
         const editResponse = await editComment(body, commentId);
-        if (editResponse.error) {
-          requestResponse.error = editResponse.error;
-          requestResponse.errorMessage = editResponse.errorMessage;
-        }
+        // if (editResponse.error) {
+        //   requestResponse.error = editResponse.error;
+        //   requestResponse.errorMessage = editResponse.errorMessage;
+        // }
       } else {
         const makeResponse = await makeComment(body);
-        if (makeResponse.error) {
-          requestResponse.error = makeResponse.error;
-          requestResponse.errorMessage = makeResponse.errorMessage;
-        }
+        // if (makeResponse.error) {
+        //   requestResponse.error = makeResponse.error;
+        //   requestResponse.errorMessage = makeResponse.errorMessage;
+        // }
       }
 
       if (requestResponse.error) {
