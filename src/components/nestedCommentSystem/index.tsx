@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -22,7 +22,6 @@ import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { TiFlag } from "react-icons/ti";
 import { IoMdShareAlt } from "react-icons/io";
-import { usePathname } from "next/navigation";
 
 const NestedCommentSystem: React.FC<{
   contentId: string;
@@ -193,27 +192,32 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
     return (
       <div className="mb-4" id={comment.id}>
-        <div className="flex">
+        <div className="flex flex-wrap">
           <div
             data-role="avatar-container"
             className={`relative mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
           >
-            <div className="absolute left-0 top-0 hidden h-[52px] w-[5px] rounded-[3px] bg-[var(--app-text-color-gunmelt-gray)]" />
+            <div
+              className={`absolute left-0 top-0 hidden ${isChildrenCollapsed ? "h-10" : "h-[52px]"} w-[5px] rounded-[3px] bg-[var(--app-text-color-gunmelt-gray)]`}
+            />
             <Image // ml-3
-              src={comment.user.avatar}
-              alt={comment.user.username ?? "profile-pic"}
+              src={comment.user?.avatar ?? "/assets/person.png"}
+              alt={comment.user?.username ?? "profile-pic"}
               width={60}
               height={60}
               className="h-full w-full rounded-[inherit] object-cover object-center"
             />
           </div>
 
-          <div data-role="body-container">
-            <div data-role="username-and-meta">
-              <div className="my-1 min-h-5 flex-1 text-xs/[21px]">
+          <div data-role="body-container" className="flex-1">
+            <div
+              data-role="username-timestamp-collapse-and-flag"
+              className="my-1 flex min-h-5"
+            >
+              <div className="flex-1 text-xs/[21px]">
                 <div className="flex flex-wrap items-center">
-                  <span className="mr-1 text-[15px] font-bold text-[var(--app-text-color-gunmelt-gray)]">
-                    {comment.user.username ?? "username"}
+                  <span className="mr-1 line-clamp-1 text-[15px] font-bold text-[var(--app-text-color-gunmelt-gray)]">
+                    {comment.user?.username ?? "deleted user"}
                   </span>
 
                   <HiUserAdd
@@ -231,7 +235,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                     >
                       <IoMdShareAlt className="inline-flex size-4" />
                       &nbsp;
-                      {comment.user.username ?? "username"}
+                      {comment.user?.username ?? "deleted user"}
                     </Link>
                   )}
                 </div>
@@ -242,7 +246,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                 </span>
               </div>
 
-              <div className="my-1 mr-3 flex min-h-5 text-[var(--app-text-color-cool-tone-grayish-blue)]">
+              <div className="mr-3 flex text-[var(--app-text-color-cool-tone-grayish-blue)]">
                 {isChildrenCollapsed ? (
                   <FaPlus
                     className="mr-2.5 size-4 opacity-60 hover:opacity-100"
@@ -271,22 +275,23 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
               </div>
             </div>
 
-            <div data-role="message-and-votes">
+            <div
+              data-role="message-votes-reply-edit-and-delete"
+              className={isChildrenCollapsed ? "hidden" : "-ml-[62px] mt-4"}
+            >
               <p
-                className={`${isChildrenCollapsed ? "hidden" : ""} break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
+                className={`break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
                 dangerouslySetInnerHTML={{
                   __html: comment.isDeleted
-                    ? "This message has been deleted."
+                    ? "This comment has been deleted."
                     : comment.message,
                 }}
               />
 
-              {/* Votes, Edit and Delete Comment */}
               <div className="my-2 flex min-h-[26px] flex-wrap items-center gap-2 text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
                 <div className="flex flex-wrap items-center">
                   <button
                     onClick={() =>
-                      !comment.isDeleted &&
                       voteComment(
                         { userId, contentId, chapterId },
                         comment.id,
@@ -305,12 +310,12 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                     ) : (
                       <BiLike className="mx-2 size-5 text-[var(--app-text-color-cool-tone-grayish-blue)]" />
                     )}
+
                     <span>{comment.upVotes}</span>
                   </button>
 
                   <button
                     onClick={() =>
-                      !comment.isDeleted &&
                       voteComment(
                         { userId, contentId, chapterId },
                         comment.id,
@@ -404,6 +409,8 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
     );
   },
 );
+
+const CommentBodyContainer = () => {};
 
 Comment.displayName = "Comment";
 
