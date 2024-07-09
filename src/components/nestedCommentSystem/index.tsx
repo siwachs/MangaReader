@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { roboto } from "@/libs/fonts";
-import { Comment as CommentType } from "@/types";
+import { Comment as CommentType, VoteType } from "@/types";
 
 import {
   NestedCommentProvider,
@@ -190,6 +190,12 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
     const childComments = getReplies(comment.id);
 
+    const onClickVoteComment = (voteType: VoteType) => {
+      if (comment.isDeleted) return;
+
+      voteComment({ userId, contentId, chapterId }, comment.id, voteType);
+    };
+
     return (
       <div className="mb-4" id={comment.id}>
         <div className="flex flex-wrap">
@@ -217,7 +223,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
               <div className="flex-1 text-xs/[21px]">
                 <div className="flex flex-wrap items-center">
                   <span className="mr-1 line-clamp-1 text-[15px] font-bold text-[var(--app-text-color-gunmelt-gray)]">
-                    {comment.user?.username ?? "deleted user"}
+                    {comment.user?.username ?? "deleted"}
                   </span>
 
                   <HiUserAdd
@@ -235,7 +241,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                     >
                       <IoMdShareAlt className="inline-flex size-4" />
                       &nbsp;
-                      {comment.user?.username ?? "deleted user"}
+                      {comment.user?.username ?? "deleted"}
                     </Link>
                   )}
                 </div>
@@ -291,13 +297,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
               <div className="my-2 flex min-h-[26px] flex-wrap items-center gap-2 text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
                 <div className="flex flex-wrap items-center">
                   <button
-                    onClick={() =>
-                      voteComment(
-                        { userId, contentId, chapterId },
-                        comment.id,
-                        "up",
-                      )
-                    }
+                    onClick={() => onClickVoteComment("up")}
                     className="flex items-center"
                     aria-label={
                       comment?.voteType === "up"
@@ -315,13 +315,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                   </button>
 
                   <button
-                    onClick={() =>
-                      voteComment(
-                        { userId, contentId, chapterId },
-                        comment.id,
-                        "down",
-                      )
-                    }
+                    onClick={() => onClickVoteComment("down")}
                     className="flex items-center"
                     aria-label={
                       comment?.voteType === "down"
@@ -400,7 +394,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
         {childComments.length > 0 && (
           <div
-            className={`${isChildrenCollapsed ? "hidden" : ""} border-l-2 border-[var(--app-border-color-periwinkle)] pl-6`}
+            className={`${isChildrenCollapsed ? "hidden" : ""} border-l-2 border-[var(--app-border-color-periwinkle)] pl-[14px]`}
           >
             <CommentList comments={childComments} />
           </div>
