@@ -197,8 +197,8 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
     };
 
     return (
-      <div className="mb-4" id={comment.id}>
-        <div className="flex flex-wrap">
+      <div id={comment.id}>
+        <div className="mb-4 flex flex-wrap">
           <div
             data-role="avatar-container"
             className={`relative mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
@@ -217,29 +217,32 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
           <div data-role="body-container" className="flex-1">
             <div
-              data-role="username-timestamp-collapse-and-flag"
+              data-role="username-timestamp-collapse-and-flag-container"
               className="my-1 flex min-h-5"
             >
-              <div className="flex-1 text-xs/[21px]">
+              <div
+                data-role="username-timestamp"
+                className="mr-3 flex-1 text-xs/[21px]"
+              >
                 <div className="flex flex-wrap items-center">
                   <span className="mr-1 line-clamp-1 text-[15px] font-bold text-[var(--app-text-color-gunmelt-gray)]">
                     {comment.user?.username ?? "deleted"}
+                    &nbsp;
+                    <HiUserAdd
+                      className="-mt-1 inline-block size-[18px] text-[var(--app-text-color-blue-gray)] hover:text-[var(--app-text-color-gunmelt-gray)]"
+                      tabIndex={0}
+                      role="button"
+                      aria-label="Add user"
+                      onClick={() => {}}
+                    />
                   </span>
-
-                  <HiUserAdd
-                    className="mr-1 size-[18px] text-[var(--app-text-color-cool-tone-grayish-blue)] opacity-60 hover:opacity-100"
-                    tabIndex={0}
-                    role="button"
-                    aria-label="Add user"
-                    onClick={() => {}}
-                  />
 
                   {comment.parentId !== "root" && (
                     <Link
                       href={`#${comment.parentId}`}
-                      className="ml-2 mr-2 select-none font-medium text-[var(--app-text-color-very-dary-steel-blue)]"
+                      className="ml-2 select-none font-medium text-[var(--app-text-color-very-dary-steel-blue)]"
                     >
-                      <IoMdShareAlt className="inline-flex size-4" />
+                      <IoMdShareAlt className="inline-block size-4" />
                       &nbsp;
                       {comment.user?.username ?? "deleted"}
                     </Link>
@@ -252,10 +255,13 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                 </span>
               </div>
 
-              <div className="mr-3 flex text-[var(--app-text-color-cool-tone-grayish-blue)]">
+              <div
+                data-role="collapse-and-flag"
+                className="mr-4 flex text-[var(--app-text-color-blue-gray)]"
+              >
                 {isChildrenCollapsed ? (
                   <FaPlus
-                    className="mr-2.5 size-4 opacity-60 hover:opacity-100"
+                    className="mr-2.5 size-4 hover:text-[var(--app-text-color-gunmelt-gray)]"
                     tabIndex={0}
                     role="button"
                     aria-label="Expand Children"
@@ -263,7 +269,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                   />
                 ) : (
                   <FaMinus
-                    className="mr-2.5 size-[18px] opacity-60 hover:opacity-100"
+                    className="mr-2.5 size-[18px] hover:text-[var(--app-text-color-gunmelt-gray)]"
                     tabIndex={0}
                     role="button"
                     aria-label="Collapse Children"
@@ -272,7 +278,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                 )}
 
                 <TiFlag
-                  className="mt-0.5 size-4 opacity-60 hover:opacity-100"
+                  className="mt-0.5 size-4 hover:text-[var(--app-text-color-gunmelt-gray)]"
                   tabIndex={0}
                   role="button"
                   aria-label="Flag Comment"
@@ -294,7 +300,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                 }}
               />
 
-              <div className="my-2 flex min-h-[26px] flex-wrap items-center gap-2 text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
                 <div className="flex flex-wrap items-center">
                   <button
                     onClick={() => onClickVoteComment("up")}
