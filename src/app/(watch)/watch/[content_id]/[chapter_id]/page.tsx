@@ -9,8 +9,8 @@ import NestedCommentSystem from "@/components/nestedCommentSystem";
 export default function WatchPage(req: Readonly<pageReqObj>) {
   return (
     <>
-      {/* <ChaptersPagination /> */}
-      {/* <div className="pictures relative mx-auto grid max-w-[800px]">
+      <ChaptersPagination />
+      <div className="pictures relative mx-auto grid max-w-[800px]">
         {[...new Array(11)].map((_, index) => (
           <Image
             key={index}
@@ -21,9 +21,9 @@ export default function WatchPage(req: Readonly<pageReqObj>) {
             className={`h-auto max-w-full border-x ${index === 11 - 1 ? "border-b" : ""} ${index === 0 ? "border-t" : ""} border-[var(--app-border-color-medium-gray)]`}
           />
         ))}
-      </div> */}
-      {/* <ChaptersPagination />
-      <div className="mb-[60px]" /> */}
+      </div>
+      <ChaptersPagination />
+      <div className="mb-[60px]" />
 
       <ToastContainerProvider>
         <NestedCommentSystem

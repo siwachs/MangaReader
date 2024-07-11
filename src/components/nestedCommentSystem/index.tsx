@@ -68,9 +68,15 @@ const NestedCommentsContainer: React.FC = () => {
     return <CommentList comments={rootComments} />;
   }
 
+  // 540px
+
+  // Line height -> line height go smaller as text size increase use 1.1 or 1.3x of font size
+  // Letter Space -> -1 to -2%, -0.5% for headings
+  // 50 - 75 chars for a p use 600px width for a desktop screen
+
   return (
     <div
-      className={`${roboto.className} text-[var(--app-text-color-dark-grayish-green)]`}
+      className={`${roboto.className} mx-auto max-w-[1200px] text-[var(--app-text-color-dark-grayish-green)] sm:w-[calc(100%-6rem)] md:w-[calc(100%-8rem)]`}
     >
       <header className="mb-6">
         <div className="flex items-center justify-between border-b-2 border-[var(--app-border-color-slightly-blue-gray)] py-3 font-bold">
@@ -218,7 +224,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
           <div data-role="body-container" className="flex-1">
             <div
               data-role="username-timestamp-collapse-and-flag-container"
-              className="my-1 flex min-h-5"
+              className="my-1 flex min-h-5 flex-wrap"
             >
               <div
                 data-role="username-timestamp"
@@ -289,7 +295,9 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
             <div
               data-role="message-votes-reply-edit-and-delete"
-              className={isChildrenCollapsed ? "hidden" : "-ml-[62px] mt-4"}
+              className={
+                isChildrenCollapsed ? "hidden" : "-ml-[62px] mt-4 sm:ml-0"
+              }
             >
               <p
                 className={`break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
@@ -400,7 +408,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
         {childComments.length > 0 && (
           <div
-            className={`${isChildrenCollapsed ? "hidden" : ""} border-l-2 border-[var(--app-border-color-periwinkle)] pl-[14px]`}
+            className={`${isChildrenCollapsed ? "hidden" : ""} border-l-2 border-[var(--app-border-color-periwinkle)] pl-[14px] sm:pl-[62px]`}
           >
             <CommentList comments={childComments} />
           </div>
