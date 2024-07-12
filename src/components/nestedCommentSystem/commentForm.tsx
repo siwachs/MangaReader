@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 
+import uuidv4 from "@/libs/uuidv4";
 import { useToastContainer } from "@/contexts/toastContainerContext";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 
@@ -31,21 +31,15 @@ const CommentForm: React.FC<{
   callback,
   editMode,
 }) => {
-  const { addToast } = useToastContainer();
-  const { data } = useSession();
-  const userId = data?.user.id;
-
-  const { contentId, chapterId, makeComment, editComment } =
+  const { userId, contentId, chapterId, makeComment, editComment } =
     useNestedCommentSystem();
-
-  const [error, setError] = useState("");
   const [message, setMessage] = useState(initialMessage);
 
   const onChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
     if (e.target.scrollHeight > 122) {
       e.target.style.height = "auto";
-      e.target.style.height = `${Math.min(e.target.scrollHeight, 390)}px`;
+      e.target.style.height = `${Math.min(e.target.scrollHeight, 350)}px`;
     }
   };
 
@@ -53,76 +47,33 @@ const CommentForm: React.FC<{
     e.preventDefault();
     if (!userId) return;
 
-    // addToast({
-    //   id: 1,
-    //   type: "error",
-    //   text: "Invalid Args",
-    // });
-    // addToast({ id: 2, type: "info", text: "Invalid Args" });
-    // addToast({
-    //   id: 3,
-    //   type: "warning",
-    //   text: "Invalid Args",
-    // });
-    // addToast({
-    //   id: 4,
-    //   type: "success",
-    //   text: "Invalid Args",
-    // });
-    // return;
-
-    try {
-      const body = editMode
-        ? { userId, message }
-        : {
-            contentId,
-            chapterId,
-            userId,
-            parentId,
-            message,
-          };
-
-      setMessage("");
-      const requestResponse = { error: false, errorMessage: "" };
-
-      if (editMode) {
-        const editResponse = await editComment(body, commentId);
-        // if (editResponse.error) {
-        //   requestResponse.error = editResponse.error;
-        //   requestResponse.errorMessage = editResponse.errorMessage;
-        // }
-      } else {
-        const makeResponse = await makeComment(body);
-        // if (makeResponse.error) {
-        //   requestResponse.error = makeResponse.error;
-        //   requestResponse.errorMessage = makeResponse.errorMessage;
-        // }
-      }
-
-      if (requestResponse.error) {
-        setError(requestResponse.errorMessage);
-      } else {
-        if (callback) callback();
-        setError("");
-      }
-    } catch (error: any) {
-      setError(error.message);
+    if (editMode) {
+      await editComment({ userId, message }, commentId);
+    } else {
+      await makeComment({
+        contentId,
+        chapterId,
+        userId,
+        parentId,
+        message,
+      });
     }
+
+    if (callback) callback();
+    else setMessage("");
   };
 
   return (
     <form onSubmit={submitComment} className="my-4">
-      {error && <p className="my-1.5 text-sm text-red-600">{error}</p>}
+      <div>
+        <div
+          role="textbox"
+          spellCheck
+          contentEditable
+          className="relative max-h-[350px] min-h-[65px] overflow-y-auto whitespace-pre-wrap break-words rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)] p-5 leading-[1.4] outline-none"
+        ></div>
 
-      <div className="w-full rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)]">
-        <textarea
-          placeholder="Join the discussion…"
-          value={message}
-          onChange={onChangeMessage}
-          className="h-auto min-h-[122px] w-full break-words rounded-t-2xl border-b-2 border-[var(--app-border-color-grayish-blue)] p-5 text-[15px] leading-[1.4] text-[var(--app-text-color-dark-grayish-green)] outline-none"
-        />
-
-        <div className="wysiwyg hidden-scrollbar ml-1.5 flex h-[36px] items-center overflow-auto">
+        {/* <div className="wysiwyg hidden-scrollbar ml-1.5 flex h-[36px] items-center overflow-auto">
           <div className="flex h-[24px] flex-1 gap-3.5">
             <button type="button" className={wysiwygButtonClasses}>
               <Gif className="size-[22px]" />
@@ -162,7 +113,7 @@ const CommentForm: React.FC<{
               Comment
             </button>
           )}
-        </div>
+        </div> */}
       </div>
 
       <div className="pt-2.5">
