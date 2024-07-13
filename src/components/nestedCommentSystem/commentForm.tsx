@@ -1,7 +1,5 @@
-import { useState } from "react";
+import { useRef, useState, useCallback } from "react";
 
-import uuidv4 from "@/libs/uuidv4";
-import { useToastContainer } from "@/contexts/toastContainerContext";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 
 import {
@@ -33,15 +31,10 @@ const CommentForm: React.FC<{
 }) => {
   const { userId, contentId, chapterId, makeComment, editComment } =
     useNestedCommentSystem();
-  const [message, setMessage] = useState(initialMessage);
 
-  const onChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
-    if (e.target.scrollHeight > 122) {
-      e.target.style.height = "auto";
-      e.target.style.height = `${Math.min(e.target.scrollHeight, 350)}px`;
-    }
-  };
+  const contentEditableRef = useRef<HTMLDivElement>(null);
+  const [content, setContent] = useState("");
+  const [message, setMessage] = useState(initialMessage);
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +56,38 @@ const CommentForm: React.FC<{
     else setMessage("");
   };
 
+  const setCursorPosition = useCallback((position: number) => {
+    if (contentEditableRef.current) {
+      const range = document.createRange();
+      const sel = window.getSelection();
+
+      const textNode = contentEditableRef.current.childNodes[0];
+      if (textNode) {
+        range.setStart(
+          textNode,
+          Math.min(position, textNode.textContent?.length || 0),
+        );
+      } else {
+        range.setStart(contentEditableRef.current, 0);
+      }
+
+      range.collapse(true);
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+    }
+  }, []);
+
+  const handleTextboxInput = useCallback(
+    (e: React.FormEvent<HTMLDivElement>) => {
+      const cursorPosition =
+        window.getSelection()?.getRangeAt(0).startOffset ?? 0;
+
+      setContent(e.currentTarget.innerText);
+      setTimeout(() => setCursorPosition(cursorPosition), 0);
+    },
+    [setCursorPosition],
+  );
+
   return (
     <form onSubmit={submitComment} className="my-4">
       <div>
@@ -70,8 +95,21 @@ const CommentForm: React.FC<{
           role="textbox"
           spellCheck
           contentEditable
+          onInput={handleTextboxInput}
+          ref={contentEditableRef}
           className="relative max-h-[350px] min-h-[65px] overflow-y-auto whitespace-pre-wrap break-words rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)] p-5 leading-[1.4] outline-none"
-        ></div>
+        >
+          {content === "" ? (
+            <div
+              data-role="placeholder"
+              className="pointer-events-none absolute top-0 mt-5 w-auto max-w-full select-none font-[Arial] font-normal text-black opacity-[0.333]"
+            >
+              <p className="leading-[1.4]">Join the discussion…</p>
+            </div>
+          ) : (
+            content
+          )}
+        </div>
 
         {/* <div className="wysiwyg hidden-scrollbar ml-1.5 flex h-[36px] items-center overflow-auto">
           <div className="flex h-[24px] flex-1 gap-3.5">
