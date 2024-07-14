@@ -67,8 +67,10 @@ const CommentForm: React.FC<{
     }
   };
 
-  const contentEditableInput = (e: React.FormEvent<HTMLDivElement>) => {
-    setContent(e.currentTarget.innerText);
+  const contentEditableInput = (e: React.ChangeEvent<HTMLDivElement>) => {
+    console.log(e.target.innerHTML);
+    console.log(e.target.innerText);
+    setContent(e.target.innerHTML);
   };
 
   return (
@@ -80,8 +82,8 @@ const CommentForm: React.FC<{
           spellCheck
           contentEditable
           onFocus={contentEditableFocus}
-          onInput={contentEditableInput}
-          className="relative max-h-[350px] min-h-[65px] overflow-y-auto whitespace-pre-wrap break-words rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)] p-5 leading-[1.4] outline-none"
+          // onInput={contentEditableInput}
+          className="pointer-events-none relative max-h-[350px] min-h-[65px] overflow-y-auto whitespace-pre-wrap break-words rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)] p-5 leading-[1.4] outline-none"
           dangerouslySetInnerHTML={{
             __html:
               content === ""
@@ -92,6 +94,28 @@ const CommentForm: React.FC<{
                 : content,
           }}
         />
+        {/* Use a Absolute textarea */}
+
+        {/* <div
+          ref={contentEditableRef}
+          role="textbox"
+          spellCheck
+          contentEditable
+          onFocus={contentEditableFocus}
+          onInput={contentEditableInput}
+          className="relative max-h-[350px] min-h-[65px] overflow-y-auto whitespace-pre-wrap break-words rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)] p-5 leading-[1.4] outline-none"
+        >
+          {content === "" ? (
+            <div
+              data-role="placeholder"
+              className="pointer-events-none absolute top-0 mt-5 w-auto max-w-full select-none font-[Arial] font-normal text-black opacity-[0.333]"
+            >
+              <p className="leading-[1.4]">Join the discussion…</p>
+            </div>
+          ) : (
+            content
+          )}
+        </div> */}
 
         {/* <div className="wysiwyg hidden-scrollbar ml-1.5 flex h-[36px] items-center overflow-auto">
           <div className="flex h-[24px] flex-1 gap-3.5">
