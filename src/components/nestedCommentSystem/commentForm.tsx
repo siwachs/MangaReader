@@ -30,7 +30,6 @@ const CommentForm: React.FC<{
   editMode,
 }) => {
   const [content, setContent] = useState("");
-  const contentEditableRef = useRef<HTMLDivElement>(null);
 
   const { userId, contentId, chapterId, makeComment, editComment } =
     useNestedCommentSystem();
@@ -56,46 +55,94 @@ const CommentForm: React.FC<{
     else setMessage("");
   };
 
-  const contentEditableFocus = () => {
-    if (contentEditableRef.current && content === "") {
-      const range = document.createRange();
-      const sel = window.getSelection();
-      range.setStart(contentEditableRef.current, 0);
-      range.collapse(true);
-      sel?.removeAllRanges();
-      sel?.addRange(range);
-    }
+  const editorRef = useRef(null);
+
+  const applyStyle = (style) => {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+    const range = selection.getRangeAt(0);
+
+    // Create a span element to wrap the selected text
+    const span = document.createElement("span");
+    if (style === "bold") span.style.fontWeight = "bold";
+    if (style === "italic") span.style.fontStyle = "italic";
+    if (style === "underline") span.style.textDecoration = "underline";
+
+    // Use DocumentFragment to safely insert styled content
+    const fragment = range.extractContents();
+    span.appendChild(fragment);
+    range.insertNode(span);
+
+    // Reselect the new styled content
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
   };
 
-  const contentEditableInput = (e: React.ChangeEvent<HTMLDivElement>) => {
-    console.log(e.target.innerHTML);
-    console.log(e.target.innerText);
-    setContent(e.target.innerHTML);
+  const createLink = () => {
+    const url = prompt("Enter the URL");
+    const selection = window.getSelection();
+    if (!selection.rangeCount || !url) return;
+    const range = selection.getRangeAt(0);
+
+    // Create an anchor element to wrap the selected text
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.target = "_blank";
+    anchor.appendChild(range.extractContents());
+    range.insertNode(anchor);
+
+    // Reselect the new link
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(anchor);
+    selection.addRange(newRange);
   };
 
   return (
     <form onSubmit={submitComment} className="my-4">
-      <div>
+      {/* Test Wisiwig */}
+      <div className="border p-4">
+        <div className="mb-4 flex space-x-2">
+          <button
+            type="button"
+            onClick={() => applyStyle("bold")}
+            className="rounded border bg-gray-200 px-2 py-1 hover:bg-gray-300"
+          >
+            Bold
+          </button>
+          <button
+            type="button"
+            onClick={() => applyStyle("italic")}
+            className="rounded border bg-gray-200 px-2 py-1 hover:bg-gray-300"
+          >
+            Italic
+          </button>
+          <button
+            type="button"
+            onClick={() => applyStyle("underline")}
+            className="rounded border bg-gray-200 px-2 py-1 hover:bg-gray-300"
+          >
+            Underline
+          </button>
+          <button
+            type="button"
+            onClick={createLink}
+            className="rounded border bg-gray-200 px-2 py-1 hover:bg-gray-300"
+          >
+            Link
+          </button>
+        </div>
         <div
-          ref={contentEditableRef}
-          role="textbox"
-          spellCheck
-          contentEditable
-          onFocus={contentEditableFocus}
-          // onInput={contentEditableInput}
-          className="pointer-events-none relative max-h-[350px] min-h-[65px] overflow-y-auto whitespace-pre-wrap break-words rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)] p-5 leading-[1.4] outline-none"
-          dangerouslySetInnerHTML={{
-            __html:
-              content === ""
-                ? `<div
-              data-role="placeholder"
-              className="pointer-events-none absolute top-0 mt-5 w-auto max-w-full select-none font-[Arial] font-normal text-black opacity-[0.333]"
-            ><p className="leading-[1.4]">Join the discussion…</p></div>`
-                : content,
-          }}
-        />
-        {/* Use a Absolute textarea */}
+          ref={editorRef}
+          className="h-48 overflow-auto border p-4"
+          contentEditable={true}
+        ></div>
+      </div>
+      {/* Test End Here */}
 
+      <div>
         {/* <div
           ref={contentEditableRef}
           role="textbox"
