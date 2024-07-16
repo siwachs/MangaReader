@@ -4,10 +4,14 @@ import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 import { PiGifFill } from "react-icons/pi";
 import { AiFillPicture } from "react-icons/ai";
 import { RxFontStyle } from "react-icons/rx";
-import { MdFormatBold } from "react-icons/md";
+import {
+  MdFormatBold,
+  MdOutlineFormatItalic,
+  MdFormatUnderlined,
+  MdStrikethroughS,
+} from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
-import { FaItalic, FaStrikethrough, FaCode } from "react-icons/fa6";
-import { ImUnderline } from "react-icons/im";
+import { FaCode } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
 import { BiSolidHide } from "react-icons/bi";
 
@@ -23,7 +27,7 @@ import { BiSolidHide } from "react-icons/bi";
 // )}
 
 const editorToolboxButtonClasses =
-  "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100";
+  "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100";
 const editorToolboxButtonIconClasses = "size-5";
 
 const CommentForm: React.FC<{
@@ -43,6 +47,15 @@ const CommentForm: React.FC<{
     useNestedCommentSystem();
   const [message, setMessage] = useState(initialMessage);
   const [expandedEditor, setExpandedEditor] = useState(true);
+  const [activeTools, setActiveTools] = useState({
+    isToolboxActive: false,
+    isBoldStyleActive: false,
+    isItalicStyleActive: false,
+    isUnderlineStyleActive: false,
+    isStrikethroughStyleActive: false,
+    isSpoilerStyleActive: false,
+    isCodeStyleActive: false,
+  });
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,7 +150,10 @@ const CommentForm: React.FC<{
               <span className="mx-0.5 inline-block h-6 w-0.5 bg-[var(--app-border-color-grayish-blue)]" />
 
               <button type="button" className={editorToolboxButtonClasses}>
-                <RxFontStyle className={editorToolboxButtonIconClasses} />
+                <RxFontStyle
+                  strokeWidth={0.2}
+                  className={editorToolboxButtonIconClasses}
+                />
               </button>
             </div>
 
@@ -165,7 +181,7 @@ const CommentForm: React.FC<{
               className={editorToolboxButtonClasses}
               title="Italic"
             >
-              <FaItalic className="size-5" />
+              <MdOutlineFormatItalic className="size-7" />
             </button>
 
             <button
@@ -173,7 +189,7 @@ const CommentForm: React.FC<{
               className={editorToolboxButtonClasses}
               title="Underline"
             >
-              <ImUnderline className="size-7" />
+              <MdFormatUnderlined className="size-7" />
             </button>
 
             <button
@@ -181,7 +197,7 @@ const CommentForm: React.FC<{
               className={editorToolboxButtonClasses}
               title="StrikeThrough"
             >
-              <FaStrikethrough className="size-7" />
+              <MdStrikethroughS className="size-7" />
             </button>
 
             <button
@@ -189,7 +205,7 @@ const CommentForm: React.FC<{
               className={editorToolboxButtonClasses}
               title="Add Link"
             >
-              <RiLinksFill className="size-7" />
+              <RiLinksFill className="size-5" strokeWidth={1} />
             </button>
 
             <button
@@ -197,7 +213,7 @@ const CommentForm: React.FC<{
               className={editorToolboxButtonClasses}
               title="Spoiler"
             >
-              <BiSolidHide className="size-7" />
+              <BiSolidHide className="size-5" />
             </button>
 
             <button
@@ -205,7 +221,7 @@ const CommentForm: React.FC<{
               className={editorToolboxButtonClasses}
               title="Code"
             >
-              <FaCode className="size-7" />
+              <FaCode className="size-[18px]" />
             </button>
           </div>
         </div>
