@@ -26,8 +26,24 @@ import { BiSolidHide } from "react-icons/bi";
 //   content
 // )}
 
+type ActiveToolKeys =
+  | "isToolboxActive"
+  | "isBoldStyleActive"
+  | "isItalicStyleActive"
+  | "isUnderlineStyleActive"
+  | "isStrikethroughStyleActive"
+  | "isSpoilerStyleActive"
+  | "isCodeStyleActive";
+type StyleType =
+  | "Bold"
+  | "Italic"
+  | "Underline"
+  | "Strikethrough"
+  | "Spoiler"
+  | "Code";
+
 const editorToolboxButtonClasses =
-  "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100";
+  "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100 data-[active=true]:bg-[var(--app-text-color-light-blue-gray)]";
 const editorToolboxButtonIconClasses = "size-5";
 
 const CommentForm: React.FC<{
@@ -43,6 +59,7 @@ const CommentForm: React.FC<{
   callback,
   editMode,
 }) => {
+  const editorRef = useRef<HTMLDivElement>(null);
   const { userId, contentId, chapterId, makeComment, editComment } =
     useNestedCommentSystem();
   const [message, setMessage] = useState(initialMessage);
@@ -56,6 +73,37 @@ const CommentForm: React.FC<{
     isSpoilerStyleActive: false,
     isCodeStyleActive: false,
   });
+
+  const applyStyle = (style: StyleType) => {
+    const selection = window.getSelection();
+    if (!selection?.rangeCount) return;
+    const range = selection.getRangeAt(0);
+
+    // Create a span element to wrap the selected text
+    const span = document.createElement("span");
+    if (style === "Bold") span.style.fontWeight = "bold";
+    if (style === "Italic") span.style.fontStyle = "italic";
+    if (style === "Underline") span.style.textDecoration = "underline";
+    if (style === "Strikethrough") span.style.textDecoration = "line-through";
+
+    // Use DocumentFragment to safely insert styled content
+    const fragment = range.extractContents();
+    span.appendChild(fragment);
+    range.insertNode(span);
+
+    // Reselect the new styled content
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
+  };
+
+  const updateActiveTools = (key: ActiveToolKeys) => {
+    setActiveTools((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,51 +123,6 @@ const CommentForm: React.FC<{
 
     if (callback) callback();
     else setMessage("");
-  };
-
-  const editorRef = useRef(null);
-
-  const createLink = () => {
-    const url = prompt("Enter the URL");
-    const selection = window.getSelection();
-    if (!selection.rangeCount || !url) return;
-    const range = selection.getRangeAt(0);
-
-    // Create an anchor element to wrap the selected text
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.target = "_blank";
-    anchor.appendChild(range.extractContents());
-    range.insertNode(anchor);
-
-    // Reselect the new link
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(anchor);
-    selection.addRange(newRange);
-  };
-
-  const applyStyle = (style) => {
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return;
-    const range = selection.getRangeAt(0);
-
-    // Create a span element to wrap the selected text
-    const span = document.createElement("span");
-    if (style === "bold") span.style.fontWeight = "bold";
-    if (style === "italic") span.style.fontStyle = "italic";
-    if (style === "underline") span.style.textDecoration = "underline";
-
-    // Use DocumentFragment to safely insert styled content
-    const fragment = range.extractContents();
-    span.appendChild(fragment);
-    range.insertNode(span);
-
-    // Reselect the new styled content
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(span);
-    selection.addRange(newRange);
   };
 
   return (
@@ -149,7 +152,12 @@ const CommentForm: React.FC<{
 
               <span className="mx-0.5 inline-block h-6 w-0.5 bg-[var(--app-border-color-grayish-blue)]" />
 
-              <button type="button" className={editorToolboxButtonClasses}>
+              <button
+                data-active={activeTools.isToolboxActive}
+                type="button"
+                onClick={() => updateActiveTools("isToolboxActive")}
+                className={editorToolboxButtonClasses}
+              >
                 <RxFontStyle
                   strokeWidth={0.2}
                   className={editorToolboxButtonIconClasses}
@@ -166,10 +174,15 @@ const CommentForm: React.FC<{
           </div>
 
           <div
-            className={`${expandedEditor ? "mt-1.5 grid grid-flow-col gap-1.5" : "hidden"}`}
+            className={`${activeTools.isToolboxActive ? "mt-1.5 grid grid-flow-col gap-1.5" : "hidden"}`}
           >
             <button
+              data-active={activeTools.isBoldStyleActive}
               type="button"
+              onClick={() => {
+                if (!activeTools.isBoldStyleActive) applyStyle("Bold");
+                updateActiveTools("isBoldStyleActive");
+              }}
               className={editorToolboxButtonClasses}
               title="Bold"
             >
@@ -177,7 +190,12 @@ const CommentForm: React.FC<{
             </button>
 
             <button
+              data-active={activeTools.isItalicStyleActive}
               type="button"
+              onClick={() => {
+                if (!activeTools.isItalicStyleActive) applyStyle("Italic");
+                updateActiveTools("isItalicStyleActive");
+              }}
               className={editorToolboxButtonClasses}
               title="Italic"
             >
@@ -185,7 +203,13 @@ const CommentForm: React.FC<{
             </button>
 
             <button
+              data-active={activeTools.isUnderlineStyleActive}
               type="button"
+              onClick={() => {
+                if (!activeTools.isUnderlineStyleActive)
+                  applyStyle("Underline");
+                updateActiveTools("isUnderlineStyleActive");
+              }}
               className={editorToolboxButtonClasses}
               title="Underline"
             >
@@ -193,7 +217,13 @@ const CommentForm: React.FC<{
             </button>
 
             <button
+              data-active={activeTools.isStrikethroughStyleActive}
               type="button"
+              onClick={() => {
+                if (!activeTools.isStrikethroughStyleActive)
+                  applyStyle("Strikethrough");
+                updateActiveTools("isStrikethroughStyleActive");
+              }}
               className={editorToolboxButtonClasses}
               title="StrikeThrough"
             >
@@ -209,7 +239,9 @@ const CommentForm: React.FC<{
             </button>
 
             <button
+              data-active={activeTools.isSpoilerStyleActive}
               type="button"
+              onClick={() => updateActiveTools("isSpoilerStyleActive")}
               className={editorToolboxButtonClasses}
               title="Spoiler"
             >
@@ -217,7 +249,9 @@ const CommentForm: React.FC<{
             </button>
 
             <button
+              data-active={activeTools.isCodeStyleActive}
               type="button"
+              onClick={() => updateActiveTools("isCodeStyleActive")}
               className={editorToolboxButtonClasses}
               title="Code"
             >
