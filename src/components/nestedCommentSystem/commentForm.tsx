@@ -15,16 +15,7 @@ import { FaCode } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
 import { BiSolidHide } from "react-icons/bi";
 
-// {content === "" ? (
-//   <div
-//     data-role="placeholder"
-//     className="pointer-events-none absolute top-0 mt-5 w-auto max-w-full select-none font-[Arial] font-normal text-black opacity-[0.333]"
-//   >
-//     <p className="leading-[1.4]">Join the discussion…</p>
-//   </div>
-// ) : (
-//   content
-// )}
+const placeholder = `<div className="pointer-events-none absolute top-0 mt-5 w-auto max-w-full select-none font-[Arial] font-normal text-black opacity-[0.333]"><p className="leading-[1.4]">Join the discussion…</p></div>`;
 
 const editorToolboxButtonClasses =
   "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100 data-[active=true]:bg-[var(--app-text-color-light-blue-gray)]";
@@ -47,7 +38,7 @@ const CommentForm: React.FC<{
   const { userId, contentId, chapterId, makeComment, editComment } =
     useNestedCommentSystem();
   const [message, setMessage] = useState(initialMessage);
-  const [expandedEditor, setExpandedEditor] = useState(true);
+  const [expandedEditor, setExpandedEditor] = useState(false);
   const [activeTools, setActiveTools] = useState({
     isToolboxActive: false,
     isBoldStyleActive: false,
@@ -57,6 +48,12 @@ const CommentForm: React.FC<{
     isSpoilerStyleActive: false,
     isCodeStyleActive: false,
   });
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.innerHTML = initialMessage;
+    }
+  }, [initialMessage]);
 
   useEffect(() => {
     applyStyle();
@@ -137,9 +134,12 @@ const CommentForm: React.FC<{
           role="textbox"
           ref={editorRef}
           onFocus={() => setExpandedEditor(true)}
+          onInput={(e: React.ChangeEvent<HTMLDivElement>) =>
+            setMessage(e.target.innerHTML)
+          }
           spellCheck
           contentEditable
-          className={`max-h-[350px] ${expandedEditor ? "min-h-[115px] border-b-2" : "min-h-[65px]"} overflow-y-auto whitespace-pre-wrap break-words p-5 leading-[1.4] outline-none transition-all`}
+          className={`relative max-h-[350px] ${expandedEditor ? "min-h-[115px] border-b-2" : "min-h-[65px]"} max-w-full overflow-y-auto whitespace-pre-wrap break-words p-5 leading-[1.4] outline-none transition-all`}
         />
 
         <div

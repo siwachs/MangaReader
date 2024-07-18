@@ -20,8 +20,7 @@ import {
   makePostPutRequest,
   makeGetRequest,
 } from "@/service/nestedCommentSystemAsyncApiCalls";
-
-import "@/customHtmlElements/SpoilerElement";
+import SpoilerTag from "@/customHtmlElements/SpoilerElement";
 
 type ContextType = {
   contentId: string;
@@ -95,6 +94,13 @@ export function NestedCommentProvider({
   );
 
   useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      !window.customElements.get("spoiler-tag")
+    ) {
+      window.customElements.define("spoiler-tag", SpoilerTag);
+    }
+
     const getInitialComments = async () => {
       try {
         setCommentsPayload((prev) => ({ ...prev, loading: true }));
