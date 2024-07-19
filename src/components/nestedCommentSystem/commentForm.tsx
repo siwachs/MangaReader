@@ -171,7 +171,7 @@ const CommentForm: React.FC<{
             </div>
 
             <button
-              type="button"
+              type="submit"
               className="h-fit whitespace-nowrap rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[3.5px_15px] text-[15px] font-bold text-white hover:border-[#526069] hover:bg-[#526069]"
             >
               Comment

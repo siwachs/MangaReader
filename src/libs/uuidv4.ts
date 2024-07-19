@@ -1,4 +1,4 @@
-function uuidv4(prefix = "id") {
+export default function uuidv4(prefix = "id") {
   return `${prefix}-${"10000000-1000-4000-8000-100000000000".replace(
     /[018]/g,
     (c) =>
@@ -8,5 +8,3 @@ function uuidv4(prefix = "id") {
       ).toString(16),
   )}`;
 }
-
-export default uuidv4;
