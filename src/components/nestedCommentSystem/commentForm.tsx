@@ -14,6 +14,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaCode } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
 import { BiSolidHide } from "react-icons/bi";
+import sanatizeHtml from "@/libs/sanitizeHtml";
 
 const placeholder = `<div className="pointer-events-none absolute top-0 mt-5 w-auto max-w-full select-none font-[Arial] font-normal text-black opacity-[0.333]"><p className="leading-[1.4]">Join the discussion…</p></div>`;
 

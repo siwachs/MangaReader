@@ -1,4 +1,15 @@
 const unsafeTags = [
+  "b",
+  "i",
+  "ul",
+  "ol",
+  "li",
+  "article",
+  "section",
+  "hr",
+  "footer",
+  "header",
+  "main",
   "script",
   "iframe",
   "object",
@@ -12,6 +23,9 @@ const unsafeTags = [
   "source",
   "svg",
   "math",
+  "label",
+  "link",
+  "nav",
   "textarea",
   "input",
   "button",
@@ -19,6 +33,12 @@ const unsafeTags = [
   "frameset",
   "noframes",
   "param",
+  "picture",
+  "select",
+  "table",
+  "th",
+  "td",
+  "tr",
   "noscript",
   "isindex",
   "bgsound",
@@ -30,14 +50,32 @@ const unsafeTags = [
   "dialog",
 ];
 
-const allowedLinkAttributes = ["rel", "href"];
-const allowedImgAttributes = ["src", "alt", "title"];
-const allowedSpanAttributes = ["style"];
+const safeTags = [
+  "a",
+  "img",
+  "span",
+  "p",
+  "br",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+];
 
-function sanatizeAllowedTags(
-  elements: NodeListOf<Element>,
-  allowedAttributes: string[],
-) {
+const allowedAttributes = [
+  "rel",
+  "href",
+  "target",
+  "src",
+  "alt",
+  "title",
+  "style",
+  "class",
+];
+
+function sanatizeAllowedTags(elements: NodeListOf<Element>) {
   elements.forEach((element) => {
     Array.from(element.attributes).forEach((attribute) => {
       if (!allowedAttributes.includes(attribute.name))
@@ -47,27 +85,27 @@ function sanatizeAllowedTags(
 }
 
 export default function sanatizeHtml(htmlString: string): string {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, "text/html");
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, "text/html");
 
-  unsafeTags.forEach((tag) => {
-    const tags = document.querySelectorAll(tag);
+    unsafeTags.forEach((tag) => {
+      const tags = doc.querySelectorAll(tag);
 
-    tags.forEach((tag) => tag.remove());
-  });
+      tags.forEach((tag) => tag.remove());
+    });
 
-  const links = doc.querySelectorAll("a");
-  sanatizeAllowedTags(links, allowedLinkAttributes);
+    safeTags.forEach((tag) => {
+      const tags = doc.querySelectorAll(tag);
+      sanatizeAllowedTags(tags);
+    });
 
-  const images = doc.querySelectorAll("img");
-  sanatizeAllowedTags(images, allowedImgAttributes);
+    htmlString = doc.body.innerHTML;
+    htmlString = htmlString.replace(/<div\b[^>]*>/gi, "");
+    htmlString = htmlString.replace(/<\/div>/gi, "<br>");
 
-  const spans = doc.querySelectorAll("span");
-  sanatizeAllowedTags(spans, allowedSpanAttributes);
-
-  htmlString = doc.body.innerHTML;
-  htmlString = htmlString.replace(/<div\b[^>]*>/gi, "");
-  htmlString = htmlString.replace(/<\/div>/gi, "<br>");
-
-  return htmlString;
+    return htmlString;
+  } catch (error: any) {
+    return error.message;
+  }
 }

@@ -177,6 +177,13 @@ const addComment = async (req: NextRequest) => {
     const user = await User.findById(userId);
     if (!user) return notFound(["User"]);
 
+    const scriptTagRegex = /<\s*script[\s\S]*?>[\s\S]*?<\s*\/\s*script\s*>/gi;
+    const eventAttributeRegex = /on\w+\s*=\s*(['"])(.*?)\1(?=\s|\/|>)/gi;
+    const hasScriptTag = scriptTagRegex.test(message);
+    const hasEventAttribute = eventAttributeRegex.test(message);
+
+    if (hasScriptTag || hasEventAttribute) return invalidBody();
+
     const comment = await Comment.create({
       parentId: parentId ?? "root",
       message,
