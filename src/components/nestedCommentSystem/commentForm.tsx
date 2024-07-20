@@ -1,5 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
+import { useToastContainer } from "@/contexts/toastContainerContext";
+
+import sanatizeHtml from "@/libs/sanitizeHtml";
+import uuidv4 from "@/libs/uuidv4";
 
 import { PiGifFill } from "react-icons/pi";
 import { AiFillPicture } from "react-icons/ai";
@@ -14,13 +18,22 @@ import { FcGoogle } from "react-icons/fc";
 import { FaCode } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
 import { BiSolidHide } from "react-icons/bi";
-import sanatizeHtml from "@/libs/sanitizeHtml";
 
 const placeholder = `<div className="pointer-events-none absolute top-0 mt-5 w-auto max-w-full select-none font-[Arial] font-normal text-black opacity-[0.333]"><p className="leading-[1.4]">Join the discussion…</p></div>`;
 
 const editorToolboxButtonClasses =
   "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100 data-[active=true]:bg-[var(--app-text-color-light-blue-gray)]";
 const editorToolboxButtonIconClasses = "size-5";
+
+const initialActiveTools = {
+  isToolboxActive: false,
+  isBoldStyleActive: false,
+  isItalicStyleActive: false,
+  isUnderlineStyleActive: false,
+  isStrikethroughStyleActive: false,
+  isSpoilerStyleActive: false,
+  isCodeStyleActive: false,
+};
 
 const CommentForm: React.FC<{
   initialMessage?: string;
@@ -36,19 +49,12 @@ const CommentForm: React.FC<{
   editMode,
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
+  const { addToast } = useToastContainer();
   const { userId, contentId, chapterId, makeComment, editComment } =
     useNestedCommentSystem();
-  const [message, setMessage] = useState(initialMessage);
+
   const [expandedEditor, setExpandedEditor] = useState(false);
-  const [activeTools, setActiveTools] = useState({
-    isToolboxActive: false,
-    isBoldStyleActive: false,
-    isItalicStyleActive: false,
-    isUnderlineStyleActive: false,
-    isStrikethroughStyleActive: false,
-    isSpoilerStyleActive: false,
-    isCodeStyleActive: false,
-  });
+  const [activeTools, setActiveTools] = useState(initialActiveTools);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -110,22 +116,38 @@ const CommentForm: React.FC<{
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userId) return;
+    if (!userId)
+      return addToast({
+        id: uuidv4(),
+        type: "info",
+        text: "You need to sign in for that.",
+      });
+
+    const message = editorRef.current?.innerHTML!;
+    const innerText = editorRef.current?.innerText;
+
+    if (innerText?.trim() === "" || innerText === "<br>")
+      return addToast({
+        id: uuidv4(),
+        type: "warning",
+        text: "Message can't be empty.",
+      });
+
+    if (editorRef.current) editorRef.current.innerHTML = "";
+    setExpandedEditor(false);
+    if (callback) callback();
 
     if (editMode) {
-      await editComment({ userId, message }, commentId);
+      await editComment({ userId, message: sanatizeHtml(message) }, commentId);
     } else {
       await makeComment({
         contentId,
         chapterId,
         userId,
         parentId,
-        message,
+        message: sanatizeHtml(message),
       });
     }
-
-    if (callback) callback();
-    else setMessage("");
   };
 
   return (
@@ -135,9 +157,6 @@ const CommentForm: React.FC<{
           role="textbox"
           ref={editorRef}
           onFocus={() => setExpandedEditor(true)}
-          onInput={(e: React.ChangeEvent<HTMLDivElement>) =>
-            setMessage(e.target.innerHTML)
-          }
           spellCheck
           contentEditable
           className={`relative max-h-[350px] ${expandedEditor ? "min-h-[115px] border-b-2" : "min-h-[65px]"} max-w-full overflow-y-auto whitespace-pre-wrap break-words p-5 leading-[1.4] outline-none transition-all`}
@@ -172,8 +191,9 @@ const CommentForm: React.FC<{
             </div>
 
             <button
+              disabled={!userId}
               type="submit"
-              className="h-fit whitespace-nowrap rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[3.5px_15px] text-[15px] font-bold text-white hover:border-[#526069] hover:bg-[#526069]"
+              className="h-fit whitespace-nowrap rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[3.5px_15px] text-[15px] font-bold text-white hover:border-[#526069] hover:bg-[#526069] disabled:bg-[#526069]"
             >
               Comment
             </button>

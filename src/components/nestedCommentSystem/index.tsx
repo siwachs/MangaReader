@@ -150,9 +150,9 @@ const NestedCommentsContainer: React.FC = () => {
           </div>
         </div>
 
-        {/* {renderComments()} */}
+        {renderComments()}
 
-        {/* {commentsPayload.pageNumber !== commentsPayload.totalPages && (
+        {commentsPayload.pageNumber !== commentsPayload.totalPages && (
           <button
             type="button"
             onClick={() => loadMoreComments(commentsPayload.pageNumber + 1)}
@@ -163,7 +163,7 @@ const NestedCommentsContainer: React.FC = () => {
           >
             Load more comments
           </button>
-        )} */}
+        )}
 
         <div className="mb-5 border border-[#dcdde7]" />
       </section>

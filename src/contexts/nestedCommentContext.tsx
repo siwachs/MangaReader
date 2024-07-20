@@ -253,12 +253,14 @@ export function NestedCommentProvider({
           return {
             ...prev,
             error,
+            totalComments: prev.totalComments + 1,
             comments: [comment, ...prev.comments],
           };
         else if (prev.sortKey === "OLDEST")
           return {
             ...prev,
             error,
+            totalComments: prev.totalComments + 1,
             comments: [...prev.comments, comment],
           };
         else {
@@ -270,6 +272,7 @@ export function NestedCommentProvider({
             return {
               ...prev,
               error,
+              totalComments: prev.totalComments + 1,
               comments: [
                 ...prev.comments.slice(0, commentWithZeroUpVotes),
                 comment,
@@ -280,6 +283,7 @@ export function NestedCommentProvider({
             return {
               ...prev,
               error,
+              totalComments: prev.totalComments + 1,
               comments: [...prev.comments, comment],
             };
         }
