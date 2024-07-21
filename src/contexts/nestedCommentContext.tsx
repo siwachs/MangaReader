@@ -100,7 +100,9 @@ export function NestedCommentProvider({
     ) {
       window.customElements.define("spoiler-tag", SpoilerTag);
     }
+  }, []);
 
+  useEffect(() => {
     const getInitialComments = async () => {
       try {
         setCommentsPayload((prev) => ({ ...prev, loading: true }));

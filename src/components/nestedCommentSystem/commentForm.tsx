@@ -81,12 +81,28 @@ const CommentForm: React.FC<{
     let wrapper = null;
     if (activeTools.isCodeStyleActive && activeTools.isSpoilerStyleActive) {
       wrapper = document.createElement("spoiler-tag");
+      wrapper.setAttribute("data-active", "true");
       wrapper.appendChild(document.createElement("code"));
     } else if (activeTools.isCodeStyleActive)
       wrapper = document.createElement("code");
-    else if (activeTools.isSpoilerStyleActive)
+    else if (activeTools.isSpoilerStyleActive) {
       wrapper = document.createElement("spoiler-tag");
-    else wrapper = document.createElement("span");
+      wrapper.setAttribute("data-active", "true");
+    } else if (
+      activeTools.isBoldStyleActive ||
+      activeTools.isItalicStyleActive ||
+      activeTools.isUnderlineStyleActive ||
+      activeTools.isStrikethroughStyleActive
+    )
+      wrapper = document.createElement("span");
+
+    if (wrapper === null) {
+      const editor = editorRef.current as Node;
+      selection.removeAllRanges();
+      const newRange = document.createRange();
+      newRange.setStart(editor, editor?.childNodes.length);
+      return selection.addRange(newRange);
+    }
 
     if (activeTools.isBoldStyleActive) wrapper.style.fontWeight = "bold";
     if (activeTools.isItalicStyleActive) wrapper.style.fontStyle = "italic";
@@ -135,6 +151,7 @@ const CommentForm: React.FC<{
 
     if (editorRef.current) editorRef.current.innerHTML = "";
     setExpandedEditor(false);
+    setActiveTools(initialActiveTools);
     if (callback) callback();
 
     if (editMode) {

@@ -62,6 +62,7 @@ const safeTags = [
   "h4",
   "h5",
   "h6",
+  "spoiler-tag",
 ];
 
 const allowedAttributes = [
