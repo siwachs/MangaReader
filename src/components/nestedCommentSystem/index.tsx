@@ -1,5 +1,6 @@
 "use client";
 
+import "./index.css";
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -74,9 +75,11 @@ const NestedCommentsContainer: React.FC = () => {
   // Letter Space -> -1 to -2%, -0.5% for headings
   // 50 - 75 chars for a p use 600px width for a desktop screen
 
+  // sm:w-[calc(100%-6rem)] md:w-[calc(100%-8rem)]
+
   return (
     <div
-      className={`${roboto.className} mx-auto max-w-[1200px] text-[var(--app-text-color-dark-grayish-green)] sm:w-[calc(100%-6rem)] md:w-[calc(100%-8rem)]`}
+      className={`${roboto.className} nested-comment-system-wrapper text-[var(--app-text-color-dark-grayish-green)]`}
     >
       <header className="mb-6">
         <div className="flex items-center justify-between border-b-2 border-[var(--app-border-color-slightly-blue-gray)] py-3 font-bold">

@@ -1,0 +1,38 @@
+.nested-comment-system-wrapper {
+  @apply mx-auto;
+}
+
+@media only screen and (min-width: 547px) {
+  .hide-mobile-toolbox,
+  .hide-mobile-toolbox-toogle {
+    @apply hidden;
+  }
+
+  .show-tool {
+    @apply flex;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .nested-comment-system-wrapper {
+    @apply max-w-[510px];
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .nested-comment-system-wrapper {
+    @apply max-w-[690px];
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .nested-comment-system-wrapper {
+    @apply max-w-[930px];
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .nested-comment-system-wrapper {
+    @apply max-w-[1110px];
+  }
+}

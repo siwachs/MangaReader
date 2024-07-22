@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, ReactElement } from "react";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 import { useToastContainer } from "@/contexts/toastContainerContext";
 
@@ -31,9 +31,72 @@ const initialActiveTools = {
   isItalicStyleActive: false,
   isUnderlineStyleActive: false,
   isStrikethroughStyleActive: false,
+  isAddLinkActive: false,
   isSpoilerStyleActive: false,
   isCodeStyleActive: false,
 };
+
+type ActiveTools =
+  | "isToolboxActive"
+  | "isBoldStyleActive"
+  | "isItalicStyleActive"
+  | "isUnderlineStyleActive"
+  | "isStrikethroughStyleActive"
+  | "isAddLinkActive"
+  | "isSpoilerStyleActive"
+  | "isCodeStyleActive";
+
+const tools = [
+  {
+    key: "bold",
+    activeKey: "isBoldStyleActive",
+    className: editorToolboxButtonClasses,
+    title: "Bold",
+    icon: <MdFormatBold className="size-7" />,
+  },
+  {
+    key: "italic",
+    activeKey: "isItalicStyleActive",
+    className: editorToolboxButtonClasses,
+    title: "Italic",
+    icon: <MdOutlineFormatItalic className="size-7" />,
+  },
+  {
+    key: "underline",
+    activeKey: "isUnderlineStyleActive",
+    className: editorToolboxButtonClasses,
+    title: "Underline",
+    icon: <MdFormatUnderlined className="size-7" />,
+  },
+  {
+    key: "strikethrough",
+    activeKey: "isStrikethroughStyleActive",
+    className: editorToolboxButtonClasses,
+    title: "StrikeThrough",
+    icon: <MdStrikethroughS className="size-7" />,
+  },
+  {
+    key: "link",
+    activeKey: "isAddLinkActive",
+    className: editorToolboxButtonClasses,
+    title: "Add Link",
+    icon: <RiLinksFill className="size-5" strokeWidth={1} />,
+  },
+  {
+    key: "spoiler",
+    activeKey: "isSpoilerStyleActive",
+    className: editorToolboxButtonClasses,
+    title: "Spoiler",
+    icon: <BiSolidHide className="size-5" />,
+  },
+  {
+    key: "code",
+    activeKey: "isCodeStyleActive",
+    className: editorToolboxButtonClasses,
+    title: "Code",
+    icon: <FaCode className="size-[18px]" />,
+  },
+];
 
 const CommentForm: React.FC<{
   initialMessage?: string;
@@ -194,11 +257,26 @@ const CommentForm: React.FC<{
 
               <span className="mx-0.5 inline-block h-6 w-0.5 bg-[var(--app-border-color-grayish-blue)]" />
 
+              {tools.map((tool) => (
+                <button
+                  key={tool.key}
+                  data-active={activeTools[tool.activeKey as ActiveTools]}
+                  type="button"
+                  onClick={() =>
+                    updateActiveTools(tool.activeKey as ActiveTools)
+                  }
+                  className={`${tool.className} show-tool hidden`}
+                  title={tool.title}
+                >
+                  {tool.icon}
+                </button>
+              ))}
+
               <button
                 data-active={activeTools.isToolboxActive}
                 type="button"
                 onClick={() => updateActiveTools("isToolboxActive")}
-                className={editorToolboxButtonClasses}
+                className={`${editorToolboxButtonClasses} hide-mobile-toolbox-toogle`}
               >
                 <RxFontStyle
                   strokeWidth={0.2}
@@ -217,75 +295,24 @@ const CommentForm: React.FC<{
           </div>
 
           <div
-            className={`${activeTools.isToolboxActive ? "mt-1.5 grid grid-flow-col gap-1.5" : "hidden"}`}
+            className={
+              activeTools.isToolboxActive
+                ? "hide-mobile-toolbox mt-1.5 grid grid-flow-col gap-1.5"
+                : "hidden"
+            }
           >
-            <button
-              data-active={activeTools.isBoldStyleActive}
-              type="button"
-              onClick={() => updateActiveTools("isBoldStyleActive")}
-              className={editorToolboxButtonClasses}
-              title="Bold"
-            >
-              <MdFormatBold className="size-7" />
-            </button>
-
-            <button
-              data-active={activeTools.isItalicStyleActive}
-              type="button"
-              onClick={() => updateActiveTools("isItalicStyleActive")}
-              className={editorToolboxButtonClasses}
-              title="Italic"
-            >
-              <MdOutlineFormatItalic className="size-7" />
-            </button>
-
-            <button
-              data-active={activeTools.isUnderlineStyleActive}
-              type="button"
-              onClick={() => updateActiveTools("isUnderlineStyleActive")}
-              className={editorToolboxButtonClasses}
-              title="Underline"
-            >
-              <MdFormatUnderlined className="size-7" />
-            </button>
-
-            <button
-              data-active={activeTools.isStrikethroughStyleActive}
-              type="button"
-              onClick={() => updateActiveTools("isStrikethroughStyleActive")}
-              className={editorToolboxButtonClasses}
-              title="StrikeThrough"
-            >
-              <MdStrikethroughS className="size-7" />
-            </button>
-
-            <button
-              type="button"
-              className={editorToolboxButtonClasses}
-              title="Add Link"
-            >
-              <RiLinksFill className="size-5" strokeWidth={1} />
-            </button>
-
-            <button
-              data-active={activeTools.isSpoilerStyleActive}
-              type="button"
-              onClick={() => updateActiveTools("isSpoilerStyleActive")}
-              className={editorToolboxButtonClasses}
-              title="Spoiler"
-            >
-              <BiSolidHide className="size-5" />
-            </button>
-
-            <button
-              data-active={activeTools.isCodeStyleActive}
-              type="button"
-              onClick={() => updateActiveTools("isCodeStyleActive")}
-              className={editorToolboxButtonClasses}
-              title="Code"
-            >
-              <FaCode className="size-[18px]" />
-            </button>
+            {tools.map((tool) => (
+              <button
+                key={tool.key}
+                data-active={activeTools[tool.activeKey as ActiveTools]}
+                type="button"
+                onClick={() => updateActiveTools(tool.activeKey as ActiveTools)}
+                className={tool.className}
+                title={tool.title}
+              >
+                {tool.icon}
+              </button>
+            ))}
           </div>
         </div>
       </div>
