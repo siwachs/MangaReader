@@ -1,20 +1,28 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import useBodyOverflow from "@/hooks/useBodyOverflow";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import ChapterLink from "@/components/buttons/chapterLink";
+
 import {
-  ChevronDown,
   ChevronLeft,
   Download,
   HeartOutline,
   InformationCircleSolid,
   Share,
 } from "@/components/icons";
+import { FaCircleChevronDown } from "react-icons/fa6";
+import { FaTimesCircle } from "react-icons/fa";
+
+import chapters from "@/data/chapters";
 
 const Header: React.FC = () => {
+  const [isChapterSelectOpen, setIsChapterSelectOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  useBodyOverflow(isChapterSelectOpen);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,8 +32,8 @@ const Header: React.FC = () => {
       else containerRef.current.style.top = "0";
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -57,9 +65,17 @@ const Header: React.FC = () => {
             <div className="hide-text text-[15px] text-black md:text-xl">
               Episode 1
             </div>
-            <span className="flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-[var(--app-text-color-slate-gray)] text-white md:h-4 md:w-4">
-              <ChevronDown />
-            </span>
+
+            <button
+              onClick={() => setIsChapterSelectOpen((prev) => !prev)}
+              className="size-3 text-[var(--app-text-color-slate-gray)] md:size-4"
+            >
+              {isChapterSelectOpen ? (
+                <FaTimesCircle className="size-[inherit]" />
+              ) : (
+                <FaCircleChevronDown className="size-[inherit]" />
+              )}
+            </button>
           </div>
 
           <p className="hide-text md:font-noto-sans-sc text-center text-[10px]/[20px] font-medium text-[var(--app-text-color-slate-gray)] md:text-sm/[16px] md:font-normal">
@@ -91,6 +107,25 @@ const Header: React.FC = () => {
             strokeWidth={2.2}
           />
           <InformationCircleSolid className="h-[15px] w-[15px] md:h-[26px] md:w-[26px]" />
+        </div>
+      </div>
+
+      <div //bg-[var(--app-text-color-very-light-gray)]
+        className={
+          isChapterSelectOpen
+            ? "fixed z-10 h-full w-full items-center bg-white"
+            : "hidden"
+        }
+      >
+        <div className="hidden-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
+          {chapters.map((chapter) => (
+            <ChapterLink
+              key={chapter._id}
+              title={chapter.title}
+              releaseDate={chapter.releaseDate}
+              href="/watch/892982/38938"
+            />
+          ))}
         </div>
       </div>
     </header>

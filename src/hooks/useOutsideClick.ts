@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 
-const useOutsideClick = (
+export default function useOutsideClick(
   ref: React.RefObject<HTMLDivElement>,
   isOpen: boolean,
   callback: () => void,
-) => {
+) {
   useEffect(() => {
     const handleOutsideClicks = (e: MouseEvent) => {
       if (!ref?.current?.contains(e.target as Node)) callback();
@@ -32,6 +32,4 @@ const useOutsideClick = (
 
     return () => removeListeners();
   }, [ref, callback, isOpen]);
-};
-
-export default useOutsideClick;
+}

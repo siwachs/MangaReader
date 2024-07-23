@@ -8,7 +8,7 @@ const mobileKeywords = [
   "BlackBerry",
 ];
 
-const useMobileDetect = () => {
+export default function useMobileDetect(): boolean {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const userAgent = navigator.userAgent;
@@ -17,6 +17,4 @@ const useMobileDetect = () => {
   }, []);
 
   return isMobile;
-};
-
-export default useMobileDetect;
+}

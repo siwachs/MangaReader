@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import useBodyOverflow from "@/hooks/useBodyOverflow";
+import { useState } from "react";
 import ReactDom from "react-dom";
 
 import { Bars3 } from "../icons";
@@ -8,9 +9,7 @@ import Sidebar from "./sidebar";
 
 const MenuToggler: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  useEffect(() => {
-    document.body.style.overflow = sidebarOpen ? "hidden" : "auto";
-  }, [sidebarOpen]);
+  useBodyOverflow(sidebarOpen);
 
   return sidebarOpen ? (
     ReactDom.createPortal(
