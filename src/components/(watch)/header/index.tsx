@@ -8,16 +8,16 @@ import useBodyOverflow from "@/hooks/useBodyOverflow";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import ChapterLink from "@/components/buttons/chapterLink";
 
-import {
-  Download,
-  HeartOutline,
-  InformationCircleSolid,
-  Share,
-} from "@/components/icons";
+import { HiOutlineShare } from "react-icons/hi";
+import { BiSolidErrorCircle } from "react-icons/bi";
+import { RiHeartAdd2Line } from "react-icons/ri";
+import { FiDownload } from "react-icons/fi";
 import { FaCircleChevronDown, FaChevronLeft } from "react-icons/fa6";
 import { FaTimesCircle } from "react-icons/fa";
-
 import chapters from "@/data/chapters";
+
+const rightSectionButtonClasses =
+  "box-content hidden h-[35px] w-[95px] items-center justify-center gap-[5px] rounded-[100px] border border-[var(--app-text-color-pinkish-red)] lg:inline-flex";
 
 const Header: React.FC = () => {
   const [isChapterSelectOpen, setIsChapterSelectOpen] = useState(false);
@@ -50,39 +50,40 @@ const Header: React.FC = () => {
     >
       <div className="mx-auto flex h-[60px] max-w-[1600px] items-center justify-between md:h-[100px]">
         <div className="ml-5 flex-1 md:flex md:items-center">
-          <Link
-            href="/"
-            className="text-[var(--app-text-color-slate-gray)] md:text-[var(--app-text-color-crimson)]"
-          >
-            <FaChevronLeft className="size-4" />
+          <Link href="/">
+            <FaChevronLeft
+              className="size-[18px] md:hidden md:size-[26px] md:text-[var(--app-text-color-crimson)]"
+              color="grey"
+            />
+            <FaChevronLeft className="hidden size-[26px] text-[var(--app-text-color-crimson)] md:inline-block" />
           </Link>
 
-          <Link href="/" className="hidden flex-shrink-0 md:inline-block">
+          <Link href="/" className="hidden md:inline-block">
             <Image
               priority
               src="/MangaToon.svg"
               alt="mangatoon"
               width={200}
               height={60}
-              className="-mb-1 ml-[8px] h-[27px] w-[131px] lg:-mb-2.5 lg:ml-[63px] lg:h-[40px] lg:w-[194px]"
+              className="-mb-1 h-[27px] w-[131px] md:ml-[31px] lg:-mb-2.5 lg:ml-[63px] lg:h-[40px] lg:w-[194px]"
             />
           </Link>
         </div>
 
         <div className="w-1/2">
-          <div className="mt-0.5 flex items-center justify-center gap-[7px] font-medium md:gap-[12px]">
+          <div className="mt-0.5 flex items-center justify-center gap-[7px] font-medium md:gap-3">
             <div className="hide-text text-[15px] text-black md:text-xl">
               Episode 1
             </div>
 
             <button
               onClick={() => setIsChapterSelectOpen((prev) => !prev)}
-              className="size-3 text-[var(--app-text-color-slate-gray)] md:size-4"
+              className="size-3 md:size-4"
             >
               {isChapterSelectOpen ? (
-                <FaTimesCircle className="size-[inherit]" />
+                <FaTimesCircle className="size-[inherit]" color="grey" />
               ) : (
-                <FaCircleChevronDown className="size-[inherit]" />
+                <FaCircleChevronDown className="size-[inherit]" color="grey" />
               )}
             </button>
           </div>
@@ -93,29 +94,23 @@ const Header: React.FC = () => {
           </p>
         </div>
 
-        <div className="mr-[15px] flex flex-1 items-center justify-end gap-[8px] text-[var(--app-text-color-pinkish-red)] md:gap-[23px]">
-          <Download
-            className="h-[15px] w-[15px] md:h-5 md:w-5"
-            strokeWidth={2.2}
-          />
+        <div className="mr-[15px] flex flex-1 items-center justify-end gap-2 text-[var(--app-text-color-pinkish-red)] sm:gap-5 md:mr-5 md:gap-6">
+          <FiDownload className="size-4 md:size-5" />
 
-          <Share className="hidden h-5 w-5 md:inline-block lg:hidden" />
+          <HiOutlineShare className="size-4 lg:hidden" />
 
-          <div className="box-content hidden h-[35px] w-[95px] items-center justify-center gap-[5px] rounded-[100px] border border-[var(--app-text-color-pinkish-red)] lg:flex">
-            <Share className="h-4 w-4" />
+          <div className={rightSectionButtonClasses}>
+            <HiOutlineShare className="size-4" />
             <span>Share</span>
           </div>
 
-          <div className="box-content hidden h-[35px] w-[95px] items-center justify-center gap-[5px] rounded-[100px] border border-[var(--app-text-color-pinkish-red)] lg:flex">
-            <HeartOutline className="h-4 w-4" strokeWidth={2.2} />
+          <div className={rightSectionButtonClasses}>
+            <RiHeartAdd2Line className="size-4" />
             <span>Collect</span>
           </div>
 
-          <HeartOutline
-            className="h-[15px] w-[15px] md:h-5 md:w-5 lg:hidden"
-            strokeWidth={2.2}
-          />
-          <InformationCircleSolid className="h-[15px] w-[15px] md:h-[26px] md:w-[26px]" />
+          <RiHeartAdd2Line className="size-4 lg:hidden" />
+          <BiSolidErrorCircle className="size-[17px] md:size-6" color="gray" />
         </div>
       </div>
 
