@@ -1,35 +1,41 @@
 "use client";
 
-import useBodyOverflow from "@/hooks/useBodyOverflow";
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import useBodyOverflow from "@/hooks/useBodyOverflow";
+import useOutsideClick from "@/hooks/useOutsideClick";
 import ChapterLink from "@/components/buttons/chapterLink";
 
 import {
-  ChevronLeft,
   Download,
   HeartOutline,
   InformationCircleSolid,
   Share,
 } from "@/components/icons";
-import { FaCircleChevronDown } from "react-icons/fa6";
+import { FaCircleChevronDown, FaChevronLeft } from "react-icons/fa6";
 import { FaTimesCircle } from "react-icons/fa";
 
 import chapters from "@/data/chapters";
 
 const Header: React.FC = () => {
   const [isChapterSelectOpen, setIsChapterSelectOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+
+  const headerContainerRef = useRef<HTMLDivElement>(null);
+  const chapterSelectContainerRef = useRef<HTMLDivElement>(null);
+
   useBodyOverflow(isChapterSelectOpen);
+  useOutsideClick(chapterSelectContainerRef, isChapterSelectOpen, () => {
+    setIsChapterSelectOpen(false);
+  });
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!containerRef.current) return;
+      if (!headerContainerRef.current) return;
 
-      if (window.scrollY >= 60) containerRef.current.style.top = "-100px";
-      else containerRef.current.style.top = "0";
+      if (window.scrollY >= 60) headerContainerRef.current.style.top = "-100px";
+      else headerContainerRef.current.style.top = "0";
     };
 
     handleScroll();
@@ -39,13 +45,16 @@ const Header: React.FC = () => {
 
   return (
     <header
-      ref={containerRef}
+      ref={headerContainerRef}
       className="fixed left-0 top-0 z-10 w-full bg-white transition-[top]"
     >
       <div className="mx-auto flex h-[60px] max-w-[1600px] items-center justify-between md:h-[100px]">
         <div className="ml-5 flex-1 md:flex md:items-center">
-          <Link href="/">
-            <ChevronLeft className="h-[26px] w-[26px] text-[var(--app-text-color-slate-gray)] md:h-10 md:w-10 md:text-[var(--app-text-color-crimson)]" />
+          <Link
+            href="/"
+            className="text-[var(--app-text-color-slate-gray)] md:text-[var(--app-text-color-crimson)]"
+          >
+            <FaChevronLeft className="size-4" />
           </Link>
 
           <Link href="/" className="hidden flex-shrink-0 md:inline-block">
@@ -110,24 +119,23 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      <div //bg-[var(--app-text-color-very-light-gray)]
-        className={
-          isChapterSelectOpen
-            ? "fixed z-10 h-full w-full items-center bg-white"
-            : "hidden"
-        }
-      >
-        <div className="hidden-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
-          {chapters.map((chapter) => (
-            <ChapterLink
-              key={chapter._id}
-              title={chapter.title}
-              releaseDate={chapter.releaseDate}
-              href="/watch/892982/38938"
-            />
-          ))}
+      {isChapterSelectOpen && (
+        <div
+          ref={chapterSelectContainerRef}
+          className="fixed left-1/2 z-10 h-[calc(100vh-60px)] w-full max-w-[1220px] -translate-x-1/2 bg-white md:h-72"
+        >
+          <div className="hidden-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
+            {chapters.map((chapter) => (
+              <ChapterLink
+                key={chapter._id}
+                title={chapter.title}
+                releaseDate={chapter.releaseDate}
+                href="/watch/892982/38938"
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 };

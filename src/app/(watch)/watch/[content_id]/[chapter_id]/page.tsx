@@ -18,7 +18,8 @@ export default function WatchPage(req: Readonly<pageReqObj>) {
             alt={`image-${index + 1}`}
             width={1200}
             height={1200}
-            className={`h-auto max-w-full border-x ${index === 11 - 1 ? "border-b" : ""} ${index === 0 ? "border-t" : ""} border-[var(--app-border-color-medium-gray)]`}
+            // border-[var(--app-border-color-medium-gray)]
+            className="h-auto max-w-full"
           />
         ))}
       </div>
