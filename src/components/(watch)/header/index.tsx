@@ -114,23 +114,25 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      {isChapterSelectOpen && (
-        <div
-          ref={chapterSelectContainerRef}
-          className="fixed left-1/2 z-10 h-[calc(100vh-60px)] w-full max-w-[1220px] -translate-x-1/2 bg-white md:h-72"
-        >
-          <div className="hidden-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
-            {chapters.map((chapter) => (
-              <ChapterLink
-                key={chapter._id}
-                title={chapter.title}
-                releaseDate={chapter.releaseDate}
-                href="/watch/892982/38938"
-              />
-            ))}
-          </div>
+      <div
+        ref={chapterSelectContainerRef}
+        className={
+          isChapterSelectOpen
+            ? "fixed left-1/2 z-10 h-[calc(100vh-60px)] w-full max-w-[1220px] -translate-x-1/2 bg-white md:h-72"
+            : "hidden"
+        }
+      >
+        <div className="hidden-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
+          {chapters.map((chapter) => (
+            <ChapterLink
+              key={chapter._id}
+              title={chapter.title}
+              releaseDate={chapter.releaseDate}
+              href="/watch/892982/38938"
+            />
+          ))}
         </div>
-      )}
+      </div>
     </header>
   );
 };
