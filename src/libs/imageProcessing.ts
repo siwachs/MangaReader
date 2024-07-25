@@ -1,11 +1,18 @@
 import sharp from "sharp";
+
+import path from "path";
 import fs from "fs/promises";
 
 export async function getBlurDataURL(imageUrl: string) {
-  try {
-    await fs.access(imageUrl);
+  const localImagePath = path.join(
+    __dirname,
+    `../../../../../../../public/${imageUrl}`,
+  );
 
-    const imageBuffer = await sharp(imageUrl)
+  try {
+    await fs.access(localImagePath);
+
+    const imageBuffer = await sharp(localImagePath)
       .resize(10)
       .blur(5)
       .toFormat("webp")
@@ -16,3 +23,5 @@ export async function getBlurDataURL(imageUrl: string) {
     console.log(error.message);
   }
 }
+
+// TODO Create a function to get a Base 64 Image
