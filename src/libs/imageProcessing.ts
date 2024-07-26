@@ -3,7 +3,11 @@ import sharp from "sharp";
 import path from "path";
 import fs from "fs/promises";
 
-export async function getBlurDataURL(imageUrl: string) {
+export async function getBlurContentCover(
+  imageUrl: string,
+  size: number = 10,
+  blur: number = 5,
+): Promise<string> {
   const localImagePath = path.join(
     __dirname,
     `../../../../../../../public/${imageUrl}`,
@@ -13,15 +17,37 @@ export async function getBlurDataURL(imageUrl: string) {
     await fs.access(localImagePath);
 
     const imageBuffer = await sharp(localImagePath)
-      .resize(10)
-      .blur(5)
+      .resize(size)
+      .blur(blur)
       .toFormat("webp")
       .toBuffer();
 
     return `data:image/webp;base64,${imageBuffer.toString("base64")}`;
   } catch (error: any) {
-    console.log(error.message);
+    throw error;
   }
 }
 
-// TODO Create a function to get a Base 64 Image
+export async function generateBlurContentCover(
+  width: number = 800,
+  height: number = 800,
+  blur: number = 20,
+): Promise<string> {
+  try {
+    const imageBuffer = await sharp({
+      create: {
+        width,
+        height,
+        channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 0.62 },
+      },
+    })
+      .blur(blur)
+      .toFormat("webp")
+      .toBuffer();
+
+    return `data:image/webp;base64,${imageBuffer.toString("base64")}`;
+  } catch (error: any) {
+    throw error;
+  }
+}

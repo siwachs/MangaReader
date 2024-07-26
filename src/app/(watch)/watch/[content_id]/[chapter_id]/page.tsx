@@ -5,7 +5,6 @@ import { pageReqObj } from "@/types";
 
 import { ToastContainerProvider } from "@/contexts/toastContainerContext";
 import NestedCommentSystem from "@/components/nestedCommentSystem";
-import { getBlurDataURL } from "@/libs/imageProcessing";
 
 export default function WatchPage(req: Readonly<pageReqObj>) {
   return (
@@ -14,8 +13,6 @@ export default function WatchPage(req: Readonly<pageReqObj>) {
       <div className="mx-auto grid max-w-[800px]">
         {[...new Array(11)].map(async (_, index) => (
           <Image
-            placeholder="blur"
-            blurDataURL={await getBlurDataURL(`/chapter/${index + 1}.jpg`)}
             key={index}
             src={`/chapter/${index + 1}.jpg`}
             alt={`image-${index + 1}`}
