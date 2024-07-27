@@ -5,8 +5,9 @@ import fs from "fs/promises";
 
 export async function getBlurContentCover(
   imageUrl: string,
-  size: number = 10,
-  blur: number = 5,
+  width: number = 800,
+  height: number = 800,
+  blur: number = 0.3,
 ): Promise<string> {
   const localImagePath = path.join(
     __dirname,
@@ -17,7 +18,7 @@ export async function getBlurContentCover(
     await fs.access(localImagePath);
 
     const imageBuffer = await sharp(localImagePath)
-      .resize(size)
+      .resize({ width, height })
       .blur(blur)
       .toFormat("webp")
       .toBuffer();
@@ -31,7 +32,7 @@ export async function getBlurContentCover(
 export async function generateBlurContentCover(
   width: number = 800,
   height: number = 800,
-  blur: number = 20,
+  blur: number = 62,
 ): Promise<string> {
   try {
     const imageBuffer = await sharp({

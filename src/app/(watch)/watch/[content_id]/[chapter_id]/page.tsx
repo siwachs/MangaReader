@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 import { pageReqObj } from "@/types";
 
@@ -11,13 +10,12 @@ export default function WatchPage(req: Readonly<pageReqObj>) {
     <>
       <ChaptersPagination />
       <div className="mx-auto grid max-w-[800px]">
-        {[...new Array(11)].map(async (_, index) => (
-          <Image
+        {[...new Array(11)].map((_, index) => (
+          <img
+            loading="eager"
             key={index}
             src={`/chapter/${index + 1}.jpg`}
             alt={`image-${index + 1}`}
-            width={1200}
-            height={1200}
             className="h-auto max-w-full"
           />
         ))}
