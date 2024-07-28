@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-
 import Link from "next/link";
 import Image from "next/image";
 import "./slider.css";
-import { ChevronDown } from "../icons";
+
+import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
+import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 
 const images = [
   "https://cn-e-pic.mangatoon.mobi/pictures_library/7d7ed86c8b538179dc2c34bbdb9db293.webp",
@@ -63,10 +64,12 @@ const Banner: React.FC = () => {
                 className={`img absolute overflow-hidden ${getImageClass(index)}`}
               >
                 <Image
+                  placeholder="blur"
+                  blurDataURL={contentCoverBlurDataImageURL}
                   src={image}
                   alt={`slide-${index}`}
-                  width={800}
-                  height={460}
+                  width={740}
+                  height={486}
                   className="mx-[7px] rounded"
                 />
               </div>
@@ -77,40 +80,26 @@ const Banner: React.FC = () => {
             {images.map((image, index) => (
               <button
                 key={image}
-                className={`m-[5px] h-[9px] rounded ${currentSlide === index ? "w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-[var(--app-text-color-light-gray)]"}`}
+                className={`m-[5px] h-[9px] rounded ${currentSlide === index ? "pointer-events-none w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-[var(--app-text-color-light-gray)]"}`}
                 onClick={() => activateSlide(index)}
               />
             ))}
           </div>
         </div>
 
-        <span
+        <BsChevronCompactLeft
+          tabIndex={0}
+          role="button"
           className="navigationButton -left-[150px]"
-          role="button"
-          tabIndex={0}
           onClick={prevSlide}
-          onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (e.key === "Enter") {
-              prevSlide();
-            }
-          }}
-        >
-          <ChevronDown className="h-[100px] w-[100px] rotate-90" />
-        </span>
+        />
 
-        <span
-          className="navigationButton -right-[150px]"
-          role="button"
+        <BsChevronCompactRight
           tabIndex={0}
+          role="button"
+          className="navigationButton -right-[150px]"
           onClick={nextSlide}
-          onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (e.key === "Enter") {
-              nextSlide();
-            }
-          }}
-        >
-          <ChevronDown className="h-[100px] w-[100px] -rotate-90" />
-        </span>
+        />
       </div>
     </div>
   );

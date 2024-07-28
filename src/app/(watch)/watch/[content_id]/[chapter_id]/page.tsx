@@ -1,7 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { pageReqObj } from "@/types";
 
+import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import { ToastContainerProvider } from "@/contexts/toastContainerContext";
 import NestedCommentSystem from "@/components/nestedCommentSystem";
 
@@ -9,14 +11,22 @@ export default function WatchPage(req: Readonly<pageReqObj>) {
   return (
     <>
       <ChaptersPagination />
-      <div className="mx-auto grid max-w-[800px]">
-        {[...new Array(11)].map((_, index) => (
-          <img
-            loading="eager"
+      <div className="mx-auto grid max-w-[800px] place-items-center">
+        {[...new Array(12)].map((_, index) => (
+          <Image
+            quality={100}
+            placeholder="blur"
+            blurDataURL={contentCoverBlurDataImageURL}
             key={index}
-            src={`/chapter/${index + 1}.jpg`}
+            src={
+              index + 1 === 12
+                ? `/chapter/${index + 1}.webp`
+                : `/chapter/${index + 1}.jpg`
+            }
             alt={`image-${index + 1}`}
-            className="h-auto max-w-full"
+            width={830}
+            height={930}
+            className="m-[inherit] h-auto max-w-full"
           />
         ))}
       </div>

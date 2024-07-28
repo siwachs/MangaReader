@@ -28,5 +28,5 @@
 }
 
 .banner .banner-images .navigationButton {
-  @apply absolute top-1/2 z-20 hidden -translate-y-1/2 text-[var(--app-text-color-gray-light)] ring-black focus:outline-none focus-visible:ring-2 lg:block;
+  @apply absolute top-1/2 z-20 hidden size-[100px] -translate-y-1/2 text-[var(--app-text-color-gray-light)] lg:block;
 }

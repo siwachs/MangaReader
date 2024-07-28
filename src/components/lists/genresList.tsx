@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Heart } from "../icons";
 
+import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
+
 const dummyContent = [
   "/dummyContent/1.webp",
   "/dummyContent/2.webp",
@@ -108,6 +110,8 @@ const GernresList: React.FC<{
                 >
                   <div className="h-[140px] w-full overflow-hidden rounded md:h-[233px]">
                     <Image
+                      placeholder="blur"
+                      blurDataURL={contentCoverBlurDataImageURL}
                       src={content}
                       alt={`content${index + 1}`}
                       height={240}

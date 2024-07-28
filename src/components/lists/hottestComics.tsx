@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Like, View } from "../icons";
 
+import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
+
 const dummyContent = ["/dummyContent/3.webp", "/dummyContent/4.webp"];
 
 const HottestComics: React.FC = () => {
@@ -27,6 +29,8 @@ const HottestComics: React.FC = () => {
               <div className="mb-[2%] mr-[15px] box-border h-[190px] w-[150%] overflow-hidden bg-[url('/assets/hot-content-bg.png')] bg-[length:100%_100%] p-[2%] md:h-[275px] lg:mb-0 lg:w-[590px] lg:p-[15px]">
                 <div className="float-left h-full w-1/4 md:h-[245px] md:w-[185px]">
                   <Image
+                    placeholder="blur"
+                    blurDataURL={contentCoverBlurDataImageURL}
                     src={image}
                     alt={`content${index + 1}`}
                     height={250}
