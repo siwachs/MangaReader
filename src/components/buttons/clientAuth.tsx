@@ -81,8 +81,8 @@ const ClientAuth: React.FC<{
               <Image
                 src={user.avatar ?? "/assests/person.png"}
                 alt={user.name ?? "user-avatar"}
-                width={90}
-                height={90}
+                width={86}
+                height={86}
                 className="h-full w-full rounded-full object-cover"
               />
             </div>
@@ -93,7 +93,7 @@ const ClientAuth: React.FC<{
 
             <div className="mx-auto mb-4 mt-0.5 max-w-[326px] rounded">
               <Link
-                href=""
+                href={`/accounts/${user.username}`}
                 className="inline-block w-full rounded-[100px] border border-[var(--app-border-color-medium-dark-gray)] px-[23px] py-[9px]"
               >
                 <div className="text-center text-sm font-medium tracking-normal text-[var(--app-text-color-medium-dark-blue)]">
