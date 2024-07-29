@@ -5,6 +5,9 @@ import { useSession, signIn } from "next-auth/react";
 
 import HomeNav from "@/components/navigations/homeNav";
 
+const checkUsenameEndpoint = process.env
+  .NEXT_PUBLIC_API_ENDPOINT_CHECK_USERNAME as string;
+
 export default function CreateUsernamePage() {
   const currentUrl = usePathname();
   const session = useSession();
