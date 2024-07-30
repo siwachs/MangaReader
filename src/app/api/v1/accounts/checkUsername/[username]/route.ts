@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { serverError } from "@/libs/apiErrorResponse";
+import { notFound, serverError } from "@/libs/apiErrorResponse";
 import connectToMongoDB from "@/libs/connectToMongoDB";
 import User from "@/models/User";
 
@@ -10,6 +10,8 @@ const checkUsername = async (
 ) => {
   try {
     const username = dynamicRouteValue.params.username;
+    if (username.trim() === "") return notFound(["username"]);
+
     await connectToMongoDB();
     const userId = await User.findOne({ username }).select("_id");
 
