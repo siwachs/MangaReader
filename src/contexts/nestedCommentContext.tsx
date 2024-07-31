@@ -19,7 +19,7 @@ import {
   makeDeleteRequest,
   makePostPutRequest,
   makeGetRequest,
-} from "@/service/nestedCommentSystemAsyncApiCalls";
+} from "@/service/asyncApiCalls";
 import SpoilerTag from "@/customHtmlElements/SpoilerElement";
 
 type ContextType = {

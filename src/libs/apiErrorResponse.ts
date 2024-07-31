@@ -32,6 +32,16 @@ export function invalidBody(parameters: string[] = []) {
   );
 }
 
+export function badRequest(errorMessage: string) {
+  return NextResponse.json(
+    {
+      error: true,
+      errorMessage,
+    },
+    { status: 400 },
+  );
+}
+
 export function invalidHeaders(parameters: string[] = []) {
   const baseErrorMessage = "Invalid headers.";
   const errorMessage =
