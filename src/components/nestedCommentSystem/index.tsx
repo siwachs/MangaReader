@@ -306,7 +306,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
                 className={`break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
                 dangerouslySetInnerHTML={{
                   __html: comment.isDeleted
-                    ? "This comment has been deleted."
+                    ? "This comment was deleted."
                     : comment.message,
                 }}
               />

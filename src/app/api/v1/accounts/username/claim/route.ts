@@ -28,10 +28,13 @@ const claimUsername = async (req: NextRequest) => {
     user.username = username;
     await user.save();
 
-    return NextResponse.json({ error: false }, { status: 200 });
+    return NextResponse.json(
+      { error: false, claimedUsername: username },
+      { status: 200 },
+    );
   } catch (error: any) {
     return serverError(error.message);
   }
 };
 
-export { claimUsername as POST };
+export { claimUsername as PUT };

@@ -47,7 +47,7 @@ const ClientAuth: React.FC<{
         className={signInButtonClasses}
         onClick={() => signIn(authProvider, { callbackUrl: currentUrl })}
       >
-        {signInButtonComponent ? signInButtonComponent : "Sign In"}
+        {signInButtonComponent ?? "Sign In"}
       </button>
     );
 

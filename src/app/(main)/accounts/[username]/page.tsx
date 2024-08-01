@@ -11,6 +11,8 @@ export default async function AccountPage() {
   return (
     <>
       <HomeNav />
+
+      <div></div>
     </>
   );
 }
