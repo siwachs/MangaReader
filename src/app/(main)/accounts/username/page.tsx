@@ -31,7 +31,7 @@ export default function CreateUsernamePage() {
   const router = useRouter();
   const currentUrl = usePathname();
   const session = useSession();
-  const { status, data } = session;
+  const { status, data, update } = session;
 
   const [username, setUsername] = useState("");
   const [usernameQuery, setUsernameQuery] = useState(initialUsernameQuery);
@@ -79,6 +79,7 @@ export default function CreateUsernamePage() {
       });
     if (usernameQuery.loading || !usernameQuery.usernameAvailable) return;
 
+    setUsernameQuery({ ...initialUsernameQuery, loading: true });
     const requestResponse = await makePostPutRequest(
       claimUsernameEndpoint,
       "PUT",
@@ -93,6 +94,7 @@ export default function CreateUsernamePage() {
         error: errorMessage,
       });
 
+    update({ username: claimedUsername });
     router.push(`/accounts/${claimedUsername}`);
   };
 
