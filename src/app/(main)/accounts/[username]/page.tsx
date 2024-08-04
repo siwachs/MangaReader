@@ -3,8 +3,29 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
+import useDebounce from "@/hooks/useDebounce";
+
+import { makeGetRequest, makePostPutRequest } from "@/service/asyncApiCalls";
 
 import { FaChevronRight } from "react-icons/fa";
+import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
+import { AiOutlineLoading } from "react-icons/ai";
+
+const checkUsenameEndpoint = process.env
+  .NEXT_PUBLIC_API_ENDPOINT_CHECK_USERNAME as string;
+const claimUsernameEndpoint = process.env
+  .NEXT_PUBLIC_API_ENDPOINT_CLAIM_USERNAME as string;
+
+const initialUsernameQuery: {
+  loading: boolean;
+  usernameAvailable: null | boolean;
+  error: null | string;
+} = {
+  loading: false,
+  usernameAvailable: null,
+  error: null,
+};
+const debouncedUsernameQueryDelay = 300;
 
 export default function AccountPage() {
   const session = useSession();
@@ -45,19 +66,33 @@ export default function AccountPage() {
 const ProfileInformationRow: React.FC<{
   title: string;
   children: React.ReactNode;
+  onClick?: () => void;
   childrenIsText?: boolean;
   clientInteractable?: boolean;
 }> = ({
   title,
   children,
+  onClick,
   childrenIsText = true,
   clientInteractable = true,
 }) => {
+  const role = onClick ? "button" : undefined;
+  const tabIndex = onClick ? 0 : undefined;
+  const onKeydown = onClick
+    ? (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") onClick();
+      }
+    : undefined;
+
   return (
     <div className="flex h-14 items-center justify-between border-b border-[var(--app-border-color-light-gray)] p-4">
       <h3 className="select-none">{title}</h3>
 
       <div
+        tabIndex={tabIndex}
+        role={role}
+        onClick={onClick}
+        onKeyDown={onKeydown}
         className={`flex ${clientInteractable ? "cursor-pointer" : ""} items-center gap-1`}
       >
         {childrenIsText ? (
@@ -72,4 +107,8 @@ const ProfileInformationRow: React.FC<{
       </div>
     </div>
   );
+};
+
+const Username: React.FC<{}> = () => {
+  return <div></div>;
 };
