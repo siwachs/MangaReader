@@ -14,7 +14,7 @@ const MenuToggler: React.FC = () => {
   return sidebarOpen ? (
     ReactDom.createPortal(
       <Sidebar setSidebarOpen={setSidebarOpen} />,
-      document.getElementById("sidebar-portal")!,
+      document.getElementById("sidebar-portal") as HTMLElement,
     )
   ) : (
     <button

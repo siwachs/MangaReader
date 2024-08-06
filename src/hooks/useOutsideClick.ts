@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 export default function useOutsideClick(
-  ref: React.RefObject<HTMLDivElement>,
+  ref: React.RefObject<HTMLDivElement> | React.RefObject<HTMLFormElement>,
   isOpen: boolean,
   callback: () => void,
 ) {

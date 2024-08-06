@@ -1,9 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import ReactDom from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
+import useBodyOverflow from "@/hooks/useBodyOverflow";
+
+import { createKeydownEvent } from "@/libs/uiUtils/keyboardUtils";
 
 import { FaChevronRight } from "react-icons/fa";
 import {
@@ -13,22 +18,30 @@ import {
 } from "react-icons/md";
 import { TfiCommentAlt, TfiCommentsSmiley } from "react-icons/tfi";
 import { BiLike } from "react-icons/bi";
+import SetUsername from "./_components/setUsername";
 
 export default function AccountPage() {
   const session = useSession();
   const currentUrl = usePathname();
   const { status, data } = session;
 
+  const [isSetAvatarOpen, setIsSetAvatarOpen] = useState(false);
+  const [isSetUsernameOpen, setIsSetUsernameOpen] = useState(false);
+  const [isSetGenderOpen, setIsSetGenderOpen] = useState(false);
+  useBodyOverflow(isSetAvatarOpen || isSetUsernameOpen || isSetGenderOpen);
+
   if (status === "loading")
-    return <div className="h-[calc(100vh-60px)] animate-pulse bg-gray-400" />;
+    return (
+      <div className="h-[calc(100vh-60px)] animate-pulse bg-gray-400 md:h-[calc(100vh-120px)]" />
+    );
 
   if (status === "authenticated")
     return (
-      <div className="mx-auto max-w-[690px] px-5">
+      <div className="mx-auto h-[calc(100vh-60px)] max-w-[690px] overflow-auto px-5 md:h-[calc(100vh-120px)]">
         <div className="flex items-center justify-end gap-4">
           <Link href="/" className="relative">
             <MdOutlineMail className="size-6" />
-            <span className="absolute -right-1.5 -top-0 flex size-3.5 items-center justify-center rounded-full bg-[var(--app-text-color-vibrant-pink)] text-xs text-white">
+            <span className="absolute -right-1.5 top-0 flex size-3.5 items-center justify-center rounded-full bg-[var(--app-text-color-vibrant-pink)] text-xs text-white">
               1
             </span>
           </Link>
@@ -51,7 +64,12 @@ export default function AccountPage() {
         </div>
 
         <div className="soft-edge-shadow mt-3.5 rounded-[10px]">
-          <ProfileInformationRow title="Avatar" childrenIsText={false}>
+          <ProfileInformationRow
+            title="Avatar"
+            onClick={() => setIsSetAvatarOpen(true)}
+            ariaLabel="Open SetAvatar"
+            childrenIsText={false}
+          >
             <Image
               src={data.user.avatar ?? "/assests/person.png"}
               alt={data.user.name ?? "user-avatar"}
@@ -61,11 +79,21 @@ export default function AccountPage() {
             />
           </ProfileInformationRow>
 
-          <ProfileInformationRow title="Username">
+          <ProfileInformationRow
+            title="Username"
+            onClick={() => setIsSetUsernameOpen(true)}
+            ariaLabel="Open Setusername"
+          >
             {data.user.username}
           </ProfileInformationRow>
 
-          <ProfileInformationRow title="Gender">Not Set</ProfileInformationRow>
+          <ProfileInformationRow
+            title="Gender"
+            onClick={() => setIsSetGenderOpen(true)}
+            ariaLabel="Open SetGender"
+          >
+            Not Set
+          </ProfileInformationRow>
 
           <ProfileInformationRow title="ID" clientInteractable={false}>
             {data.user.id ? data.user.id?.slice(-8) : "Undefined"}
@@ -86,6 +114,15 @@ export default function AccountPage() {
           />
           <ProfileLinkRow href="/" Icon={BiLike} title="Liked Chapters" />
         </div>
+
+        {isSetUsernameOpen &&
+          ReactDom.createPortal(
+            <SetUsername
+              isSetUsernameOpen={isSetUsernameOpen}
+              setIsSetUsernameOpen={setIsSetUsernameOpen}
+            />,
+            document.getElementById("user-profile-portal") as HTMLElement,
+          )}
       </div>
     );
 
@@ -96,22 +133,19 @@ const ProfileInformationRow: React.FC<{
   title: string;
   children: React.ReactNode;
   onClick?: () => void;
+  ariaLabel?: string;
   childrenIsText?: boolean;
   clientInteractable?: boolean;
 }> = ({
   title,
   children,
   onClick,
+  ariaLabel,
   childrenIsText = true,
   clientInteractable = true,
 }) => {
   const role = onClick ? "button" : undefined;
   const tabIndex = onClick ? 0 : undefined;
-  const onKeydown = onClick
-    ? (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") onClick();
-      }
-    : undefined;
 
   return (
     <div className="flex h-14 items-center justify-between border-b border-[var(--app-border-color-light-gray)] p-4">
@@ -121,11 +155,12 @@ const ProfileInformationRow: React.FC<{
         tabIndex={tabIndex}
         role={role}
         onClick={onClick}
-        onKeyDown={onKeydown}
-        className={`flex ${clientInteractable ? "cursor-pointer" : ""} items-center gap-1`}
+        onKeyDown={() => createKeydownEvent(onClick)}
+        aria-label={ariaLabel}
+        className={`flex ${clientInteractable ? "cursor-pointer select-none" : "select-none"} items-center gap-1`}
       >
         {childrenIsText ? (
-          <h3 className="select-none text-slate-600">{children}</h3>
+          <h3 className="text-slate-600">{children}</h3>
         ) : (
           children
         )}

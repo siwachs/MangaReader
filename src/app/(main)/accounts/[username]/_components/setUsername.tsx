@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useState, useRef, Dispatch, SetStateAction } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import useDebounce from "@/hooks/useDebounce";
+import useOutsideClick from "@/hooks/useOutsideClick";
 
 import { makeGetRequest, makePostPutRequest } from "@/service/asyncApiCalls";
+import ModelOverlay from "@/components/utils/modelOverlay";
 
 import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -25,15 +27,21 @@ const initialUsernameQuery: {
 const debouncedUsernameQueryDelay = 300;
 
 const SetUsername: React.FC<{
-  initialUsername: string;
-  userId: string;
-}> = ({ initialUsername, userId }) => {
+  isSetUsernameOpen: boolean;
+  setIsSetUsernameOpen: Dispatch<SetStateAction<boolean>>;
+}> = ({ isSetUsernameOpen, setIsSetUsernameOpen }) => {
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
+
   const session = useSession();
   const { data, update } = session;
 
-  const [username, setUsername] = useState(initialUsername);
+  const [username, setUsername] = useState(data?.user.username ?? "");
   const [usernameQuery, setUsernameQuery] = useState(initialUsernameQuery);
+
+  useOutsideClick(formRef, isSetUsernameOpen, () => {
+    setIsSetUsernameOpen(false);
+  });
 
   useDebounce(
     async () => {
@@ -89,7 +97,7 @@ const SetUsername: React.FC<{
       });
 
     update({ username: claimedUsername });
-    router.push(`/accounts/${claimedUsername}`);
+    router.replace(`/accounts/${claimedUsername}`);
   };
 
   const changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,54 +116,69 @@ const SetUsername: React.FC<{
     username === data?.user.username || usernameQuery.loading;
 
   return (
-    <form
-      onSubmit={claimThisUsername}
-      className="soft-edge-shadow mx-auto mt-8 grid w-[90%] max-w-[690px] place-items-center gap-3.5 overflow-hidden rounded-lg p-5 text-sm md:mt-36 md:text-base"
-    >
-      <h3 className="select-none font-bold">Set Username</h3>
-      <div className="w-full">
-        <div
-          className={`flex items-center rounded-lg border bg-[var(--app-text-color-very-light-gray)] ${usernameQuery.error ? "border-red-500" : "border-transparent"}`}
-        >
-          <input
-            value={username}
-            onChange={changeUsername}
-            type="text"
-            autoComplete="on"
-            autoFocus
-            className="flex-1 bg-transparent p-2.5 outline-none"
-          />
+    <ModelOverlay>
+      <form
+        ref={formRef}
+        onSubmit={claimThisUsername}
+        className="soft-edge-shadow mx-auto mt-[92px] grid w-[90%] max-w-[690px] place-items-center gap-3.5 overflow-hidden rounded-lg bg-white p-5 text-sm md:mt-36 md:text-base"
+      >
+        <h3 className="select-none font-bold">Set Username</h3>
+        <div className="w-full">
+          <div
+            className={`flex items-center rounded-lg border bg-[var(--app-text-color-very-light-gray)] ${usernameQuery.error ? "border-red-500" : "border-transparent"}`}
+          >
+            <input
+              value={username}
+              onChange={changeUsername}
+              type="text"
+              autoComplete="on"
+              autoFocus
+              className="flex-1 bg-transparent p-2.5 text-black outline-none"
+            />
 
-          {usernameQuery.usernameAvailable !== null && (
-            <>
-              {usernameQuery.usernameAvailable && (
-                <IoCheckmarkCircle className="mr-2 size-6 text-green-500" />
-              )}
-              {!usernameQuery.usernameAvailable && (
-                <IoCloseCircle className="mr-2 size-6 text-red-500" />
-              )}
-            </>
-          )}
-          {usernameQuery.loading && (
-            <AiOutlineLoading className="mr-2 size-6 animate-spin" />
-          )}
+            {usernameQuery.usernameAvailable !== null && (
+              <>
+                {usernameQuery.usernameAvailable && (
+                  <IoCheckmarkCircle className="mr-2 size-6 text-green-500" />
+                )}
+                {!usernameQuery.usernameAvailable && (
+                  <IoCloseCircle className="mr-2 size-6 text-red-500" />
+                )}
+              </>
+            )}
+            {usernameQuery.loading && (
+              <AiOutlineLoading className="mr-2 size-6 animate-spin" />
+            )}
+          </div>
+
+          <p
+            className={`my-1.5 h-5 text-xs font-bold text-red-500 ${usernameQuery.error ? "" : "opacity-0"}`}
+          >
+            {usernameQuery.error}
+          </p>
         </div>
 
-        <p
-          className={`my-1.5 h-5 text-xs font-bold text-red-500 ${usernameQuery.error ? "" : "opacity-0"}`}
-        >
-          {usernameQuery.error}
-        </p>
-      </div>
+        <div className="flex w-full items-center justify-center gap-5 md:gap-6">
+          <button
+            type="button"
+            onClick={() => setIsSetUsernameOpen(false)}
+            aria-label="Cancel"
+            className="inline-block h-[42px] rounded-[20px] bg-[var(--app-text-color-very-light-gray)] px-9 text-black hover:bg-gray-200"
+          >
+            Cancel
+          </button>
 
-      <button
-        disabled={disableButton}
-        type="submit"
-        className="inline-block h-10 rounded-[20px] bg-[var(--app-text-color-red)] px-6 text-white hover:bg-red-500"
-      >
-        Confirm
-      </button>
-    </form>
+          <button
+            disabled={disableButton}
+            type="submit"
+            aria-label="Setusername"
+            className="inline-block h-[42px] rounded-[20px] bg-[var(--app-text-color-red)] px-9 text-white hover:bg-red-500 disabled:hover:bg-[var(--app-text-color-red)]"
+          >
+            Confirm
+          </button>
+        </div>
+      </form>
+    </ModelOverlay>
   );
 };
 

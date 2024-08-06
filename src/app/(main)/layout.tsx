@@ -22,6 +22,7 @@ export default function RootLayout({
       <body className={nunito.className}>
         <NextAuthProvider>
           <Header />
+          <div id="user-profile-portal" />
           <div id="sidebar-portal" />
           <main id="page-content">{children}</main>
         </NextAuthProvider>
