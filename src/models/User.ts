@@ -15,6 +15,10 @@ const UserSchema = new Schema(
     name: { type: String, required: true },
     username: { type: String, unique: true },
     email: { type: String, required: true, unique: true },
+    gender: {
+      type: String,
+      enum: ["MALE", "FEMALE"],
+    },
     avatar: { type: String },
     subscriptions: [{ type: Schema.Types.ObjectId, ref: "Content" }],
     likedChapters: [{ type: Schema.Types.ObjectId, ref: "Chapter" }],

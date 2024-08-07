@@ -133,7 +133,7 @@ const SetUsername: React.FC<{
               type="text"
               autoComplete="on"
               autoFocus
-              className="flex-1 bg-transparent p-2.5 text-black outline-none"
+              className="flex-1 bg-transparent p-2.5 outline-none"
             />
 
             {usernameQuery.usernameAvailable !== null && (
@@ -163,7 +163,7 @@ const SetUsername: React.FC<{
             type="button"
             onClick={() => setIsSetUsernameOpen(false)}
             aria-label="Cancel"
-            className="inline-block h-[42px] rounded-[20px] bg-[var(--app-text-color-very-light-gray)] px-9 text-black hover:bg-gray-200"
+            className="inline-block h-[42px] rounded-[20px] bg-[var(--app-text-color-very-light-gray)] px-9 hover:bg-gray-200"
           >
             Cancel
           </button>

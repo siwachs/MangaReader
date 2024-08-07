@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --app-bg-color-primary: #f5f5fa;
+  /* #D3D3D3
+  #F8F8FF, #FFFAFA, #FAF9F6 */
+  --app-bg-color-primary: #faf9f6;
   --app-text-color-primary: #333333;
+
+  /* #333333, #0B1215 */
 
   --app-background-overlay-transparent-black: #0000009e;
 
@@ -72,7 +76,7 @@
 }
 
 body {
-  @apply bg-white text-[var(--app-text-color-primary)];
+  @apply bg-[var(--app-bg-color-primary)] text-[var(--app-text-color-primary)];
 }
 
 @layer utilities {

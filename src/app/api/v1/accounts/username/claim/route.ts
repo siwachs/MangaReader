@@ -5,6 +5,7 @@ import {
   serverError,
   unauthorizedUser,
   badRequest,
+  invalidBody,
 } from "@/libs/apiErrorResponse";
 import connectToMongoDB from "@/libs/connectToMongoDB";
 import getServerSession from "@/libs/getServerSession";
@@ -13,8 +14,10 @@ import User from "@/models/User";
 const claimUsername = async (req: NextRequest) => {
   try {
     const { userId, username } = await req.json();
-    await connectToMongoDB();
+    const trimmedUsername = username?.trim();
+    if (!trimmedUsername) return invalidBody(["userId", "username"]);
 
+    await connectToMongoDB();
     const user = await User.findById(userId).select("_id");
     if (!user) return notFound(["User"]);
 
@@ -25,11 +28,11 @@ const claimUsername = async (req: NextRequest) => {
     if (usernameAvailable !== null)
       return badRequest("Username already claimed.");
 
-    user.username = username;
+    user.username = trimmedUsername;
     await user.save();
 
     return NextResponse.json(
-      { error: false, claimedUsername: username },
+      { error: false, claimedUsername: trimmedUsername },
       { status: 200 },
     );
   } catch (error: any) {

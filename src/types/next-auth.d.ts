@@ -8,8 +8,9 @@ declare module "next-auth" {
     name: string;
     username?: string;
     email: string;
-    avatar: string | null;
-    isAdmin?: boolean;
+    gender?: "MALE" | "FEMALE";
+    avatar?: string;
+    isAdmin: boolean;
     createdAt: string;
     updatedAt: string;
   }

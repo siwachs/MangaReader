@@ -19,6 +19,7 @@ import {
 import { TfiCommentAlt, TfiCommentsSmiley } from "react-icons/tfi";
 import { BiLike } from "react-icons/bi";
 import SetUsername from "./_components/setUsername";
+import SetGender from "./_components/setGender";
 
 export default function AccountPage() {
   const session = useSession();
@@ -54,7 +55,7 @@ export default function AccountPage() {
         <div className="mt-2.5 flex gap-5">
           <Image
             src={data.user.avatar ?? "/assests/person.png"}
-            alt={data.user.name ?? "user-avatar"}
+            alt={data.user.name!}
             width={52}
             height={52}
             className="size-[50px] cursor-pointer rounded-full object-center"
@@ -72,7 +73,7 @@ export default function AccountPage() {
           >
             <Image
               src={data.user.avatar ?? "/assests/person.png"}
-              alt={data.user.name ?? "user-avatar"}
+              alt={data.user.name!}
               width={46}
               height={46}
               className="size-9 rounded-full object-cover"
@@ -84,7 +85,7 @@ export default function AccountPage() {
             onClick={() => setIsSetUsernameOpen(true)}
             ariaLabel="Open Setusername"
           >
-            {data.user.username}
+            {data.user.username ?? "Not Set"}
           </ProfileInformationRow>
 
           <ProfileInformationRow
@@ -96,7 +97,7 @@ export default function AccountPage() {
           </ProfileInformationRow>
 
           <ProfileInformationRow title="ID" clientInteractable={false}>
-            {data.user.id ? data.user.id?.slice(-8) : "Undefined"}
+            {data.user.id?.slice(-8)}
           </ProfileInformationRow>
         </div>
 
@@ -120,6 +121,15 @@ export default function AccountPage() {
             <SetUsername
               isSetUsernameOpen={isSetUsernameOpen}
               setIsSetUsernameOpen={setIsSetUsernameOpen}
+            />,
+            document.getElementById("user-profile-portal") as HTMLElement,
+          )}
+
+        {isSetGenderOpen &&
+          ReactDom.createPortal(
+            <SetGender
+              isSetGenderOpen={isSetGenderOpen}
+              setIsSetGenderOpen={setIsSetGenderOpen}
             />,
             document.getElementById("user-profile-portal") as HTMLElement,
           )}
