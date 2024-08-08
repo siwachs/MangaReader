@@ -20,6 +20,7 @@ import { TfiCommentAlt, TfiCommentsSmiley } from "react-icons/tfi";
 import { BiLike } from "react-icons/bi";
 import SetUsername from "./_components/setUsername";
 import SetGender from "./_components/setGender";
+import SetAvatar from "./_components/setAvatar";
 
 export default function AccountPage() {
   const session = useSession();
@@ -115,6 +116,15 @@ export default function AccountPage() {
           />
           <ProfileLinkRow href="/" Icon={BiLike} title="Liked Chapters" />
         </div>
+
+        {isSetAvatarOpen &&
+          ReactDom.createPortal(
+            <SetAvatar
+              isSetAvatarOpen={isSetAvatarOpen}
+              setIsSetAvatarOpen={setIsSetAvatarOpen}
+            />,
+            document.getElementById("user-profile-portal") as HTMLElement,
+          )}
 
         {isSetUsernameOpen &&
           ReactDom.createPortal(
