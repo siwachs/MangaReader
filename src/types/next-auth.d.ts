@@ -8,7 +8,7 @@ declare module "next-auth" {
     name: string;
     username?: string;
     email: string;
-    gender?: "MALE" | "FEMALE";
+    gender?: "Male" | "Female";
     avatar?: string;
     isAdmin: boolean;
     createdAt: string;

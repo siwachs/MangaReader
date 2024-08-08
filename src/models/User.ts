@@ -17,7 +17,7 @@ const UserSchema = new Schema(
     email: { type: String, required: true, unique: true },
     gender: {
       type: String,
-      enum: ["MALE", "FEMALE"],
+      enum: ["Male", "Female"],
     },
     avatar: { type: String },
     subscriptions: [{ type: Schema.Types.ObjectId, ref: "Content" }],

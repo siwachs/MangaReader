@@ -39,7 +39,7 @@ export default function AccountPage() {
   if (status === "authenticated")
     return (
       <div className="mx-auto h-[calc(100vh-60px)] max-w-[690px] overflow-auto px-5 md:h-[calc(100vh-120px)]">
-        <div className="flex items-center justify-end gap-4">
+        <div className="mt-2.5 flex items-center justify-end gap-4">
           <Link href="/" className="relative">
             <MdOutlineMail className="size-6" />
             <span className="absolute -right-1.5 top-0 flex size-3.5 items-center justify-center rounded-full bg-[var(--app-text-color-vibrant-pink)] text-xs text-white">
@@ -93,7 +93,7 @@ export default function AccountPage() {
             onClick={() => setIsSetGenderOpen(true)}
             ariaLabel="Open SetGender"
           >
-            Not Set
+            {data.user.gender ?? "Not Set"}
           </ProfileInformationRow>
 
           <ProfileInformationRow title="ID" clientInteractable={false}>
