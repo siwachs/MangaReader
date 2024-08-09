@@ -8,7 +8,12 @@ import { usePathname } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
-import { createKeydownEvent } from "@/libs/uiUtils/keyboardUtils";
+import SetUsername from "./_components/setUsername";
+import SetGender from "./_components/setGender";
+import SetAvatar from "./_components/setAvatar";
+import ImagePickAndUploadTool from "@/components/imagePickAndUploadTool";
+
+import { createKeydownEvent } from "@/libs/uiUtils/eventHandlers";
 
 import { FaChevronRight } from "react-icons/fa";
 import {
@@ -18,19 +23,22 @@ import {
 } from "react-icons/md";
 import { TfiCommentAlt, TfiCommentsSmiley } from "react-icons/tfi";
 import { BiLike } from "react-icons/bi";
-import SetUsername from "./_components/setUsername";
-import SetGender from "./_components/setGender";
-import SetAvatar from "./_components/setAvatar";
 
 export default function AccountPage() {
   const session = useSession();
   const currentUrl = usePathname();
   const { status, data } = session;
 
+  const [images, setImages] = useState<string[]>([]);
   const [isSetAvatarOpen, setIsSetAvatarOpen] = useState(false);
   const [isSetUsernameOpen, setIsSetUsernameOpen] = useState(false);
   const [isSetGenderOpen, setIsSetGenderOpen] = useState(false);
-  useBodyOverflow(isSetAvatarOpen || isSetUsernameOpen || isSetGenderOpen);
+  useBodyOverflow(
+    images.length > 0 ||
+      isSetAvatarOpen ||
+      isSetUsernameOpen ||
+      isSetGenderOpen,
+  );
 
   if (status === "loading")
     return (
@@ -117,9 +125,18 @@ export default function AccountPage() {
           <ProfileLinkRow href="/" Icon={BiLike} title="Liked Chapters" />
         </div>
 
+        {images.length > 0 &&
+          ReactDom.createPortal(
+            <ImagePickAndUploadTool images={images} setImages={setImages} />,
+            document.getElementById(
+              "image-pick-and-upload-portal",
+            ) as HTMLElement,
+          )}
+
         {isSetAvatarOpen &&
           ReactDom.createPortal(
             <SetAvatar
+              setImages={setImages}
               isSetAvatarOpen={isSetAvatarOpen}
               setIsSetAvatarOpen={setIsSetAvatarOpen}
             />,

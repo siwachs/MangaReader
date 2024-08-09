@@ -1,20 +1,17 @@
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import ReactDom from "react-dom";
-import { useSession } from "next-auth/react";
+import { Dispatch, SetStateAction, useRef } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
-import { makePostPutRequest } from "@/service/asyncApiCalls";
+import { getUpdateImageSelectionEvent } from "@/libs/uiUtils/eventHandlers";
 import ModelOverlay from "@/components/utils/modelOverlay";
 
 const menuButtonClasses =
   "h-16 w-full border-b border-[var(--app-border-color-light-gray)] p-4 text-base font-bold";
 
 const SetAvatar: React.FC<{
+  setImages: Dispatch<SetStateAction<string[]>>;
   isSetAvatarOpen: boolean;
   setIsSetAvatarOpen: Dispatch<SetStateAction<boolean>>;
-}> = ({ isSetAvatarOpen, setIsSetAvatarOpen }) => {
-  const [images, setImages] = useState<string[]>([]);
-
+}> = ({ setImages, isSetAvatarOpen, setIsSetAvatarOpen }) => {
   const avatarMenuRef = useRef<HTMLDivElement>(null);
   const filePickerRef = useRef<HTMLInputElement>(null);
 
@@ -22,10 +19,9 @@ const SetAvatar: React.FC<{
     setIsSetAvatarOpen(false);
   });
 
-  const updateImagesSelecction = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedImages = e.target.files || null;
-    if (!selectedImages) return;
-  };
+  const updateImageSelection = getUpdateImageSelectionEvent(setImages, () => {
+    setIsSetAvatarOpen(false);
+  });
 
   return (
     <ModelOverlay>
@@ -37,7 +33,7 @@ const SetAvatar: React.FC<{
 
         <input
           ref={filePickerRef}
-          onChange={updateImagesSelecction}
+          onChange={updateImageSelection}
           type="file"
           multiple
           hidden
