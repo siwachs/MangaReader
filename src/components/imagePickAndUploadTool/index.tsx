@@ -3,17 +3,43 @@ import { Dispatch, SetStateAction, useState } from "react";
 import ModelOverlay from "../utils/modelOverlay";
 
 import { IoArrowBack } from "react-icons/io5";
+import { FaCheckCircle } from "react-icons/fa";
 import {
   FaRegCircleCheck,
   FaCircleChevronLeft,
   FaCircleChevronRight,
+  FaCheck,
 } from "react-icons/fa6";
 
 const ImagePickAndUploadTool: React.FC<{
   images: string[];
   setImages: Dispatch<SetStateAction<string[]>>;
 }> = ({ images, setImages }) => {
+  const [selectedSlides, setSelectedSlides] = useState([]);
   const [activeSlide, setActiveSlide] = useState(0);
+
+  const leftNavigationDisabled = activeSlide === 0;
+  const rightNavigationDisabled = activeSlide === images.length - 1;
+  const currentSlide = activeSlide + 1;
+  const totalSlides = images.length;
+
+  const prevSlide = () => {
+    setActiveSlide((prev) => {
+      if (prev - 1 < 0) return prev;
+
+      return prev - 1;
+    });
+  };
+
+  const nextSlide = () => {
+    setActiveSlide((prev) => {
+      if (prev + 1 === images.length) return prev;
+
+      return prev + 1;
+    });
+  };
+
+  const selectSlide = () => {};
 
   return (
     <ModelOverlay zIndex={9999} blackBg>
@@ -27,10 +53,16 @@ const ImagePickAndUploadTool: React.FC<{
         />
 
         <span className="select-none">
-          {activeSlide + 1}/{images.length}
+          {currentSlide}/{totalSlides}
         </span>
 
-        <FaRegCircleCheck className="size-5" />
+        <FaRegCircleCheck
+          tabIndex={0}
+          role="button"
+          onClick={selectSlide}
+          aria-label="Select Slide"
+          className="size-5"
+        />
       </div>
 
       <div className="hidden-scrollbar relative mt-[60px] flex h-[calc(100vh-120px)] overflow-y-auto overflow-x-hidden">
@@ -51,29 +83,19 @@ const ImagePickAndUploadTool: React.FC<{
         <FaCircleChevronLeft
           tabIndex={0}
           role="button"
-          onClick={() =>
-            setActiveSlide((prev) => {
-              if (prev - 1 < 0) return prev;
-
-              return prev - 1;
-            })
-          }
+          onClick={prevSlide}
           aria-label="Prev Slide"
-          className="absolute left-2 top-1/2 size-7 -translate-y-1/2 text-[var(--app-bg-color-primary)]"
+          aria-disabled={leftNavigationDisabled}
+          className={`absolute left-2 top-1/2 size-7 -translate-y-1/2 ${leftNavigationDisabled ? "pointer-events-none" : "text-[var(--app-bg-color-primary)]"}`}
         />
 
         <FaCircleChevronRight
           tabIndex={0}
           role="button"
-          onClick={() => {
-            setActiveSlide((prev) => {
-              if (prev + 1 === images.length) return prev;
-
-              return prev + 1;
-            });
-          }}
+          onClick={nextSlide}
           aria-label="Next Slide"
-          className="absolute right-2 top-1/2 size-7 -translate-y-1/2 text-[var(--app-bg-color-primary)]"
+          aria-disabled={rightNavigationDisabled}
+          className={`absolute right-2 top-1/2 size-7 -translate-y-1/2 ${rightNavigationDisabled ? "pointer-events-none" : "text-[var(--app-bg-color-primary)]"}`}
         />
       </div>
 
