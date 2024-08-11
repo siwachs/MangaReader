@@ -127,7 +127,11 @@ export default function AccountPage() {
 
         {images.length > 0 &&
           ReactDom.createPortal(
-            <ImagePickAndUploadTool images={images} setImages={setImages} />,
+            <ImagePickAndUploadTool
+              images={images}
+              setImages={setImages}
+              selectionLimit={1}
+            />,
             document.getElementById(
               "image-pick-and-upload-portal",
             ) as HTMLElement,

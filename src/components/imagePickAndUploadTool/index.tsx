@@ -1,45 +1,48 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useCallback } from "react";
 
 import ModelOverlay from "../utils/modelOverlay";
 
 import { IoArrowBack } from "react-icons/io5";
-import { FaCheckCircle } from "react-icons/fa";
 import {
   FaRegCircleCheck,
   FaCircleChevronLeft,
   FaCircleChevronRight,
-  FaCheck,
+  FaCircleCheck,
 } from "react-icons/fa6";
 
 const ImagePickAndUploadTool: React.FC<{
   images: string[];
   setImages: Dispatch<SetStateAction<string[]>>;
-}> = ({ images, setImages }) => {
-  const [selectedSlides, setSelectedSlides] = useState([]);
+  selectionLimit?: number;
+}> = ({ images, setImages, selectionLimit }) => {
+  const [selectedSlides, setSelectedSlides] = useState<string[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
 
+  const totalSlides = images.length;
+  const totalSelectedSlides = selectedSlides.length;
   const leftNavigationDisabled = activeSlide === 0;
   const rightNavigationDisabled = activeSlide === images.length - 1;
-  const currentSlide = activeSlide + 1;
-  const totalSlides = images.length;
+  const currentSlide = images[activeSlide];
+  const isSlideSelected = selectedSlides.includes(currentSlide);
 
-  const prevSlide = () => {
-    setActiveSlide((prev) => {
-      if (prev - 1 < 0) return prev;
+  const prevSlide = useCallback(() => {
+    setActiveSlide((prev) => Math.max(prev - 1, 0));
+  }, []);
 
-      return prev - 1;
-    });
-  };
+  const nextSlide = useCallback(() => {
+    setActiveSlide((prev) => Math.min(prev + 1, totalSlides - 1));
+  }, [totalSlides]);
 
-  const nextSlide = () => {
-    setActiveSlide((prev) => {
-      if (prev + 1 === images.length) return prev;
+  const selectSlide = useCallback(() => {
+    if (selectionLimit && selectionLimit === totalSelectedSlides)
+      return alert(`Select upto ${selectionLimit} images`);
 
-      return prev + 1;
-    });
-  };
+    setSelectedSlides((prev) => [...prev, currentSlide]);
+  }, [currentSlide, totalSelectedSlides, selectionLimit]);
 
-  const selectSlide = () => {};
+  const removeSlide = useCallback(() => {
+    setSelectedSlides((prev) => prev.filter((slide) => slide !== currentSlide));
+  }, [currentSlide]);
 
   return (
     <ModelOverlay zIndex={9999} blackBg>
@@ -53,16 +56,26 @@ const ImagePickAndUploadTool: React.FC<{
         />
 
         <span className="select-none">
-          {currentSlide}/{totalSlides}
+          {activeSlide + 1}/{totalSlides}
         </span>
 
-        <FaRegCircleCheck
-          tabIndex={0}
-          role="button"
-          onClick={selectSlide}
-          aria-label="Select Slide"
-          className="size-5"
-        />
+        {isSlideSelected ? (
+          <FaCircleCheck
+            tabIndex={0}
+            role="button"
+            onClick={removeSlide}
+            aria-label="Remove Slide"
+            className="size-5 text-green-500"
+          />
+        ) : (
+          <FaRegCircleCheck
+            tabIndex={0}
+            role="button"
+            onClick={selectSlide}
+            aria-label="Select Slide"
+            className="size-5"
+          />
+        )}
       </div>
 
       <div className="hidden-scrollbar relative mt-[60px] flex h-[calc(100vh-120px)] overflow-y-auto overflow-x-hidden">
@@ -100,7 +113,24 @@ const ImagePickAndUploadTool: React.FC<{
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 z-[99999] flex h-10 select-none items-center justify-end bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]">
-        Please Select
+        {totalSelectedSlides === 0 ? (
+          <span>Please Select</span>
+        ) : (
+          <button className="flex items-center gap-1.5 text-orange-600">
+            <span className="flex size-[18px] items-center justify-center rounded-full bg-orange-600 text-xs text-white">
+              {totalSelectedSlides}
+            </span>
+            {selectionLimit ? (
+              <span>
+                {totalSelectedSlides === selectionLimit
+                  ? "Completed"
+                  : "Please Select"}
+              </span>
+            ) : (
+              <span>Next</span>
+            )}
+          </button>
+        )}
       </div>
     </ModelOverlay>
   );
