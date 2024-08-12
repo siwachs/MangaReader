@@ -128,7 +128,7 @@ export default function AccountPage() {
             <ImagePickAndUploadTool
               images={images}
               setImages={setImages}
-              selectionLimit={1}
+              multiple
             />,
             document.getElementById(
               "image-pick-and-upload-portal",

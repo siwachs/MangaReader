@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef } from "react";
+import { Dispatch, SetStateAction, useRef, useCallback } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 import { getUpdateImageSelectionEvent } from "@/libs/uiUtils/eventHandlers";
@@ -12,16 +12,19 @@ const SetAvatar: React.FC<{
   isSetAvatarOpen: boolean;
   setIsSetAvatarOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ setImages, isSetAvatarOpen, setIsSetAvatarOpen }) => {
+  const selectFromGalleryRef = useRef<HTMLInputElement>(null);
   const avatarMenuRef = useRef<HTMLDivElement>(null);
-  const filePickerRef = useRef<HTMLInputElement>(null);
 
   useOutsideClick(avatarMenuRef, isSetAvatarOpen, () => {
     setIsSetAvatarOpen(false);
   });
 
-  const updateImageSelection = getUpdateImageSelectionEvent(setImages, () => {
-    setIsSetAvatarOpen(false);
-  });
+  const updateImageSelection = useCallback(
+    getUpdateImageSelectionEvent(setImages, () => {
+      setIsSetAvatarOpen(false);
+    }),
+    [setImages, setIsSetAvatarOpen],
+  );
 
   return (
     <ModelOverlay>
@@ -31,19 +34,20 @@ const SetAvatar: React.FC<{
       >
         <button className={menuButtonClasses}>View Full Size</button>
 
-        <input
-          ref={filePickerRef}
-          onChange={updateImageSelection}
-          type="file"
-          multiple
-          hidden
-          accept="image/*"
-        />
         <button
-          onClick={() => filePickerRef.current?.click()}
+          onClick={() => selectFromGalleryRef.current?.click()}
           className={menuButtonClasses}
         >
           Select From Gallery
+          <input
+            ref={selectFromGalleryRef}
+            onChange={updateImageSelection}
+            id="avatar"
+            type="file"
+            accept="image/*"
+            hidden
+            aria-label="Select From Gallery"
+          />
         </button>
 
         <div className="h-2 w-full bg-gray-200" />

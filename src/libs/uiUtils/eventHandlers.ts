@@ -18,29 +18,44 @@ export const createKeydownEvent = (onClick?: () => void) => {
 /**
  * Handle onChange events for input field of type file
  * @param setImages - State to set images.
+ * @param maxFileSize - Define each image's max size fallback to 3MB
  * @returns A onChange event handler function.
  */
 export const getUpdateImageSelectionEvent = (
   setImages: Dispatch<SetStateAction<string[]>>,
   callback?: () => void,
+  maxFileSize?: number,
 ) => {
+  const effectiveMaxFileSize = maxFileSize ?? 3;
+  const MAX_FILE_SIZE = effectiveMaxFileSize * 1024 * 1024; // Convert MB to bytes
+
   return (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImages = e.target.files || null;
     if (!selectedImages) return;
 
-    const filteredImagesPromises = Array.from(selectedImages).map((file) => {
-      if (file.type.startsWith("image/")) return imageFileToBase64(file);
-    });
+    const filesArray = Array.from(selectedImages);
+    const errorMessages: string[] = [];
 
-    Promise.all(filteredImagesPromises)
-      .then((filteredImages) => {
-        const validImages = filteredImages.filter(
-          (image) => image !== undefined,
-        );
+    const filteredImagesPromises = filesArray
+      .filter((file) => {
+        const isImage = file.type.startsWith("image/");
+        const isWithinSizeLimit = file.size <= MAX_FILE_SIZE;
 
-        setImages(validImages);
-        if (callback) callback();
+        if (!isImage) errorMessages.push(`${file.name} is not a image.`);
+        if (!isWithinSizeLimit)
+          errorMessages.push(
+            `${file.name} exceeds the size limit of ${effectiveMaxFileSize}MB.`,
+          );
+
+        return isImage && isWithinSizeLimit;
       })
-      .catch((error) => {});
+      .map((file) => imageFileToBase64(file));
+
+    if (errorMessages.length > 0) alert(errorMessages.join("\n"));
+
+    Promise.all(filteredImagesPromises).then((filteredImages) => {
+      setImages(filteredImages);
+      if (callback) callback();
+    });
   };
 };
