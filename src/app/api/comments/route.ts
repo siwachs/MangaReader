@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
 
 import { Comment as CommentType, VoteType } from "@/types";
-import { auth } from "@/libs/auth";
 import {
   invalidBody,
   invalidQuery,
@@ -10,9 +9,9 @@ import {
   serverError,
   unauthorizedUser,
 } from "@/libs/apiErrorResponse";
-import formatMongooseDoc from "@/libs/formatMongooseDoc";
-import getServerSession from "@/libs/getServerSession";
-import connectToMongoDB from "@/libs/connectToMongoDB";
+import formatMongooseDoc from "@/libs/db/formatMongooseDoc";
+import getServerSession from "@/libs/db/getServerSession";
+import connectToMongoDB from "@/libs/db/connectToMongoDB";
 import Comment from "@/models/Comment";
 import User from "@/models/User";
 
@@ -103,7 +102,7 @@ const getComments = async (req: NextRequest) => {
         formatMongooseDoc(comment, "Comment"),
       ) ?? [];
 
-    const serverSession = await auth();
+    const serverSession = await getServerSession();
     if (serverSession) {
       const aggregatedUser = await User.aggregate([
         {

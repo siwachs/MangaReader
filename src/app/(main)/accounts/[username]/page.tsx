@@ -8,10 +8,11 @@ import { usePathname } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
+import LoadingOverlay from "@/components/utils/loadingOverlay";
+import ImagePickAndUploadTool from "@/components/imagePickAndUploadTool";
 import SetUsername from "./_components/setUsername";
 import SetGender from "./_components/setGender";
 import SetAvatar from "./_components/setAvatar";
-import ImagePickAndUploadTool from "@/components/imagePickAndUploadTool";
 
 import { createKeydownEvent } from "@/libs/uiUtils/eventHandlers";
 
@@ -40,10 +41,7 @@ export default function AccountPage() {
       isSetGenderOpen,
   );
 
-  if (status === "loading")
-    return (
-      <div className="h-[calc(100vh-60px)] animate-pulse bg-gray-400 md:h-[calc(100vh-120px)]" />
-    );
+  if (status === "loading") return <LoadingOverlay />;
 
   if (status === "authenticated")
     return (

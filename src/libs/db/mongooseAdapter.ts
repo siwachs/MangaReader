@@ -7,7 +7,7 @@ import {
 } from "next-auth/adapters";
 import connectToMongoDB from "./connectToMongoDB";
 
-import { partialUser } from "@/libs/mongooseSelect";
+import { partialUser } from "./mongooseSelect";
 import Account from "@/models/Account";
 import Session from "@/models/Session";
 import User from "@/models/User";

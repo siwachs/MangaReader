@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { notFound, serverError } from "@/libs/apiErrorResponse";
-import connectToMongoDB from "@/libs/connectToMongoDB";
+import connectToMongoDB from "@/libs/db/connectToMongoDB";
 import User from "@/models/User";
 
 const checkUsername = async (

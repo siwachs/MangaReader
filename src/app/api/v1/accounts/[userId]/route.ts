@@ -5,8 +5,8 @@ import {
   serverError,
   unauthorizedUser,
 } from "@/libs/apiErrorResponse";
-import connectToMongoDB from "@/libs/connectToMongoDB";
-import getServerSession from "@/libs/getServerSession";
+import connectToMongoDB from "@/libs/db/connectToMongoDB";
+import getServerSession from "@/libs/db/getServerSession";
 import User from "@/models/User";
 
 const updateProfile = async (
