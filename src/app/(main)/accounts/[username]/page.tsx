@@ -30,12 +30,12 @@ export default function AccountPage() {
   const currentUrl = usePathname();
   const { status, data } = session;
 
-  const [images, setImages] = useState<string[]>([]);
+  const [avatarImage, setAvatarImage] = useState<string[]>([]);
   const [isSetAvatarOpen, setIsSetAvatarOpen] = useState(false);
   const [isSetUsernameOpen, setIsSetUsernameOpen] = useState(false);
   const [isSetGenderOpen, setIsSetGenderOpen] = useState(false);
   useBodyOverflow(
-    images.length > 0 ||
+    avatarImage.length > 0 ||
       isSetAvatarOpen ||
       isSetUsernameOpen ||
       isSetGenderOpen,
@@ -123,12 +123,11 @@ export default function AccountPage() {
           <ProfileLinkRow href="/" Icon={BiLike} title="Liked Chapters" />
         </div>
 
-        {images.length > 0 &&
+        {avatarImage.length > 0 &&
           ReactDom.createPortal(
             <ImagePickAndUploadTool
-              images={images}
-              setImages={setImages}
-              multiple
+              images={avatarImage}
+              goBackCallback={() => setAvatarImage([])}
             />,
             document.getElementById(
               "image-pick-and-upload-portal",
@@ -138,7 +137,7 @@ export default function AccountPage() {
         {isSetAvatarOpen &&
           ReactDom.createPortal(
             <SetAvatar
-              setImages={setImages}
+              setAvatarImage={setAvatarImage}
               isSetAvatarOpen={isSetAvatarOpen}
               setIsSetAvatarOpen={setIsSetAvatarOpen}
             />,

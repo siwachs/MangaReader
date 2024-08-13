@@ -8,10 +8,10 @@ const menuButtonClasses =
   "h-16 w-full border-b border-[var(--app-border-color-light-gray)] p-4 text-base font-bold";
 
 const SetAvatar: React.FC<{
-  setImages: Dispatch<SetStateAction<string[]>>;
+  setAvatarImage: Dispatch<SetStateAction<string[]>>;
   isSetAvatarOpen: boolean;
   setIsSetAvatarOpen: Dispatch<SetStateAction<boolean>>;
-}> = ({ setImages, isSetAvatarOpen, setIsSetAvatarOpen }) => {
+}> = ({ setAvatarImage, isSetAvatarOpen, setIsSetAvatarOpen }) => {
   const selectFromGalleryRef = useRef<HTMLInputElement>(null);
   const avatarMenuRef = useRef<HTMLDivElement>(null);
 
@@ -20,10 +20,10 @@ const SetAvatar: React.FC<{
   });
 
   const updateImageSelection = useCallback(
-    getUpdateImageSelectionEvent(setImages, () => {
+    getUpdateImageSelectionEvent(setAvatarImage, () => {
       setIsSetAvatarOpen(false);
     }),
-    [setImages, setIsSetAvatarOpen],
+    [setAvatarImage, setIsSetAvatarOpen],
   );
 
   return (

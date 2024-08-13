@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import { useState, useCallback, useMemo } from "react";
 
 import ModelOverlay from "../utils/modelOverlay";
 
@@ -19,9 +13,9 @@ import {
 
 const ImagePickAndUploadTool: React.FC<{
   images: string[];
-  setImages: Dispatch<SetStateAction<string[]>>;
+  goBackCallback: () => void;
   multiple?: boolean;
-}> = ({ images, setImages, multiple = false }) => {
+}> = ({ images, goBackCallback, multiple = false }) => {
   const [selectedSlides, setSelectedSlides] = useState<string[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -65,7 +59,7 @@ const ImagePickAndUploadTool: React.FC<{
         <IoArrowBack
           tabIndex={0}
           role="button"
-          onClick={() => setImages([])}
+          onClick={goBackCallback}
           aria-label="Go back"
           className="size-5"
         />
