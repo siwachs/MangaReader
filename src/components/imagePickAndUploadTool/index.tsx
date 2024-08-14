@@ -14,8 +14,8 @@ import {
 const ImagePickAndUploadTool: React.FC<{
   images: string[];
   goBackCallback: () => void;
-  multiple?: boolean;
-}> = ({ images, goBackCallback, multiple = false }) => {
+  enableSlidesSelection?: boolean;
+}> = ({ images, goBackCallback, enableSlidesSelection = false }) => {
   const [selectedSlides, setSelectedSlides] = useState<string[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -54,8 +54,8 @@ const ImagePickAndUploadTool: React.FC<{
   }, [currentSlide]);
 
   return (
-    <ModelOverlay zIndex={9999} blackBg>
-      <div className="fixed left-0 right-0 top-0 z-[99999] flex h-[60px] items-center justify-between bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]">
+    <ModelOverlay blackBg>
+      <div className="fixed left-0 right-0 top-0 z-[9999] flex h-[60px] items-center justify-between bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]">
         <IoArrowBack
           tabIndex={0}
           role="button"
@@ -67,7 +67,7 @@ const ImagePickAndUploadTool: React.FC<{
           {activeSlide + 1}/{totalSlides}
         </span>
 
-        {multiple &&
+        {enableSlidesSelection &&
           (isSlideSelected ? (
             <FaCircleCheck
               tabIndex={0}
@@ -87,7 +87,7 @@ const ImagePickAndUploadTool: React.FC<{
           ))}
       </div>
 
-      <div className="hidden-scrollbar relative mt-[60px] flex h-[calc(100vh-120px)] overflow-y-auto overflow-x-hidden">
+      <div className="hidden-scrollbar relative mt-[60px] flex h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden">
         {images.map((image, index) => (
           <div
             key={index}
@@ -125,9 +125,9 @@ const ImagePickAndUploadTool: React.FC<{
         )}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-[99999] flex h-10 select-none items-center justify-end bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]">
+      <div className="fixed bottom-0 left-0 right-0 z-[9999] flex h-10 items-center justify-end bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]">
         <button className="flex items-center gap-1.5 text-orange-600">
-          {multiple ? (
+          {enableSlidesSelection ? (
             <>
               {selectedSlides.length === 0 ? (
                 <span>Please Select</span>

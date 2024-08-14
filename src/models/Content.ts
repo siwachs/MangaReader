@@ -9,6 +9,7 @@ const ContentSchema = new Schema({
     required: true,
     enum: ["Ongoing", "Discontinued", "Abandoned", "Unscheduled", "Completed"],
   },
+  genres: [{ type: Schema.Types.ObjectId, ref: "Genre" }],
   rating: { type: Number, default: 0, min: 0, max: 10 },
   author: { type: String, required: true },
   synonyms: [{ type: String }],

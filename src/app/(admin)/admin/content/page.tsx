@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
-import ReactDom, { useFormState } from "react-dom";
+import { useRef, useState, useActionState } from "react";
+import ReactDom from "react-dom";
 import { usePathname } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
-import createOrUpdateContent from "@/actions/createOrUpdateContent";
+import { addGenre, addOrUpdateContent } from "@/actions/contentPageForm";
 
 import { getUpdateImageSelectionEvent } from "@/libs/uiUtils/eventHandlers";
 import ImagePickAndUploadTool from "@/components/imagePickAndUploadTool";
@@ -15,11 +15,12 @@ import LoadingOverlay from "@/components/utils/loadingOverlay";
 import { FaFileArrowUp } from "react-icons/fa6";
 import { MdPreview } from "react-icons/md";
 
+const formTitleClasses = "select-none text-base font-bold text-gray-700";
 const formButtonClasses =
-  "flex cursor-pointer items-center gap-2 rounded-md bg-blue-600 px-4 py-2 font-medium text-white shadow-md transition duration-200 ease-in-out hover:bg-blue-700";
-const formLabelClasses = "mb-2 block select-none font-bold text-gray-700";
+  "flex cursor-pointer items-center gap-2 rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100";
+const formLabelClasses = "mb-2 block font-bold text-gray-700";
 const formInputTypeTextClasses =
-  "w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow";
+  "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight";
 
 const statusOptions = [
   "Ongoing",
@@ -30,8 +31,19 @@ const statusOptions = [
 ];
 
 export default function ContentPage() {
-  // @ts-ignore
-  const [state, formAction] = useFormState(createOrUpdateContent, {
+  const [addGenreState, addGenreAction, addGenreActionPending] = useActionState(
+    addGenre,
+    {
+      error: false,
+      errorMessage: undefined,
+    },
+  );
+
+  const [
+    addOrUpdateContentState,
+    addOrUpdateContentAction,
+    addOrUpdateContentActionPending,
+  ] = useActionState(addOrUpdateContent, {
     error: false,
     errorMessage: undefined,
   });
@@ -77,31 +89,52 @@ export default function ContentPage() {
 
   if (status === "authenticated" && data.user.isAdmin)
     return (
-      <>
-        <form
-          action={formAction}
-          className="soft-edge-shadow mx-auto mb-5 mt-[92px] flex w-[90%] max-w-[690px] flex-col gap-3.5 overflow-hidden rounded-lg bg-white p-5 text-sm md:mb-[30px] md:mt-36 md:text-base"
-        >
-          <button
-            onClick={() =>
-              isThumbnailSelected
-                ? setIsPreviewThumbnail(true)
-                : pickAThumbnailRef.current?.click()
-            }
-            type="button"
-            className="flex cursor-pointer items-center gap-2 rounded-md bg-blue-600 px-4 py-2 font-medium text-white shadow-md transition duration-200 ease-in-out hover:bg-blue-700"
-          >
-            {isThumbnailSelected ? (
-              <>
-                <MdPreview className="size-[18px]" />
-                <span>Preview Thumbnail</span>
-              </>
-            ) : (
-              <>
-                <FaFileArrowUp className="size-4" />
-                <span>Pick Thumbnail</span>
-              </>
+      <div className="soft-edge-shadow mx-auto mb-5 mt-[92px] w-[90%] max-w-[690px] rounded-lg bg-white p-5 text-sm md:mb-[30px] md:mt-36 md:text-base">
+        <form action={addGenreAction} className="mb-6 flex flex-col gap-3.5">
+          <h3 className={formTitleClasses}>Add a new Genre</h3>
+
+          <div>
+            <input
+              type="text"
+              name="genre"
+              className={
+                addGenreState.error
+                  ? `${formInputTypeTextClasses} border-red-500`
+                  : formInputTypeTextClasses
+              }
+              required
+              aria-required
+            />
+
+            {addGenreState.error && (
+              <p className="mt-1 select-none text-[11px] text-red-500">
+                {addGenreState.errorMessage}
+              </p>
             )}
+
+            <button
+              type="submit"
+              disabled={addGenreActionPending}
+              aria-disabled={addGenreActionPending}
+            >
+              Add Genre
+            </button>
+          </div>
+        </form>
+
+        <form
+          action={addOrUpdateContentAction}
+          className="flex flex-col gap-3.5"
+        >
+          <h3 className={formTitleClasses}>Add a new Content</h3>
+
+          <button
+            onClick={() => pickAThumbnailRef.current?.click()}
+            type="button"
+            className={formButtonClasses}
+          >
+            <FaFileArrowUp className="size-4" />
+            <span>Pick Thumbnail</span>
             <input
               ref={pickAThumbnailRef}
               onChange={updateThumbnailSelection}
@@ -115,26 +148,24 @@ export default function ContentPage() {
             />
           </button>
 
+          {isThumbnailSelected && (
+            <button
+              onClick={() => setIsPreviewThumbnail(true)}
+              type="button"
+              className={formButtonClasses}
+            >
+              <MdPreview className="size-[18px]" />
+              <span>Preview Thumbnail</span>
+            </button>
+          )}
+
           <button
-            onClick={() =>
-              isPosterSelected
-                ? setIsPreviewPoster(true)
-                : pickAPosterRef.current?.click()
-            }
+            onClick={() => pickAPosterRef.current?.click()}
             type="button"
             className={formButtonClasses}
           >
-            {isPosterSelected ? (
-              <>
-                <MdPreview className="size-[18px]" />
-                <span>Preview Poster</span>
-              </>
-            ) : (
-              <>
-                <FaFileArrowUp className="size-4" />
-                <span>Pick Poster</span>
-              </>
-            )}
+            <FaFileArrowUp className="size-4" />
+            <span>Pick Poster</span>
             <input
               ref={pickAPosterRef}
               onChange={updatePosterSelection}
@@ -147,6 +178,17 @@ export default function ContentPage() {
               required
             />
           </button>
+
+          {isPosterSelected && (
+            <button
+              onClick={() => setIsPreviewPoster(true)}
+              type="button"
+              className={formButtonClasses}
+            >
+              <MdPreview className="size-[18px]" />
+              <span>Preview Poster</span>
+            </button>
+          )}
 
           <div>
             <label className={formLabelClasses} htmlFor="title">
@@ -171,7 +213,7 @@ export default function ContentPage() {
             <select
               id="status"
               name="status"
-              className="w-full rounded border bg-white px-4 py-2 pr-8 leading-tight shadow"
+              className="w-full rounded border bg-white px-3 py-2 leading-tight text-gray-700 shadow"
             >
               {statusOptions.map((status) => (
                 <option key={status} value={status}>
@@ -222,32 +264,19 @@ export default function ContentPage() {
               id="description"
               name="description"
               rows={4}
-              className="w-full rounded border p-2.5 text-gray-700"
+              className="w-full rounded border p-2.5 leading-tight text-gray-700 shadow"
               aria-required
               required
             />
           </div>
 
           <button
-            onClick={() =>
-              isImagesAndWallpapersSelected
-                ? setIsPreviewImagesAndWallpapers(true)
-                : imagesAndWallpapersRef.current?.click()
-            }
+            onClick={() => imagesAndWallpapersRef.current?.click()}
             type="button"
             className={formButtonClasses}
           >
-            {isImagesAndWallpapersSelected ? (
-              <>
-                <MdPreview className="size-[18px]" />
-                <span>Preview images and wallpapers</span>
-              </>
-            ) : (
-              <>
-                <FaFileArrowUp className="size-4" />
-                <span>Pick images and wallpapers</span>
-              </>
-            )}
+            <FaFileArrowUp className="size-4" />
+            <span>Pick images and wallpapers</span>
             <input
               ref={imagesAndWallpapersRef}
               onChange={updateImagesAndWallpapersSelection}
@@ -259,6 +288,17 @@ export default function ContentPage() {
               multiple
             />
           </button>
+
+          {isImagesAndWallpapersSelected && (
+            <button
+              onClick={() => setIsPreviewImagesAndWallpapers(true)}
+              type="button"
+              className={formButtonClasses}
+            >
+              <MdPreview className="size-[18px]" />
+              <span>Preview images and wallpapers</span>
+            </button>
+          )}
         </form>
 
         {isPreviewThumbnail &&
@@ -288,13 +328,12 @@ export default function ContentPage() {
             <ImagePickAndUploadTool
               images={imagesAndWallpapers}
               goBackCallback={() => setIsPreviewImagesAndWallpapers(false)}
-              multiple
             />,
             document.getElementById(
               "image-pick-and-upload-portal",
             ) as HTMLElement,
           )}
-      </>
+      </div>
     );
 
   if (status === "unauthenticated" || !data?.user.isAdmin)
