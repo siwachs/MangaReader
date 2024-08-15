@@ -14,8 +14,14 @@ import {
 const ImagePickAndUploadTool: React.FC<{
   images: string[];
   goBackCallback: () => void;
+  onClickNextCallback?: () => void;
   enableSlidesSelection?: boolean;
-}> = ({ images, goBackCallback, enableSlidesSelection = false }) => {
+}> = ({
+  images,
+  goBackCallback,
+  onClickNextCallback,
+  enableSlidesSelection = false,
+}) => {
   const [selectedSlides, setSelectedSlides] = useState<string[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -126,7 +132,10 @@ const ImagePickAndUploadTool: React.FC<{
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 z-[9999] flex h-10 items-center justify-end bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]">
-        <button className="flex items-center gap-1.5 text-orange-600">
+        <button
+          onClick={onClickNextCallback}
+          className="flex items-center gap-1.5 text-orange-600"
+        >
           {enableSlidesSelection ? (
             <>
               {selectedSlides.length === 0 ? (
@@ -145,7 +154,7 @@ const ImagePickAndUploadTool: React.FC<{
               )}
             </>
           ) : (
-            "Next"
+            "OK"
           )}
 
           <FaChevronRight className="size-3" />

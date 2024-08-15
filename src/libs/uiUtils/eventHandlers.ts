@@ -51,7 +51,7 @@ export const getUpdateImageSelectionEvent = (
       })
       .map((file) => imageFileToBase64(file));
 
-    if (errorMessages.length > 0) alert(errorMessages.join("\n"));
+    if (errorMessages.length > 0) return alert(errorMessages.join("\n"));
 
     Promise.all(filteredImagesPromises).then((filteredImages) => {
       setImages(filteredImages);

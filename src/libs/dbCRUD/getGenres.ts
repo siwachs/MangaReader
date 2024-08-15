@@ -6,7 +6,7 @@ import formatMongooseDoc from "../db/formatMongooseDoc";
 export default async function getGenres() {
   try {
     await connectToMongoDB();
-    const genresDoc = await Genre.find({});
+    const genresDoc = await Genre.find({}).sort({ updatedAt: -1 });
     const formatedGenresDoc =
       genresDoc?.map((genre) => formatMongooseDoc(genre.toObject())) ?? [];
 

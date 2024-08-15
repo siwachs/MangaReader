@@ -11,18 +11,18 @@ import { formInputTypeTextClasses, formTitleClasses } from "../_tw/formStyles";
 
 const AddGenreForm: React.FC = () => {
   const addGenreFormRef = useRef<HTMLFormElement>(null);
-  const [addGenreState, addGenreAction] = useFormState(addGenre, {
+  const [state, action] = useFormState(addGenre, {
     error: false,
     errorMessage: undefined,
   });
 
-  if (!addGenreState.error) addGenreFormRef.current?.reset();
+  if (!state.error) addGenreFormRef.current?.reset();
 
   return (
     <form
       ref={addGenreFormRef}
-      action={addGenreAction}
-      className="mb-6 flex flex-col gap-3.5"
+      action={action}
+      className="flex flex-col gap-3.5"
     >
       <h3 className={formTitleClasses}>Add a new Genre</h3>
 
@@ -31,7 +31,7 @@ const AddGenreForm: React.FC = () => {
           type="text"
           name="genre"
           className={
-            addGenreState.error
+            state.error
               ? `${formInputTypeTextClasses} border-red-500`
               : formInputTypeTextClasses
           }
@@ -39,14 +39,14 @@ const AddGenreForm: React.FC = () => {
           aria-required
         />
 
-        {addGenreState.error && (
+        {state.error && (
           <p className="mt-1 select-none text-[11px] text-red-500">
-            {addGenreState.errorMessage}
+            {state.errorMessage}
           </p>
         )}
       </div>
 
-      <SubmitForm text="Add Genre" />
+      <SubmitForm title="Add Genre" />
     </form>
   );
 };

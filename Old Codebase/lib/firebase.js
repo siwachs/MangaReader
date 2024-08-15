@@ -5,7 +5,7 @@ const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_firebaseAPI,
   authDomain: "m-reader-web-app.firebaseapp.com",
   projectId: "m-reader-web-app",
-  storageBucket: "m-reader-web-app.appspot.com",
+  storageBucket: process.env.NEXT_PUBLIC_storageBucket,
   messagingSenderId: "136849294341",
   appId: "1:136849294341:web:6f089adf5ba8a84f1a886c",
 };
