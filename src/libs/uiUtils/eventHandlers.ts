@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { imageFileToBase64 } from "../clientSideImageProcessing";
+import { imageFileToBase64 } from "../imageProcessing";
 
 /**
  * Create keydown events for button-like behavior on non interactive elements.

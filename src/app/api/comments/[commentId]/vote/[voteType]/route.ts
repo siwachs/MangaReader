@@ -8,9 +8,9 @@ import {
   methodNotAllowed,
 } from "@/libs/apiErrorResponse";
 import { VoteType } from "@/types";
-import { partialUserWithVotedComments } from "@/libs/db/mongooseSelect";
+import { partialUserWithVotedComments } from "@/libs/mongooseSelect";
 import formatMongooseDoc from "@/libs/db/formatMongooseDoc";
-import getServerSession from "@/libs/db/getServerSession";
+import getServerSession from "@/libs/auth/getServerSession";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
 import Comment from "@/models/Comment";
 import User from "@/models/User";

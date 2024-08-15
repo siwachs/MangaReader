@@ -5,9 +5,9 @@ import {
   AdapterUser,
   Adapter,
 } from "next-auth/adapters";
-import connectToMongoDB from "./connectToMongoDB";
+import connectToMongoDB from "../db/connectToMongoDB";
 
-import { partialUser } from "./mongooseSelect";
+import { partialUser } from "../mongooseSelect";
 import Account from "@/models/Account";
 import Session from "@/models/Session";
 import User from "@/models/User";

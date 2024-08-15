@@ -8,7 +8,7 @@ import {
   invalidBody,
 } from "@/libs/apiErrorResponse";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
-import getServerSession from "@/libs/db/getServerSession";
+import getServerSession from "@/libs/auth/getServerSession";
 import User from "@/models/User";
 
 const claimUsername = async (req: NextRequest) => {

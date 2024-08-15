@@ -8,7 +8,7 @@ import {
   unauthorizedUser,
 } from "@/libs/apiErrorResponse";
 import formatMongooseDoc from "@/libs/db/formatMongooseDoc";
-import getServerSession from "@/libs/db/getServerSession";
+import getServerSession from "@/libs/auth/getServerSession";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
 import Comment from "@/models/Comment";
 import User from "@/models/User";
