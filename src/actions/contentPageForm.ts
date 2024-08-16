@@ -7,6 +7,8 @@ import getServerSession from "@/libs/auth/getServerSession";
 import Genre from "@/models/Genre";
 import Content from "@/models/Content";
 
+import uploadImageToFirebaseStorage from "@/libs/uploadImageToFirebaseStorage";
+
 export const addGenre = async (prevState: any, formData: FormData) => {
   try {
     await connectToMongoDB();
@@ -41,8 +43,8 @@ export const addOrUpdateContent = async (
   formData: FormData,
 ) => {
   try {
-    const thumbnail = formData.get("thumbnail");
-    const poster = formData.get("poster");
+    const thumbnail = formData.get("thumbnail") as string;
+    const poster = formData.get("poster") as string;
 
     if (!thumbnail || !poster)
       return {
@@ -88,11 +90,33 @@ export const addOrUpdateContent = async (
       formData.get("imagesAndWallpapers") as string,
     );
 
-    const content = await Content.find({ title }).select("_id");
-    if (content) return { error: false, errorMessage: "Title must be unique." };
+    const content = await Content.findOne({ title }).select("_id");
+    if (content) return { error: true, errorMessage: "Title must be unique." };
+
+    const thumbnailUrl = await uploadImageToFirebaseStorage(
+      `Content/${title}/thumbnail`,
+      thumbnail,
+    );
+    const posterUrl = await uploadImageToFirebaseStorage(
+      `Content/${title}/poster`,
+      poster,
+    );
+
+    await Content.create({
+      tags,
+      thumbnail: thumbnailUrl,
+      poster: posterUrl,
+      title,
+      status,
+      genres,
+      author,
+      synonyms: synonymsArray,
+      description,
+      imagesAndWallpapers,
+    });
 
     return { error: false, errorMessage: undefined };
   } catch (error: any) {
-    return { error: false, errorMessage: error.message };
+    return { error: true, errorMessage: error.message };
   }
 };

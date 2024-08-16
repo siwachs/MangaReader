@@ -1,10 +1,11 @@
 "use client";
 
 // useActionState is Latest method for fom Managment Currently available in Next 14.3.5
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import ReactDom, { useFormState } from "react-dom";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
+import { Content } from "@/types";
 import { addOrUpdateContent } from "@/actions/contentPageForm";
 import { getUpdateImageSelectionEvent } from "@/libs/uiUtils/eventHandlers";
 import SubmitForm from "@/components/buttons/submitForm";
@@ -43,20 +44,30 @@ const AddOrUpdateContentForm: React.FC<{
     genres?: { id: string; name: string }[];
     errorMessage?: string;
   };
-}> = ({ genresResponse }) => {
+  contentResponse: {
+    error: boolean;
+    content?: null | Content;
+    errorMessage?: string;
+  };
+}> = ({ genresResponse, contentResponse }) => {
+  const { genres } = genresResponse;
+  const { content } = contentResponse;
+
   const addOrUpdateContentFormRef = useRef<HTMLFormElement>(null);
   const [state, action] = useFormState(addOrUpdateContent, {
     error: false,
     errorMessage: undefined,
   });
 
-  const [thumbnail, setThumbnail] = useState<string[]>([]);
-  const [poster, setPoster] = useState<string[]>([]);
-  const [imagesAndWallpapers, setImagesAndWallpapers] = useState<string[]>([]);
-
-  const pickAThumbnailRef = useRef<HTMLInputElement>(null);
-  const pickAPosterRef = useRef<HTMLInputElement>(null);
-  const imagesAndWallpapersRef = useRef<HTMLInputElement>(null);
+  const [thumbnail, setThumbnail] = useState<string[]>(
+    content?.thumbnail ? [content.thumbnail] : [],
+  );
+  const [poster, setPoster] = useState<string[]>(
+    content?.poster ? [content.poster] : [],
+  );
+  const [imagesAndWallpapers, setImagesAndWallpapers] = useState<string[]>(
+    content?.imagesAndWallpapers ?? [],
+  );
 
   const [isPreviewPoster, setIsPreviewPoster] = useState(false);
   const [isPreviewThumbnail, setIsPreviewThumbnail] = useState(false);
@@ -67,23 +78,13 @@ const AddOrUpdateContentForm: React.FC<{
     isPreviewPoster || isPreviewThumbnail || isPreviewImagesAndWallpapers,
   );
 
-  const updateThumbnailSelection = getUpdateImageSelectionEvent(
-    setThumbnail,
-    () => setIsPreviewThumbnail(true),
-  );
-  const updatePosterSelection = getUpdateImageSelectionEvent(setPoster, () =>
-    setIsPreviewPoster(true),
-  );
-  const updateImagesAndWallpapersSelection = getUpdateImageSelectionEvent(
-    setImagesAndWallpapers,
-    () => setIsPreviewImagesAndWallpapers(true),
-  );
-
   const isThumbnailSelected = thumbnail.length > 0;
   const isPosterSelected = poster.length > 0;
   const isImagesAndWallpapersSelected = imagesAndWallpapers.length > 0;
 
-  if (!state.error) addOrUpdateContentFormRef.current?.reset();
+  if (!state.error) {
+    addOrUpdateContentFormRef.current?.reset();
+  }
 
   return (
     <>
@@ -114,6 +115,7 @@ const AddOrUpdateContentForm: React.FC<{
             multiple
             className={`${formInputTypeSelectClasses} h-[136px]`}
             aria-multiselectable="true"
+            defaultValue={content?.tags}
           >
             {tags.map((tag) => (
               <option key={tag} value={tag}>
@@ -123,61 +125,23 @@ const AddOrUpdateContentForm: React.FC<{
           </select>
         </div>
 
-        <button
-          onClick={() => pickAThumbnailRef.current?.click()}
-          type="button"
-          className={formButtonClasses}
-        >
-          <FaFileArrowUp className="size-4" />
-          <span>Pick Thumbnail</span>
-          <input
-            ref={pickAThumbnailRef}
-            onChange={updateThumbnailSelection}
-            type="file"
-            accept="image/*"
-            hidden
-            aria-label="Pick Thumbnail"
-          />
-        </button>
+        <SelectImageButtonWithPreview
+          setFile={setThumbnail}
+          setPreview={setIsPreviewThumbnail}
+          isImageSelected={isThumbnailSelected}
+          previewButtonText="Preview Thumbnail"
+          selectButtonText="Pick Thumbnail"
+          ariaLabel="Pick Thumbnail"
+        />
 
-        {isThumbnailSelected && (
-          <button
-            onClick={() => setIsPreviewThumbnail(true)}
-            type="button"
-            className={formButtonClasses}
-          >
-            <MdPreview className="size-[18px]" />
-            <span>Preview Thumbnail</span>
-          </button>
-        )}
-
-        <button
-          onClick={() => pickAPosterRef.current?.click()}
-          type="button"
-          className={formButtonClasses}
-        >
-          <FaFileArrowUp className="size-4" />
-          <span>Pick Poster</span>
-          <input
-            ref={pickAPosterRef}
-            onChange={updatePosterSelection}
-            type="file"
-            accept="image/*"
-            hidden
-            aria-label="Pick Poster"
-          />
-        </button>
-
-        {isPosterSelected && (
-          <button
-            onClick={() => setIsPreviewPoster(true)}
-            type="button"
-            className={formButtonClasses}
-          >
-            <MdPreview className="size-[18px]" />
-            <span>Preview Poster</span>
-          </button>
-        )}
+        <SelectImageButtonWithPreview
+          setFile={setPoster}
+          setPreview={setIsPreviewPoster}
+          isImageSelected={isPosterSelected}
+          previewButtonText="Preview Poster"
+          selectButtonText="Pick Poster"
+          ariaLabel="Pick Poster"
+        />
 
         <div>
           <label className={formLabelClasses} htmlFor="title">
@@ -191,6 +155,7 @@ const AddOrUpdateContentForm: React.FC<{
             className={formInputTypeTextClasses}
             aria-required
             required
+            defaultValue={content?.title}
           />
         </div>
 
@@ -205,6 +170,7 @@ const AddOrUpdateContentForm: React.FC<{
             className={formInputTypeSelectClasses}
             aria-required
             required
+            defaultValue={content?.status}
           >
             {statusOptions.map((status) => (
               <option key={status} value={status}>
@@ -226,9 +192,10 @@ const AddOrUpdateContentForm: React.FC<{
             className={`${formInputTypeSelectClasses} h-[136px]`}
             aria-required
             required
+            defaultValue={content?.genres}
           >
-            {genresResponse.genres?.map((genre) => (
-              <option key={genre.id} value={genre.name}>
+            {genres?.map((genre) => (
+              <option key={genre.id} value={genre.id}>
                 {genre.name}
               </option>
             ))}
@@ -247,6 +214,7 @@ const AddOrUpdateContentForm: React.FC<{
             className={formInputTypeTextClasses}
             aria-required
             required
+            defaultValue={content?.author}
           />
         </div>
 
@@ -261,6 +229,7 @@ const AddOrUpdateContentForm: React.FC<{
             name="synonyms"
             className={formInputTypeTextClasses}
             aria-required
+            defaultValue={content?.synonyms.join(",")}
           />
           <p className="mt-1 select-none text-[11px] text-gray-600">
             Please enter synonyms separated by commas.
@@ -279,37 +248,19 @@ const AddOrUpdateContentForm: React.FC<{
             className="w-full rounded border p-2.5 leading-tight text-gray-700 shadow"
             aria-required
             required
+            defaultValue={content?.description}
           />
         </div>
 
-        <button
-          onClick={() => imagesAndWallpapersRef.current?.click()}
-          type="button"
-          className={formButtonClasses}
-        >
-          <FaFileArrowUp className="size-4" />
-          <span>Pick images and wallpapers</span>
-          <input
-            ref={imagesAndWallpapersRef}
-            onChange={updateImagesAndWallpapersSelection}
-            type="file"
-            accept="image/*"
-            hidden
-            aria-label="Pick images and wallpapers"
-            multiple
-          />
-        </button>
-
-        {isImagesAndWallpapersSelected && (
-          <button
-            onClick={() => setIsPreviewImagesAndWallpapers(true)}
-            type="button"
-            className={formButtonClasses}
-          >
-            <MdPreview className="size-[18px]" />
-            <span>Preview images and wallpapers</span>
-          </button>
-        )}
+        <SelectImageButtonWithPreview
+          setFile={setImagesAndWallpapers}
+          setPreview={setIsPreviewImagesAndWallpapers}
+          isImageSelected={isImagesAndWallpapersSelected}
+          previewButtonText="Preview images and wallpapers"
+          selectButtonText="Pick images and wallpapers"
+          ariaLabel="Pick images and wallpapers"
+          multiple
+        />
 
         <div>
           <SubmitForm title="Add Content" />
@@ -325,6 +276,10 @@ const AddOrUpdateContentForm: React.FC<{
         ReactDom.createPortal(
           <ImagePickAndUploadTool
             images={thumbnail}
+            onClickResetCallback={() => {
+              setIsPreviewThumbnail(false);
+              setThumbnail([]);
+            }}
             onClickNextCallback={() => setIsPreviewThumbnail(false)}
             goBackCallback={() => setIsPreviewThumbnail(false)}
           />,
@@ -336,6 +291,10 @@ const AddOrUpdateContentForm: React.FC<{
         ReactDom.createPortal(
           <ImagePickAndUploadTool
             images={poster}
+            onClickResetCallback={() => {
+              setIsPreviewPoster(false);
+              setPoster([]);
+            }}
             onClickNextCallback={() => setIsPreviewPoster(false)}
             goBackCallback={() => setIsPreviewPoster(false)}
           />,
@@ -347,6 +306,10 @@ const AddOrUpdateContentForm: React.FC<{
         ReactDom.createPortal(
           <ImagePickAndUploadTool
             images={imagesAndWallpapers}
+            onClickResetCallback={() => {
+              setIsPreviewImagesAndWallpapers(false);
+              setImagesAndWallpapers([]);
+            }}
             enableSlidesSelection
             goBackCallback={() => setIsPreviewImagesAndWallpapers(false)}
           />,
@@ -355,6 +318,63 @@ const AddOrUpdateContentForm: React.FC<{
           ) as HTMLElement,
         )}
     </>
+  );
+};
+
+const SelectImageButtonWithPreview: React.FC<{
+  setFile: Dispatch<SetStateAction<string[]>>;
+  setPreview: Dispatch<SetStateAction<boolean>>;
+  isImageSelected: boolean;
+  previewButtonText: string;
+  selectButtonText: string;
+  ariaLabel: string;
+  multiple?: boolean;
+}> = ({
+  setFile,
+  setPreview,
+  isImageSelected,
+  previewButtonText,
+  selectButtonText,
+  ariaLabel,
+  multiple,
+}) => {
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const updateSelectionEvent = getUpdateImageSelectionEvent(setFile, () =>
+    setPreview(true),
+  );
+
+  const onClickTrigger = () => {
+    if (isImageSelected) setPreview(true);
+    else imageInputRef.current?.click();
+  };
+
+  return (
+    <button
+      onClick={onClickTrigger}
+      type="button"
+      className={formButtonClasses}
+    >
+      {isImageSelected ? (
+        <>
+          <MdPreview className="size-[18px]" />
+          <span>{previewButtonText}</span>
+        </>
+      ) : (
+        <>
+          <FaFileArrowUp className="size-4" />
+          <span>{selectButtonText}</span>
+          <input
+            ref={imageInputRef}
+            onChange={updateSelectionEvent}
+            type="file"
+            accept="image/*"
+            hidden
+            aria-label={ariaLabel}
+            multiple={multiple}
+          />
+        </>
+      )}
+    </button>
   );
 };
 

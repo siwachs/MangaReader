@@ -3,3 +3,6 @@ export const partialUser =
 
 export const partialUserWithVotedComments =
   "-likedChapters -subscriptions -password -emailVerified";
+
+export const partialContent =
+  "tags thumbnail poster title status genres author synonyms description imagesAndWallpapers";

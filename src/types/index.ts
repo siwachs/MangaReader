@@ -5,6 +5,7 @@ export type pageReqObj = {
   };
 };
 
+// NavLink
 export type LinkObject = {
   key: string;
   Icon?: any;
@@ -13,6 +14,7 @@ export type LinkObject = {
   link: string;
 };
 
+// Nested Comment System's types
 export type Comment = {
   id: string;
   parentId: string;
@@ -48,4 +50,20 @@ export type CommentsPayload = {
   comments: Comment[];
   sortKey: SortKey;
   loadMoreCommentsLoding: boolean;
+};
+
+// Content Page And CMS
+export type Content = {
+  id: string;
+  tags: string[];
+  thumbnail: string;
+  poster: string;
+  title: string;
+  status: string;
+  genres: string[];
+  rating: number;
+  author: string;
+  synonyms: string[];
+  description: string;
+  imagesAndWallpapers: string[];
 };

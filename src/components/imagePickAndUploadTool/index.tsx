@@ -14,11 +14,13 @@ import {
 const ImagePickAndUploadTool: React.FC<{
   images: string[];
   goBackCallback: () => void;
+  onClickResetCallback?: () => void;
   onClickNextCallback?: () => void;
   enableSlidesSelection?: boolean;
 }> = ({
   images,
   goBackCallback,
+  onClickResetCallback,
   onClickNextCallback,
   enableSlidesSelection = false,
 }) => {
@@ -131,7 +133,15 @@ const ImagePickAndUploadTool: React.FC<{
         )}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-[9999] flex h-10 items-center justify-end bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]">
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-[9999] flex h-10 items-center ${onClickResetCallback ? "justify-between" : "justify-end"} bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]`}
+      >
+        {onClickResetCallback && (
+          <button onClick={onClickResetCallback} className="text-orange-600">
+            Reset
+          </button>
+        )}
+
         <button
           onClick={onClickNextCallback}
           className="flex items-center gap-1.5 text-orange-600"

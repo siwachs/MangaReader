@@ -14,9 +14,9 @@ const ContentSchema = new Schema(
         ],
       },
     ],
-    poster: { type: String, required: true },
     thumbnail: { type: String, required: true },
-    title: { type: String, requred: true, unique: true },
+    poster: { type: String, required: true },
+    title: { type: String, required: true, unique: true },
     status: {
       type: String,
       required: true,
@@ -33,12 +33,6 @@ const ContentSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "Genre",
         required: true,
-        validate: {
-          validator: function (v: any[]) {
-            return v.length > 0;
-          },
-          message: "Genres can't be empty.",
-        },
       },
     ],
     rating: { type: Number, default: 0, min: 0, max: 10 },
@@ -49,7 +43,11 @@ const ContentSchema = new Schema(
     imagesAndWallpapers: [{ type: String }],
     news: [{ type: Schema.Types.ObjectId, ref: "News" }],
   },
-  { timestamps: true },
+  { timestamps: true, validateBeforeSave: true },
 );
+
+ContentSchema.path("genres").validate(function (genres) {
+  return genres.length > 0;
+}, "Genres can't be empty");
 
 export default models.Content || model("Content", ContentSchema, "ContentList");

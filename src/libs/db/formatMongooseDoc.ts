@@ -1,4 +1,4 @@
-function getUserObj(userObject: Record<string, any>) {
+function getFormatedNestedDoc(userObject: Record<string, any>) {
   const newUserObject: Record<string, unknown> = {};
 
   for (const key in userObject) {
@@ -22,8 +22,8 @@ export default function formatMongooseDoc(
 
     if (key === "_id") {
       newObject.id = value.toString();
-    } else if (key === "user") {
-      newObject[key] = getUserObj(value);
+    } else if (key === "user" || key === "genres") {
+      newObject[key] = getFormatedNestedDoc(value);
     } else {
       newObject[key] = value;
     }
