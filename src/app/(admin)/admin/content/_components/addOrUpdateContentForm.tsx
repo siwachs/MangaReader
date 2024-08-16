@@ -103,6 +103,13 @@ const AddOrUpdateContentForm: React.FC<{
         className="flex flex-col gap-3.5"
       >
         <h3 className={formTitleClasses}>Add a new Content</h3>
+        <input
+          type="text"
+          name="contentId"
+          value={content?.id}
+          hidden
+          readOnly
+        />
 
         <div>
           <label className={formLabelClasses} htmlFor="tags">

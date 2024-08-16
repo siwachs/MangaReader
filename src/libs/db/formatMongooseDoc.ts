@@ -1,14 +1,26 @@
-function getFormatedNestedDoc(userObject: Record<string, any>) {
-  const newUserObject: Record<string, unknown> = {};
+import { Types } from "mongoose";
 
-  for (const key in userObject) {
-    const value = userObject[key];
+function getFormattedObject(object: Record<string, any>): Record<string, any> {
+  const newObject: Record<string, unknown> = {};
 
-    if (key === "_id") newUserObject.id = value.toString();
-    else newUserObject[key] = value;
+  for (const key in object) {
+    const value = object[key];
+
+    if (key === "_id") newObject.id = value.toString();
+    else newObject[key] = value;
   }
 
-  return newUserObject;
+  return newObject;
+}
+
+function convertItem(item: any) {
+  if (Types.ObjectId.isValid(item)) {
+    return item.toString();
+  } else if (item && typeof item === "object" && "_id" in item) {
+    return item._id.toString();
+  }
+
+  return item;
 }
 
 export default function formatMongooseDoc(
@@ -22,8 +34,10 @@ export default function formatMongooseDoc(
 
     if (key === "_id") {
       newObject.id = value.toString();
-    } else if (key === "user" || key === "genres") {
-      newObject[key] = getFormatedNestedDoc(value);
+    } else if (key === "user") {
+      newObject[key] = getFormattedObject(value);
+    } else if (key === "genres") {
+      newObject[key] = value.map(convertItem);
     } else {
       newObject[key] = value;
     }

@@ -10,10 +10,10 @@ export default async function getContent(contentId?: string) {
 
     await connectToMongoDB();
     const contentDoc = await Content.findById(contentId).select(partialContent);
+
     const formatedContentDoc = contentDoc
       ? formatMongooseDoc(contentDoc.toObject())
       : null;
-    console.log(JSON.parse(JSON.stringify(formatedContentDoc)));
 
     return {
       error: false,
