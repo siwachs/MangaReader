@@ -19,7 +19,7 @@ const ChapterLink: React.FC<{
         <span className="mr-5">
           {chaptersOrder === "positive" ? index + 1 : totalChapters - index}
         </span>
-        <span className="hide-text">{chapter.title}</span>
+        <span className="truncate">{chapter.title}</span>
       </div>
 
       <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">

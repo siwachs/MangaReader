@@ -21,7 +21,7 @@ const LanguagePicker = dynamic(() => import("./languagePicker"), {
 
 const Header: React.FC = () => {
   return (
-    <header className="fixed left-0 top-0 z-50 w-full bg-white">
+    <header className="fixed left-0 top-0 z-50 w-full bg-[var(--app-bg-color-primary)]">
       <div
         id="nav"
         className="relative mx-auto w-full max-w-[1200px] md:mb-5 md:mt-2.5 md:h-[90px]"
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
             />
           </Link>
 
-          <nav className="hidden-scrollbar ml-5 hidden flex-1 gap-5 overflow-auto whitespace-nowrap font-bold text-[var(--app-navlink-color)] md:text-sm lg:flex lg:text-base">
+          <nav className="hide-scrollbar ml-5 hidden flex-1 gap-5 overflow-auto whitespace-nowrap font-bold text-gray-600 md:text-sm lg:flex lg:text-base">
             {navLinks.map(
               (navLink) =>
                 !navLink.sidebarOnly && (

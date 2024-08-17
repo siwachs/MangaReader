@@ -2,33 +2,25 @@ import { useState, useCallback, useMemo } from "react";
 
 import ModelOverlay from "../utils/modelOverlay";
 
+import { FiDownload } from "react-icons/fi";
 import { IoArrowBack } from "react-icons/io5";
-import {
-  FaRegCircleCheck,
-  FaCircleChevronLeft,
-  FaCircleChevronRight,
-  FaCircleCheck,
-  FaChevronRight,
-} from "react-icons/fa6";
+import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 
 const ImagePickAndUploadTool: React.FC<{
   images: string[];
   goBackCallback: () => void;
   onClickResetCallback?: () => void;
-  onClickNextCallback?: () => void;
-  enableSlidesSelection?: boolean;
+  title: string;
+  onClickOkCallback?: () => void;
 }> = ({
   images,
   goBackCallback,
   onClickResetCallback,
-  onClickNextCallback,
-  enableSlidesSelection = false,
+  title,
+  onClickOkCallback,
 }) => {
-  const [selectedSlides, setSelectedSlides] = useState<string[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
-
   const totalSlides = images.length;
-  const totalSelectedSlides = selectedSlides.length;
 
   const leftNavigationDisabled = useMemo(
     () => activeSlide === 0,
@@ -39,12 +31,6 @@ const ImagePickAndUploadTool: React.FC<{
     [activeSlide, images.length],
   );
 
-  const currentSlide = images[activeSlide];
-  const isSlideSelected = useMemo(
-    () => selectedSlides.includes(currentSlide),
-    [selectedSlides, currentSlide],
-  );
-
   const prevSlide = useCallback(() => {
     setActiveSlide((prev) => Math.max(prev - 1, 0));
   }, []);
@@ -53,56 +39,46 @@ const ImagePickAndUploadTool: React.FC<{
     setActiveSlide((prev) => Math.min(prev + 1, totalSlides - 1));
   }, [totalSlides]);
 
-  const selectSlide = useCallback(() => {
-    setSelectedSlides((prev) => [...prev, currentSlide]);
-  }, [currentSlide, totalSelectedSlides]);
+  const downloadImage = useCallback(() => {
+    const link = document.createElement("a");
+    link.href = images[activeSlide];
+    link.download = `${title}-${activeSlide + 1}`;
 
-  const removeSlide = useCallback(() => {
-    setSelectedSlides((prev) => prev.filter((slide) => slide !== currentSlide));
-  }, [currentSlide]);
+    link.click();
+  }, [images, activeSlide]);
 
   return (
     <ModelOverlay blackBg>
-      <div className="fixed left-0 right-0 top-0 z-[9999] flex h-[60px] items-center justify-between bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]">
+      <div className="fixed top-0 flex w-full items-center justify-between bg-gray-600/85 p-[19px_16px] text-white">
         <IoArrowBack
+          onClick={goBackCallback}
           tabIndex={0}
           role="button"
-          onClick={goBackCallback}
-          aria-label="Go back"
+          aria-label="Go Back"
           className="size-5"
         />
+
         <span className="select-none">
-          {activeSlide + 1}/{totalSlides}
+          {activeSlide + 1} / {totalSlides}
         </span>
 
-        {enableSlidesSelection &&
-          (isSlideSelected ? (
-            <FaCircleCheck
-              tabIndex={0}
-              role="button"
-              onClick={removeSlide}
-              aria-label="Remove Slide"
-              className="size-5 text-green-500"
-            />
-          ) : (
-            <FaRegCircleCheck
-              tabIndex={0}
-              role="button"
-              onClick={selectSlide}
-              aria-label="Select Slide"
-              className="size-5"
-            />
-          ))}
+        <button
+          onClick={onClickResetCallback}
+          className="select-none text-orange-600"
+        >
+          Reset
+        </button>
       </div>
 
-      <div className="hidden-scrollbar relative mt-[60px] flex h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden">
+      <div className="mt-[62px] flex h-[calc(100vh-124px)] overflow-hidden">
         {images.map((image, index) => (
           <div
             key={index}
-            className="flex h-full w-full flex-shrink-0 items-center justify-center transition-transform duration-300 ease-in-out"
+            className="hide-scrollbar grid h-full w-full flex-shrink-0 place-items-center overflow-y-auto overflow-x-hidden transition-transform duration-300 ease-in-out"
             style={{ transform: `translateX(-${activeSlide * 100}%)` }}
           >
             <img
+              loading="lazy"
               src={image}
               alt={`slide-${index}`}
               className="h-auto max-w-full"
@@ -133,42 +109,16 @@ const ImagePickAndUploadTool: React.FC<{
         )}
       </div>
 
-      <div
-        className={`fixed bottom-0 left-0 right-0 z-[9999] flex h-10 items-center ${onClickResetCallback ? "justify-between" : "justify-end"} bg-gray-600/85 px-5 text-[var(--app-bg-color-primary)]`}
-      >
-        {onClickResetCallback && (
-          <button onClick={onClickResetCallback} className="text-orange-600">
-            Reset
-          </button>
-        )}
+      <div className="fixed bottom-0 flex w-full items-center justify-between bg-gray-600/85 p-[19px_16px] text-white">
+        {title && <p className="truncate break-words">{title}</p>}
 
-        <button
-          onClick={onClickNextCallback}
-          className="flex items-center gap-1.5 text-orange-600"
-        >
-          {enableSlidesSelection ? (
-            <>
-              {selectedSlides.length === 0 ? (
-                <span>Please Select</span>
-              ) : (
-                <>
-                  <span className="flex size-[18px] items-center justify-center rounded-full bg-orange-600 text-xs text-white">
-                    {totalSelectedSlides}
-                  </span>
-                  <span>
-                    {selectedSlides.length === 1
-                      ? "Image Selected"
-                      : "Images Selected"}
-                  </span>
-                </>
-              )}
-            </>
-          ) : (
-            "OK"
-          )}
-
-          <FaChevronRight className="size-3" />
-        </button>
+        <FiDownload
+          onClick={downloadImage}
+          tabIndex={0}
+          role="button"
+          aria-label="Download current image"
+          className="size-5"
+        />
       </div>
     </ModelOverlay>
   );

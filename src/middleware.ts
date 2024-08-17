@@ -1,8 +1,7 @@
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-  }
+  // Add Middleware logic.
 }
 
 export const config = {

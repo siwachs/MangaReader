@@ -101,7 +101,7 @@ const ChaptersAndCommentsLoading: React.FC<{
             >
               <div className="h-[24px] text-xs md:text-sm">
                 <span className="mr-5">{index + 1}</span>
-                <span className="hide-text">{chapter.title}</span>
+                <span className="truncate">{chapter.title}</span>
               </div>
 
               <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">

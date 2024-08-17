@@ -14,6 +14,7 @@ import ImagePickAndUploadTool from "@/components/imagePickAndUploadTool";
 
 import {
   formButtonClasses,
+  formInputCaptionClasses,
   formInputTypeSelectClasses,
   formInputTypeTextClasses,
   formLabelClasses,
@@ -252,7 +253,7 @@ const AddOrUpdateContentForm: React.FC<{
             aria-required
             defaultValue={content?.synonyms.join(",")}
           />
-          <p className="mt-1 select-none text-[11px] text-gray-600">
+          <p className={`${formInputCaptionClasses} text-gray-600`}>
             Please enter synonyms separated by commas.
           </p>
         </div>
@@ -287,7 +288,7 @@ const AddOrUpdateContentForm: React.FC<{
         <div>
           <SubmitForm title="Add Content" />
           {state.error && (
-            <p className="mt-1 select-none text-[11px] text-red-600">
+            <p className={`${formInputCaptionClasses} text-red-600`}>
               {state.errorMessage}
             </p>
           )}

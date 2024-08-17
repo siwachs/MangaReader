@@ -23,7 +23,6 @@ export default function RootLayout({
         <NextAuthProvider>
           <Header />
           <div id="image-pick-and-upload-portal" />
-          <div id="user-profile-portal" />
           <div id="sidebar-portal" />
           <main id="page-content">{children}</main>
         </NextAuthProvider>

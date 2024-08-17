@@ -10,7 +10,7 @@ const HomeNav: React.FC = () => {
   const currentUrl = usePathname();
 
   return (
-    <nav className="hidden-scrollbar flex h-[40px] w-full items-center justify-between overflow-auto border-y border-[var(--app-border-color-gray)] px-2.5 md:hidden">
+    <nav className="hide-scrollbar flex h-[40px] w-full items-center justify-between overflow-auto border-y border-[var(--app-border-color-gray)] px-2.5 md:hidden">
       {homeNavLinks.map((navLink) => {
         const { key, link, label } = navLink;
 

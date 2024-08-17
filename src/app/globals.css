@@ -3,16 +3,10 @@
 @tailwind utilities;
 
 :root {
-  /* #D3D3D3
-  #F8F8FF, #FFFAFA, #FAF9F6 */
   --app-bg-color-primary: #faf9f6;
   --app-text-color-primary: #333333;
 
-  /* #333333, #0B1215 */
-
   --app-background-overlay-transparent-black: #0000009e;
-
-  --app-navlink-color: #4d5168;
 
   --app-text-color-red: #ff5454;
   --app-text-color-crimson: #ff204e;
@@ -82,18 +76,15 @@ body {
 @layer utilities {
   .font-noto-sans-sc {
     font-family: Noto Sans SC;
+    color: #4d5168;
   }
 
-  .hide-text {
-    @apply overflow-hidden overflow-ellipsis whitespace-nowrap;
-  }
-
-  .hidden-scrollbar {
+  .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  .hidden-scrollbar::-webkit-scrollbar {
+  .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
 

@@ -41,7 +41,7 @@ const HaveResults: React.FC<{ title: string }> = ({ title }) => {
                 </div>
               </Link>
 
-              <div className="hide-text h-[30px] w-[95%] px-[5px] text-left text-sm/[30px] md:w-[160px] md:text-base/[30px]">
+              <div className="h-[30px] w-[95%] truncate px-[5px] text-left text-sm/[30px] md:w-[160px] md:text-base/[30px]">
                 <span>Martial Arts Peak</span>
               </div>
             </div>
@@ -97,11 +97,11 @@ const NoResults: React.FC = () => {
               </div>
             </Link>
 
-            <div className="recommend-comics-title hide-text mt-1.5 h-[30px] w-[95%] px-[5px] text-sm/[30px] md:w-[160px] md:text-base/[30px]">
+            <div className="recommend-comics-title mt-1.5 h-[30px] w-[95%] truncate px-[5px] text-sm/[30px] md:w-[160px] md:text-base/[30px]">
               <span>Your Turn to Chase After Me</span>
             </div>
 
-            <div className="comics-genres hide-text h-5 w-[95%] text-xs text-[var(--app-text-color-medium-gray)] md:w-[160px] md:text-sm">
+            <div className="comics-genres h-5 w-[95%] truncate text-xs text-[var(--app-text-color-medium-gray)] md:w-[160px] md:text-sm">
               <span>
                 Romance/CEO/Urban Romance/Girl
                 Power/Rebirth/Revenge/Counterattack

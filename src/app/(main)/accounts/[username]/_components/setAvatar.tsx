@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useRef, useCallback } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
-import { getUpdateImageSelectionEvent } from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
+import getUpdateImageSelectionEvent from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
 import ModelOverlay from "@/components/utils/modelOverlay";
 
 const menuButtonClasses =
@@ -38,7 +38,7 @@ const SetAvatar: React.FC<{
           onClick={() => selectFromGalleryRef.current?.click()}
           className={menuButtonClasses}
         >
-          Select From Gallery
+          <span>Select From Gallery</span>
           <input
             ref={selectFromGalleryRef}
             onChange={updateImageSelection}
@@ -46,6 +46,7 @@ const SetAvatar: React.FC<{
             type="file"
             accept="image/*"
             hidden
+            multiple
             aria-label="Select From Gallery"
           />
         </button>

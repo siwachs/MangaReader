@@ -928,7 +928,7 @@ export default function TitlePage(req: Readonly<pageReqObj>) {
         />
 
         <div className="detail-gallery mx-auto mt-2.5 max-w-[1200px] md:mt-0">
-          <div className="hidden-scrollbar mt-2.5 flex overflow-auto pl-4 md:flex-wrap md:overflow-auto md:pl-0">
+          <div className="hide-scrollbar mt-2.5 flex overflow-auto pl-4 md:flex-wrap md:overflow-auto md:pl-0">
             {data.galleryImages.map((galleryImage, index) => (
               <Link key={galleryImage} href="/" className="flex-shrink-0">
                 <div className="mr-3 w-24 md:mr-5">

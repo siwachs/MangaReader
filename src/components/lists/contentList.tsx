@@ -20,7 +20,7 @@ const ContentList: React.FC<{
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
       <div className="relative mx-auto my-5 w-full max-w-[1200px] overflow-hidden md:my-[30px]">
-        <h2 className="hide-text w-[70%] text-[22px] font-bold md:text-[28px]">
+        <h2 className="w-[70%] truncate text-[22px] font-bold md:text-[28px]">
           {title}
         </h2>
 
@@ -53,7 +53,7 @@ const ContentList: React.FC<{
                   />
                 </div>
 
-                <div className="hide-text mt-[5px] overflow-hidden text-xs/[13px] md:mt-2.5 md:text-lg/[22px]">
+                <div className="mt-[5px] overflow-hidden truncate text-xs/[13px] md:mt-2.5 md:text-lg/[22px]">
                   <span>Your Turn to Chase After Me</span>
                 </div>
               </Link>

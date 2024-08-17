@@ -72,7 +72,7 @@ const Header: React.FC = () => {
 
         <div className="w-1/2">
           <div className="mt-0.5 flex items-center justify-center gap-[7px] font-medium md:gap-3">
-            <div className="hide-text text-[15px] text-black md:text-xl">
+            <div className="truncate text-[15px] text-black md:text-xl">
               Episode 1
             </div>
 
@@ -88,7 +88,7 @@ const Header: React.FC = () => {
             </button>
           </div>
 
-          <p className="hide-text md:font-noto-sans-sc text-center text-[10px]/[20px] font-medium text-[var(--app-text-color-slate-gray)] md:text-sm/[16px] md:font-normal">
+          <p className="md:font-noto-sans-sc truncate text-center text-[10px]/[20px] font-medium text-[var(--app-text-color-slate-gray)] md:text-sm/[16px] md:font-normal">
             Isekai Shoukan Sareta Kita Seijo-sama ga &apos;Kareshi ga
             Shinda&apos; to Naku Bakari de Hataraite kuremasen
           </p>
@@ -122,7 +122,7 @@ const Header: React.FC = () => {
             : "hidden"
         }
       >
-        <div className="hidden-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
+        <div className="hide-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
           {chapters.map((chapter) => (
             <ChapterLink
               key={chapter._id}

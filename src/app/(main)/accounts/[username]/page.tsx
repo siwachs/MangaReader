@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import ReactDom from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,7 +13,7 @@ import SetUsername from "./_components/setUsername";
 import SetGender from "./_components/setGender";
 import SetAvatar from "./_components/setAvatar";
 
-import { createKeydownEvent } from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
+import createKeydownEvent from "@/libs/eventHandlers/createKeydownEvent";
 
 import { FaChevronRight } from "react-icons/fa";
 import {
@@ -123,44 +122,35 @@ export default function AccountPage() {
           <ProfileLinkRow href="/" Icon={BiLike} title="Liked Chapters" />
         </div>
 
-        {avatarImage.length > 0 &&
-          ReactDom.createPortal(
-            <ImagePickAndUploadTool
-              images={avatarImage}
-              goBackCallback={() => setAvatarImage([])}
-            />,
-            document.getElementById(
-              "image-pick-and-upload-portal",
-            ) as HTMLElement,
-          )}
+        {avatarImage.length > 0 && (
+          <ImagePickAndUploadTool
+            images={avatarImage}
+            goBackCallback={() => setAvatarImage([])}
+            title="Tales of Demons and Gods"
+          />
+        )}
 
-        {isSetAvatarOpen &&
-          ReactDom.createPortal(
-            <SetAvatar
-              setAvatarImage={setAvatarImage}
-              isSetAvatarOpen={isSetAvatarOpen}
-              setIsSetAvatarOpen={setIsSetAvatarOpen}
-            />,
-            document.getElementById("user-profile-portal") as HTMLElement,
-          )}
+        {isSetAvatarOpen && (
+          <SetAvatar
+            setAvatarImage={setAvatarImage}
+            isSetAvatarOpen={isSetAvatarOpen}
+            setIsSetAvatarOpen={setIsSetAvatarOpen}
+          />
+        )}
 
-        {isSetUsernameOpen &&
-          ReactDom.createPortal(
-            <SetUsername
-              isSetUsernameOpen={isSetUsernameOpen}
-              setIsSetUsernameOpen={setIsSetUsernameOpen}
-            />,
-            document.getElementById("user-profile-portal") as HTMLElement,
-          )}
+        {isSetUsernameOpen && (
+          <SetUsername
+            isSetUsernameOpen={isSetUsernameOpen}
+            setIsSetUsernameOpen={setIsSetUsernameOpen}
+          />
+        )}
 
-        {isSetGenderOpen &&
-          ReactDom.createPortal(
-            <SetGender
-              isSetGenderOpen={isSetGenderOpen}
-              setIsSetGenderOpen={setIsSetGenderOpen}
-            />,
-            document.getElementById("user-profile-portal") as HTMLElement,
-          )}
+        {isSetGenderOpen && (
+          <SetGender
+            isSetGenderOpen={isSetGenderOpen}
+            setIsSetGenderOpen={setIsSetGenderOpen}
+          />
+        )}
       </div>
     );
 

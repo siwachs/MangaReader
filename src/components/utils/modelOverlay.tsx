@@ -6,7 +6,7 @@ const ModelOverlay: React.FC<{
   return (
     <div
       aria-hidden="true"
-      className={`fixed inset-0 z-[${zIndex}] ${blackBg ? "bg-[#121212]" : "bg-[var(--app-background-overlay-transparent-black)]"}`}
+      className={`fixed inset-0 z-[${zIndex}] ${blackBg ? "bg-[var(--app-text-color-primary)]" : "bg-[var(--app-background-overlay-transparent-black)]"}`}
     >
       {children}
     </div>

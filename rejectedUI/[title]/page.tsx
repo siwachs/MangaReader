@@ -171,7 +171,7 @@ export default async function TitlePage() {
 
           <div className="detail-info inline-block w-full max-w-[880px] overflow-hidden md:h-[345px] md:w-[calc(100%-305px)]">
             <div className="detail-title flex items-center overflow-hidden py-2.5 md:mb-[4px] md:h-[29px] md:py-0">
-              <span className="hide-text font-noto-sans-sc mr-[80px] w-full text-lg/[24px] font-medium md:mr-[15px] md:h-[29px] md:w-auto md:text-xl/[29px]">
+              <span className="font-noto-sans-sc mr-[80px] w-full truncate text-lg/[24px] font-medium md:mr-[15px] md:h-[29px] md:w-auto md:text-xl/[29px]">
                 {data.title}
               </span>
 
@@ -180,7 +180,7 @@ export default async function TitlePage() {
               </div>
             </div>
 
-            <div className="detail-genres font-noto-sans-sc hidden-scrollbar mb-[5px] h-5 max-w-[700px] overflow-auto whitespace-nowrap text-xs/[20px] font-normal text-[var(--app-text-color-darker-gray)] md:mb-[15px] md:text-sm md:text-[var(--app-text-color-slate-gray)]">
+            <div className="detail-genres font-noto-sans-sc hide-scrollbar mb-[5px] h-5 max-w-[700px] overflow-auto whitespace-nowrap text-xs/[20px] font-normal text-[var(--app-text-color-darker-gray)] md:mb-[15px] md:text-sm md:text-[var(--app-text-color-slate-gray)]">
               {data.genres.map((genre, index) => (
                 <React.Fragment key={genre}>
                   <Link href={"/"} key={genre}>

@@ -73,14 +73,14 @@ export default function GenrePage() {
                     />
                   </div>
 
-                  <div className="content-title hide-text mt-2.5 hidden text-lg/[22px] md:block">
+                  <div className="content-title mt-2.5 hidden truncate text-lg/[22px] md:block">
                     <span>Martial Peak</span>
                   </div>
                   <div className="content-icons mt-2.5 hidden items-center gap-[5px] text-[13px] text-[var(--app-text-color-red)] md:flex">
                     <View className="-mt-[1px] mr-[5px] h-[15px] w-[15px]" />
                     <span>30.4M</span>
                   </div>
-                  <div className="content-genres font-noto-sans-sc hide-text mt-[5px] hidden text-sm font-normal text-[var(--app-text-color-slate-gray)] md:block">
+                  <div className="content-genres font-noto-sans-sc mt-[5px] hidden truncate text-sm font-normal text-[var(--app-text-color-slate-gray)] md:block">
                     <span>
                       School life/Romance/TimeTravel/Comedy/Urban Romance/Girl
                       Power/Game/Sweet/Counterattack/School Hunk
@@ -89,16 +89,16 @@ export default function GenrePage() {
                 </div>
 
                 <div className="overflow-hidden md:hidden">
-                  <div className="content-title hide-text text-lg/[30px] font-bold">
+                  <div className="content-title truncate text-lg/[30px] font-bold">
                     <span>Martial Peak</span>
                   </div>
-                  <div className="content-genres hide-text mt-2.5 text-xs/[30px] text-[var(--app-text-color-medium-gray)]">
+                  <div className="content-genres mt-2.5 truncate text-xs/[30px] text-[var(--app-text-color-medium-gray)]">
                     <span>
                       School life/Romance/TimeTravel/Comedy/Urban Romance/Girl
                       Power/Game/Sweet/Counterattack/School Hunk
                     </span>
                   </div>
-                  <div className="content-episodes-count hide-text text-xs/[24px] text-[var(--app-text-color-medium-gray)]">
+                  <div className="content-episodes-count truncate text-xs/[24px] text-[var(--app-text-color-medium-gray)]">
                     Up to Ep.463
                   </div>
                   <div className="content-icons mt-[30px] flex items-center gap-0.5 text-[13px] text-[var(--app-text-color-red)]">
@@ -142,7 +142,7 @@ const Channels: React.FC<{ title: string; channels: string[] }> = ({
           <span>{title}</span>
         </div>
 
-        <div className="hidden-scrollbar flex w-[85%] max-w-[1060px] overflow-auto md:w-full md:flex-wrap">
+        <div className="hide-scrollbar flex w-[85%] max-w-[1060px] overflow-auto md:w-full md:flex-wrap">
           {channels.map((channel, index) => (
             <Link key={channel} href="/" className="last:mr-[10%]">
               <div
