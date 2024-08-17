@@ -6,13 +6,15 @@ import connectToMongoDB from "@/libs/db/connectToMongoDB";
 import Genre from "@/models/Genre";
 import Content from "@/models/Content";
 
+import { Content as ContentType } from "@/types";
 import { MONGOOSE_DUPLICATE_KEY_ERROR } from "@/constants";
 import { isBase64Image, getValidContentPayload } from "@/libs/validations";
 import {
+  deleteFolder,
   moveFolder,
   uploadImageToFirebaseStorage,
+  uploadImagesToFirebaseStorage,
 } from "@/libs/firebaseStorage";
-import { Content as ContentType } from "@/types";
 
 export const addGenre = async (prevState: any, formData: FormData) => {
   try {
@@ -63,32 +65,22 @@ export const addOrUpdateContent = async (
       poster,
     );
 
-    validContentPayload.imagesAndWallpapers = await getImagesAndWallpapersLinks(
-      imagesAndWallpapers,
-      title,
-    );
+    validContentPayload.imagesAndWallpapers =
+      await uploadImagesToFirebaseStorage(
+        `Content/${title}/imagesAndWallpapers`,
+        imagesAndWallpapers,
+      );
 
     await Content.create(validContentPayload);
 
     return { error: false, errorMessage: undefined, resetForm: true };
   } catch (error: any) {
+    if (error.code === MONGOOSE_DUPLICATE_KEY_ERROR) {
+      return { error: true, errorMessage: "Title must be unique." };
+    }
+
     return { error: true, errorMessage: error.message };
   }
-};
-
-const getImagesAndWallpapersLinks = async (
-  imagesAndWallpapers: string[],
-  title: string,
-) => {
-  const imagesAndWallpapersUploadPromises = imagesAndWallpapers.map(
-    async (image, index) =>
-      await uploadImageToFirebaseStorage(
-        `Content/${title}/imagesAndWallpapers/${index}`,
-        image,
-      ),
-  );
-
-  return await Promise.all(imagesAndWallpapersUploadPromises);
 };
 
 const updateContent = async (
@@ -123,18 +115,40 @@ const updateContent = async (
       poster,
     );
 
+  const isImagesAndWallpapersUpdateRequest =
+    imagesAndWallpapers.length === 0 || isBase64Image(imagesAndWallpapers[0]);
+
+  if (isImagesAndWallpapersUpdateRequest) {
+    await deleteFolder(`Content/${oldTitle}/imagesAndWallpapers`);
+
+    validContentPayload.imagesAndWallpapers =
+      await uploadImagesToFirebaseStorage(
+        `Content/${oldTitle}/imagesAndWallpapers`,
+        imagesAndWallpapers,
+      );
+  }
+
   if (isTitleUpdateRequest) {
-    const updatedUrls = await moveFolder(
+    const updatedThumbnailAndPosterUrls = await moveFolder(
       `Content/${oldTitle}`,
       `Content/${newTitle}`,
     );
+    const updatedImagesAndWallpapersUrls = await moveFolder(
+      `Content/${oldTitle}/imagesAndWallpapers`,
+      `Content/${newTitle}/imagesAndWallpapers`,
+    );
 
     validContentPayload.thumbnail =
-      updatedUrls[validContentPayload.thumbnail] ??
+      updatedThumbnailAndPosterUrls[validContentPayload.thumbnail] ??
       validContentPayload.thumbnail;
 
     validContentPayload.poster =
-      updatedUrls[validContentPayload.poster] ?? validContentPayload.poster;
+      updatedThumbnailAndPosterUrls[validContentPayload.poster] ??
+      validContentPayload.poster;
+
+    validContentPayload.imagesAndWallpapers = Object.values(
+      updatedImagesAndWallpapersUrls,
+    );
   }
 
   await Content.findByIdAndUpdate(contentId, validContentPayload);

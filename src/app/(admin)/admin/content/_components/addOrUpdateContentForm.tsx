@@ -1,10 +1,11 @@
 "use client";
 
 // useActionState is Latest method for fom Managment Currently available in Next 14.3.5
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState, useEffect } from "react";
 import ReactDom, { useFormState } from "react-dom";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
+import { MAX_FILE_SIZE } from "@/constants";
 import { Content } from "@/types";
 import { addOrUpdateContent } from "@/actions/contentPageForm";
 import getUpdateImageSelectionEvent from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
@@ -80,17 +81,29 @@ const AddOrUpdateContentForm: React.FC<{
   const isThumbnailSelected = thumbnail.length > 0;
   const isPosterSelected = poster.length > 0;
   const isImagesAndWallpapersSelected = imagesAndWallpapers.length > 0;
-  if (state?.resetForm) {
-    addOrUpdateContentFormRef.current?.reset();
-  }
+
+  useEffect(() => {
+    if (state?.resetForm) {
+      addOrUpdateContentFormRef.current?.reset();
+      setThumbnail([]);
+      setPoster([]);
+      setImagesAndWallpapers([]);
+    }
+  }, [state?.resetForm]);
 
   return (
     <>
       <form
         ref={addOrUpdateContentFormRef}
         action={(formData) => {
-          formData.append("thumbnail", thumbnail[0] ?? "");
-          formData.append("poster", poster[0] ?? "");
+          if (thumbnail.length === 0 || poster.length === 0)
+            return {
+              error: true,
+              errorMessage: `Pick a valid Thumbnail and Poster of size upto ${MAX_FILE_SIZE}MB.`,
+            };
+
+          formData.append("thumbnail", thumbnail[0]);
+          formData.append("poster", poster[0]);
           imagesAndWallpapers.map((image) =>
             formData.append("imagesAndWallpapers", image),
           );
@@ -135,7 +148,6 @@ const AddOrUpdateContentForm: React.FC<{
           isImageSelected={isThumbnailSelected}
           previewButtonText="Preview Thumbnail"
           selectButtonText="Pick Thumbnail"
-          ariaLabel="Pick Thumbnail"
         />
 
         <SelectImageButtonWithPreview
@@ -144,7 +156,6 @@ const AddOrUpdateContentForm: React.FC<{
           isImageSelected={isPosterSelected}
           previewButtonText="Preview Poster"
           selectButtonText="Pick Poster"
-          ariaLabel="Pick Poster"
         />
 
         <div>
@@ -270,7 +281,6 @@ const AddOrUpdateContentForm: React.FC<{
           isImageSelected={isImagesAndWallpapersSelected}
           previewButtonText="Preview images and wallpapers"
           selectButtonText="Pick images and wallpapers"
-          ariaLabel="Pick images and wallpapers"
           multiple
         />
 
@@ -339,7 +349,6 @@ const SelectImageButtonWithPreview: React.FC<{
   isImageSelected: boolean;
   previewButtonText: string;
   selectButtonText: string;
-  ariaLabel: string;
   multiple?: boolean;
 }> = ({
   setFile,
@@ -347,7 +356,6 @@ const SelectImageButtonWithPreview: React.FC<{
   isImageSelected,
   previewButtonText,
   selectButtonText,
-  ariaLabel,
   multiple,
 }) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -365,6 +373,7 @@ const SelectImageButtonWithPreview: React.FC<{
       onClick={onClickTrigger}
       type="button"
       className={formButtonClasses}
+      aria-haspopup="dialog"
     >
       {isImageSelected ? (
         <>
@@ -381,7 +390,6 @@ const SelectImageButtonWithPreview: React.FC<{
             type="file"
             accept="image/*"
             hidden
-            aria-label={ariaLabel}
             multiple={multiple}
           />
         </>
