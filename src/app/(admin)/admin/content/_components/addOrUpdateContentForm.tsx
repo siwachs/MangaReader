@@ -7,7 +7,7 @@ import useBodyOverflow from "@/hooks/useBodyOverflow";
 
 import { Content } from "@/types";
 import { addOrUpdateContent } from "@/actions/contentPageForm";
-import { getUpdateImageSelectionEvent } from "@/libs/uiUtils/eventHandlers";
+import getUpdateImageSelectionEvent from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
 import SubmitForm from "@/components/buttons/submitForm";
 import ImagePickAndUploadTool from "@/components/imagePickAndUploadTool";
 
@@ -17,7 +17,7 @@ import {
   formInputTypeTextClasses,
   formLabelClasses,
   formTitleClasses,
-} from "../_tw/formStyles";
+} from "@/constants/adminCMSFormStyles";
 
 import { FaFileArrowUp } from "react-icons/fa6";
 import { MdPreview } from "react-icons/md";
@@ -50,14 +50,13 @@ const AddOrUpdateContentForm: React.FC<{
     errorMessage?: string;
   };
 }> = ({ genresResponse, contentResponse }) => {
-  const { genres } = genresResponse;
-  const { content } = contentResponse;
-
   const addOrUpdateContentFormRef = useRef<HTMLFormElement>(null);
   const [state, action] = useFormState(addOrUpdateContent, {
     error: false,
     errorMessage: undefined,
   });
+  const { genres } = genresResponse;
+  const { content } = contentResponse;
 
   const [thumbnail, setThumbnail] = useState<string[]>(
     content?.thumbnail ? [content.thumbnail] : [],
@@ -81,8 +80,7 @@ const AddOrUpdateContentForm: React.FC<{
   const isThumbnailSelected = thumbnail.length > 0;
   const isPosterSelected = poster.length > 0;
   const isImagesAndWallpapersSelected = imagesAndWallpapers.length > 0;
-
-  if (!state.error) {
+  if (state?.resetForm) {
     addOrUpdateContentFormRef.current?.reset();
   }
 
@@ -93,9 +91,8 @@ const AddOrUpdateContentForm: React.FC<{
         action={(formData) => {
           formData.append("thumbnail", thumbnail[0] ?? "");
           formData.append("poster", poster[0] ?? "");
-          formData.append(
-            "imagesAndWallpapers",
-            JSON.stringify(imagesAndWallpapers),
+          imagesAndWallpapers.map((image) =>
+            formData.append("imagesAndWallpapers", image),
           );
 
           action(formData);
@@ -160,6 +157,8 @@ const AddOrUpdateContentForm: React.FC<{
             type="text"
             name="title"
             className={formInputTypeTextClasses}
+            autoComplete="on"
+            spellCheck
             aria-required
             required
             defaultValue={content?.title}
@@ -219,6 +218,8 @@ const AddOrUpdateContentForm: React.FC<{
             type="text"
             name="author"
             className={formInputTypeTextClasses}
+            autoComplete="on"
+            spellCheck
             aria-required
             required
             defaultValue={content?.author}
@@ -235,6 +236,8 @@ const AddOrUpdateContentForm: React.FC<{
             type="text"
             name="synonyms"
             className={formInputTypeTextClasses}
+            autoComplete="on"
+            spellCheck
             aria-required
             defaultValue={content?.synonyms.join(",")}
           />
@@ -251,8 +254,10 @@ const AddOrUpdateContentForm: React.FC<{
           <textarea
             id="description"
             name="description"
-            rows={4}
+            rows={8}
             className="w-full rounded border p-2.5 leading-tight text-gray-700 shadow"
+            autoComplete="on"
+            spellCheck
             aria-required
             required
             defaultValue={content?.description}

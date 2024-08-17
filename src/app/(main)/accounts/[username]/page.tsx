@@ -14,7 +14,7 @@ import SetUsername from "./_components/setUsername";
 import SetGender from "./_components/setGender";
 import SetAvatar from "./_components/setAvatar";
 
-import { createKeydownEvent } from "@/libs/uiUtils/eventHandlers";
+import { createKeydownEvent } from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
 
 import { FaChevronRight } from "react-icons/fa";
 import {

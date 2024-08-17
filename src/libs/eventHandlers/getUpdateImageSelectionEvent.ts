@@ -1,19 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
+import { MAX_FILE_SIZE } from "@/constants";
 import { imageFileToBase64 } from "../imageProcessing";
-
-/**
- * Create keydown events for button-like behavior on non interactive elements.
- * @param onClick - Function to be called on keydown.
- * @returns A keydown event handler function.
- */
-export const createKeydownEvent = (onClick?: () => void) => {
-  if (!onClick) return undefined;
-
-  return (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") onClick();
-  };
-};
 
 /**
  * Handle onChange events for input field of type file
@@ -21,13 +9,13 @@ export const createKeydownEvent = (onClick?: () => void) => {
  * @param maxFileSize - Define each image's max size fallback to 3MB
  * @returns A onChange event handler function.
  */
-export const getUpdateImageSelectionEvent = (
+const getUpdateImageSelectionEvent = (
   setImages: Dispatch<SetStateAction<string[]>>,
   callback?: () => void,
   maxFileSize?: number,
 ) => {
-  const effectiveMaxFileSize = maxFileSize ?? 3;
-  const MAX_FILE_SIZE = effectiveMaxFileSize * 1024 * 1024; // Convert MB to bytes
+  const effectiveMaxFileSize = maxFileSize ?? MAX_FILE_SIZE;
+  const maxFileSizeInBytes = effectiveMaxFileSize * 1024 * 1024;
 
   return (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImages = e.target.files || null;
@@ -39,7 +27,7 @@ export const getUpdateImageSelectionEvent = (
     const filteredImagesPromises = filesArray
       .filter((file) => {
         const isImage = file.type.startsWith("image/");
-        const isWithinSizeLimit = file.size <= MAX_FILE_SIZE;
+        const isWithinSizeLimit = file.size <= maxFileSizeInBytes;
 
         if (!isImage) errorMessages.push(`${file.name} is not a image.`);
         if (!isWithinSizeLimit)
@@ -59,3 +47,5 @@ export const getUpdateImageSelectionEvent = (
     });
   };
 };
+
+export default getUpdateImageSelectionEvent;

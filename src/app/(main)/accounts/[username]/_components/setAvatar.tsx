@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useRef, useCallback } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
-import { getUpdateImageSelectionEvent } from "@/libs/uiUtils/eventHandlers";
+import { getUpdateImageSelectionEvent } from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
 import ModelOverlay from "@/components/utils/modelOverlay";
 
 const menuButtonClasses =

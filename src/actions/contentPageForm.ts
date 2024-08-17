@@ -2,13 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 
-import { partialContent } from "@/libs/mongooseSelect";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
-import getServerSession from "@/libs/auth/getServerSession";
 import Genre from "@/models/Genre";
 import Content from "@/models/Content";
 
-import { isBase64Image } from "@/libs/validations";
+import { MONGOOSE_DUPLICATE_KEY_ERROR } from "@/constants";
+import { isBase64Image, getValidContentPayload } from "@/libs/validations";
 import {
   moveFolder,
   uploadImageToFirebaseStorage,
@@ -19,15 +18,6 @@ export const addGenre = async (prevState: any, formData: FormData) => {
   try {
     await connectToMongoDB();
 
-    const data = await getServerSession();
-    if (!data || !data.user.isAdmin) {
-      return {
-        error: true,
-        errorMessage:
-          "An admin user is required for this operation. Please sign in with an admin account.",
-      };
-    }
-
     const genre = (formData.get("genre") as string).trim();
     if (!genre) return { error: true, errorMessage: "Genre can't be empty." };
 
@@ -37,87 +27,88 @@ export const addGenre = async (prevState: any, formData: FormData) => {
 
     await Genre.create({ name: genre });
 
-    revalidatePath("/admin/content");
-    return { error: false, errorMessage: undefined };
+    return { error: false, errorMessage: undefined, resetForm: true };
+  } catch (error: any) {
+    if (error.code === MONGOOSE_DUPLICATE_KEY_ERROR) {
+      return { error: true, errorMessage: "Genre must be unique." };
+    }
+
+    return { error: true, errorMessage: error.message };
+  }
+};
+
+export const addOrUpdateContent = async (
+  prevState: any,
+  formData: FormData,
+) => {
+  try {
+    const validContentPayload = getValidContentPayload(formData);
+    if (validContentPayload.error) return validContentPayload;
+
+    const contentId = (formData.get("contentId") as string).trim();
+    if (contentId)
+      return updateContent(contentId, validContentPayload as ContentType);
+
+    const { title, thumbnail, poster, imagesAndWallpapers } =
+      validContentPayload as ContentType;
+    if (await Content.findOne({ title }).select("_id"))
+      return { error: true, errorMessage: "Title must be unique." };
+
+    validContentPayload.thumbnail = await uploadImageToFirebaseStorage(
+      `Content/${title}/thumbnail`,
+      thumbnail,
+    );
+    validContentPayload.poster = await uploadImageToFirebaseStorage(
+      `Content/${title}/poster`,
+      poster,
+    );
+
+    validContentPayload.imagesAndWallpapers = await getImagesAndWallpapersLinks(
+      imagesAndWallpapers,
+      title,
+    );
+
+    await Content.create(validContentPayload);
+
+    return { error: false, errorMessage: undefined, resetForm: true };
   } catch (error: any) {
     return { error: true, errorMessage: error.message };
   }
 };
 
-const getValidContentPayload = (formData: FormData) => {
-  const thumbnail = formData.get("thumbnail") as string;
-  const poster = formData.get("poster") as string;
-
-  if (!thumbnail || !poster)
-    return {
-      error: true,
-      errorMessage: "Pick a valid Thumbnail and Poster of size upto 3MB.",
-    };
-
-  const tags = formData.getAll("tags");
-
-  const title = (formData.get("title") as string).trim();
-  if (!title)
-    return {
-      error: true,
-      errorMessage: "Title can't be empty.",
-    };
-
-  const status = formData.get("status");
-  const genres = formData.getAll("genres");
-  if (!genres.length)
-    return {
-      error: true,
-      errorMessage: "Genres can't be empty.",
-    };
-
-  const author = (formData.get("author") as string).trim();
-  if (!author)
-    return {
-      error: true,
-      errorMessage: "Author can't be empty.",
-    };
-
-  const synonyms = (formData.get("synonyms") as string).trim();
-  const synonymsArray = synonyms.split(",");
-
-  const description = (formData.get("description") as string).trim();
-  if (!description)
-    return {
-      error: true,
-      errorMessage: "Description can't be empty.",
-    };
-
-  const imagesAndWallpapers = JSON.parse(
-    formData.get("imagesAndWallpapers") as string,
+const getImagesAndWallpapersLinks = async (
+  imagesAndWallpapers: string[],
+  title: string,
+) => {
+  const imagesAndWallpapersUploadPromises = imagesAndWallpapers.map(
+    async (image, index) =>
+      await uploadImageToFirebaseStorage(
+        `Content/${title}/imagesAndWallpapers/${index}`,
+        image,
+      ),
   );
 
-  return {
-    tags,
-    thumbnail,
-    poster,
-    title,
-    status,
-    genres,
-    author,
-    synonyms: synonymsArray,
-    description,
-    imagesAndWallpapers,
-  };
+  return await Promise.all(imagesAndWallpapersUploadPromises);
 };
 
 const updateContent = async (
   contentId: string,
   validContentPayload: ContentType,
 ) => {
-  const content = await Content.findById(contentId).select(partialContent);
-
-  if (!content) return { error: true, errorMessage: "Invalid update request." };
-  const { title, thumbnail, poster } = validContentPayload;
+  const content = await Content.findById(contentId).select("_id title");
+  const {
+    title: newTitle,
+    thumbnail,
+    poster,
+    imagesAndWallpapers,
+  } = validContentPayload;
 
   const oldTitle = content.title;
-  const isTitleUpdateRequest = title !== oldTitle;
-  if (isTitleUpdateRequest && (await Content.findOne({ title }).select("_id")))
+  const isTitleUpdateRequest = newTitle !== oldTitle;
+  if (
+    isTitleUpdateRequest &&
+    (await Content.findOne({ title: newTitle }).select("_id"))
+  )
     return { error: true, errorMessage: "Title must be unique." };
 
   if (isBase64Image(thumbnail))
@@ -135,7 +126,7 @@ const updateContent = async (
   if (isTitleUpdateRequest) {
     const updatedUrls = await moveFolder(
       `Content/${oldTitle}`,
-      `Content/${title}`,
+      `Content/${newTitle}`,
     );
 
     validContentPayload.thumbnail =
@@ -150,37 +141,4 @@ const updateContent = async (
 
   revalidatePath("/admin/content");
   return { error: false, errorMessage: undefined };
-};
-
-export const addOrUpdateContent = async (
-  prevState: any,
-  formData: FormData,
-) => {
-  try {
-    const validContentPayload = getValidContentPayload(formData);
-    if (validContentPayload.error) return validContentPayload;
-
-    const contentId = (formData.get("contentId") as string).trim();
-    if (contentId)
-      return updateContent(contentId, validContentPayload as ContentType);
-
-    const { title, thumbnail, poster } = validContentPayload as ContentType;
-    if (await Content.findOne({ title }).select("_id"))
-      return { error: true, errorMessage: "Title must be unique." };
-
-    validContentPayload.thumbnail = await uploadImageToFirebaseStorage(
-      `Content/${title}/thumbnail`,
-      thumbnail,
-    );
-    validContentPayload.poster = await uploadImageToFirebaseStorage(
-      `Content/${title}/poster`,
-      poster,
-    );
-
-    await Content.create(validContentPayload);
-
-    return { error: false, errorMessage: undefined };
-  } catch (error: any) {
-    return { error: true, errorMessage: error.message };
-  }
 };

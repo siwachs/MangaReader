@@ -7,7 +7,10 @@ import { useFormState } from "react-dom";
 import { addGenre } from "@/actions/contentPageForm";
 import SubmitForm from "@/components/buttons/submitForm";
 
-import { formInputTypeTextClasses, formTitleClasses } from "../_tw/formStyles";
+import {
+  formInputTypeTextClasses,
+  formTitleClasses,
+} from "@/constants/adminCMSFormStyles";
 
 const AddGenreForm: React.FC = () => {
   const addGenreFormRef = useRef<HTMLFormElement>(null);
@@ -16,7 +19,7 @@ const AddGenreForm: React.FC = () => {
     errorMessage: undefined,
   });
 
-  if (!state.error) addGenreFormRef.current?.reset();
+  if (state?.resetForm) addGenreFormRef.current?.reset();
 
   return (
     <form

@@ -19,9 +19,18 @@ export async function uploadImageToFirebaseStorage(
   return imageUrl;
 }
 
-export async function moveFolder(oldRef: string, newRef: string) {
-  const sourceRef = ref(storage, oldRef);
-  const destinationRef = ref(storage, newRef);
+export async function deleteFolder(refPath: string) {
+  const folderRef = ref(storage, refPath);
+  const files = await listAll(folderRef);
+
+  for (const file of files.items) {
+    await deleteObject(file);
+  }
+}
+
+export async function moveFolder(oldRefPath: string, newRefPath: string) {
+  const sourceRef = ref(storage, oldRefPath);
+  const destinationRef = ref(storage, newRefPath);
 
   const files = await listAll(sourceRef);
 

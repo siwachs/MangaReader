@@ -5,11 +5,9 @@ import getServerSession from "@/libs/auth/getServerSession";
 import AddGenreForm from "./_components/addGenreForm";
 import AddOrUpdateContentForm from "./_components/addOrUpdateContentForm";
 
+import { formContainer } from "@/constants/adminCMSFormStyles";
 import getGenres from "@/libs/dbCRUD/getGenres";
 import getContent from "@/libs/dbCRUD/getContent";
-
-const formContainer =
-  "soft-edge-shadow mx-auto w-[90%] max-w-[590px] rounded-lg bg-white p-5 text-sm md:text-base";
 
 export default async function ContentPage(req: Readonly<pageReqObj>) {
   const data = await getServerSession();
