@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -21,7 +21,7 @@ import {
   MdOutlineMail,
   MdOutlineBookmarkAdded,
 } from "react-icons/md";
-import { TfiCommentAlt, TfiCommentsSmiley } from "react-icons/tfi";
+import { TfiCommentAlt } from "react-icons/tfi";
 import { BiLike } from "react-icons/bi";
 
 export default function AccountPage() {
@@ -40,93 +40,105 @@ export default function AccountPage() {
       isSetGenderOpen,
   );
 
+  const openSetAvatar = useCallback(() => setIsSetAvatarOpen(true), []);
+  const openSetUsername = useCallback(() => setIsSetUsernameOpen(true), []);
+  const openSetGender = useCallback(() => setIsSetGenderOpen(true), []);
+
   if (status === "loading") return <LoadingOverlay />;
 
-  if (status === "authenticated")
+  if (status === "authenticated") {
+    const { avatar, name, username, gender, id } = data.user;
+
     return (
-      <div className="mx-auto h-[calc(100vh-60px)] max-w-[690px] overflow-auto px-5 md:h-[calc(100vh-120px)]">
-        <div className="mt-2.5 flex items-center justify-end gap-4">
-          <Link href="/" className="relative">
+      <div className="mx-auto h-[calc(100vh-60px)] max-w-[690px] overflow-auto px-5 pb-5 pt-2.5 md:h-[calc(100vh-120px)] md:pb-[30px]">
+        <div className="flex items-center justify-end gap-5">
+          <Link
+            href={`/accounts/${username}/notifications`}
+            className="relative"
+          >
             <MdOutlineMail className="size-6" />
             <span className="absolute -right-1.5 top-0 flex size-3.5 items-center justify-center rounded-full bg-[var(--app-text-color-vibrant-pink)] text-xs text-white">
               1
             </span>
           </Link>
 
-          <Link href="/">
+          <Link href={`/accounts/${username}/setting`}>
             <MdOutlineSettings className="size-6" />
           </Link>
         </div>
 
         <div className="mt-2.5 flex gap-5">
           <Image
-            src={data.user.avatar ?? "/assests/person.png"}
-            alt={data.user.name!}
+            src={avatar ?? "/assests/person.png"}
+            alt={name ?? "user-avatar"}
             width={52}
             height={52}
-            className="size-[50px] cursor-pointer rounded-full object-center"
+            className="size-[50px] rounded-full object-cover object-center"
           />
 
-          <h3 className="select-none text-xl font-bold">{data.user.name}</h3>
+          <h3 className="select-none text-xl font-bold">{name ?? "Not Set"}</h3>
         </div>
 
         <div className="soft-edge-shadow mt-3.5 rounded-[10px]">
           <ProfileInformationRow
             title="Avatar"
-            onClick={() => setIsSetAvatarOpen(true)}
+            onClick={openSetAvatar}
             ariaLabel="Open SetAvatar"
             childrenIsText={false}
           >
             <Image
               src={data.user.avatar ?? "/assests/person.png"}
-              alt={data.user.name!}
+              alt={data.user.name ?? "Not Set"}
               width={46}
               height={46}
-              className="size-9 rounded-full object-cover"
+              className="size-9 rounded-full object-cover object-center"
             />
           </ProfileInformationRow>
 
           <ProfileInformationRow
             title="Username"
-            onClick={() => setIsSetUsernameOpen(true)}
+            onClick={openSetUsername}
             ariaLabel="Open Setusername"
           >
-            {data.user.username ?? "Not Set"}
+            {username ?? "Not Set"}
           </ProfileInformationRow>
 
           <ProfileInformationRow
             title="Gender"
-            onClick={() => setIsSetGenderOpen(true)}
+            onClick={openSetGender}
             ariaLabel="Open SetGender"
           >
-            {data.user.gender ?? "Not Set"}
+            {gender ?? "Not Set"}
           </ProfileInformationRow>
 
           <ProfileInformationRow title="ID" clientInteractable={false}>
-            {data.user.id?.slice(-8)}
+            {id?.slice(-8)}
           </ProfileInformationRow>
         </div>
 
         <div className="soft-edge-shadow mt-3.5 rounded-[10px]">
-          <ProfileLinkRow href="/" Icon={TfiCommentAlt} title="My Comments" />
           <ProfileLinkRow
-            href="/"
+            href={`/accounts/${username}/comments`}
+            Icon={TfiCommentAlt}
+            title="My Comments"
+          />
+          <ProfileLinkRow
+            href={`/accounts/${username}/bookmarks`}
             Icon={MdOutlineBookmarkAdded}
             title="My Bookmarks"
           />
           <ProfileLinkRow
-            href="/"
-            Icon={TfiCommentsSmiley}
-            title="My Comments Reaction"
+            href={`/accounts/${username}/chapters`}
+            Icon={BiLike}
+            title="Liked Chapters"
           />
-          <ProfileLinkRow href="/" Icon={BiLike} title="Liked Chapters" />
         </div>
 
         {avatarImage.length > 0 && (
           <ImagePreviewAndUploadTool
             images={avatarImage}
             goBackCallback={() => setAvatarImage([])}
-            title="Tales of Demons and Gods"
+            title="User Avatar"
           />
         )}
 
@@ -153,6 +165,7 @@ export default function AccountPage() {
         )}
       </div>
     );
+  }
 
   return signIn("google", { callbackUrl: currentUrl });
 }
@@ -164,49 +177,52 @@ const ProfileInformationRow: React.FC<{
   ariaLabel?: string;
   childrenIsText?: boolean;
   clientInteractable?: boolean;
-}> = ({
-  title,
-  children,
-  onClick,
-  ariaLabel,
-  childrenIsText = true,
-  clientInteractable = true,
-}) => {
-  const role = onClick ? "button" : undefined;
-  const tabIndex = onClick ? 0 : undefined;
+}> = memo(
+  ({
+    title,
+    children,
+    onClick,
+    ariaLabel,
+    childrenIsText = true,
+    clientInteractable = true,
+  }) => {
+    const role = onClick ? "button" : undefined;
+    const tabIndex = onClick ? 0 : undefined;
+    const keyDownEvent = createKeydownEvent(onClick);
 
-  return (
-    <div className="flex h-14 items-center justify-between border-b border-[var(--app-border-color-light-gray)] p-4">
-      <h3 className="select-none font-bold">{title}</h3>
+    return (
+      <div className="flex h-14 items-center justify-between border-b border-[var(--app-border-color-light-gray)] p-4">
+        <h3 className="select-none font-bold">{title}</h3>
 
-      <div
-        tabIndex={tabIndex}
-        role={role}
-        onClick={onClick}
-        onKeyDown={() => createKeydownEvent(onClick)}
-        aria-label={ariaLabel}
-        className={`flex ${clientInteractable ? "cursor-pointer select-none" : "select-none"} items-center gap-1`}
-      >
-        {childrenIsText ? (
-          <h3 className="text-slate-600">{children}</h3>
-        ) : (
-          children
-        )}
+        <div
+          tabIndex={tabIndex}
+          role={role}
+          onClick={onClick}
+          onKeyDown={keyDownEvent}
+          aria-label={ariaLabel}
+          className={`flex ${clientInteractable ? "cursor-pointer select-none" : "select-none"} items-center gap-1`}
+        >
+          {childrenIsText ? (
+            <h3 className="text-slate-600">{children}</h3>
+          ) : (
+            children
+          )}
 
-        {clientInteractable && (
-          <FaChevronRight className="size-3.5 text-[var(--app-text-color-stone-gray)]" />
-        )}
+          {clientInteractable && (
+            <FaChevronRight className="size-3.5 text-[var(--app-text-color-stone-gray)]" />
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  },
+);
 
 const ProfileLinkRow: React.FC<{
   href: string;
   Icon: any;
   iconSize?: string;
   title: string;
-}> = ({ href, Icon, iconSize = "size-5", title }) => {
+}> = memo(({ href, Icon, iconSize = "size-5", title }) => {
   return (
     <Link
       href={href}
@@ -216,4 +232,4 @@ const ProfileLinkRow: React.FC<{
       <span className="select-none font-bold">{title}</span>
     </Link>
   );
-};
+});

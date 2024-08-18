@@ -6,11 +6,10 @@ import { makePostPutRequest } from "@/service/asyncApiCalls";
 import ModelOverlay from "@/components/utils/modelOverlay";
 
 import { FaCheck } from "react-icons/fa6";
+import { updateProfileEndpoint } from "@/constants/apiEndpoints";
 
-const updateProfileEndpoint = process.env
-  .NEXT_PUBLIC_API_ENDPOINT_ACCOUNTS as string;
 const selectButtonClasses =
-  "flex h-14 w-full items-center justify-between border-b border-[var(--app-border-color-light-gray)] p-4 text-base font-bold";
+  "flex h-14 w-full items-center justify-between border-b border-[var(--app-border-color-light-gray)] p-4 font-bold";
 
 const SetGender: React.FC<{
   isSetGenderOpen: boolean;
@@ -53,7 +52,7 @@ const SetGender: React.FC<{
         >
           Male
           {gender === "Male" && (
-            <FaCheck className="inline-block text-[var(--app-text-color-bright-pink)]" />
+            <FaCheck className="text-[var(--app-text-color-bright-pink)]" />
           )}
         </button>
 
@@ -63,7 +62,7 @@ const SetGender: React.FC<{
         >
           Female
           {gender === "Female" && (
-            <FaCheck className="inline-block text-[var(--app-text-color-bright-pink)]" />
+            <FaCheck className="text-[var(--app-text-color-bright-pink)]" />
           )}
         </button>
 

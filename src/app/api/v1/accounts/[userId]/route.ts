@@ -18,15 +18,15 @@ const updateProfile = async (
     const userId = dynamicRouteValue.params.userId;
 
     await connectToMongoDB();
-    const user = await User.findById(userId).select("_id");
-    if (!user) return notFound(["User"]);
 
     const serverSession = await getServerSession(userId);
     if (!serverSession) return unauthorizedUser();
 
-    await User.findByIdAndUpdate(userId, profileData, {
+    const updatedUser = await User.findByIdAndUpdate(userId, profileData, {
+      new: true,
       runValidators: true,
-    });
+    }).select("_id");
+    if (!updatedUser) return notFound(["User"]);
 
     return NextResponse.json({ error: false }, { status: 200 });
   } catch (error: any) {

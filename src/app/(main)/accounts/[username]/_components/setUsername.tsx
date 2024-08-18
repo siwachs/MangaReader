@@ -1,4 +1,4 @@
-import { useState, useRef, Dispatch, SetStateAction } from "react";
+import { useState, useRef, Dispatch, SetStateAction, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import useDebounce from "@/hooks/useDebounce";
@@ -10,10 +10,11 @@ import ModelOverlay from "@/components/utils/modelOverlay";
 import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { AiOutlineLoading } from "react-icons/ai";
 
-const checkUsenameEndpoint = process.env
-  .NEXT_PUBLIC_API_ENDPOINT_CHECK_USERNAME as string;
-const claimUsernameEndpoint = process.env
-  .NEXT_PUBLIC_API_ENDPOINT_CLAIM_USERNAME as string;
+import { DEBOUNCED_DELAY } from "@/constants";
+import {
+  checkUsenameEndpoint,
+  claimUsernameEndpoint,
+} from "@/constants/apiEndpoints";
 
 const initialUsernameQuery: {
   loading: boolean;
@@ -24,7 +25,6 @@ const initialUsernameQuery: {
   usernameAvailable: null,
   error: null,
 };
-const debouncedUsernameQueryDelay = 300;
 
 const SetUsername: React.FC<{
   isSetUsernameOpen: boolean;
@@ -43,42 +43,48 @@ const SetUsername: React.FC<{
     setIsSetUsernameOpen(false);
   });
 
-  useDebounce(
-    async () => {
-      if (username.trim() === "" || username === data?.user?.username) return;
-      const requestResponse = await makeGetRequest(
-        `${checkUsenameEndpoint}/${username}`,
-        undefined,
-        () => {
-          setUsernameQuery((prev) => ({ ...prev, loading: false }));
-        },
-      );
+  const checkUsernameAvailability = useCallback(async (username: string) => {
+    if (username === "" || username === data?.user?.username) return;
 
-      const { error, errorMessage, usernameAvailable } = requestResponse;
-      if (error)
-        return setUsernameQuery((prev) => ({
-          ...prev,
-          error: errorMessage,
-        }));
+    const requestResponse = await makeGetRequest(
+      `${checkUsenameEndpoint}/${username}`,
+      undefined,
+      () => {
+        setUsernameQuery((prev) => ({ ...prev, loading: false }));
+      },
+    );
 
-      setUsernameQuery((prev) => ({
+    const { error, errorMessage, usernameAvailable } = requestResponse;
+    if (error)
+      return setUsernameQuery((prev) => ({
         ...prev,
-        error: null,
-        usernameAvailable,
+        error: errorMessage,
       }));
-    },
+
+    setUsernameQuery((prev) => ({
+      ...prev,
+      error: null,
+      usernameAvailable,
+    }));
+  }, []);
+
+  useDebounce(
+    () => checkUsernameAvailability(username),
     [username],
-    debouncedUsernameQueryDelay,
+    DEBOUNCED_DELAY,
   );
 
   const claimThisUsername = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (username.trim() === "")
+
+    const trimmedUsername = username.trim();
+    if (trimmedUsername === "")
       return setUsernameQuery({
         loading: false,
         error: "You haven't enter your username",
         usernameAvailable: null,
       });
+
     if (usernameQuery.loading || !usernameQuery.usernameAvailable) return;
 
     setUsernameQuery({ ...initialUsernameQuery, loading: true });
@@ -96,11 +102,12 @@ const SetUsername: React.FC<{
         error: errorMessage,
       });
 
+    setIsSetUsernameOpen(false);
     update({ username: claimedUsername });
     router.replace(`/accounts/${claimedUsername}`);
   };
 
-  const changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     const trimmedUsername = e.target.value.trim();
 
     setUsername(trimmedUsername);
@@ -123,13 +130,14 @@ const SetUsername: React.FC<{
         className="soft-edge-shadow mx-auto mt-[92px] grid w-[90%] max-w-[690px] place-items-center gap-3.5 overflow-hidden rounded-lg bg-white p-5 text-sm md:mt-36 md:text-base"
       >
         <h3 className="select-none font-bold">Set Username</h3>
+
         <div className="w-full">
           <div
             className={`flex items-center rounded-lg border bg-[var(--app-text-color-very-light-gray)] ${usernameQuery.error ? "border-red-500" : "border-transparent"}`}
           >
             <input
               value={username}
-              onChange={changeUsername}
+              onChange={onChangeUsername}
               type="text"
               autoComplete="on"
               autoFocus
@@ -146,13 +154,14 @@ const SetUsername: React.FC<{
                 )}
               </>
             )}
+
             {usernameQuery.loading && (
               <AiOutlineLoading className="mr-2 size-6 animate-spin" />
             )}
           </div>
 
           <p
-            className={`my-1.5 h-5 text-xs font-bold text-red-500 ${usernameQuery.error ? "" : "opacity-0"}`}
+            className={`my-1.5 h-5 text-[11px] font-bold text-red-500 md:text-[13px] lg:text-sm ${usernameQuery.error ? "opacity-100" : "opacity-0"}`}
           >
             {usernameQuery.error}
           </p>

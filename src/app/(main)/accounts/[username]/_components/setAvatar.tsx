@@ -46,7 +46,6 @@ const SetAvatar: React.FC<{
             type="file"
             accept="image/*"
             hidden
-            multiple
             aria-label="Select From Gallery"
           />
         </button>

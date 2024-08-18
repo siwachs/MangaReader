@@ -10,26 +10,18 @@ export default function useOutsideClick(
       if (!ref?.current?.contains(e.target as Node)) callback();
     };
 
-    const handleEscapeKey = (e: KeyboardEvent) => {
+    const onPressEscapeKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") callback();
     };
 
-    const addListeners = () => {
-      document.addEventListener("mousedown", handleOutsideClicks);
-      document.addEventListener("keydown", handleEscapeKey);
-    };
-
-    const removeListeners = () => {
-      document.removeEventListener("mousedown", handleOutsideClicks);
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
-
     if (isOpen) {
-      addListeners();
-    } else {
-      removeListeners();
+      document.addEventListener("mousedown", handleOutsideClicks);
+      document.addEventListener("keydown", onPressEscapeKey);
     }
 
-    return () => removeListeners();
-  }, [ref, callback, isOpen]);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClicks);
+      document.removeEventListener("keydown", onPressEscapeKey);
+    };
+  }, [callback, isOpen]);
 }
