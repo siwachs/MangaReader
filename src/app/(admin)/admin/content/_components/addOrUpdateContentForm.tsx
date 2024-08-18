@@ -10,7 +10,7 @@ import { Content } from "@/types";
 import { addOrUpdateContent } from "@/actions/contentPageForm";
 import getUpdateImageSelectionEvent from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
 import SubmitForm from "@/components/buttons/submitForm";
-import ImagePickAndUploadTool from "@/components/imagePickAndUploadTool";
+import ImagePickAndUploadTool from "@/components/imagePreviewAndUploadTool";
 
 import {
   formButtonClasses,

@@ -8,7 +8,7 @@ import { useSession, signIn } from "next-auth/react";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
 import LoadingOverlay from "@/components/utils/loadingOverlay";
-import ImagePickAndUploadTool from "@/components/imagePickAndUploadTool";
+import ImagePreviewAndUploadTool from "@/components/imagePreviewAndUploadTool";
 import SetUsername from "./_components/setUsername";
 import SetGender from "./_components/setGender";
 import SetAvatar from "./_components/setAvatar";
@@ -123,7 +123,7 @@ export default function AccountPage() {
         </div>
 
         {avatarImage.length > 0 && (
-          <ImagePickAndUploadTool
+          <ImagePreviewAndUploadTool
             images={avatarImage}
             goBackCallback={() => setAvatarImage([])}
             title="Tales of Demons and Gods"
