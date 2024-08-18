@@ -1,16 +1,11 @@
 "use client";
 
 // useActionState is Latest method for fom Managment Currently available in Next 14.3.5
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFormState } from "react-dom";
 
 import { addGenre } from "@/actions/contentPageForm";
 import SubmitForm from "@/components/buttons/submitForm";
-
-import {
-  formInputTypeTextClasses,
-  formTitleClasses,
-} from "@/constants/adminCMSFormStyles";
 
 const AddGenreForm: React.FC = () => {
   const addGenreFormRef = useRef<HTMLFormElement>(null);
@@ -19,7 +14,9 @@ const AddGenreForm: React.FC = () => {
     errorMessage: undefined,
   });
 
-  if (state?.resetForm) addGenreFormRef.current?.reset();
+  useEffect(() => {
+    if (state?.resetForm) addGenreFormRef.current?.reset();
+  }, [state?.resetForm]);
 
   return (
     <form
@@ -27,7 +24,7 @@ const AddGenreForm: React.FC = () => {
       action={action}
       className="flex flex-col gap-3.5"
     >
-      <h3 className={formTitleClasses}>Add a new Genre</h3>
+      <h3 className="admin-form-title">Add a new Genre</h3>
 
       <div>
         <input
@@ -35,15 +32,15 @@ const AddGenreForm: React.FC = () => {
           name="genre"
           className={
             state.error
-              ? `${formInputTypeTextClasses} border-red-500`
-              : formInputTypeTextClasses
+              ? "admin-form-input-type-text border-red-600"
+              : "admin-form-input-type-text"
           }
           required
           aria-required
         />
 
         {state.error && (
-          <p className="mt-1 select-none text-[11px] text-red-500">
+          <p className="admin-form-input-caption text-red-600">
             {state.errorMessage}
           </p>
         )}

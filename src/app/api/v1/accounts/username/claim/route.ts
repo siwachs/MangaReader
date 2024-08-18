@@ -18,18 +18,22 @@ const claimUsername = async (req: NextRequest) => {
     if (!trimmedUsername) return invalidBody(["userId", "username"]);
 
     await connectToMongoDB();
-    const user = await User.findById(userId).select("_id");
-    if (!user) return notFound(["User"]);
 
     const serverSession = await getServerSession(userId);
     if (!serverSession) return unauthorizedUser();
 
-    const usernameAvailable = await User.findOne({ username }).select("_id");
+    const usernameAvailable = await User.findOne({
+      username: trimmedUsername,
+    }).select("_id");
     if (usernameAvailable !== null)
       return badRequest("Username already claimed.");
 
-    user.username = trimmedUsername;
-    await user.save();
+    const updatedUser = User.findByIdAndUpdate(
+      userId,
+      { username: trimmedUsername },
+      { new: true, runValidators: true },
+    ).select("_id");
+    if (!updatedUser) return notFound(["User"]);
 
     return NextResponse.json(
       { error: false, claimedUsername: trimmedUsername },

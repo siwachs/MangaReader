@@ -96,9 +96,38 @@ body {
   .pink-lift-shadow {
     box-shadow: 0 3px 5px rgba(255, 32, 78, 0.3);
   }
+
+  /* Admin Form */
+  .admin-form-container {
+    @apply soft-edge-shadow mx-auto w-[90%] max-w-[590px] rounded-lg bg-white p-5 text-sm md:text-base;
+  }
+
+  .admin-form-title {
+    @apply select-none text-base font-bold text-gray-700;
+  }
+
+  .admin-form-button {
+    @apply flex cursor-pointer items-center gap-2 rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100;
+  }
+
+  .admin-form-label {
+    @apply mb-2 block font-bold text-gray-700;
+  }
+
+  .admin-form-input-type-text {
+    @apply w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow;
+  }
+
+  .admin-form-input-type-select {
+    @apply w-full rounded border bg-white px-3 py-2 leading-tight text-gray-700 shadow;
+  }
+
+  .admin-form-input-caption {
+    @apply mt-1 select-none text-[11px] md:text-[13px] lg:mt-1.5 lg:text-sm;
+  }
 }
 
-/* App Container CSS */
+/* App Container */
 #page-content {
   @apply relative mt-[60px] md:mt-[120px];
 }

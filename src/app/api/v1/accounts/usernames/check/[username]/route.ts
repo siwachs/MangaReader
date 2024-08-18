@@ -10,10 +10,13 @@ const checkUsername = async (
 ) => {
   try {
     const username = dynamicRouteValue.params.username;
-    if (username.trim() === "") return notFound(["username"]);
+    const trimmedUsername = username.trim();
+    if (trimmedUsername === "") return notFound(["username"]);
 
     await connectToMongoDB();
-    const userId = await User.findOne({ username }).select("_id");
+    const userId = await User.findOne({ username: trimmedUsername }).select(
+      "_id",
+    );
 
     return NextResponse.json(
       { error: false, usernameAvailable: userId === null },

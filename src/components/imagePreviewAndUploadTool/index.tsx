@@ -37,13 +37,13 @@ const ImagePreviewAndUploadTool: React.FC<{
     setActiveSlide((prev) => Math.min(prev + 1, totalSlides - 1));
   }, [totalSlides]);
 
-  const downloadImage = useCallback(() => {
+  const downloadImage = () => {
     const link = document.createElement("a");
     link.href = images[activeSlide];
     link.download = `${title}-${activeSlide + 1}`;
 
     link.click();
-  }, [images, activeSlide]);
+  };
 
   return (
     <ModelOverlay blackBg>

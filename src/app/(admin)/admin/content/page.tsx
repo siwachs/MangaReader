@@ -5,7 +5,6 @@ import getServerSession from "@/libs/auth/getServerSession";
 import AddGenreForm from "./_components/addGenreForm";
 import AddOrUpdateContentForm from "./_components/addOrUpdateContentForm";
 
-import { formContainer } from "@/constants/adminCMSFormStyles";
 import getGenres from "@/libs/dbCRUD/getGenres";
 import getContent from "@/libs/dbCRUD/getContent";
 
@@ -18,11 +17,11 @@ export default async function ContentPage(req: Readonly<pageReqObj>) {
 
   return (
     <>
-      <div className={`${formContainer} mb-5 mt-[92px] md:mb-[30px] md:mt-36`}>
+      <div className="admin-form-container mb-5 mt-[92px] md:mb-[30px] md:mt-36">
         <AddGenreForm />
       </div>
 
-      <div className={`${formContainer} my-5 md:my-[30px]`}>
+      <div className="admin-form-container my-5 md:my-[30px]">
         <AddOrUpdateContentForm
           genresResponse={genresResponse}
           contentResponse={contentResponse}

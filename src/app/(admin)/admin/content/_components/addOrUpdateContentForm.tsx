@@ -1,8 +1,15 @@
 "use client";
 
 // useActionState is Latest method for fom Managment Currently available in Next 14.3.5
-import { Dispatch, SetStateAction, useRef, useState, useEffect } from "react";
-import ReactDom, { useFormState } from "react-dom";
+import {
+  Dispatch,
+  SetStateAction,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import { useFormState } from "react-dom";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
 import { MAX_FILE_SIZE } from "@/constants";
@@ -10,16 +17,7 @@ import { Content } from "@/types";
 import { addOrUpdateContent } from "@/actions/contentPageForm";
 import getUpdateImageSelectionEvent from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
 import SubmitForm from "@/components/buttons/submitForm";
-import ImagePickAndUploadTool from "@/components/imagePreviewAndUploadTool";
-
-import {
-  formButtonClasses,
-  formInputCaptionClasses,
-  formInputTypeSelectClasses,
-  formInputTypeTextClasses,
-  formLabelClasses,
-  formTitleClasses,
-} from "@/constants/adminCMSFormStyles";
+import ImagePreviewAndUploadTool from "@/components/imagePreviewAndUploadTool";
 
 import { FaFileArrowUp } from "react-icons/fa6";
 import { MdPreview } from "react-icons/md";
@@ -92,28 +90,34 @@ const AddOrUpdateContentForm: React.FC<{
     }
   }, [state?.resetForm]);
 
+  const formAction = useCallback(
+    (formData: FormData) => {
+      if (thumbnail.length === 0 || poster.length === 0) {
+        return {
+          error: true,
+          errorMessage: `Pick a valid Thumbnail and Poster of size up to ${MAX_FILE_SIZE}MB.`,
+        };
+      }
+
+      formData.append("thumbnail", thumbnail[0]);
+      formData.append("poster", poster[0]);
+      imagesAndWallpapers.forEach((image) =>
+        formData.append("imagesAndWallpapers", image),
+      );
+
+      action(formData);
+    },
+    [thumbnail, poster, imagesAndWallpapers, action],
+  );
+
   return (
     <>
       <form
         ref={addOrUpdateContentFormRef}
-        action={(formData) => {
-          if (thumbnail.length === 0 || poster.length === 0)
-            return {
-              error: true,
-              errorMessage: `Pick a valid Thumbnail and Poster of size upto ${MAX_FILE_SIZE}MB.`,
-            };
-
-          formData.append("thumbnail", thumbnail[0]);
-          formData.append("poster", poster[0]);
-          imagesAndWallpapers.map((image) =>
-            formData.append("imagesAndWallpapers", image),
-          );
-
-          action(formData);
-        }}
+        action={formAction}
         className="flex flex-col gap-3.5"
       >
-        <h3 className={formTitleClasses}>Add a new Content</h3>
+        <h3 className="admin-form-title">Add a new Content</h3>
         <input
           type="text"
           name="contentId"
@@ -123,7 +127,7 @@ const AddOrUpdateContentForm: React.FC<{
         />
 
         <div>
-          <label className={formLabelClasses} htmlFor="tags">
+          <label className="admin-form-label" htmlFor="tags">
             Tags
           </label>
 
@@ -131,7 +135,7 @@ const AddOrUpdateContentForm: React.FC<{
             id="tags"
             name="tags"
             multiple
-            className={`${formInputTypeSelectClasses} h-[136px]`}
+            className="admin-form-input-type-select h-[136px]"
             aria-multiselectable="true"
             defaultValue={content?.tags}
           >
@@ -160,7 +164,7 @@ const AddOrUpdateContentForm: React.FC<{
         />
 
         <div>
-          <label className={formLabelClasses} htmlFor="title">
+          <label className="admin-form-label" htmlFor="title">
             Title
           </label>
 
@@ -168,7 +172,7 @@ const AddOrUpdateContentForm: React.FC<{
             id="title"
             type="text"
             name="title"
-            className={formInputTypeTextClasses}
+            className="admin-form-input-type-text"
             autoComplete="on"
             spellCheck
             aria-required
@@ -178,14 +182,14 @@ const AddOrUpdateContentForm: React.FC<{
         </div>
 
         <div>
-          <label className={formLabelClasses} htmlFor="status">
+          <label className="admin-form-label" htmlFor="status">
             Status
           </label>
 
           <select
             id="status"
             name="status"
-            className={formInputTypeSelectClasses}
+            className="admin-form-input-type-select"
             aria-required
             required
             defaultValue={content?.status}
@@ -199,7 +203,7 @@ const AddOrUpdateContentForm: React.FC<{
         </div>
 
         <div>
-          <label className={formLabelClasses} htmlFor="genres">
+          <label className="admin-form-label" htmlFor="genres">
             Genres
           </label>
 
@@ -207,7 +211,7 @@ const AddOrUpdateContentForm: React.FC<{
             id="genres"
             name="genres"
             multiple
-            className={`${formInputTypeSelectClasses} h-[136px]`}
+            className="admin-form-input-type-select h-[136px]"
             aria-required
             required
             defaultValue={content?.genres}
@@ -221,7 +225,7 @@ const AddOrUpdateContentForm: React.FC<{
         </div>
 
         <div>
-          <label className={formLabelClasses} htmlFor="author">
+          <label className="admin-form-label" htmlFor="author">
             Author
           </label>
 
@@ -229,7 +233,7 @@ const AddOrUpdateContentForm: React.FC<{
             id="author"
             type="text"
             name="author"
-            className={formInputTypeTextClasses}
+            className="admin-form-input-type-text"
             autoComplete="on"
             spellCheck
             aria-required
@@ -239,7 +243,7 @@ const AddOrUpdateContentForm: React.FC<{
         </div>
 
         <div>
-          <label className={formLabelClasses} htmlFor="synonyms">
+          <label className="admin-form-label" htmlFor="synonyms">
             Synonyms
           </label>
 
@@ -247,19 +251,19 @@ const AddOrUpdateContentForm: React.FC<{
             id="synonyms"
             type="text"
             name="synonyms"
-            className={formInputTypeTextClasses}
+            className="admin-form-input-type-text"
             autoComplete="on"
             spellCheck
             aria-required
             defaultValue={content?.synonyms.join(",")}
           />
-          <p className={`${formInputCaptionClasses} text-gray-600`}>
+          <p className="admin-form-input-caption text-gray-600">
             Please enter synonyms separated by commas.
           </p>
         </div>
 
         <div>
-          <label className={formLabelClasses} htmlFor="description">
+          <label className="admin-form-label" htmlFor="description">
             Description
           </label>
 
@@ -288,58 +292,48 @@ const AddOrUpdateContentForm: React.FC<{
         <div>
           <SubmitForm title="Add Content" />
           {state.error && (
-            <p className={`${formInputCaptionClasses} text-red-600`}>
+            <p className="admin-form-input-caption text-red-600">
               {state.errorMessage}
             </p>
           )}
         </div>
       </form>
 
-      {isPreviewThumbnail &&
-        ReactDom.createPortal(
-          <ImagePickAndUploadTool
-            images={thumbnail}
-            onClickResetCallback={() => {
-              setIsPreviewThumbnail(false);
-              setThumbnail([]);
-            }}
-            onClickNextCallback={() => setIsPreviewThumbnail(false)}
-            goBackCallback={() => setIsPreviewThumbnail(false)}
-          />,
-          document.getElementById(
-            "image-pick-and-upload-portal",
-          ) as HTMLElement,
-        )}
-      {isPreviewPoster &&
-        ReactDom.createPortal(
-          <ImagePickAndUploadTool
-            images={poster}
-            onClickResetCallback={() => {
-              setIsPreviewPoster(false);
-              setPoster([]);
-            }}
-            onClickNextCallback={() => setIsPreviewPoster(false)}
-            goBackCallback={() => setIsPreviewPoster(false)}
-          />,
-          document.getElementById(
-            "image-pick-and-upload-portal",
-          ) as HTMLElement,
-        )}
-      {isPreviewImagesAndWallpapers &&
-        ReactDom.createPortal(
-          <ImagePickAndUploadTool
-            images={imagesAndWallpapers}
-            onClickResetCallback={() => {
-              setIsPreviewImagesAndWallpapers(false);
-              setImagesAndWallpapers([]);
-            }}
-            enableSlidesSelection
-            goBackCallback={() => setIsPreviewImagesAndWallpapers(false)}
-          />,
-          document.getElementById(
-            "image-pick-and-upload-portal",
-          ) as HTMLElement,
-        )}
+      {isPreviewThumbnail && (
+        <ImagePreviewAndUploadTool
+          images={thumbnail}
+          onClickResetCallback={() => {
+            setIsPreviewThumbnail(false);
+            setThumbnail([]);
+          }}
+          title="Thumbnail Preview"
+          goBackCallback={() => setIsPreviewThumbnail(false)}
+        />
+      )}
+
+      {isPreviewPoster && (
+        <ImagePreviewAndUploadTool
+          images={poster}
+          onClickResetCallback={() => {
+            setIsPreviewPoster(false);
+            setPoster([]);
+          }}
+          title="Poster Preview"
+          goBackCallback={() => setIsPreviewPoster(false)}
+        />
+      )}
+
+      {isPreviewImagesAndWallpapers && (
+        <ImagePreviewAndUploadTool
+          images={imagesAndWallpapers}
+          onClickResetCallback={() => {
+            setIsPreviewImagesAndWallpapers(false);
+            setImagesAndWallpapers([]);
+          }}
+          title="Images and Wallpapers Preview"
+          goBackCallback={() => setIsPreviewImagesAndWallpapers(false)}
+        />
+      )}
     </>
   );
 };
@@ -360,20 +354,21 @@ const SelectImageButtonWithPreview: React.FC<{
   multiple,
 }) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
-  const updateSelectionEvent = getUpdateImageSelectionEvent(setFile, () =>
-    setPreview(true),
+  const updateSelectionEvent = useCallback(
+    getUpdateImageSelectionEvent(setFile, () => setPreview(true)),
+    [setFile, setPreview],
   );
 
-  const onClickTrigger = () => {
+  const onClickTrigger = useCallback(() => {
     if (isImageSelected) setPreview(true);
     else imageInputRef.current?.click();
-  };
+  }, [isImageSelected, setPreview]);
 
   return (
     <button
       onClick={onClickTrigger}
       type="button"
-      className={formButtonClasses}
+      className="admin-form-button"
       aria-haspopup="dialog"
     >
       {isImageSelected ? (
