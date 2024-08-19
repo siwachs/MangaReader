@@ -1040,9 +1040,7 @@ const Rating: React.FC<{ rating: number; mobileOnly?: boolean }> = ({
       <span className="text-base font-bold md:mr-3 md:text-lg md:font-normal lg:text-[var(--app-text-color-standard-gray)]">
         {rating}
       </span>
-      <span className="-mt-[1px] text-sm text-[var(--app-text-color-gray-light)] md:hidden">
-          | 
-      </span>
+      <span className="-mt-[1px] text-sm text-gray-300 md:hidden">  | </span>
 
       {[...new Array(5)].map((_, index) => {
         const uniqueKey = `star${index}`;

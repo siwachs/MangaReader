@@ -57,7 +57,7 @@ export default function AccountPage() {
             className="relative"
           >
             <MdOutlineMail className="size-6" />
-            <span className="absolute -right-1.5 top-0 flex size-3.5 items-center justify-center rounded-full bg-[var(--app-text-color-vibrant-pink)] text-xs text-white">
+            <span className="absolute -right-1.5 top-0 flex size-3.5 items-center justify-center rounded-full bg-[var(--app-text-color-bright-pink)] text-xs text-white">
               1
             </span>
           </Link>

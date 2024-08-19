@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import "./slider.css";
 
+import { CURRENT_SLIDE_NUMBER } from "@/constants";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 
@@ -18,36 +19,25 @@ const images = [
 ];
 
 const Banner: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState<number>(2);
+  const [currentSlide, setCurrentSlide] = useState(CURRENT_SLIDE_NUMBER);
 
   const getImageClass = (index: number): string => {
     if (index === currentSlide) return "centerActive";
 
-    const slideIndex =
-      currentSlide - 1 < 0 ? images.length - 1 : currentSlide - 1;
-    if (slideIndex === index) return "leftActive";
+    if ((currentSlide - 1 + images.length) % images.length === index)
+      return "leftActive";
 
     if ((currentSlide + 1) % images.length === index) return "rightActive";
 
     return "imageHidden";
   };
 
-  const activateSlide = (index: number): void => {
-    if (index === currentSlide) return;
-
-    setCurrentSlide(index);
-  };
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % images.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => {
-      if (prev - 1 < 0) return images.length - 1;
-
-      return prev - 1;
-    });
+  const changeSlide = (direction: "left" | "right") => {
+    setCurrentSlide((prev) =>
+      direction === "right"
+        ? (prev + 1) % images.length
+        : (prev - 1 + images.length) % images.length,
+    );
   };
 
   return (
@@ -58,7 +48,7 @@ const Banner: React.FC = () => {
             <Link
               key={image}
               href={`${"Your Turn to Chase After Me".toLocaleLowerCase().replaceAll(" ", "-")}?content_id=1753528`}
-              onClick={() => activateSlide(index)}
+              onClick={() => setCurrentSlide(index)}
             >
               <div
                 className={`img absolute overflow-hidden ${getImageClass(index)}`}
@@ -80,8 +70,8 @@ const Banner: React.FC = () => {
             {images.map((image, index) => (
               <button
                 key={image}
-                className={`m-[5px] h-[9px] rounded ${currentSlide === index ? "pointer-events-none w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-[var(--app-text-color-light-gray)]"}`}
-                onClick={() => activateSlide(index)}
+                className={`m-[5px] h-[9px] rounded ${currentSlide === index ? "pointer-events-none w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-gray-300"}`}
+                onClick={() => setCurrentSlide(index)}
               />
             ))}
           </div>
@@ -91,14 +81,14 @@ const Banner: React.FC = () => {
           tabIndex={0}
           role="button"
           className="navigationButton -left-[150px]"
-          onClick={prevSlide}
+          onClick={() => changeSlide("left")}
         />
 
         <BsChevronCompactRight
           tabIndex={0}
           role="button"
           className="navigationButton -right-[150px]"
-          onClick={nextSlide}
+          onClick={() => changeSlide("right")}
         />
       </div>
     </div>

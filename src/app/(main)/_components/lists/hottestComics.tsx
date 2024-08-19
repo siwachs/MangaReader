@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Like, View } from "../icons";
+import { Like, View } from "../../../../components/icons";
 
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 

@@ -6,3 +6,5 @@ export const partialUserWithVotedComments =
 
 export const partialContent =
   "tags thumbnail poster title status genres author synonyms description imagesAndWallpapers";
+
+export const partialContentForContentList = "thumbnail poster title";

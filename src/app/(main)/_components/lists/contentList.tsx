@@ -14,9 +14,8 @@ const dummyContent = [
 
 const ContentList: React.FC<{
   title: string;
-  dataUrl: string;
   seeAll?: string;
-}> = ({ title, dataUrl, seeAll }) => {
+}> = ({ title, seeAll }) => {
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
       <div className="relative mx-auto my-5 w-full max-w-[1200px] overflow-hidden md:my-[30px]">

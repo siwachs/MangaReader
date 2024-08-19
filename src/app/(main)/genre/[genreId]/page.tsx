@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import HomeNav from "@/components/navigations/homeNav";
+import TabNavigation from "@/components/tabNavigation";
 import { View } from "@/components/icons";
 import BreadCrum from "@/components/breadcrum";
 
@@ -50,9 +50,9 @@ const status = ["Hottest", "Updated", "Completed"];
 export default function GenrePage() {
   return (
     <>
-      <HomeNav />
+      <TabNavigation />
       <BreadCrum titleOne="Genres" titleOneLink="/genre/all" titleTwo="All" />
-      <div className="w-full overflow-hidden border-b border-[var(--app-border-color-gray)] bg-[var(--app-text-color-lavender-offwhite)] md:border-none">
+      <div className="w-full overflow-hidden border-b border-gray-300 bg-[var(--app-text-color-lavender-offwhite)] md:border-none">
         <Channels title="Genres" channels={genres} />
         <Channels title="Status" channels={status} />
       </div>
@@ -111,11 +111,11 @@ export default function GenrePage() {
           ))}
         </div>
 
-        <div className="page mx-auto my-[25px] flex max-w-[1200px] overflow-hidden border-y border-[var(--app-border-color-gray)] py-2.5 md:justify-center md:gap-5 md:border-none">
+        <div className="page mx-auto my-[25px] flex max-w-[1200px] overflow-hidden border-y border-gray-300 py-2.5 md:justify-center md:gap-5 md:border-none">
           <Link
             aria-disabled={true}
             href="/"
-            className="pointer-events-none flex h-[50px] w-[50%] items-center justify-center border-r border-[var(--app-border-color-gray)] text-center text-sm text-[var(--app-text-color-gray-light)] md:w-[180px] md:rounded-[25px] md:border md:border-[var(--app-text-color-gray-light)]"
+            className="pointer-events-none flex h-[50px] w-[50%] items-center justify-center border-r border-gray-300 text-center text-sm text-gray-300 md:w-[180px] md:rounded-[25px] md:border md:border-gray-300"
           >
             <span>Last Page</span>
           </Link>

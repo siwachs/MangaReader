@@ -16,7 +16,7 @@ type ChaptersPayload = {
 };
 
 const chaptersOrderBtnClasses =
-  "select-none data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-vibrant-pink)]";
+  "select-none data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-bright-pink)]";
 
 const ChaptersList: React.FC<{
   title: string;

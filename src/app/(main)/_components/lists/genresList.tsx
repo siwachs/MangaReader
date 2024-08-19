@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Heart } from "../icons";
+import { Heart } from "../../../../components/icons";
 
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 

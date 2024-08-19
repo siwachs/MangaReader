@@ -304,7 +304,7 @@ const ChaptersAndComments: React.FC<{
                     }
                   }}
                   data-active={chaptersOrder === "positive"}
-                  className="data-[active=true]:text-[var(--app-text-color-vibrant-pink)]"
+                  className="data-[active=true]:text-[var(--app-text-color-bright-pink)]"
                 >
                   <span>Positive</span>
                 </div>
@@ -323,7 +323,7 @@ const ChaptersAndComments: React.FC<{
                     }
                   }}
                   data-active={chaptersOrder === "reverse"}
-                  className="data-[active=true]:text-[var(--app-text-color-vibrant-pink)]"
+                  className="data-[active=true]:text-[var(--app-text-color-bright-pink)]"
                 >
                   <span>Reverse</span>
                 </div>
@@ -351,7 +351,7 @@ const ChaptersAndComments: React.FC<{
                 "loading-indicator my-6 flex items-center justify-center"
               }
             >
-              <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-[var(--app-text-color-vibrant-pink)]" />
+              <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-[var(--app-text-color-bright-pink)]" />
               <div className="sr-only">Loading...</div>
             </div>
           )}

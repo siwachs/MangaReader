@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import HomeNav from "@/components/navigations/homeNav";
+import TabNavigation from "@/components/tabNavigation";
 import { SearchGlass } from "@/components/icons";
 
 const dummyContent = [
@@ -119,7 +119,7 @@ export default function SearchPage() {
 
   return (
     <>
-      <HomeNav />
+      <TabNavigation />
       <div className="search-page-wrapper">
         <div className="search-box flex h-[100px] w-full items-center justify-center overflow-hidden md:mt-[120px] md:h-[150px]">
           <div className="box-content h-[33px] w-[90%] rounded-[500px] border border-[var(--app-text-color-red)] bg-[var(--app-text-color-very-light-gray)] md:h-[45px] md:w-[590px] md:border-2">
