@@ -1017,7 +1017,7 @@ export default function TitlePage(req: Readonly<pageReqObj>) {
 
         <Link
           href="/"
-          className="mb-[30px] mt-8 flex items-center justify-center text-[var(--app-text-color-medium-gray)]"
+          className="mb-[30px] mt-8 flex items-center justify-center text-gray-500/70"
         >
           <p className="mr-2 text-xs font-normal underline">
             Have problems with reading?
@@ -1075,7 +1075,7 @@ const TitleBox: React.FC<{ title: string; subTitle: string; href: string }> = ({
         <div className="flex items-center justify-between px-4 text-lg">
           <p className="font-bold">{title}</p>
           <ChevronDown
-            className="h-5 w-5 -rotate-90 cursor-pointer text-[var(--app-text-color-medium-gray)]"
+            className="h-5 w-5 -rotate-90 cursor-pointer text-gray-500/70"
             strokeWidth={2.6}
           />
         </div>

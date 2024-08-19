@@ -22,7 +22,7 @@ const ChapterLink: React.FC<{
         <span className="truncate">{chapter.title}</span>
       </div>
 
-      <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">
+      <div className="text-xs text-gray-500/70 md:text-sm">
         <span>{chapter.releaseDate}</span>
 
         <div className="flex items-center gap-[5px]">

@@ -4,7 +4,8 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 
 import useOutsideClick from "@/hooks/useOutsideClick";
-import { ChevronDown } from "../icons";
+
+import { FaCaretDown } from "react-icons/fa";
 
 const languages = [
   { name: "English", href: "/en", dataLink: "/en", dataLanguageCode: "en" },
@@ -22,17 +23,22 @@ const LanguagePicker: React.FC = () => {
     setIsLanguagePickerOpen(false),
   );
 
+  const toggleLanguagePicker = () => setIsLanguagePickerOpen((prev) => !prev);
+
   return (
     <div
       className="absolute right-5 top-0.5 md:relative md:right-0 md:top-0"
       ref={languagesContainerRef}
     >
       <button
-        className="flex cursor-pointer select-none items-center gap-1 text-xs md:text-sm"
-        onClick={() => setIsLanguagePickerOpen((prev) => !prev)}
+        aria-expanded={isLanguagePickerOpen}
+        aria-controls="languages-list"
+        aria-haspopup="true"
+        className="flex items-center gap-1 text-xs md:text-sm"
+        onClick={toggleLanguagePicker}
       >
         <span>English</span>
-        <ChevronDown className="h-4 w-4 md:h-5 md:w-5" />
+        <FaCaretDown className="size-[18px] text-gray-500/70" />
       </button>
 
       <div

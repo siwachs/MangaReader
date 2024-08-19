@@ -45,7 +45,7 @@ export default function WatchPage(req: Readonly<pageReqObj>) {
 }
 
 const paginationButtonClasses =
-  "box-content flex h-[25px] w-[40%] items-center justify-center rounded-[500px] border border-[var(--app-border-color-medium-gray)] leading-normal text-[var(--app-text-color-medium-gray)] data-[active=false]:pointer-events-none data-[active=true]:border-[var(--app-text-color-crimson)] data-[active=true]:text-[var(--app-text-color-crimson)]";
+  "box-content flex h-[25px] w-[40%] items-center justify-center rounded-[500px] border border-[var(--app-border-color-medium-gray)] leading-normal text-gray-500/70 data-[active=false]:pointer-events-none data-[active=true]:border-[var(--app-text-color-crimson)] data-[active=true]:text-[var(--app-text-color-crimson)]";
 
 const ChaptersPagination: React.FC = () => {
   return (

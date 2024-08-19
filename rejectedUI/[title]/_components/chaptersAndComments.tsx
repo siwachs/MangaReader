@@ -158,7 +158,7 @@ const ChaptersAndComments: React.FC<{
         </div>
 
         <div className="menu-controls h-10 border-b border-black/[0.2] md:h-20">
-          <div className="float-left w-[35%] text-[var(--app-text-color-medium-gray)] md:w-auto">
+          <div className="float-left w-[35%] text-gray-500/70 md:w-auto">
             <div
               role="button"
               tabIndex={0}
@@ -263,7 +263,7 @@ const ChaptersAndComments: React.FC<{
           }
         }}
         onClick={() => setSeeAll(true)}
-        className="see-all-button mx-auto mb-20 h-[42px] w-[80%] cursor-pointer rounded-lg bg-[var(--app-text-color-near-white)] text-center leading-[42px] text-[var(--app-text-color-medium-gray)] md:hidden"
+        className="see-all-button mx-auto mb-20 h-[42px] w-[80%] cursor-pointer rounded-lg bg-[var(--app-text-color-near-white)] text-center leading-[42px] text-gray-500/70 md:hidden"
       >
         See all
       </div>

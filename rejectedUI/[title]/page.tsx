@@ -133,11 +133,11 @@ export default async function TitlePage() {
             <Link href="/">Home</Link>
           </li>
 
-          <li className="ml-[5px] inline-block before:text-[var(--app-text-color-medium-gray)] before:content-['_/_'] hover:text-[var(--app-text-color-red)]">
+          <li className="ml-[5px] inline-block before:text-gray-500/70 before:content-['_/_'] hover:text-[var(--app-text-color-red)]">
             <Link href="/genre/tags/8">{data.genres[0]}</Link>
           </li>
 
-          <li className="ml-[5px] inline-block text-[var(--app-text-color-medium-gray)] before:text-[var(--app-text-color-medium-gray)] before:content-['_/_']">
+          <li className="ml-[5px] inline-block text-gray-500/70 before:text-gray-500/70 before:content-['_/_']">
             {data.title}
           </li>
         </ul>

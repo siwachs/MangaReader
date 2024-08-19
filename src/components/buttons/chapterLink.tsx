@@ -13,7 +13,7 @@ const ChapterLink: React.FC<{
       <div className="flex items-center justify-between">
         <Link href={href}>
           <p className="text-sm/[18px] font-normal">{title}</p>
-          <p className="mt-2.5 text-xs font-normal text-[var(--app-text-color-medium-gray)]">
+          <p className="mt-2.5 text-xs font-normal text-gray-500/70">
             release date {releaseDate}
           </p>
         </Link>
@@ -21,7 +21,7 @@ const ChapterLink: React.FC<{
         <IoChevronDownOutline
           tabIndex={0}
           role="button"
-          className="size-[18px] text-[var(--app-text-color-medium-gray)]"
+          className="size-[18px] text-gray-500/70"
         />
       </div>
     </div>

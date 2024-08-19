@@ -11,10 +11,10 @@ const BreadCrum: React.FC<{
         <li className="hover:text-[var(--app-text-color-bright-pink)]">
           <Link href="/">Home</Link>
         </li>
-        <li className="before:text-[var(--app-text-color-medium-gray)] before:content-['_/_'] hover:text-[var(--app-text-color-bright-pink)]">
+        <li className="before:text-gray-500/70 before:content-['_/_'] hover:text-[var(--app-text-color-bright-pink)]">
           <Link href={titleOneLink}>{titleOne}</Link>
         </li>
-        <li className="text-[var(--app-text-color-medium-gray)] before:text-[var(--app-text-color-medium-gray)] before:content-['_/_']">
+        <li className="text-gray-500/70 before:text-gray-500/70 before:content-['_/_']">
           {titleTwo}
         </li>
       </ul>

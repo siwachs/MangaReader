@@ -2,32 +2,49 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
-import SidebarLoading from "./sidebarLoading";
-import LanguagePickerLoading from "./languagePickerLoading";
+import ClientAuth from "@/components/buttons/clientAuth";
+import { navLinks } from "./navlinks";
 
-import ClientAuth from "../buttons/clientAuth";
-import { navLinks } from "@/data/navlinks";
-import { SearchGlass } from "../icons";
+import { FaBars } from "react-icons/fa6";
+import { FaCaretDown } from "react-icons/fa";
+import { BiSearchAlt } from "react-icons/bi";
 
 // Dynamic Imports
 const MenuToggler = dynamic(() => import("./menuToggler"), {
   ssr: false,
-  loading: () => <SidebarLoading />,
+  loading: () => (
+    <FaBars
+      role="status"
+      aria-live="polite"
+      aria-label="Loading menu toggler"
+      className="absolute left-5 top-0.5 size-5 animate-pulse text-gray-500/70 lg:hidden"
+    />
+  ),
 });
 const LanguagePicker = dynamic(() => import("./languagePicker"), {
   ssr: false,
-  loading: () => <LanguagePickerLoading />,
+  loading: () => (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label="Loading language picker"
+      className="absolute right-5 top-0.5 flex animate-pulse items-center gap-1 text-xs md:relative md:right-0 md:top-0 md:text-sm"
+    >
+      <span className="sr-only">Loading Language Picker</span>
+      <FaCaretDown className="size-[18px] text-gray-500/70" />
+    </div>
+  ),
 });
 
 const Header: React.FC = () => {
   return (
     <header className="fixed left-0 top-0 z-50 w-full bg-[var(--app-bg-color-primary)]">
       <div
-        id="nav"
+        // Container
         className="relative mx-auto w-full max-w-[1200px] md:mb-5 md:mt-2.5 md:h-[90px]"
       >
         <div
-          id="top-nav"
+          // Header Top
           className="mt-[18px] h-10 md:mt-0 md:flex md:items-center md:justify-end md:gap-5 md:text-sm"
         >
           <MenuToggler />
@@ -50,8 +67,8 @@ const Header: React.FC = () => {
               priority
               src="/MangaToon.svg"
               alt="mangatoon"
-              width={256}
-              height={256}
+              width={145}
+              height={36}
               className="h-[27px] w-[131px]"
             />
           </Link>
@@ -60,46 +77,45 @@ const Header: React.FC = () => {
         </div>
 
         <div
-          id="bottom-nav"
-          className="mt-2.5 hidden h-[45px] items-center justify-between md:flex"
+          // Header Bottom
+          className="mt-2.5 hidden h-[45px] md:flex md:items-center md:justify-between"
         >
           <Link href="/">
             <Image
               priority
               src="/MangaToon.svg"
               alt="mangatoon"
-              width={256}
-              height={256}
+              width={206}
+              height={46}
               className="h-10 md:w-[160px] lg:w-[194px]"
             />
           </Link>
 
-          <nav className="hide-scrollbar ml-5 hidden flex-1 gap-5 overflow-auto whitespace-nowrap font-bold text-gray-600 md:text-sm lg:flex lg:text-base">
-            {navLinks.map(
-              (navLink) =>
-                !navLink.sidebarOnly && (
-                  <Link
-                    key={navLink.key}
-                    href={navLink.link}
-                    className="hover:text-[var(--app-text-color-red)]"
-                  >
-                    {navLink.label}
-                  </Link>
-                ),
-            )}
+          <nav className="hide-scrollbar ml-5 hidden flex-1 gap-5 overflow-auto whitespace-nowrap font-bold text-gray-600 lg:flex">
+            {navLinks
+              .filter((navlink) => !navlink.sidebarOnly)
+              .map((navLink) => (
+                <Link
+                  key={navLink.key}
+                  href={navLink.link}
+                  className="hover:text-[var(--app-text-color-red)]"
+                >
+                  {navLink.label}
+                </Link>
+              ))}
           </nav>
 
           <div className="flex gap-2.5">
             <Link
               href="/search"
-              className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-red-500 text-red-500"
+              className="flex size-[38px] items-center justify-center rounded-full border-[1.5px] border-red-500 text-red-500"
             >
-              <SearchGlass className="h-5 w-5" strokeWidth={2.3} />
+              <BiSearchAlt className="size-5" />
             </Link>
 
             <Link
               href="/publish"
-              className="inline-block h-10 rounded-[20px] bg-[var(--app-text-color-red)] px-6 text-sm leading-10 text-white hover:bg-red-500"
+              className="h-10 rounded-[20px] bg-[var(--app-text-color-red)] px-6 text-sm leading-10 text-white hover:bg-red-500"
             >
               Publish
             </Link>

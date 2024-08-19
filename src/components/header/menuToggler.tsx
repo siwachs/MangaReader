@@ -1,28 +1,32 @@
 "use client";
 
-import useBodyOverflow from "@/hooks/useBodyOverflow";
-import { useState } from "react";
 import ReactDom from "react-dom";
+import { useState } from "react";
 
-import { Bars3 } from "../icons";
 import Sidebar from "./sidebar";
 
-const MenuToggler: React.FC = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  useBodyOverflow(sidebarOpen);
+import { FaBars } from "react-icons/fa6";
 
-  return sidebarOpen ? (
+const MenuToggler: React.FC = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
+  return isSidebarOpen ? (
     ReactDom.createPortal(
-      <Sidebar setSidebarOpen={setSidebarOpen} />,
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={toggleSidebar}
+      />,
       document.getElementById("sidebar-portal") as HTMLElement,
     )
   ) : (
-    <button
-      onClick={() => setSidebarOpen((prev) => !prev)}
-      className="absolute left-5 top-0.5 cursor-pointer text-[var(--app-text-color-medium-gray)] lg:hidden"
-    >
-      <Bars3 className="h-[25px] w-[25px]" />
-    </button>
+    <FaBars
+      tabIndex={0}
+      role="button"
+      onClick={toggleSidebar}
+      className="absolute left-5 top-0.5 size-5 text-gray-500/70 lg:hidden"
+    />
   );
 };
 

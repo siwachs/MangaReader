@@ -55,7 +55,7 @@ const HaveResults: React.FC<{ title: string }> = ({ title }) => {
 const NoResults: React.FC = () => {
   return (
     <div className="no-results mx-auto w-full max-w-[1200px]">
-      <div className="no-result-word font-noto-sans-sc py-[35px] text-center text-xs/[15px] font-normal text-[var(--app-text-color-medium-gray)] md:py-[130px] md:text-2xl">
+      <div className="no-result-word font-noto-sans-sc py-[35px] text-center text-xs/[15px] font-normal text-gray-500/70 md:py-[130px] md:text-2xl">
         <Image
           priority
           src="/assets/nothing.png"
@@ -101,7 +101,7 @@ const NoResults: React.FC = () => {
               <span>Your Turn to Chase After Me</span>
             </div>
 
-            <div className="comics-genres h-5 w-[95%] truncate text-xs text-[var(--app-text-color-medium-gray)] md:w-[160px] md:text-sm">
+            <div className="comics-genres h-5 w-[95%] truncate text-xs text-gray-500/70 md:w-[160px] md:text-sm">
               <span>
                 Romance/CEO/Urban Romance/Girl
                 Power/Rebirth/Revenge/Counterattack

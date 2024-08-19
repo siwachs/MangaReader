@@ -50,7 +50,7 @@ const ChaptersAndCommentsLoading: React.FC<{
         </div>
 
         <div className="menu-controls h-10 animate-pulse border-b border-black/[0.2] md:h-20">
-          <div className="float-left w-[35%] text-[var(--app-text-color-medium-gray)] md:w-auto">
+          <div className="float-left w-[35%] text-gray-500/70 md:w-auto">
             <div
               className={`${menuTypeClasses} border-b-2 border-[var(--app-text-color-red)] text-[var(--app-text-color-red)] md:pr-2.5`}
             >
@@ -104,7 +104,7 @@ const ChaptersAndCommentsLoading: React.FC<{
                 <span className="truncate">{chapter.title}</span>
               </div>
 
-              <div className="text-xs text-[var(--app-text-color-medium-gray)] md:text-sm">
+              <div className="text-xs text-gray-500/70 md:text-sm">
                 <span>{chapter.releaseDate}</span>
 
                 <div className="flex items-center gap-[5px]">
@@ -119,7 +119,7 @@ const ChaptersAndCommentsLoading: React.FC<{
         </div>
       </div>
 
-      <div className="see-all-button mx-auto mb-20 h-[42px] w-[80%] animate-pulse cursor-pointer rounded-lg bg-[var(--app-text-color-near-white)] text-center leading-[42px] text-[var(--app-text-color-medium-gray)] md:hidden">
+      <div className="see-all-button mx-auto mb-20 h-[42px] w-[80%] animate-pulse cursor-pointer rounded-lg bg-[var(--app-text-color-near-white)] text-center leading-[42px] text-gray-500/70 md:hidden">
         See all
       </div>
     </>

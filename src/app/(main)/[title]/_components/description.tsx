@@ -19,7 +19,7 @@ const Description: React.FC<{ description: string; mobileOnly?: boolean }> = ({
       </p>
 
       <span
-        className="absolute bottom-0 right-0 cursor-pointer bg-white text-[var(--app-text-color-medium-gray)]"
+        className="absolute bottom-0 right-0 cursor-pointer bg-white text-gray-500/70"
         role="button"
         tabIndex={0}
         onClick={() => setSeeAll((prev) => !prev)}

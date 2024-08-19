@@ -92,13 +92,13 @@ export default function GenrePage() {
                   <div className="content-title truncate text-lg/[30px] font-bold">
                     <span>Martial Peak</span>
                   </div>
-                  <div className="content-genres mt-2.5 truncate text-xs/[30px] text-[var(--app-text-color-medium-gray)]">
+                  <div className="content-genres mt-2.5 truncate text-xs/[30px] text-gray-500/70">
                     <span>
                       School life/Romance/TimeTravel/Comedy/Urban Romance/Girl
                       Power/Game/Sweet/Counterattack/School Hunk
                     </span>
                   </div>
-                  <div className="content-episodes-count truncate text-xs/[24px] text-[var(--app-text-color-medium-gray)]">
+                  <div className="content-episodes-count truncate text-xs/[24px] text-gray-500/70">
                     Up to Ep.463
                   </div>
                   <div className="content-icons mt-[30px] flex items-center gap-0.5 text-[13px] text-[var(--app-text-color-red)]">

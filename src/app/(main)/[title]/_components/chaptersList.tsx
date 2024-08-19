@@ -138,7 +138,7 @@ const ChaptersList: React.FC<{
       </div>
 
       <div className="detail-subscribe mx-4 my-2 flex items-center justify-between rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 md:hidden">
-        <p className="text-sm/[18px] font-normal text-[var(--app-text-color-medium-gray)]">
+        <p className="text-sm/[18px] font-normal text-gray-500/70">
           {reminderText}
         </p>
 
@@ -167,7 +167,7 @@ const ChaptersList: React.FC<{
               setInfiniteScroll(true);
             }
           }}
-          className="mx-4 my-2 flex cursor-pointer items-center justify-center rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-[var(--app-text-color-medium-gray)] md:hidden"
+          className="mx-4 my-2 flex cursor-pointer items-center justify-center rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-gray-500/70 md:hidden"
         >
           View All Chapters &nbsp;&nbsp;&nbsp;&gt;&gt;&gt;
         </div>
@@ -217,11 +217,11 @@ const ChaptersList: React.FC<{
           onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
             setShowAll((prev) => !prev);
           }}
-          className="mb-4 box-content hidden h-[43px] w-[288px] cursor-pointer items-center justify-center gap-1 rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-base text-[var(--app-text-color-medium-gray)] md:flex"
+          className="mb-4 box-content hidden h-[43px] w-[288px] cursor-pointer items-center justify-center gap-1 rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-base text-gray-500/70 md:flex"
         >
           <span>{showAll ? "Hide All Chapters" : "View All Chapters"}</span>
           <ChevronDown
-            className={`h-4 w-4 ${showAll ? "-rotate-180" : ""} text-[var(--app-text-color-medium-gray)]`}
+            className={`h-4 w-4 ${showAll ? "-rotate-180" : ""} text-gray-500/70`}
             strokeWidth={2.6}
           />
         </div>
