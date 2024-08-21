@@ -9,15 +9,6 @@ import getGenres from "@/libs/dbCRUD/getGenres";
 
 import getContentList from "@/libs/dbCRUD/getContentList";
 
-const dummyContent = [
-  "/dummyContent/1.webp",
-  "/dummyContent/2.webp",
-  "/dummyContent/3.webp",
-  "/dummyContent/4.webp",
-  "/dummyContent/5.webp",
-  "/dummyContent/6.webp",
-];
-
 const GernresList: React.FC<{
   title: string;
 
@@ -29,7 +20,6 @@ const GernresList: React.FC<{
     { filterBy: "genres", genres: [genre] },
     CONTENT_LIST_LIMIT,
   );
-  console.log(genreList);
 
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">

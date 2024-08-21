@@ -10,3 +10,5 @@ export const partialContent =
 export const partialContentForContentList = "poster title";
 export const partialContentForBanner = "thumbnail title";
 export const partialContentForGenres = "poster title noOfSubscribers";
+export const partialContentForHottestList =
+  "poster title noOfSubscribers genres noOfViews description";
