@@ -7,7 +7,8 @@ import Content from "@/models/Content";
 import { CONTENT_LIST_DEFAULT_LIMIT } from "@/constants";
 import {
   partialContentForContentList,
-  partialContentForContentListWithGenres,
+  partialContentForBanner,
+  partialContentForGenres,
 } from "../mongooseSelect";
 import formatMongooseDoc from "../db/formatMongooseDoc";
 
@@ -36,7 +37,7 @@ type ContentListFilter = {
 async function getFilterQuery(listFilter: ContentListFilter) {
   const { filterBy, tags, status } = listFilter;
 
-  if (filterBy === "tags") return { tags: { $in: tags ?? [] } };
+  if (filterBy === "tags") return { tags: { $in: tags } };
   if (filterBy === "status") return { status };
 
   if (filterBy === "genres") {
@@ -62,6 +63,17 @@ function getSortQuery(
   return {};
 }
 
+function getPartialContentSelect(listFilter: ContentListFilter) {
+  const { filterBy, tags } = listFilter;
+
+  if (filterBy === "tags" && tags?.includes("BannerContent"))
+    return partialContentForBanner;
+
+  if (filterBy === "genres") return partialContentForGenres;
+
+  return partialContentForContentList;
+}
+
 export default async function getContentList(
   listFilter: ContentListFilter,
   listLimit?: number,
@@ -69,12 +81,10 @@ export default async function getContentList(
   try {
     await connectToMongoDB();
     const limit = listLimit ?? CONTENT_LIST_DEFAULT_LIMIT;
-    const filterQuery = getFilterQuery(listFilter);
+    const filterQuery = await getFilterQuery(listFilter);
+
     const sortQuery = getSortQuery(listFilter);
-    const partialContent =
-      listFilter.filterBy === "genres"
-        ? partialContentForContentListWithGenres
-        : partialContentForContentList;
+    const partialContent = getPartialContentSelect(listFilter);
 
     const contentDocs = await Content.find(filterQuery)
       .sort(sortQuery)

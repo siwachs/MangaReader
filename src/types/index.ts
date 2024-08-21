@@ -67,3 +67,9 @@ export type Content = {
   description: string;
   imagesAndWallpapers: string[];
 };
+
+export type GenresResponse = {
+  error: boolean;
+  genres?: { id: string; name: string }[];
+  errorMessage?: string;
+};

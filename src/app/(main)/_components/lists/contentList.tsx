@@ -3,19 +3,11 @@ import Image from "next/image";
 
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 
-const dummyContent = [
-  "/dummyContent/1.webp",
-  "/dummyContent/2.webp",
-  "/dummyContent/3.webp",
-  "/dummyContent/4.webp",
-  "/dummyContent/5.webp",
-  "/dummyContent/6.webp",
-];
-
 const ContentList: React.FC<{
   title: string;
   seeAll?: string;
-}> = ({ title, seeAll }) => {
+  contentList: { id: string; poster: string; title: string }[];
+}> = ({ title, seeAll, contentList }) => {
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
       <div className="relative mx-auto my-5 w-full max-w-[1200px] overflow-hidden md:my-[30px]">
@@ -32,19 +24,19 @@ const ContentList: React.FC<{
         )}
 
         <div className="mt-5 flex flex-wrap gap-[2%] overflow-hidden md:mt-[30px] md:gap-[30px]">
-          {dummyContent.map((content, index) => (
+          {contentList.map((content, index) => (
             <div
-              key={content}
+              key={content.id}
               className="mb-5 w-[32%] md:mb-[30px] md:w-[175px]"
             >
               <Link
-                href={`${"Your Turn to Chase After Me".toLocaleLowerCase().replaceAll(" ", "-")}?content_id=1753528`}
+                href={`${content.title.toLocaleLowerCase().replaceAll(" ", "-")}?content_id=${content.id}`}
               >
                 <div className="h-[140px] w-full overflow-hidden md:h-[233px]">
                   <Image
                     placeholder="blur"
                     blurDataURL={contentCoverBlurDataImageURL}
-                    src={content}
+                    src={content.poster}
                     alt={`content${index + 1}`}
                     height={240}
                     width={200}
@@ -53,7 +45,7 @@ const ContentList: React.FC<{
                 </div>
 
                 <div className="mt-[5px] overflow-hidden truncate text-xs/[13px] md:mt-2.5 md:text-lg/[22px]">
-                  <span>Your Turn to Chase After Me</span>
+                  <span>{content.title}</span>
                 </div>
               </Link>
             </div>
