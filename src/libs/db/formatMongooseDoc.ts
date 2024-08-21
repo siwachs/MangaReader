@@ -6,6 +6,7 @@ function getFormattedObject(object: Record<string, any>): Record<string, any> {
   for (const key in object) {
     const value = object[key];
 
+    if (key === "__v") continue;
     if (key === "_id") newObject.id = value.toString();
     else newObject[key] = value;
   }
@@ -17,7 +18,7 @@ function convertItem(item: any) {
   if (Types.ObjectId.isValid(item)) {
     return item.toString();
   } else if (item && typeof item === "object" && "_id" in item) {
-    return item._id.toString();
+    return getFormattedObject(item);
   }
 
   return item;

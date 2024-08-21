@@ -9,6 +9,7 @@ import {
   partialContentForContentList,
   partialContentForBanner,
   partialContentForGenres,
+  partialContentForHottestList,
 } from "../mongooseSelect";
 import formatMongooseDoc from "../db/formatMongooseDoc";
 
@@ -28,7 +29,7 @@ type Status =
 
 type ContentListFilter = {
   filterBy?: "tags" | "genres" | "status";
-  sortBy?: "trending" | "new" | "updatedToday";
+  sortBy?: "trending" | "new" | "updatedToday" | "hottest";
   tags?: Tags[];
   genres?: string[];
   status?: Status;
@@ -55,7 +56,7 @@ function getSortQuery(
 ): Record<string, SortOrder> {
   const { sortBy } = listFilter;
 
-  if (sortBy === "trending")
+  if (sortBy === "trending" || sortBy === "hottest")
     return { rating: -1, noOfViews: -1, noOfSubscribers: -1 };
   if (sortBy === "new") return { createdAt: -1 };
   if (sortBy === "updatedToday") return { chaptersUpdatedOn: -1 };
@@ -64,12 +65,14 @@ function getSortQuery(
 }
 
 function getPartialContentSelect(listFilter: ContentListFilter) {
-  const { filterBy, tags } = listFilter;
+  const { filterBy, tags, sortBy } = listFilter;
 
   if (filterBy === "tags" && tags?.includes("BannerContent"))
     return partialContentForBanner;
 
   if (filterBy === "genres") return partialContentForGenres;
+
+  if (sortBy === "hottest") return partialContentForHottestList;
 
   return partialContentForContentList;
 }
