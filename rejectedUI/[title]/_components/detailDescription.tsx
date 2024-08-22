@@ -11,7 +11,7 @@ const DetailDescription: React.FC<{ description: string }> = ({
   return (
     <div className="detail-description relative flex lg:mt-[5px]">
       <div
-        className={`font-noto-sans-sc mr-[15px] font-normal ${!showAll && "line-clamp-2"} max-w-[700px] whitespace-pre-line break-all text-xs/[20px] font-normal md:text-sm md:text-[var(--app-text-color-slate-gray)]`}
+        className={`font-noto-sans-sc mr-[15px] font-normal ${!showAll && "line-clamp-2"} max-w-[700px] whitespace-pre-line break-all text-xs/[20px] font-normal md:text-sm md:text-neutral-400`}
       >
         <p>{description}</p>
       </div>

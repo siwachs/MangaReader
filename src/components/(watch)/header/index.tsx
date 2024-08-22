@@ -88,7 +88,7 @@ const Header: React.FC = () => {
             </button>
           </div>
 
-          <p className="md:font-noto-sans-sc truncate text-center text-[10px]/[20px] font-medium text-[var(--app-text-color-slate-gray)] md:text-sm/[16px] md:font-normal">
+          <p className="md:font-noto-sans-sc truncate text-center text-[10px]/[20px] font-medium text-neutral-400 md:text-sm/[16px] md:font-normal">
             Isekai Shoukan Sareta Kita Seijo-sama ga &apos;Kareshi ga
             Shinda&apos; to Naku Bakari de Hataraite kuremasen
           </p>

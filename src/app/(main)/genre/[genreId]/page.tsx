@@ -2,8 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 import TabNavigation from "@/components/tabNavigation";
-import { View } from "@/components/icons";
 import BreadCrum from "@/components/breadcrum";
+import Channels from "../_components/channels";
+
+import { View } from "@/components/icons";
 
 const genres = [
   "All",
@@ -52,6 +54,7 @@ export default function GenrePage() {
     <>
       <TabNavigation />
       <BreadCrum titleOne="Genres" titleOneLink="/genre/all" titleTwo="All" />
+
       <div className="w-full overflow-hidden border-b border-gray-300 bg-[var(--app-text-color-lavender-offwhite)] md:border-none">
         <Channels title="Genres" channels={genres} />
         <Channels title="Status" channels={status} />
@@ -80,7 +83,7 @@ export default function GenrePage() {
                     <View className="-mt-[1px] mr-[5px] h-[15px] w-[15px]" />
                     <span>30.4M</span>
                   </div>
-                  <div className="content-genres font-noto-sans-sc mt-[5px] hidden truncate text-sm font-normal text-[var(--app-text-color-slate-gray)] md:block">
+                  <div className="content-genres font-noto-sans-sc mt-[5px] hidden truncate text-sm font-normal text-neutral-400 md:block">
                     <span>
                       School life/Romance/TimeTravel/Comedy/Urban Romance/Girl
                       Power/Game/Sweet/Counterattack/School Hunk
@@ -130,31 +133,3 @@ export default function GenrePage() {
     </>
   );
 }
-
-const Channels: React.FC<{ title: string; channels: string[] }> = ({
-  title,
-  channels,
-}) => {
-  return (
-    <div className="my-2.5 ml-5 w-full max-w-[1200px] overflow-hidden whitespace-nowrap md:mx-auto md:mb-[35px]">
-      <div className="flex items-center justify-between overflow-hidden md:items-start">
-        <div className="my-[5px] w-[50px] py-[5px] text-sm text-[var(--app-text-color-stone-gray)] md:mr-[50px] md:w-[80px] md:text-lg">
-          <span>{title}</span>
-        </div>
-
-        <div className="hide-scrollbar flex w-[85%] max-w-[1060px] overflow-auto md:w-full md:flex-wrap">
-          {channels.map((channel, index) => (
-            <Link key={channel} href="/" className="last:mr-[10%]">
-              <div
-                data-active={index === 0}
-                className="m-[5px] py-[5px] text-sm data-[active=true]:rounded-xl data-[active=true]:bg-[var(--app-text-color-red)] data-[active=true]:px-2.5 data-[active=true]:text-white md:m-[5px_20px_5px_0] md:text-base data-[active=true]:md:rounded-2xl data-[active=true]:md:px-5"
-              >
-                <span>{channel}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};

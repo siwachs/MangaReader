@@ -1,13 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Heart } from "../../../../components/icons";
 
-import { CONTENT_LIST_LIMIT } from "@/constants";
+import { CONTENT_LIST_PAGE_SIZE } from "@/constants";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import { Content, GenresResponse } from "@/types";
 import getGenres from "@/libs/dbCRUD/getGenres";
 
+import numeral from "@/libs/numeral";
 import getContentList from "@/libs/dbCRUD/getContentList";
+
+import { FaHeart } from "react-icons/fa";
 
 const GernresList: React.FC<{
   title: string;
@@ -18,7 +20,7 @@ const GernresList: React.FC<{
   const genre = genresResponse?.genres?.[0].name ?? "all";
   const genreList: Content[] = await getContentList(
     { filterBy: "genres", genres: [genre] },
-    CONTENT_LIST_LIMIT,
+    CONTENT_LIST_PAGE_SIZE,
   );
 
   return (
@@ -81,8 +83,8 @@ const GernresList: React.FC<{
                   </div>
 
                   <div className="mt-[5px] flex items-center truncate text-xs/[20px] text-[var(--app-text-color-red)] md:mt-[10px] md:text-sm">
-                    <Heart className="mx-[5px] inline-block h-[14px] w-[14px] md:h-4 md:w-4" />
-                    <span>668.8K</span>
+                    <FaHeart className="mx-[5px] size-3 md:size-[14px] lg:size-4" />
+                    <span>{numeral(content.noOfSubscribers)}</span>
                   </div>
                 </Link>
               </div>

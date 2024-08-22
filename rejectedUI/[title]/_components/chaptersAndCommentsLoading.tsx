@@ -57,7 +57,7 @@ const ChaptersAndCommentsLoading: React.FC<{
               <span>Chapters</span>
             </div>
 
-            <span className="font-noto-sans-sc hidden animate-pulse text-sm/[16px] text-[var(--app-text-color-slate-gray)] md:inline-block">
+            <span className="font-noto-sans-sc hidden animate-pulse text-sm/[16px] text-neutral-400 md:inline-block">
               Updated to Chapter {totalChapters}
             </span>
 
@@ -67,12 +67,12 @@ const ChaptersAndCommentsLoading: React.FC<{
               <span>Comments</span>
             </div>
 
-            <span className="font-noto-sans-sc hidden text-sm/[16px] text-[var(--app-text-color-slate-gray)] md:inline-block">
+            <span className="font-noto-sans-sc hidden text-sm/[16px] text-neutral-400 md:inline-block">
               (5772)
             </span>
           </div>
 
-          <div className="float-right flex gap-[5px] text-xs/[40px] text-[var(--app-text-color-slate-gray)] md:text-sm/[89px]">
+          <div className="float-right flex gap-[5px] text-xs/[40px] text-neutral-400 md:text-sm/[89px]">
             <div
               className={`${chaptersOrderClasses} text-[var(--app-text-color-crimson)]`}
             >
@@ -87,7 +87,7 @@ const ChaptersAndCommentsLoading: React.FC<{
           </div>
         </div>
 
-        <div className="font-noto-sans-sc float-left my-1 w-[90%] animate-pulse text-xs font-normal text-[var(--app-text-color-slate-gray)] md:hidden">
+        <div className="font-noto-sans-sc float-left my-1 w-[90%] animate-pulse text-xs font-normal text-neutral-400 md:hidden">
           <span>Updated to Chapter {totalChapters}</span>
         </div>
       </div>

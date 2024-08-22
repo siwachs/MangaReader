@@ -4,7 +4,8 @@ import connectToMongoDB from "../db/connectToMongoDB";
 import Genre from "@/models/Genre";
 import Content from "@/models/Content";
 
-import { CONTENT_LIST_DEFAULT_LIMIT } from "@/constants";
+import { Tags, Status } from "@/types";
+import { CONTENT_LIST_DEFAULT_PAGE_SIZE } from "@/constants";
 import {
   partialContentForContentList,
   partialContentForBanner,
@@ -13,36 +14,23 @@ import {
 } from "../mongooseSelect";
 import formatMongooseDoc from "../db/formatMongooseDoc";
 
-type Tags =
-  | "BannerContent"
-  | "ReadWithEditor"
-  | "CompletedClassic"
-  | "WeeklyNovel"
-  | "FreeRead";
-
-type Status =
-  | "Ongoing"
-  | "Discontinued"
-  | "Abandoned"
-  | "Unscheduled"
-  | "Completed";
-
 type ContentListFilter = {
   filterBy?: "tags" | "genres" | "status";
   sortBy?: "trending" | "new" | "updatedToday" | "hottest";
   tags?: Tags[];
   genres?: string[];
   status?: Status;
+  populate?: string;
 };
 
 async function getFilterQuery(listFilter: ContentListFilter) {
-  const { filterBy, tags, status } = listFilter;
+  const { filterBy, tags = [], status } = listFilter;
 
   if (filterBy === "tags") return { tags: { $in: tags } };
   if (filterBy === "status") return { status };
 
   if (filterBy === "genres") {
-    const { genres } = listFilter;
+    const { genres = [] } = listFilter;
     const genreIds = await Genre.find({ name: { $in: genres } }).select("_id");
 
     return { genres: { $in: genreIds } };
@@ -65,9 +53,9 @@ function getSortQuery(
 }
 
 function getPartialContentSelect(listFilter: ContentListFilter) {
-  const { filterBy, tags, sortBy } = listFilter;
+  const { filterBy, tags = [], sortBy } = listFilter;
 
-  if (filterBy === "tags" && tags?.includes("BannerContent"))
+  if (filterBy === "tags" && tags.includes("BannerContent"))
     return partialContentForBanner;
 
   if (filterBy === "genres") return partialContentForGenres;
@@ -79,20 +67,27 @@ function getPartialContentSelect(listFilter: ContentListFilter) {
 
 export default async function getContentList(
   listFilter: ContentListFilter,
-  listLimit?: number,
+  listSize?: number,
+  listPageNumber?: number,
 ) {
   try {
     await connectToMongoDB();
-    const limit = listLimit ?? CONTENT_LIST_DEFAULT_LIMIT;
-    const filterQuery = await getFilterQuery(listFilter);
 
+    const pageSize = listSize ?? CONTENT_LIST_DEFAULT_PAGE_SIZE;
+    const pageNumber = listPageNumber ?? 1;
+    const skip = (pageNumber - 1) * pageSize;
+
+    const filterQuery = await getFilterQuery(listFilter);
     const sortQuery = getSortQuery(listFilter);
     const partialContent = getPartialContentSelect(listFilter);
+    const { populate = "" } = listFilter;
 
     const contentDocs = await Content.find(filterQuery)
+      .select(partialContent)
       .sort(sortQuery)
-      .limit(limit)
-      .select(partialContent);
+      .skip(skip)
+      .limit(pageSize)
+      .populate(populate);
 
     const formatedContentDocs = contentDocs.map((content) =>
       formatMongooseDoc(content.toObject()),

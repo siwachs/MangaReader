@@ -38,7 +38,7 @@ const Description: React.FC<{ description: string; mobileOnly?: boolean }> = ({
   ) : (
     <div className="relative hidden max-w-[800px] md:block">
       <p
-        className={`lg:font-noto-sans-sc ${seeAll ? "" : "line-clamp-5"} whitespace-pre-line break-words text-sm font-normal lg:text-[var(--app-text-color-slate-gray)]`}
+        className={`lg:font-noto-sans-sc ${seeAll ? "" : "line-clamp-5"} whitespace-pre-line break-words text-sm font-normal lg:text-neutral-400`}
       >
         {description}
       </p>

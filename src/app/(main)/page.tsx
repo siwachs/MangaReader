@@ -5,7 +5,7 @@ import ContentList from "@/app/(main)/_components/lists/contentList";
 import HottestComics from "@/app/(main)/_components/lists/hottestComics";
 import GernresList from "@/app/(main)/_components/lists/genresList";
 
-import { CONTENT_LIST_LIMIT } from "@/constants";
+import { CONTENT_LIST_PAGE_SIZE } from "@/constants";
 import getContentList from "@/libs/dbCRUD/getContentList";
 
 export default async function HomePage() {
@@ -22,11 +22,11 @@ export default async function HomePage() {
   ] = await Promise.all([
     getContentList(
       { filterBy: "tags", sortBy: "updatedToday", tags: ["BannerContent"] },
-      CONTENT_LIST_LIMIT,
+      CONTENT_LIST_PAGE_SIZE,
     ),
     getContentList(
       { filterBy: "tags", sortBy: "updatedToday", tags: ["ReadWithEditor"] },
-      CONTENT_LIST_LIMIT,
+      CONTENT_LIST_PAGE_SIZE,
     ),
     getContentList(
       {
@@ -34,23 +34,23 @@ export default async function HomePage() {
         sortBy: "trending",
         tags: ["CompletedClassic"],
       },
-      CONTENT_LIST_LIMIT,
+      CONTENT_LIST_PAGE_SIZE,
     ),
     getContentList(
       { filterBy: "tags", sortBy: "trending", tags: ["WeeklyNovel"] },
-      CONTENT_LIST_LIMIT,
+      CONTENT_LIST_PAGE_SIZE,
     ),
     getContentList(
       { filterBy: "tags", sortBy: "updatedToday", tags: ["FreeRead"] },
-      CONTENT_LIST_LIMIT,
+      CONTENT_LIST_PAGE_SIZE,
     ),
-    getContentList({ sortBy: "new" }, CONTENT_LIST_LIMIT),
+    getContentList({ sortBy: "new" }, CONTENT_LIST_PAGE_SIZE),
     getContentList(
       { filterBy: "status", status: "Completed" },
-      CONTENT_LIST_LIMIT,
+      CONTENT_LIST_PAGE_SIZE,
     ),
-    getContentList({}, CONTENT_LIST_LIMIT),
-    getContentList({ sortBy: "updatedToday" }, CONTENT_LIST_LIMIT),
+    getContentList({}, CONTENT_LIST_PAGE_SIZE),
+    getContentList({ sortBy: "updatedToday" }, CONTENT_LIST_PAGE_SIZE),
   ]);
 
   return (

@@ -1,20 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Like, View } from "../../../../components/icons";
 
 import { Content } from "@/types";
-import { HOTTEST_CONTENT_LIST_LIMIT } from "@/constants";
+import { HOTTEST_CONTENT_PAGE_SIZE } from "@/constants";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
+
+import numeral from "@/libs/numeral";
 import getContentList from "@/libs/dbCRUD/getContentList";
+
+import { AiFillLike } from "react-icons/ai";
+import { FaEye } from "react-icons/fa";
 
 const HottestComics: React.FC = async () => {
   const hottestComicsList: Content[] = await getContentList(
     {
       sortBy: "hottest",
+      populate: "genres",
     },
-    HOTTEST_CONTENT_LIST_LIMIT,
+    HOTTEST_CONTENT_PAGE_SIZE,
   );
-  console.log(hottestComicsList[0].genres);
 
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
@@ -49,30 +53,27 @@ const HottestComics: React.FC = async () => {
                 </div>
 
                 <div className="float-left ml-[3%] w-1/2 overflow-hidden md:m-[10px_30px_20px_17px] lg:w-[328px]">
-                  <div className="font-noto-sans-sc h-[29px] w-[70%] truncate text-base/[29px] font-medium text-black md:text-xl/[29px]">
+                  <div className="h-[29px] w-[70%] truncate text-base/[29px] md:text-xl/[29px]">
                     <span>{content.title}</span>
                   </div>
 
-                  <div className="font-noto-sans-sc h-5 w-[80%] truncate text-sm/[20px] font-normal text-[var(--app-text-color-slate-gray)]">
-                    <span>
-                      School life / Romance / TimeTravel / Comedy / Urban /
-                      Romance / Game
+                  <div className="font-noto-sans-sc h-5 w-[80%] truncate text-sm/[20px] font-normal text-neutral-400">
+                    {content.genres.map((genre) => genre.name).join(" / ")}
+                  </div>
+
+                  <div className="mt-2.5 flex h-5 w-full items-center text-[var(--app-text-color-crimson)]">
+                    <FaEye className="mr-1 size-3.5" />
+                    <span className="mr-[15px] inline-block text-xs text-neutral-400 md:text-base">
+                      {numeral(content.noOfViews)}
+                    </span>
+
+                    <AiFillLike className="mr-1 size-3.5" />
+                    <span className="text-xs text-neutral-400 md:text-base">
+                      {numeral(content.noOfSubscribers)}
                     </span>
                   </div>
 
-                  <div className="mt-2.5 flex h-5 w-full items-center">
-                    <View className="mr-0.5 h-4 w-4" />
-                    <span className="mr-[15px] inline-block text-xs text-[var(--app-text-color-slate-gray)] md:text-base">
-                      34M
-                    </span>
-
-                    <Like className="mr-0.5 h-4 w-4" />
-                    <span className="text-xs text-[var(--app-text-color-slate-gray)] md:text-base">
-                      3.5M
-                    </span>
-                  </div>
-
-                  <div className="font-noto-sans-sc mt-5 line-clamp-4 w-[70%] text-xs/[18px] font-normal text-[var(--app-text-color-slate-gray)] md:w-full md:text-sm">
+                  <div className="font-noto-sans-sc mt-5 line-clamp-4 w-[70%] text-xs/[18px] font-normal text-neutral-400 md:w-full md:text-sm">
                     {content.description}
                   </div>
                 </div>

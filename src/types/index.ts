@@ -5,7 +5,7 @@ export type pageReqObj = {
   };
 };
 
-// NavLink
+// Header NavLink
 export type LinkObject = {
   key: string;
   Icon?: any;
@@ -15,6 +15,8 @@ export type LinkObject = {
 };
 
 // Nested Comment System's types
+export type VoteType = "up" | "down";
+
 export type Comment = {
   id: string;
   parentId: string;
@@ -38,8 +40,6 @@ export type Comment = {
 
 export type SortKey = "BEST" | "NEWEST" | "OLDEST";
 
-export type VoteType = "up" | "down";
-
 export type CommentsPayload = {
   loading: boolean;
   error: boolean;
@@ -53,23 +53,43 @@ export type CommentsPayload = {
 };
 
 // Content Page And CMS
+export type Tags =
+  | "BannerContent"
+  | "ReadWithEditor"
+  | "CompletedClassic"
+  | "WeeklyNovel"
+  | "FreeRead";
+
+export type Status =
+  | "Ongoing"
+  | "Discontinued"
+  | "Abandoned"
+  | "Unscheduled"
+  | "Completed";
+
+type Genre = { id: string; name: string; createdAt: string; updatedAt: string };
+
 export type Content = {
   id: string;
-  tags: string[];
+  tags: Tags[];
   thumbnail: string;
   poster: string;
   title: string;
-  status: string;
-  genres: string[];
+  status: Status;
+  genres: Genre[];
   rating: number;
+  noOfViews: number;
+  noOfSubscribers: number;
   author: string;
   synonyms: string[];
   description: string;
   imagesAndWallpapers: string[];
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type GenresResponse = {
   error: boolean;
-  genres?: { id: string; name: string }[];
+  genres?: Genre[];
   errorMessage?: string;
 };

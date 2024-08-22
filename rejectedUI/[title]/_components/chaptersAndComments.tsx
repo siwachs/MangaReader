@@ -174,7 +174,7 @@ const ChaptersAndComments: React.FC<{
               <span>Chapters</span>
             </div>
 
-            <span className="font-noto-sans-sc hidden text-sm/[16px] text-[var(--app-text-color-slate-gray)] md:inline-block">
+            <span className="font-noto-sans-sc hidden text-sm/[16px] text-neutral-400 md:inline-block">
               Updated to Chapter {chaptersPayload.totalChapters}
             </span>
 
@@ -195,12 +195,12 @@ const ChaptersAndComments: React.FC<{
               <span>Comments</span>
             </div>
 
-            <span className="font-noto-sans-sc hidden text-sm/[16px] text-[var(--app-text-color-slate-gray)] md:inline-block">
+            <span className="font-noto-sans-sc hidden text-sm/[16px] text-neutral-400 md:inline-block">
               (5772)
             </span>
           </div>
 
-          <div className="float-right flex gap-[5px] text-xs/[40px] text-[var(--app-text-color-slate-gray)] md:text-sm/[89px]">
+          <div className="float-right flex gap-[5px] text-xs/[40px] text-neutral-400 md:text-sm/[89px]">
             <div
               role="button"
               tabIndex={0}
@@ -235,7 +235,7 @@ const ChaptersAndComments: React.FC<{
           </div>
         </div>
 
-        <div className="font-noto-sans-sc float-left my-1 w-[90%] text-xs font-normal text-[var(--app-text-color-slate-gray)] md:hidden">
+        <div className="font-noto-sans-sc float-left my-1 w-[90%] text-xs font-normal text-neutral-400 md:hidden">
           <span>Updated to Chapter {chaptersPayload.totalChapters}</span>
         </div>
       </div>
