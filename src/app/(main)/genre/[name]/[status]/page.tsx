@@ -1,42 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import { GenrePageReqObj, GenresResponse } from "@/types";
 import TabNavigation from "@/components/tabNavigation";
 import BreadCrum from "@/components/breadcrum";
-import Channels from "../_components/channels";
+import Channels from "./_components/channels";
+
+import getGenres from "@/libs/dbCRUD/getGenres";
 
 import { View } from "@/components/icons";
-
-const genres = [
-  "All",
-  "Action",
-  "Adventure",
-  "Comedy",
-  "Drama",
-  "Fantasy",
-  "Horror",
-  "Mystery",
-  "Romance",
-  "Science Fiction",
-  "Thriller",
-  "Crime",
-  "Animation",
-  "Documentary",
-  "Biography",
-  "Historical",
-  "Musical",
-  "Western",
-  "War",
-  "Family",
-  "Sport",
-  "School Life",
-  "AI",
-  "Martial Arts",
-  "Wars",
-  "Games",
-  "Space Travel",
-  "K Art",
-];
 
 const dummyContent = [
   "/dummyContent/1.webp",
@@ -47,17 +19,34 @@ const dummyContent = [
   "/dummyContent/6.webp",
 ];
 
-const status = ["Hottest", "Updated", "Completed"];
+const statusList = ["Hottest", "Updated", "Completed"];
 
-export default function GenrePage() {
+export default async function GenrePage(req: GenrePageReqObj) {
+  const genresResponse: GenresResponse = await getGenres();
+  const genreNames = genresResponse?.genres?.map((genre) => genre.name) ?? [];
+  genreNames.unshift("All");
+
+  const { name, status } = req.params;
+
   return (
     <>
       <TabNavigation />
       <BreadCrum titleOne="Genres" titleOneLink="/genre/all" titleTwo="All" />
 
       <div className="w-full overflow-hidden border-b border-gray-300 bg-[var(--app-text-color-lavender-offwhite)] md:border-none">
-        <Channels title="Genres" channels={genres} />
-        <Channels title="Status" channels={status} />
+        <Channels
+          title="Genres"
+          channels={genreNames}
+          currentGenre={name}
+          currentStatus={statusList[parseInt(status)]}
+        />
+
+        <Channels
+          title="Status"
+          channels={statusList}
+          currentGenre={name}
+          currentStatus={statusList[parseInt(status)]}
+        />
       </div>
 
       <div className="mx-auto mt-5 w-full max-w-[1200px] overflow-hidden md:mb-5 md:mt-[50px]">

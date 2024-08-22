@@ -1,8 +1,15 @@
 export type pageReqObj = {
-  params: { content_id?: string; chapter_id?: string };
+  params: {
+    content_id?: string;
+    chapter_id?: string;
+  };
   searchParams: {
     content_id?: string;
   };
+};
+
+export type GenrePageReqObj = {
+  params: { name: string; status: string };
 };
 
 // Header NavLink

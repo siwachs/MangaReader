@@ -17,7 +17,6 @@ export default async function HomePage() {
     freeReadList,
     newComicsList,
     completedList,
-    allMangaList,
     mangaUpdateTodayList,
   ] = await Promise.all([
     getContentList(
@@ -49,7 +48,6 @@ export default async function HomePage() {
       { filterBy: "status", status: "Completed" },
       CONTENT_LIST_PAGE_SIZE,
     ),
-    getContentList({}, CONTENT_LIST_PAGE_SIZE),
     getContentList({ sortBy: "updatedToday" }, CONTENT_LIST_PAGE_SIZE),
   ]);
 
@@ -68,7 +66,7 @@ export default async function HomePage() {
         title="free read Manga|Anime|comics|manhwa|manhua|online"
       />
       <HottestComics />
-      <GernresList title="Genres" />
+      <GernresList title="Genres" seeAll="/genre/all/0" />
       <ContentList
         contentList={newComicsList}
         title="New Comics"
@@ -77,11 +75,6 @@ export default async function HomePage() {
       <ContentList
         contentList={completedList}
         title="Completed"
-        seeAll="/api/list"
-      />
-      <ContentList
-        contentList={allMangaList}
-        title="AllManga"
         seeAll="/api/list"
       />
       <ContentList

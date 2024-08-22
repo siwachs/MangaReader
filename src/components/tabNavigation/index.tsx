@@ -29,7 +29,7 @@ const TabNavigation: React.FC = () => {
           <ClientAuth
             key={key}
             profileContainerClasses="mx-2.5 size-[30px] flex-shrink-0 sm:size-[32px]"
-            signInButtonClasses="text-sm font-normal leading-[37px] text-gray-800"
+            signInButtonClasses="text-sm font-normal leading-[37px] whitespace-nowrap text-gray-800"
           />
         ) : (
           <div key={key} className="relative mx-2.5 flex-shrink-0">
