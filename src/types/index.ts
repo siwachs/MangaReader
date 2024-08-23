@@ -83,7 +83,7 @@ export type Content = {
   poster: string;
   title: string;
   status: Status;
-  genres: Genre[];
+  genres: Genre[] | string[];
   rating: number;
   noOfViews: number;
   noOfSubscribers: number;

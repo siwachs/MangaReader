@@ -44,7 +44,7 @@ const TabNavigation: React.FC = () => {
               </span>
 
               <div
-                className={`${currentUrl === "/" || currentUrl.startsWith(link) ? "block" : "hidden"} absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]`}
+                className={`${currentUrl.includes(link) ? "block" : "hidden"} absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]`}
               />
             </Link>
           </div>

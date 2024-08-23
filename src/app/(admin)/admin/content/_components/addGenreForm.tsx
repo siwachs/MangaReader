@@ -15,7 +15,9 @@ const AddGenreForm: React.FC = () => {
   });
 
   useEffect(() => {
-    if (state?.resetForm) addGenreFormRef.current?.reset();
+    if (state?.resetForm) {
+      addGenreFormRef.current?.reset();
+    }
   }, [state?.resetForm]);
 
   return (

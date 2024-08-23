@@ -80,6 +80,7 @@ const AddOrUpdateContentForm: React.FC<{
   useEffect(() => {
     if (state?.resetForm) {
       addOrUpdateContentFormRef.current?.reset();
+
       setThumbnail([]);
       setPoster([]);
       setImagesAndWallpapers([]);
@@ -210,7 +211,7 @@ const AddOrUpdateContentForm: React.FC<{
             className="admin-form-input-type-select h-[136px]"
             aria-required
             required
-            defaultValue={content?.genres}
+            defaultValue={content?.genres as string[]}
           >
             {genres?.map((genre) => (
               <option key={genre.id} value={genre.id}>

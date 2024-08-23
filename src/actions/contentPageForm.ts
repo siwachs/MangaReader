@@ -23,12 +23,15 @@ export const addGenre = async (prevState: any, formData: FormData) => {
     const genre = (formData.get("genre") as string).trim();
     if (!genre) return { error: true, errorMessage: "Genre can't be empty." };
 
-    const existingGenre = await Genre.findOne({ name: genre });
+    const existingGenre = await Genre.findOne({
+      name: new RegExp(`^${genre}`, "i"),
+    });
     if (existingGenre)
       return { error: true, errorMessage: "Genre must be unique." };
 
     await Genre.create({ name: genre });
 
+    revalidatePath("/admin/content");
     return { error: false, errorMessage: undefined, resetForm: true };
   } catch (error: any) {
     if (error.code === MONGOOSE_DUPLICATE_KEY_ERROR) {
