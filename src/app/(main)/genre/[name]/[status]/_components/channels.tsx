@@ -30,7 +30,7 @@ const Channels: React.FC<{
                     ? channel === currentGenre
                     : channel === channels[currentStatus]
                 }
-                className="m-[5px] py-[5px] text-sm data-[active=true]:rounded-xl data-[active=true]:bg-[var(--app-text-color-red)] data-[active=true]:px-2.5 data-[active=true]:text-white md:m-[5px_20px_5px_0] md:text-base data-[active=true]:md:rounded-2xl data-[active=true]:md:px-5"
+                className="m-[5px] py-[5px] text-sm capitalize data-[active=true]:rounded-xl data-[active=true]:bg-[var(--app-text-color-red)] data-[active=true]:px-2.5 data-[active=true]:text-white md:m-[5px_20px_5px_0] md:text-base data-[active=true]:md:rounded-2xl data-[active=true]:md:px-5"
               >
                 <span>{channel}</span>
               </div>

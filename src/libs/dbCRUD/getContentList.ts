@@ -24,16 +24,17 @@ type ContentListFilter = {
 };
 
 async function getFilterQuery(listFilter: ContentListFilter) {
-  const { filterBy, tags = [], status = "" } = listFilter;
+  const { filterBy, tags = [], status } = listFilter;
 
-  if (filterBy === "tags")
-    return { tags: { $in: tags.map((tag) => new RegExp(tag, "i")) } };
-  if (filterBy === "status") return { status: new RegExp(status, "i") };
+  if (filterBy === "tags") return { tags: { $in: tags } };
+  if (filterBy === "status") return { status };
 
   if (filterBy === "genres") {
     const { genres = [] } = listFilter;
+
+    if (genres.includes("all")) return {};
     const genreIds = await Genre.find({
-      name: { $in: genres.map((genre) => new RegExp(genre, "i")) },
+      name: { $in: genres.map((genre) => new RegExp(`^${genre}`, "i")) },
     }).select("_id");
 
     return { genres: { $in: genreIds } };
@@ -58,7 +59,7 @@ function getSortQuery(
 function getPartialContentSelect(listFilter: ContentListFilter) {
   const { filterBy, tags = [], sortBy } = listFilter;
 
-  if (filterBy === "tags" && tags.find((tag) => /BannerContent/i.test(tag)))
+  if (filterBy === "tags" && tags.includes("BannerContent"))
     return partialContentForBanner;
 
   if (filterBy === "genres") return partialContentForGenres;

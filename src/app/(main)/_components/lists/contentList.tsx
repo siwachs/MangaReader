@@ -30,7 +30,7 @@ const ContentList: React.FC<{
               className="mb-5 w-[32%] md:mb-[30px] md:w-[175px]"
             >
               <Link
-                href={`${content.title.toLocaleLowerCase().replaceAll(" ", "-")}?content_id=${content.id}`}
+                href={`${encodeURIComponent(content.title.toLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
               >
                 <div className="h-[140px] w-full overflow-hidden md:h-[233px]">
                   <Image

@@ -23,8 +23,9 @@ const statusList = ["Hottest", "Updated", "Completed"];
 
 export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
   const genresResponse: GenresResponse = await getGenres();
-  const genreNames = genresResponse?.genres?.map((genre) => genre.name) ?? [];
-  genreNames.unshift("All");
+  const genreNames =
+    genresResponse?.genres?.map((genre) => genre.name.toLowerCase()) ?? [];
+  genreNames.unshift("all");
 
   const { name, status } = req.params;
 
