@@ -21,7 +21,7 @@ const dummyContent = [
 
 const statusList = ["Hottest", "Updated", "Completed"];
 
-export default async function GenrePage(req: GenrePageReqObj) {
+export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
   const genresResponse: GenresResponse = await getGenres();
   const genreNames = genresResponse?.genres?.map((genre) => genre.name) ?? [];
   genreNames.unshift("All");
@@ -33,19 +33,19 @@ export default async function GenrePage(req: GenrePageReqObj) {
       <TabNavigation />
       <BreadCrum titleOne="Genres" titleOneLink="/genre/all" titleTwo="All" />
 
-      <div className="w-full overflow-hidden border-b border-gray-300 bg-[var(--app-text-color-lavender-offwhite)] md:border-none">
+      <div className="w-full overflow-hidden border-b border-gray-300 bg-purple-50 md:border-none">
         <Channels
           title="Genres"
           channels={genreNames}
           currentGenre={name}
-          currentStatus={statusList[parseInt(status)]}
+          currentStatus={status}
         />
 
         <Channels
           title="Status"
           channels={statusList}
           currentGenre={name}
-          currentStatus={statusList[parseInt(status)]}
+          currentStatus={status}
         />
       </div>
 

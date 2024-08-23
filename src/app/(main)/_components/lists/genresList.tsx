@@ -49,7 +49,7 @@ const GernresList: React.FC<{
                 <Link
                   data-active={index === 0}
                   className="block h-5 text-sm text-[var(--app-text-color-muted)] data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=true]:font-bold data-[active=true]:text-[var(--app-text-color-red)] md:h-[30px] md:text-lg/[30px]"
-                  href={`/genre/${genre.id}`}
+                  href={`/genre/${genre.name}/0`}
                 >
                   {genre.name}
                 </Link>

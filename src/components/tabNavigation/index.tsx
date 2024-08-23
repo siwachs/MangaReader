@@ -8,7 +8,7 @@ import ClientAuth from "../buttons/clientAuth";
 
 const tabNavigationLinks: LinkObject[] = [
   { key: "home", label: "Home", link: "/" },
-  { key: "comics", label: "Comics", link: "/genre/all" },
+  { key: "comics", label: "Comics", link: "/genre/all/0" },
   { key: "search", label: "Search", link: "/search" },
   { key: "booklist", label: "Booklist", link: "/book/list" },
   {
@@ -25,6 +25,7 @@ const TabNavigation: React.FC = () => {
     <nav className="hide-scrollbar flex h-10 w-full items-center justify-between overflow-auto border-y border-gray-300 px-2.5 md:hidden">
       {tabNavigationLinks.map((navLink) => {
         const { key, link, label } = navLink;
+
         return key === "signin" ? (
           <ClientAuth
             key={key}
@@ -43,7 +44,7 @@ const TabNavigation: React.FC = () => {
               </span>
 
               <div
-                className={`${currentUrl === link ? "block" : "hidden"} absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]`}
+                className={`${currentUrl === "/" || currentUrl.startsWith(link) ? "block" : "hidden"} absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]`}
               />
             </Link>
           </div>
