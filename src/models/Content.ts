@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, UpdateQuery, Document } from "mongoose";
 
 const ContentSchema = new Schema(
   {
@@ -41,6 +41,7 @@ const ContentSchema = new Schema(
     author: { type: String, required: true },
     synonyms: [{ type: String }],
     chapters: [{ type: Schema.Types.ObjectId, ref: "Chapter" }],
+    chaptersCount: { type: Number, default: 0 },
     chaptersUpdatedOn: { type: Date, default: () => new Date() },
     description: { type: String, required: true },
     imagesAndWallpapers: [{ type: String }],
@@ -49,6 +50,23 @@ const ContentSchema = new Schema(
   { timestamps: true, validateBeforeSave: true },
 );
 
+// Presave and Find and Update middleware
+ContentSchema.pre("save", function (next) {
+  if (this.isModified("chapters")) this.chaptersCount = this.chapters.length;
+
+  next();
+});
+
+ContentSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate() as UpdateQuery<Document>;
+
+  if (update && Array.isArray(update.chapters))
+    update.chaptersCount = update.chapters.length;
+
+  next();
+});
+
+// Content Validation
 ContentSchema.path("genres").validate(function (genres) {
   return genres.length > 0;
 }, "Genres can't be empty");

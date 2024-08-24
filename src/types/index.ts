@@ -74,7 +74,13 @@ export type Status =
   | "Unscheduled"
   | "Completed";
 
-type Genre = { id: string; name: string; createdAt: string; updatedAt: string };
+export type Genre = {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type Content = {
   id: string;

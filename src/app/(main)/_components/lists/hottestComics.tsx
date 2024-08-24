@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { Content } from "@/types";
+import { Content, Genre } from "@/types";
 import { HOTTEST_CONTENT_PAGE_SIZE } from "@/constants";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 
@@ -15,7 +15,8 @@ const HottestComics: React.FC = async () => {
   const hottestComicsList: Content[] = await getContentList(
     {
       sortBy: "hottest",
-      populate: "genres",
+      populatePath: "genres",
+      populateSelect: "name",
     },
     HOTTEST_CONTENT_PAGE_SIZE,
   );
@@ -37,7 +38,7 @@ const HottestComics: React.FC = async () => {
           {hottestComicsList?.map((content, index) => (
             <Link
               key={content.id}
-              href={`${content.title.toLocaleLowerCase().replaceAll(" ", "-")}?content_id=${content.id}`}
+              href={`${encodeURIComponent(content.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
             >
               <div className="mb-[2%] mr-[15px] box-border h-[190px] w-[150%] overflow-hidden bg-[url('/assets/hot-content-bg.png')] bg-[length:100%_100%] p-[2%] md:h-[275px] lg:mb-0 lg:w-[590px] lg:p-[15px]">
                 <div className="float-left h-full w-1/4 md:h-[245px] md:w-[185px]">
@@ -58,7 +59,9 @@ const HottestComics: React.FC = async () => {
                   </div>
 
                   <div className="font-noto-sans-sc h-5 w-[80%] truncate text-sm/[20px] font-normal text-neutral-400">
-                    {content.genres.map((genre) => genre.name).join(" / ")}
+                    {(content.genres as Genre[])
+                      .map((genre) => genre.name)
+                      .join(" / ")}
                   </div>
 
                   <div className="mt-2.5 flex h-5 w-full items-center text-[var(--app-text-color-crimson)]">

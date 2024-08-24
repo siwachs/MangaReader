@@ -17,8 +17,13 @@ const GernresList: React.FC<{
   seeAll?: string;
 }> = async ({ title, seeAll }) => {
   const genresResponse: GenresResponse = await getGenres();
+  genresResponse.genres = genresResponse.genres?.map((genre) => ({
+    ...genre,
+    name: genre.name.toLowerCase(),
+  }));
   const genre = genresResponse?.genres?.[0].name ?? "all";
-  const genreList: Content[] = await getContentList(
+
+  const genresList: Content[] = await getContentList(
     { filterBy: "genres", genres: [genre] },
     CONTENT_LIST_PAGE_SIZE,
   );
@@ -48,7 +53,7 @@ const GernresList: React.FC<{
               >
                 <Link
                   data-active={index === 0}
-                  className="block h-5 text-sm text-[var(--app-text-color-muted)] data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=true]:font-bold data-[active=true]:text-[var(--app-text-color-red)] md:h-[30px] md:text-lg/[30px]"
+                  className="block h-5 text-sm capitalize text-[var(--app-text-color-muted)] data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=true]:font-bold data-[active=true]:text-[var(--app-text-color-red)] md:h-[30px] md:text-lg/[30px]"
                   href={`/genre/${genre.name}/0`}
                 >
                   {genre.name}
@@ -58,7 +63,7 @@ const GernresList: React.FC<{
           </div>
 
           <div className="mt-5 flex flex-wrap gap-[2%] overflow-hidden md:mt-[30px] md:gap-[30px]">
-            {genreList?.map((content, index) => (
+            {genresList?.map((content, index) => (
               <div
                 key={content.id}
                 className="mb-5 w-[32%] md:mb-[30px] md:w-[175px]"
@@ -78,7 +83,7 @@ const GernresList: React.FC<{
                     />
                   </div>
 
-                  <div className="font-noto-sans-sc mt-[5px] overflow-hidden truncate text-xs/[13px] md:mt-2.5 md:text-lg/[22px]">
+                  <div className="mt-[5px] overflow-hidden truncate text-xs/[13px] md:mt-2.5 md:text-lg/[22px]">
                     <span>{content.title}</span>
                   </div>
 

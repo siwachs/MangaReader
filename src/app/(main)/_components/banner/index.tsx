@@ -41,7 +41,7 @@ const Banner: React.FC<{
           {bannerList.map((image, index) => (
             <Link
               key={image.id}
-              href={`${image.title.toLocaleLowerCase().replaceAll(" ", "-")}?content_id=${image.id}`}
+              href={`${encodeURIComponent(image.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${image.id}`}
               onClick={() => setCurrentSlide(index)}
             >
               <div

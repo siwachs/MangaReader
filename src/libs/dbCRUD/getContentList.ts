@@ -20,7 +20,8 @@ type ContentListFilter = {
   tags?: Tags[];
   genres?: string[];
   status?: Status;
-  populate?: string;
+  populatePath?: string;
+  populateSelect?: string;
 };
 
 async function getFilterQuery(listFilter: ContentListFilter) {
@@ -84,14 +85,21 @@ export default async function getContentList(
     const filterQuery = await getFilterQuery(listFilter);
     const sortQuery = getSortQuery(listFilter);
     const partialContent = getPartialContentSelect(listFilter);
-    const { populate = "" } = listFilter;
+    const { populatePath = "", populateSelect = "" } = listFilter;
 
     const contentDocs = await Content.find(filterQuery)
       .select(partialContent)
       .sort(sortQuery)
       .skip(skip)
       .limit(pageSize)
-      .populate(populate);
+      .populate(
+        populatePath && populateSelect
+          ? {
+              path: populatePath,
+              select: populateSelect,
+            }
+          : [],
+      );
 
     const formatedContentDocs = contentDocs.map((content) =>
       formatMongooseDoc(content.toObject()),

@@ -114,6 +114,10 @@ body {
   .admin-form-input-caption {
     @apply mt-1 select-none text-[11px] md:text-[13px] lg:mt-1.5 lg:text-sm;
   }
+
+  .admin-form-description {
+    @apply w-full rounded border p-2.5 leading-tight text-gray-700 shadow;
+  }
 }
 
 /* App Container */

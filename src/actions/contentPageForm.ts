@@ -20,16 +20,20 @@ export const addGenre = async (prevState: any, formData: FormData) => {
   try {
     await connectToMongoDB();
 
-    const genre = (formData.get("genre") as string).trim();
-    if (!genre) return { error: true, errorMessage: "Genre can't be empty." };
+    const name = (formData.get("name") as string).trim();
+    if (!name)
+      return { error: true, errorMessage: "Genre name can't be empty." };
+    const description = (formData.get("description") as string).trim();
+    if (!description)
+      return { error: true, errorMessage: "Description can't be empty." };
 
     const existingGenre = await Genre.findOne({
-      name: new RegExp(`^${genre}`, "i"),
+      name: new RegExp(`^${name}`, "i"),
     });
     if (existingGenre)
       return { error: true, errorMessage: "Genre must be unique." };
 
-    await Genre.create({ name: genre });
+    await Genre.create({ name, description });
 
     revalidatePath("/admin/content");
     return { error: false, errorMessage: undefined, resetForm: true };

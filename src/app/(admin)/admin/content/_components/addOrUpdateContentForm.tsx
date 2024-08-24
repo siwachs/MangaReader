@@ -268,7 +268,7 @@ const AddOrUpdateContentForm: React.FC<{
             id="description"
             name="description"
             rows={8}
-            className="w-full rounded border p-2.5 leading-tight text-gray-700 shadow"
+            className="admin-form-description"
             autoComplete="on"
             spellCheck
             aria-required

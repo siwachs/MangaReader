@@ -29,26 +29,44 @@ const AddGenreForm: React.FC = () => {
       <h3 className="admin-form-title">Add a new Genre</h3>
 
       <div>
+        <label className="admin-form-label" htmlFor="description">
+          Name
+        </label>
+
         <input
           type="text"
-          name="genre"
-          className={
-            state.error
-              ? "admin-form-input-type-text border-red-600"
-              : "admin-form-input-type-text"
-          }
+          name="name"
+          className="admin-form-input-type-text"
           required
           aria-required
         />
+      </div>
 
+      <div>
+        <label className="admin-form-label" htmlFor="description">
+          Description
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          rows={8}
+          className="admin-form-description"
+          autoComplete="on"
+          spellCheck
+          aria-required
+          required
+        />
+      </div>
+
+      <div>
+        <SubmitForm title="Add Genre" />
         {state.error && (
           <p className="admin-form-input-caption text-red-600">
             {state.errorMessage}
           </p>
         )}
       </div>
-
-      <SubmitForm title="Add Genre" />
     </form>
   );
 };
