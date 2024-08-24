@@ -10,7 +10,9 @@ export const partialContent =
 export const partialGenre = "name";
 export const partialGenreWithDescription = "name description";
 
-export const partialContentForGenreList = "poster title genres";
+export const partialContentForGenrePageList =
+  "poster title genres noOfViews noOfSubscribers chaptersCount";
+
 export const partialContentForContentList = "poster title";
 export const partialContentForBanner = "thumbnail title";
 export const partialContentForGenres = "poster title noOfSubscribers";

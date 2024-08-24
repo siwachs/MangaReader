@@ -9,7 +9,7 @@ export type pageReqObj = {
 };
 
 export type GenrePageReqObj = {
-  params: { name: string; status: number };
+  params: { name: string; status: string };
 };
 
 // Header NavLink
@@ -95,6 +95,7 @@ export type Content = {
   noOfSubscribers: number;
   author: string;
   synonyms: string[];
+  chaptersCount: number;
   description: string;
   imagesAndWallpapers: string[];
   createdAt: string;

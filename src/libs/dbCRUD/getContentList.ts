@@ -11,11 +11,12 @@ import {
   partialContentForBanner,
   partialContentForGenres,
   partialContentForHottestList,
+  partialContentForGenrePageList,
 } from "../mongooseSelect";
 import formatMongooseDoc from "../db/formatMongooseDoc";
 
-type ContentListFilter = {
-  filterBy?: "tags" | "genres" | "status";
+export type ContentListFilter = {
+  filterBy?: "tags" | "genres" | "status" | "genresPageList";
   sortBy?: "trending" | "new" | "updatedToday" | "hottest";
   tags?: Tags[];
   genres?: string[];
@@ -30,10 +31,10 @@ async function getFilterQuery(listFilter: ContentListFilter) {
   if (filterBy === "tags") return { tags: { $in: tags } };
   if (filterBy === "status") return { status };
 
-  if (filterBy === "genres") {
+  if (filterBy === "genres" || filterBy === "genresPageList") {
     const { genres = [] } = listFilter;
-
     if (genres.includes("all")) return {};
+
     const genreIds = await Genre.find({
       name: { $in: genres.map((genre) => new RegExp(`^${genre}`, "i")) },
     }).select("_id");
@@ -63,6 +64,7 @@ function getPartialContentSelect(listFilter: ContentListFilter) {
   if (filterBy === "tags" && tags.includes("BannerContent"))
     return partialContentForBanner;
 
+  if (filterBy === "genresPageList") return partialContentForGenrePageList;
   if (filterBy === "genres") return partialContentForGenres;
 
   if (sortBy === "hottest") return partialContentForHottestList;
