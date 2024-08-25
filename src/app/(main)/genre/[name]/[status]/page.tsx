@@ -40,7 +40,7 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
       case 1:
         return { sortBy: "updatedToday" };
       case 2:
-        return { filterBy: "status", status: "Completed" };
+        return { status: "Completed" };
       default:
         return {};
     }

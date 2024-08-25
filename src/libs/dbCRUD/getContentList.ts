@@ -37,12 +37,15 @@ async function getFilterQuery(listFilter: ContentListFilter) {
 
     case "genres":
     case "genresPageList":
-      if (genres.includes("all")) return {};
+      if (genres.includes("all")) return status ? { status } : {};
+
       const genreIds = await Genre.find({
         name: { $in: genres.map((genre) => new RegExp(`^${genre}`, "i")) },
       }).select("_id");
 
-      return { genres: { $in: genreIds } };
+      return status
+        ? { genres: { $in: genreIds }, status }
+        : { genres: { $in: genreIds } };
 
     default:
       return {};
