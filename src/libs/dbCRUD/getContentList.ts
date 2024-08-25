@@ -87,6 +87,68 @@ function getPartialContentSelect(listFilter: ContentListFilter) {
   return partialContentForContentList;
 }
 
+function getProjectFields(partialContent: string) {
+  const fields = partialContent.split(" ");
+  const projection: any = {};
+
+  fields.forEach((field) => {
+    projection[field] = 1;
+  });
+
+  return projection;
+}
+
+export async function getContentListWithAggregation(
+  listFilter: ContentListFilter,
+  listPageNumber?: number,
+  listSize?: number,
+) {
+  await connectToMongoDB();
+
+  const pageSize = listSize ?? CONTENT_LIST_DEFAULT_PAGE_SIZE;
+  const pageNumber = listPageNumber ?? 1;
+  const skip = (pageNumber - 1) * pageSize;
+
+  const filterQuery = await getFilterQuery(listFilter);
+  const sortQuery: Record<string, 1 | -1> | {} = getSortQuery(listFilter);
+  const partialContent = getPartialContentSelect(listFilter);
+  const { populatePath = "", populateSelect = "" } = listFilter;
+
+  const aggregatedResult = await Content.aggregate([
+    {
+      $facet: {
+        metaData: [{ $count: "totalContent" }],
+        data: [
+          { $match: filterQuery },
+          { $sort: sortQuery },
+          { $skip: skip },
+          { $limit: pageSize },
+          {
+            $lookup: {
+              from: "Genres",
+              let: { genreIds: "$genres" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $in: ["$_id", "$$genreIds"],
+                    },
+                  },
+                },
+                { $project: { name: 1, description: 1 } },
+              ],
+              as: "genres",
+            },
+          },
+          { $project: getProjectFields(partialContent) },
+        ],
+      },
+    },
+  ]);
+
+  return JSON.stringify(aggregatedResult[0]["data"][0].genres);
+}
+
 export default async function getContentList(
   listFilter: ContentListFilter,
   listPageNumber?: number,

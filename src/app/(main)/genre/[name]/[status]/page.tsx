@@ -9,6 +9,7 @@ import Channels from "./_components/channels";
 import numeral from "@/libs/numeral";
 import getContentList, {
   ContentListFilter,
+  getContentListWithAggregation,
 } from "@/libs/dbCRUD/getContentList";
 import getGenres from "@/libs/dbCRUD/getGenres";
 
@@ -55,6 +56,19 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
       populateSelect: "name",
     },
     page,
+  );
+
+  console.log(
+    await getContentListWithAggregation(
+      {
+        filterBy: "genresPageList",
+        genres: [name],
+        ...getSortByOrFilterByOnStatus(),
+        populatePath: "genres",
+        populateSelect: "name",
+      },
+      page,
+    ),
   );
 
   return (
