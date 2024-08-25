@@ -10,6 +10,7 @@ export type pageReqObj = {
 
 export type GenrePageReqObj = {
   params: { name: string; status: string };
+  searchParams: { page?: string };
 };
 
 // Header NavLink

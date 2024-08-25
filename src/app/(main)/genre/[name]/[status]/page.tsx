@@ -12,9 +12,13 @@ import getContentList, {
 } from "@/libs/dbCRUD/getContentList";
 import getGenres from "@/libs/dbCRUD/getGenres";
 
-import { View } from "@/components/icons";
+import { FaHeart } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 const statusList = ["Hottest", "Updated", "Completed"];
+
+const paginationButtonClasses =
+  "flex h-[50px] w-[50%] items-center justify-center text-center text-sm aria-disabled:pointer-events-none aria-disabled:border-gray-300 aria-disabled:text-gray-300 md:w-[180px] md:rounded-[25px] md:border md:border-gray-600";
 
 export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
   const genresResponse: GenresResponse = await getGenres();
@@ -23,6 +27,9 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
   genreNames.unshift("all");
 
   const { name, status: statusParam } = req.params;
+  const { page: pageParam } = req.searchParams;
+
+  const page = parseInt(pageParam ?? "1");
   const status = parseInt(statusParam);
 
   const getSortByOrFilterByOnStatus = (): Partial<ContentListFilter> => {
@@ -38,13 +45,16 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
     }
   };
 
-  const genresList: Content[] = await getContentList({
-    filterBy: "genresPageList",
-    genres: [name],
-    ...getSortByOrFilterByOnStatus(),
-    populatePath: "genres",
-    populateSelect: "name",
-  });
+  const genresList: Content[] = await getContentList(
+    {
+      filterBy: "genresPageList",
+      genres: [name],
+      ...getSortByOrFilterByOnStatus(),
+      populatePath: "genres",
+      populateSelect: "name",
+    },
+    page,
+  );
 
   return (
     <>
@@ -68,9 +78,12 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
       </div>
 
       <div className="mx-auto mt-5 w-full max-w-[1200px] overflow-hidden md:mb-5 md:mt-[50px]">
-        <div className="items mx-auto w-[90%] md:flex md:w-full md:flex-wrap md:gap-[30px]">
+        <div className="items mx-auto min-h-[calc(100vh-355px)] w-[90%] md:flex md:w-full md:flex-wrap md:gap-[30px]">
           {genresList?.map((content, index) => (
-            <Link key={content.id} href="/">
+            <Link
+              key={content.id}
+              href={`/${encodeURIComponent(content.title.toLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
+            >
               <div className="mb-5 grid grid-cols-[32%_60%] gap-[4%] overflow-hidden md:mb-0 md:block">
                 <div className="md:w-[175px]">
                   <div className="content-image w-full md:h-[233px]">
@@ -86,8 +99,9 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
                   <div className="content-title mt-2.5 hidden truncate text-lg/[22px] md:block">
                     <span>{content.title}</span>
                   </div>
+
                   <div className="content-icons mt-2.5 hidden items-center gap-[5px] text-[13px] text-[var(--app-text-color-red)] md:flex">
-                    <View className="-mt-[1px] mr-[5px] h-[15px] w-[15px]" />
+                    <FaHeart className="-mt-[1px] mr-[5px] size-3.5" />
                     <span>{numeral(content.noOfSubscribers)}</span>
                   </div>
 
@@ -102,16 +116,21 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
                   <div className="content-title truncate text-lg/[30px] font-bold">
                     <span>{content.title}</span>
                   </div>
+
                   <div className="content-genres mt-2.5 truncate text-xs/[30px] text-gray-500/70">
                     {(content.genres as Genre[])
                       .map((genre) => genre.name)
                       .join("/")}
                   </div>
+
                   <div className="content-episodes-count truncate text-xs/[24px] text-gray-500/70">
-                    Up to Ep.{content.chaptersCount}
+                    {content.chaptersCount
+                      ? ` Up to Ep.${content.chaptersCount}`
+                      : "No chapters yet."}
                   </div>
-                  <div className="content-icons mt-[30px] flex items-center gap-0.5 text-[13px] text-[var(--app-text-color-red)]">
-                    <View className="-mt-[1px] h-3 w-3" />
+
+                  <div className="content-icons mt-[30px] flex items-center gap-1.5 text-[13px] text-[var(--app-text-color-red)]">
+                    <FaEye className="-mt-[1px] size-3" />
                     <span>{numeral(content.noOfViews)}</span>
                   </div>
                 </div>
@@ -122,18 +141,18 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
 
         <div className="page mx-auto my-[25px] flex max-w-[1200px] overflow-hidden border-y border-gray-300 py-2.5 md:justify-center md:gap-5 md:border-none">
           <Link
-            aria-disabled={true}
-            href="/"
-            className="pointer-events-none flex h-[50px] w-[50%] items-center justify-center border-r border-gray-300 text-center text-sm text-gray-300 md:w-[180px] md:rounded-[25px] md:border md:border-gray-300"
+            aria-disabled={page <= 1}
+            href={`/genre/${name}/${status}?page=${page - 1}`}
+            className={`${paginationButtonClasses} border-r`}
           >
-            <span>Last Page</span>
+            Last Page
           </Link>
 
           <Link
-            href="/"
-            className="flex h-[50px] w-[50%] items-center justify-center text-center text-sm md:w-[180px] md:rounded-[25px] md:border md:border-[var(--app-text-color-dim-gray)]"
+            href={`/genre/${name}/${status}?page=${page + 1}`}
+            className={`${paginationButtonClasses} `}
           >
-            <span>Next Page</span>
+            Next Page
           </Link>
         </div>
       </div>

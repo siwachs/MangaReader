@@ -38,7 +38,7 @@ const HottestComics: React.FC = async () => {
           {hottestComicsList?.map((content, index) => (
             <Link
               key={content.id}
-              href={`${encodeURIComponent(content.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
+              href={`/${encodeURIComponent(content.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
             >
               <div className="mb-[2%] mr-[15px] box-border h-[190px] w-[150%] overflow-hidden bg-[url('/assets/hot-content-bg.png')] bg-[length:100%_100%] p-[2%] md:h-[275px] lg:mb-0 lg:w-[590px] lg:p-[15px]">
                 <div className="float-left h-full w-1/4 md:h-[245px] md:w-[185px]">

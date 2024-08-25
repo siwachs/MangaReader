@@ -985,7 +985,7 @@ export default function TitlePage(req: Readonly<pageReqObj>) {
                   </p>
                 </div>
 
-                <p className="line-clamp-2 break-words text-sm font-[300] text-[var(--app-text-color-dim-gray)]">
+                <p className="line-clamp-2 break-words text-sm font-[300] text-gray-600">
                   {news.shortDescription}
                 </p>
               </div>
@@ -1007,7 +1007,7 @@ export default function TitlePage(req: Readonly<pageReqObj>) {
               </Link>
 
               <Link href={latestUpdate.link}>
-                <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-normal text-[var(--app-text-color-dim-gray)] md:flex">
+                <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-normal text-gray-600 md:flex">
                   {latestUpdate.title}
                 </div>
               </Link>

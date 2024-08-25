@@ -11,6 +11,6 @@ export default function numeral(value: number) {
   } else if (value >= 1e3) {
     return (value / 1e3).toFixed(1) + "K"; // Thousand
   } else {
-    return value?.toString(); // Less than a thousand
+    return value?.toString() ?? 0; // Less than a thousand
   }
 }

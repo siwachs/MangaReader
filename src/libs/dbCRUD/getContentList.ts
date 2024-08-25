@@ -26,23 +26,27 @@ export type ContentListFilter = {
 };
 
 async function getFilterQuery(listFilter: ContentListFilter) {
-  const { filterBy, tags = [], status } = listFilter;
+  const { filterBy, tags = [], status, genres = [] } = listFilter;
 
-  if (filterBy === "tags") return { tags: { $in: tags } };
-  if (filterBy === "status") return { status };
+  switch (filterBy) {
+    case "tags":
+      return { tags: { $in: tags } };
 
-  if (filterBy === "genres" || filterBy === "genresPageList") {
-    const { genres = [] } = listFilter;
-    if (genres.includes("all")) return {};
+    case "status":
+      return { status };
 
-    const genreIds = await Genre.find({
-      name: { $in: genres.map((genre) => new RegExp(`^${genre}`, "i")) },
-    }).select("_id");
+    case "genres":
+    case "genresPageList":
+      if (genres.includes("all")) return {};
+      const genreIds = await Genre.find({
+        name: { $in: genres.map((genre) => new RegExp(`^${genre}`, "i")) },
+      }).select("_id");
 
-    return { genres: { $in: genreIds } };
+      return { genres: { $in: genreIds } };
+
+    default:
+      return {};
   }
-
-  return {};
 }
 
 function getSortQuery(
@@ -50,12 +54,20 @@ function getSortQuery(
 ): Record<string, SortOrder> {
   const { sortBy } = listFilter;
 
-  if (sortBy === "trending" || sortBy === "hottest")
-    return { rating: -1, noOfViews: -1, noOfSubscribers: -1 };
-  if (sortBy === "new") return { createdAt: -1 };
-  if (sortBy === "updatedToday") return { chaptersUpdatedOn: -1 };
+  switch (sortBy) {
+    case "trending":
+    case "hottest":
+      return { rating: -1, noOfViews: -1, noOfSubscribers: -1 };
 
-  return {};
+    case "new":
+      return { createdAt: -1 };
+
+    case "updatedToday":
+      return { chaptersUpdatedOn: -1 };
+
+    default:
+      return {};
+  }
 }
 
 function getPartialContentSelect(listFilter: ContentListFilter) {
@@ -74,8 +86,8 @@ function getPartialContentSelect(listFilter: ContentListFilter) {
 
 export default async function getContentList(
   listFilter: ContentListFilter,
-  listSize?: number,
   listPageNumber?: number,
+  listSize?: number,
 ) {
   try {
     await connectToMongoDB();
