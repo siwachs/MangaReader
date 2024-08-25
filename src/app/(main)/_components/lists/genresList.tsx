@@ -1,7 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { CONTENT_LIST_PAGE_SIZE } from "@/constants";
+import {
+  CONTENT_LIST_PAGE_SIZE,
+  CONTENT_LIST_DEFAULT_PAGE_NUMBER,
+} from "@/constants";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import { Content, GenresResponse } from "@/types";
 import getGenres from "@/libs/dbCRUD/getGenres";
@@ -25,6 +28,7 @@ const GernresList: React.FC<{
 
   const genresList: Content[] = await getContentList(
     { filterBy: "genres", genres: [genre] },
+    CONTENT_LIST_DEFAULT_PAGE_NUMBER,
     CONTENT_LIST_PAGE_SIZE,
   );
 

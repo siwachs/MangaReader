@@ -26,10 +26,11 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
     genresResponse?.genres?.map((genre) => genre.name.toLowerCase()) ?? [];
   genreNames.unshift("all");
 
-  const { name, status: statusParam } = req.params;
+  const { name: encodedName, status: statusParam } = req.params;
   const { page: pageParam } = req.searchParams;
 
-  const page = parseInt(pageParam ?? "1");
+  const name = decodeURI(encodedName);
+  const page = parseInt(decodeURI(pageParam ?? "1"));
   const status = parseInt(statusParam);
 
   const getSortByOrFilterByOnStatus = (): Partial<ContentListFilter> => {
