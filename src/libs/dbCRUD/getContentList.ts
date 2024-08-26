@@ -55,10 +55,11 @@ async function getFilterQuery(listFilter: ContentListFilter) {
       const genreIds = await Genre.find({
         name: { $in: genres.map((genre) => new RegExp(`^${genre}`, "i")) },
       }).select("_id");
+      const genreFilter = {
+        genres: { $in: genreIds.map((genre) => genre._id) },
+      };
 
-      return status
-        ? { genres: { $in: genreIds }, status }
-        : { genres: { $in: genreIds } };
+      return status ? { $and: [genreFilter, { status }] } : genreFilter;
 
     default:
       return {};
@@ -153,10 +154,14 @@ export default async function getContentList(
     const aggregatedContentList = await Content.aggregate([
       {
         $facet: {
-          metaData: [{ $count: "totalContent" }],
+          metaData: [{ $match: filterQuery }, { $count: "totalContent" }],
           data: [
-            { $match: filterQuery },
-            { $sort: sortQuery },
+            ...(Object.keys(filterQuery).length > 0
+              ? [{ $match: filterQuery }]
+              : []),
+            ...(Object.keys(sortQuery).length > 0
+              ? [{ $sort: sortQuery }]
+              : []),
             { $skip: skip },
             { $limit: pageSize },
             ...lookupStages,
