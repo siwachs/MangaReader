@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { GenrePageReqObj, GenresResponse, Content, Genre } from "@/types";
+import { GenrePageReqObj, GenresResponse, Genre } from "@/types";
 import TabNavigation from "@/components/tabNavigation";
 import BreadCrum from "@/components/breadcrum";
 import Channels from "./_components/channels";
@@ -9,7 +9,6 @@ import Channels from "./_components/channels";
 import numeral from "@/libs/numeral";
 import getContentList, {
   ContentListFilter,
-  getContentListWithAggregation,
 } from "@/libs/dbCRUD/getContentList";
 import getGenres from "@/libs/dbCRUD/getGenres";
 
@@ -47,28 +46,22 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
     }
   };
 
-  const genresList: Content[] = await getContentList(
+  const { error, errorMessage, totalPages, contentList } = await getContentList(
     {
       filterBy: "genresPageList",
       genres: [name],
       ...getSortByOrFilterByOnStatus(),
-      populatePath: "genres",
-      populateSelect: "name",
+      populate: [
+        {
+          from: "Genres",
+          localField: "genres",
+          as: "genres",
+          project: "name",
+        },
+      ],
     },
     page,
-  );
-
-  console.log(
-    await getContentListWithAggregation(
-      {
-        filterBy: "genresPageList",
-        genres: [name],
-        ...getSortByOrFilterByOnStatus(),
-        populatePath: "genres",
-        populateSelect: "name",
-      },
-      page,
-    ),
+    1,
   );
 
   return (
@@ -94,7 +87,7 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
 
       <div className="mx-auto mt-5 w-full max-w-[1200px] overflow-hidden md:mb-5 md:mt-[50px]">
         <div className="items mx-auto min-h-[calc(100vh-355px)] w-[90%] md:flex md:w-full md:flex-wrap md:gap-[30px]">
-          {genresList?.map((content, index) => (
+          {contentList.map((content, index) => (
             <Link
               key={content.id}
               href={`/${encodeURIComponent(content.title.toLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
@@ -164,6 +157,7 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
           </Link>
 
           <Link
+            aria-disabled={page >= totalPages}
             href={`/genre/${name}/${status}?page=${page + 1}`}
             className={`${paginationButtonClasses} `}
           >

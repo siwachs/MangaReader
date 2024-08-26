@@ -4,7 +4,7 @@ import connectToMongoDB from "../db/connectToMongoDB";
 import Genre from "@/models/Genre";
 import Content from "@/models/Content";
 
-import { Tags, Status } from "@/types";
+import { Tags, Status, Content as ContentType } from "@/types";
 import { CONTENT_LIST_DEFAULT_PAGE_SIZE } from "@/constants";
 import {
   partialContentForContentList,
@@ -21,8 +21,21 @@ export type ContentListFilter = {
   tags?: Tags[];
   genres?: string[];
   status?: Status;
-  populatePath?: string;
-  populateSelect?: string;
+  populate?: {
+    from: string;
+    localField: string;
+    as: string;
+    project: string;
+  }[];
+};
+
+type ContentListResponse = {
+  error: boolean;
+  errorMessage?: string;
+  totalPages: number;
+  totalContent: number;
+  pageNumber: number;
+  contentList: ContentType[];
 };
 
 async function getFilterQuery(listFilter: ContentListFilter) {
@@ -89,7 +102,7 @@ function getPartialContentSelect(listFilter: ContentListFilter) {
 
 function getProjectFields(partialContent: string) {
   const fields = partialContent.split(" ");
-  const projection: any = {};
+  const projection: Record<string, 1> = {};
 
   fields.forEach((field) => {
     projection[field] = 1;
@@ -98,62 +111,33 @@ function getProjectFields(partialContent: string) {
   return projection;
 }
 
-export async function getContentListWithAggregation(
-  listFilter: ContentListFilter,
-  listPageNumber?: number,
-  listSize?: number,
-) {
-  await connectToMongoDB();
+function getLookupStages(listFilter: ContentListFilter) {
+  const { populate = [] } = listFilter;
 
-  const pageSize = listSize ?? CONTENT_LIST_DEFAULT_PAGE_SIZE;
-  const pageNumber = listPageNumber ?? 1;
-  const skip = (pageNumber - 1) * pageSize;
-
-  const filterQuery = await getFilterQuery(listFilter);
-  const sortQuery: Record<string, 1 | -1> | {} = getSortQuery(listFilter);
-  const partialContent = getPartialContentSelect(listFilter);
-  const { populatePath = "", populateSelect = "" } = listFilter;
-
-  const aggregatedResult = await Content.aggregate([
-    {
-      $facet: {
-        metaData: [{ $count: "totalContent" }],
-        data: [
-          { $match: filterQuery },
-          { $sort: sortQuery },
-          { $skip: skip },
-          { $limit: pageSize },
-          {
-            $lookup: {
-              from: "Genres",
-              let: { genreIds: "$genres" },
-              pipeline: [
-                {
-                  $match: {
-                    $expr: {
-                      $in: ["$_id", "$$genreIds"],
-                    },
-                  },
-                },
-                { $project: { name: 1, description: 1 } },
-              ],
-              as: "genres",
+  return populate.map((populateItem) => ({
+    $lookup: {
+      from: populateItem.from,
+      let: { ids: `$${populateItem.localField}` },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $in: ["$_id", "$$ids"],
             },
           },
-          { $project: getProjectFields(partialContent) },
-        ],
-      },
+        },
+        { $project: getProjectFields(populateItem.project) },
+      ],
+      as: populateItem.as,
     },
-  ]);
-
-  return JSON.stringify(aggregatedResult[0]["data"][0].genres);
+  }));
 }
 
 export default async function getContentList(
   listFilter: ContentListFilter,
   listPageNumber?: number,
   listSize?: number,
-) {
+): Promise<ContentListResponse> {
   try {
     await connectToMongoDB();
 
@@ -162,33 +146,47 @@ export default async function getContentList(
     const skip = (pageNumber - 1) * pageSize;
 
     const filterQuery = await getFilterQuery(listFilter);
-    const sortQuery = getSortQuery(listFilter);
+    const sortQuery: Record<string, 1 | -1> | {} = getSortQuery(listFilter);
+    const lookupStages = getLookupStages(listFilter);
     const partialContent = getPartialContentSelect(listFilter);
-    const { populatePath = "", populateSelect = "" } = listFilter;
 
-    const contentDocs = await Content.find(filterQuery)
-      .select(partialContent)
-      .sort(sortQuery)
-      .skip(skip)
-      .limit(pageSize)
-      .populate(
-        populatePath && populateSelect
-          ? {
-              path: populatePath,
-              select: populateSelect,
-            }
-          : [],
-      );
+    const aggregatedContentList = await Content.aggregate([
+      {
+        $facet: {
+          metaData: [{ $count: "totalContent" }],
+          data: [
+            { $match: filterQuery },
+            { $sort: sortQuery },
+            { $skip: skip },
+            { $limit: pageSize },
+            ...lookupStages,
+            { $project: getProjectFields(partialContent) },
+          ],
+        },
+      },
+    ]);
 
-    const formatedContentDocs = contentDocs.map((content) =>
-      formatMongooseDoc(content.toObject()),
-    );
+    const { totalContent = 0 } = aggregatedContentList[0].metaData[0] ?? {};
+    const contentList =
+      aggregatedContentList[0].data?.map((content: any) =>
+        formatMongooseDoc(content),
+      ) ?? [];
 
-    return JSON.parse(JSON.stringify(formatedContentDocs));
+    return {
+      error: false,
+      totalPages: Math.ceil(totalContent / pageSize),
+      totalContent,
+      pageNumber,
+      contentList,
+    };
   } catch (error: any) {
     return {
       error: true,
       errorMessage: error.message,
+      totalPages: 1,
+      totalContent: 0,
+      pageNumber: 1,
+      contentList: [],
     };
   }
 }
