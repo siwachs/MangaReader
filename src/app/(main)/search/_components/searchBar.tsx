@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
 
@@ -13,20 +13,24 @@ const SearchBar: React.FC<{ word?: string }> = ({ word }) => {
 
   const search = () => {
     const trimmedKeyword = keyword.trim();
-    if (!trimmedKeyword) return router.push("/search");
+    if (trimmedKeyword) return router.push(`/search?word=${trimmedKeyword}`);
 
-    router.push(`/search?word=${trimmedKeyword}`);
+    router.push("/search");
   };
 
-  useDebounce(search, [keyword], DEBOUNCED_DELAY);
+  const cancelDebounce = useDebounce(search, [keyword], DEBOUNCED_DELAY);
 
   const sumbitKeyword = (e: React.FormEvent) => {
     e.preventDefault();
+
+    cancelDebounce();
     search();
   };
 
-  const changeKeyword = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setKeyword(e.target.value);
+  const changeKeyword = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value),
+    [],
+  );
 
   return (
     <div className="flex h-[100px] w-full items-center justify-center overflow-hidden md:mt-[120px] md:h-[150px]">
