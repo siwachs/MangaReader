@@ -19,8 +19,8 @@ const Channels: React.FC<{
               key={channel}
               href={
                 title === "Genres"
-                  ? `/genre/${channel}/${currentStatus}`
-                  : `/genre/${currentGenre}/${index}`
+                  ? `/genre/${encodeURIComponent(channel)}/${currentStatus}`
+                  : `/genre/${encodeURIComponent(currentGenre)}/${index}`
               }
               className="last:mr-[10%]"
             >

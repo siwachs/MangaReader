@@ -5,12 +5,15 @@ import {
   CONTENT_LIST_PAGE_SIZE,
   CONTENT_LIST_DEFAULT_PAGE_NUMBER,
 } from "@/constants";
+import ErrorMessage from "@/components/messages/errorMessage";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
-import { Content, GenresResponse } from "@/types";
-import getGenres from "@/libs/dbCRUD/getGenres";
+import { GenresResponse } from "@/types";
 
 import numeral from "@/libs/numeral";
-import getContentList from "@/libs/dbCRUD/getContentList";
+import getGenres from "@/libs/dbCRUD/getGenres";
+import getContentList, {
+  ContentListResponse,
+} from "@/libs/dbCRUD/getContentList";
 
 import { FaHeart } from "react-icons/fa";
 
@@ -19,18 +22,19 @@ const GernresList: React.FC<{
 
   seeAll?: string;
 }> = async ({ title, seeAll }) => {
-  const genresResponse: GenresResponse = await getGenres();
-  genresResponse.genres = genresResponse.genres?.map((genre) => ({
-    ...genre,
-    name: genre.name.toLowerCase(),
-  }));
-  const genre = genresResponse?.genres?.[0].name ?? "all";
+  const genresResponse: GenresResponse = await getGenres({
+    nameInLowercase: true,
+  });
+  const genreNames = genresResponse.genres?.map((genre) => genre.name) ?? [];
+  const genre = genreNames?.[0] ?? "all";
 
-  const genresList: Content[] = await getContentList(
+  const genresListResponse: ContentListResponse = await getContentList(
     { filterBy: "genres", genres: [genre] },
     CONTENT_LIST_DEFAULT_PAGE_NUMBER,
     CONTENT_LIST_PAGE_SIZE,
   );
+
+  const { error, errorMessage, contentList } = genresListResponse;
 
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
@@ -50,30 +54,34 @@ const GernresList: React.FC<{
 
           {/* Genres List */}
           <div className="hide-scrollbar ml-[5px] mt-2.5 overflow-auto whitespace-nowrap">
-            {genresResponse?.genres?.map((genre, index) => (
+            {genreNames.map((genre, index) => (
               <div
-                key={genre.id}
+                key={genre}
                 className="mb-[5px] mr-2.5 inline-block px-[5px] md:mr-5 md:px-2.5"
               >
                 <Link
                   data-active={index === 0}
                   className="block h-5 text-sm capitalize text-[var(--app-text-color-muted)] data-[active=true]:border-b-2 data-[active=true]:border-[var(--app-text-color-red)] data-[active=true]:font-bold data-[active=true]:text-[var(--app-text-color-red)] md:h-[30px] md:text-lg/[30px]"
-                  href={`/genre/${genre.name}/0`}
+                  href={`/genre/${encodeURIComponent(genre)}/0`}
                 >
-                  {genre.name}
+                  {genre}
                 </Link>
               </div>
             ))}
           </div>
 
+          {error && (
+            <ErrorMessage>{`Unable to load Genre list because ${errorMessage}`}</ErrorMessage>
+          )}
+
           <div className="mt-5 flex flex-wrap gap-[2%] overflow-hidden md:mt-[30px] md:gap-[30px]">
-            {genresList?.map((content, index) => (
+            {contentList.map((content, index) => (
               <div
                 key={content.id}
                 className="mb-5 w-[32%] md:mb-[30px] md:w-[175px]"
               >
                 <Link
-                  href={`/${content.title.toLocaleLowerCase().replaceAll(" ", "-")}?content_id=${content.id}`}
+                  href={`/${encodeURIComponent(content.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
                 >
                   <div className="h-[140px] w-full overflow-hidden rounded md:h-[233px]">
                     <Image

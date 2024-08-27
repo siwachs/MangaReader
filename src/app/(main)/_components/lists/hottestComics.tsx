@@ -1,25 +1,35 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { Content, Genre } from "@/types";
-import { HOTTEST_CONTENT_PAGE_SIZE } from "@/constants";
+import { Genre } from "@/types";
+import {
+  HOTTEST_CONTENT_PAGE_SIZE,
+  CONTENT_LIST_DEFAULT_PAGE_NUMBER,
+} from "@/constants";
+import ErrorMessage from "@/components/messages/errorMessage";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 
 import numeral from "@/libs/numeral";
-import getContentList from "@/libs/dbCRUD/getContentList";
+import getContentList, {
+  ContentListResponse,
+} from "@/libs/dbCRUD/getContentList";
 
 import { AiFillLike } from "react-icons/ai";
 import { FaEye } from "react-icons/fa";
 
 const HottestComics: React.FC = async () => {
-  const hottestComicsList: Content[] = await getContentList(
+  const hottestComicsListResponse: ContentListResponse = await getContentList(
     {
       sortBy: "hottest",
-      populatePath: "genres",
-      populateSelect: "name",
+      populate: [
+        { from: "Genres", localField: "genres", as: "genres", project: "name" },
+      ],
     },
+    CONTENT_LIST_DEFAULT_PAGE_NUMBER,
     HOTTEST_CONTENT_PAGE_SIZE,
   );
+
+  const { error, errorMessage, contentList } = hottestComicsListResponse;
 
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
@@ -34,8 +44,12 @@ const HottestComics: React.FC = async () => {
           </span>
         </Link>
 
+        {error && (
+          <ErrorMessage>{`Unable to load Hottest Comics because ${errorMessage}`}</ErrorMessage>
+        )}
+
         <div className="mx-auto my-2.5 w-full overflow-hidden lg:flex">
-          {hottestComicsList?.map((content, index) => (
+          {contentList.map((content, index) => (
             <Link
               key={content.id}
               href={`/${encodeURIComponent(content.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}

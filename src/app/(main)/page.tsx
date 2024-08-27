@@ -6,6 +6,7 @@ import HottestComics from "@/app/(main)/_components/lists/hottestComics";
 import GernresList from "@/app/(main)/_components/lists/genresList";
 
 import {
+  FREE_READ_CONTENT_LIST_PAGE_SIZE,
   CONTENT_LIST_PAGE_SIZE,
   CONTENT_LIST_DEFAULT_PAGE_NUMBER,
 } from "@/constants";
@@ -49,7 +50,7 @@ export default async function HomePage() {
     getContentList(
       { filterBy: "tags", sortBy: "updatedToday", tags: ["FreeRead"] },
       CONTENT_LIST_DEFAULT_PAGE_NUMBER,
-      CONTENT_LIST_PAGE_SIZE,
+      FREE_READ_CONTENT_LIST_PAGE_SIZE,
     ),
     getContentList(
       { sortBy: "new" },
@@ -88,8 +89,8 @@ export default async function HomePage() {
         contentListResponse={freeReadListResponse}
         title="free read Manga|Anime|comics|manhwa|manhua|online"
       />
-      {/* <HottestComics /> */}
-      {/* <GernresList title="Genres" seeAll="/genre/all/0" /> */}
+      <HottestComics />
+      <GernresList title="Genres" seeAll="/genre/all/0" />
       <ContentList
         contentListResponse={newComicsListResponse}
         title="New Comics"
@@ -98,12 +99,12 @@ export default async function HomePage() {
       <ContentList
         contentListResponse={completedListResponse}
         title="Completed"
-        seeAll="/api/list"
+        seeAll="/genre/all/2"
       />
       <ContentList
         contentListResponse={mangaUpdateTodayListResponse}
         title="Manga Update Today"
-        seeAll="/api/list"
+        seeAll="/genre/all/1"
       />
     </>
   );

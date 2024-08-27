@@ -28,7 +28,7 @@ const ContentList: React.FC<{
         )}
 
         {error && (
-          <ErrorMessage>{`Unable to load the ${title} because ${errorMessage}`}</ErrorMessage>
+          <ErrorMessage>{`Unable to load ${title} because ${errorMessage}`}</ErrorMessage>
         )}
 
         <div className="mt-5 flex flex-wrap gap-[2%] overflow-hidden md:mt-[30px] md:gap-[30px]">

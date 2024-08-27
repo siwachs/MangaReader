@@ -19,7 +19,7 @@ import getGenres, { getDescriptionByName } from "@/libs/dbCRUD/getGenres";
 
 import { FaHeart, FaEye } from "react-icons/fa";
 
-const statusList = ["Hottest", "Updated", "Completed"];
+const statusList = ["Hottest", "Updated", "Completed", "New"];
 
 export async function generateMetadata(
   { params, searchParams }: GenrePageReqObj,
@@ -58,6 +58,8 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
         return { sortBy: "updatedToday" };
       case 2:
         return { status: "Completed" };
+      case 3:
+        return { sortBy: "new" };
       default:
         return {};
     }
@@ -106,7 +108,7 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
       </div>
 
       {error && (
-        <ErrorMessage>{`Unable to load the Genre list because ${errorMessage}`}</ErrorMessage>
+        <ErrorMessage>{`Unable to load Genre list because ${errorMessage}`}</ErrorMessage>
       )}
 
       <div className="mx-auto mt-5 w-full max-w-[1200px] overflow-hidden md:mb-5 md:mt-[50px]">
