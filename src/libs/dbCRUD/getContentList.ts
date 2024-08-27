@@ -49,7 +49,7 @@ async function getFilterQuery(listFilter: ContentListFilter) {
       return { status };
 
     case "genres":
-    case "genresPageList":
+    case "genresPageList": {
       if (genres.includes("all")) return status ? { status } : {};
 
       const genreIds = await Genre.find({
@@ -60,6 +60,7 @@ async function getFilterQuery(listFilter: ContentListFilter) {
       };
 
       return status ? { $and: [genreFilter, { status }] } : genreFilter;
+    }
 
     default:
       return {};

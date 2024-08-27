@@ -1,30 +1,47 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
-import { GenrePageReqObj, GenresResponse, Genre } from "@/types";
+import { GenrePageReqObj, Genre } from "@/types";
 import Error from "@/components/messages/error";
 import TabNavigation from "@/components/tabNavigation";
 import BreadCrum from "@/components/breadcrum";
 import Channels from "./_components/channels";
 
+import { getCapitalizedWord } from "@/libs/stringTransformations";
 import numeral from "@/libs/numeral";
+
 import getContentList, {
   ContentListFilter,
 } from "@/libs/dbCRUD/getContentList";
-import getGenres from "@/libs/dbCRUD/getGenres";
+import getGenres, { getDescriptionByName } from "@/libs/dbCRUD/getGenres";
 
-import { FaHeart } from "react-icons/fa";
-import { FaEye } from "react-icons/fa";
+import { FaHeart, FaEye } from "react-icons/fa";
 
 const statusList = ["Hottest", "Updated", "Completed"];
 
 const paginationButtonClasses =
   "flex h-[50px] w-[50%] items-center justify-center text-center text-sm aria-disabled:pointer-events-none aria-disabled:border-gray-300 aria-disabled:text-gray-300 md:w-[180px] md:rounded-[25px] md:border md:border-gray-600";
 
+export async function generateMetadata(
+  { params, searchParams }: GenrePageReqObj,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { name: encodedName } = params;
+  const name = decodeURI(encodedName);
+  const description = await getDescriptionByName(name);
+
+  return {
+    title: `${getCapitalizedWord(name)} - Read Manga, Anime, Manhua, and Donghua Online - Manga Reader`,
+    description,
+  };
+}
+
 export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
-  const genresResponse: GenresResponse = await getGenres();
-  const genreNames =
-    genresResponse?.genres?.map((genre) => genre.name.toLowerCase()) ?? [];
+  const genresResponse = await getGenres({
+    nameInLowercase: true,
+  });
+  const genreNames = genresResponse?.genres?.map((genre) => genre.name) ?? [];
   genreNames.unshift("all");
 
   const { name: encodedName, status: statusParam } = req.params;
