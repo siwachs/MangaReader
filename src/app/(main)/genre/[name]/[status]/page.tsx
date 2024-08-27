@@ -2,7 +2,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
-import { GenrePageReqObj, Genre } from "@/types";
+import { Genre } from "@/types";
 import TabNavigation from "@/components/tabNavigation";
 import BreadCrum from "@/components/breadcrum";
 import Channels from "./_components/channels";
@@ -34,6 +34,11 @@ export async function generateMetadata(
     description,
   };
 }
+
+type GenrePageReqObj = {
+  params: { name: string; status: string };
+  searchParams: { page?: string };
+};
 
 export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
   const genresResponse = await getGenres({

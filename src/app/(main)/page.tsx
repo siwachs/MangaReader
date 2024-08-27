@@ -89,7 +89,7 @@ export default async function HomePage() {
         contentListResponse={freeReadListResponse}
         title="free read Manga|Anime|comics|manhwa|manhua|online"
       />
-      <HottestComics />
+      <HottestComics title="Hottest Comics" seeAll="/genre/all/0" />
       <GernresList title="Genres" seeAll="/genre/all/0" />
       <ContentList
         contentListResponse={newComicsListResponse}

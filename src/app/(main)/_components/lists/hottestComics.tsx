@@ -17,7 +17,10 @@ import getContentList, {
 import { AiFillLike } from "react-icons/ai";
 import { FaEye } from "react-icons/fa";
 
-const HottestComics: React.FC = async () => {
+const HottestComics: React.FC<{
+  title: string;
+  seeAll?: string;
+}> = async ({ title, seeAll }) => {
   const hottestComicsListResponse: ContentListResponse = await getContentList(
     {
       sortBy: "hottest",
@@ -35,17 +38,19 @@ const HottestComics: React.FC = async () => {
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
       <div className="relative mx-auto my-5 w-full max-w-[1200px] overflow-hidden md:my-[30px]">
         <h2 className="w-[70%] truncate text-[22px] font-bold md:text-[28px]">
-          Hottest Comics
+          {title}
         </h2>
 
-        <Link href="/api/seeAll">
-          <span className="absolute right-2.5 top-2.5 text-sm text-[var(--app-text-color-red)] md:right-0 md:text-lg">
-            See all &gt;
-          </span>
-        </Link>
+        {seeAll && (
+          <Link href={seeAll}>
+            <span className="absolute right-2.5 top-2.5 text-sm text-[var(--app-text-color-red)] md:right-0 md:text-lg">
+              See all &gt;
+            </span>
+          </Link>
+        )}
 
         {error && (
-          <ErrorMessage>{`Unable to load Hottest Comics because ${errorMessage}`}</ErrorMessage>
+          <ErrorMessage>{`Unable to load ${title} because ${errorMessage}`}</ErrorMessage>
         )}
 
         <div className="mx-auto my-2.5 w-full overflow-hidden lg:flex">

@@ -137,7 +137,7 @@ const ChaptersList: React.FC<{
         </span>
       </div>
 
-      <div className="detail-subscribe mx-4 my-2 flex items-center justify-between rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 md:hidden">
+      <div className="detail-subscribe mx-4 my-2 flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 md:hidden">
         <p className="text-sm/[18px] font-normal text-gray-500/70">
           {reminderText}
         </p>
@@ -167,7 +167,7 @@ const ChaptersList: React.FC<{
               setInfiniteScroll(true);
             }
           }}
-          className="mx-4 my-2 flex cursor-pointer items-center justify-center rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-gray-500/70 md:hidden"
+          className="mx-4 my-2 flex cursor-pointer items-center justify-center rounded-lg bg-gray-100 px-4 py-3 text-gray-500/70 md:hidden"
         >
           View All Chapters &nbsp;&nbsp;&nbsp;&gt;&gt;&gt;
         </div>
@@ -217,7 +217,7 @@ const ChaptersList: React.FC<{
           onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
             setShowAll((prev) => !prev);
           }}
-          className="mb-4 box-content hidden h-[43px] w-[288px] cursor-pointer items-center justify-center gap-1 rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 text-base text-gray-500/70 md:flex"
+          className="mb-4 box-content hidden h-[43px] w-[288px] cursor-pointer items-center justify-center gap-1 rounded-lg bg-gray-100 px-4 py-3 text-base text-gray-500/70 md:flex"
         >
           <span>{showAll ? "Hide All Chapters" : "View All Chapters"}</span>
           <ChevronDown

@@ -133,7 +133,7 @@ const SetUsername: React.FC<{
 
         <div className="w-full">
           <div
-            className={`flex items-center rounded-lg border bg-[var(--app-text-color-very-light-gray)] ${usernameQuery.error ? "border-red-500" : "border-transparent"}`}
+            className={`flex items-center rounded-lg border bg-gray-100 ${usernameQuery.error ? "border-red-500" : "border-transparent"}`}
           >
             <input
               value={username}
@@ -172,7 +172,7 @@ const SetUsername: React.FC<{
             type="button"
             onClick={() => setIsSetUsernameOpen(false)}
             aria-label="Cancel"
-            className="inline-block h-[42px] rounded-[20px] bg-[var(--app-text-color-very-light-gray)] px-9 hover:bg-gray-200"
+            className="inline-block h-[42px] rounded-[20px] bg-gray-100 px-9 hover:bg-gray-200"
           >
             Cancel
           </button>

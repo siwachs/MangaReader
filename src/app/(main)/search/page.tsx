@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import TabNavigation from "@/components/tabNavigation";
-import { SearchGlass } from "@/components/icons";
+import SearchBar from "./_components/searchBar";
 
 const dummyContent = [
   "/dummyContent/1.webp",
@@ -114,41 +114,21 @@ const NoResults: React.FC = () => {
   );
 };
 
-export default function SearchPage() {
-  const haveResult = false;
+type SearchPageReqObj = { params: {}; searchParams: { word?: string } };
+
+export default async function SearchPage(req: Readonly<SearchPageReqObj>) {
+  const { word } = req.searchParams;
 
   return (
     <>
       <TabNavigation />
       <div className="search-page-wrapper">
-        <div className="search-box flex h-[100px] w-full items-center justify-center overflow-hidden md:mt-[120px] md:h-[150px]">
-          <div className="box-content h-[33px] w-[90%] rounded-[500px] border border-[var(--app-text-color-red)] bg-[var(--app-text-color-very-light-gray)] md:h-[45px] md:w-[590px] md:border-2">
-            <form className="flex h-full w-full items-center justify-between rounded-[500px]">
-              <input
-                type="text"
-                placeholder="Enter manga name"
-                className="ml-[11px] w-[85%] border-none bg-transparent text-xs/[25px] outline-none placeholder:text-[var(--app-text-color-charcoal-gray)] md:ml-[17px] md:w-[90%] md:text-sm/[30px]"
-              />
-              <button
-                type="submit"
-                className="flex h-full min-w-[55px] flex-shrink-0 items-center justify-center gap-1 rounded-[20px] bg-[var(--app-text-color-red)] px-3 text-xs text-white md:gap-2 md:rounded-[500px] md:px-5 md:text-base"
-              >
-                <SearchGlass
-                  className="h-[14px] w-[14px] md:h-5 md:w-5"
-                  strokeWidth={2.3}
-                />
-                <span>Search</span>
-              </button>
-            </form>
-          </div>
-        </div>
+        <SearchBar word={word} />
 
         <div className="search-page mx-[5%] w-[90%] md:mx-0 md:w-full">
-          <HaveResults title="Internet search" />
-          <HaveResults title="Comics" />
-          <HaveResults title="Novels" />
+          <HaveResults title="Manga|Comics" />
 
-          {haveResult && <NoResults />}
+          <NoResults />
         </div>
       </div>
     </>

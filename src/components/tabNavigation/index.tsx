@@ -34,17 +34,13 @@ const TabNavigation: React.FC = () => {
           />
         ) : (
           <div key={key} className="relative mx-2.5 flex-shrink-0">
-            <Link
-              href={
-                key === "signin" ? `${link}?callbackurl=${currentUrl}` : link
-              }
-            >
+            <Link href={link}>
               <span className="text-sm font-normal leading-[37px] text-gray-800">
                 {label}
               </span>
 
               <div
-                className={`${currentUrl.includes(link) ? "block" : "hidden"} absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]`}
+                className={`${currentUrl === link ? "block" : "hidden"} absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]`}
               />
             </Link>
           </div>

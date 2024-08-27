@@ -9,7 +9,7 @@ const ChapterLink: React.FC<{
   href: string;
 }> = React.memo(({ title, releaseDate, href }) => {
   return (
-    <div className="mx-4 my-2 rounded-lg bg-[var(--app-text-color-very-light-gray)] px-4 py-3 md:m-0 md:mb-4 md:w-80">
+    <div className="mx-4 my-2 rounded-lg bg-gray-100 px-4 py-3 md:m-0 md:mb-4 md:w-80">
       <div className="flex items-center justify-between">
         <Link href={href}>
           <p className="text-sm/[18px] font-normal">{title}</p>
