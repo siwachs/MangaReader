@@ -64,7 +64,6 @@ body {
 @layer utilities {
   .font-noto-sans-sc {
     font-family: Noto Sans SC;
-    color: #4d5168;
   }
 
   .hide-scrollbar {

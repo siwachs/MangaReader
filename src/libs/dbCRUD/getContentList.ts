@@ -29,7 +29,7 @@ export type ContentListFilter = {
   }[];
 };
 
-type ContentListResponse = {
+export type ContentListResponse = {
   error: boolean;
   errorMessage?: string;
   totalPages: number;

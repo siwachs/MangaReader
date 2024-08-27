@@ -5,23 +5,28 @@ import Link from "next/link";
 import Image from "next/image";
 import "./slider.css";
 
+import ErrorMessage from "@/components/messages/errorMessage";
+import { ContentListResponse } from "@/libs/dbCRUD/getContentList";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
+
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 
 const Banner: React.FC<{
-  bannerList: { id: string; thumbnail: string; title: string }[];
-}> = ({ bannerList }) => {
+  bannerListResponse: ContentListResponse;
+}> = ({ bannerListResponse }) => {
+  const { error, errorMessage, contentList } = bannerListResponse;
+
   const [currentSlide, setCurrentSlide] = useState(
-    Math.floor(bannerList.length / 2),
+    Math.floor(contentList.length / 2),
   );
 
   const getImageClass = (index: number): string => {
     if (index === currentSlide) return "centerActive";
 
-    if ((currentSlide - 1 + bannerList.length) % bannerList.length === index)
+    if ((currentSlide - 1 + contentList.length) % contentList.length === index)
       return "leftActive";
 
-    if ((currentSlide + 1) % bannerList.length === index) return "rightActive";
+    if ((currentSlide + 1) % contentList.length === index) return "rightActive";
 
     return "imageHidden";
   };
@@ -29,8 +34,8 @@ const Banner: React.FC<{
   const changeSlide = (direction: "left" | "right") => {
     setCurrentSlide((prev) =>
       direction === "right"
-        ? (prev + 1) % bannerList.length
-        : (prev - 1 + bannerList.length) % bannerList.length,
+        ? (prev + 1) % contentList.length
+        : (prev - 1 + contentList.length) % contentList.length,
     );
   };
 
@@ -38,7 +43,11 @@ const Banner: React.FC<{
     <div className="banner mx-auto mt-5 w-[90%] overflow-hidden md:m-0 md:w-full">
       <div className="banner-images relative mx-auto w-full max-w-[1200px] md:my-[30px]">
         <div className="slide relative h-[60vw] w-full overflow-hidden md:h-[432px]">
-          {bannerList.map((image, index) => (
+          {error && (
+            <ErrorMessage>{`Unable to load the Banner because ${errorMessage}`}</ErrorMessage>
+          )}
+
+          {contentList.map((image, index) => (
             <Link
               key={image.id}
               href={`${encodeURIComponent(image.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${image.id}`}
@@ -61,7 +70,7 @@ const Banner: React.FC<{
           ))}
 
           <div className="absolute bottom-0 z-30 flex w-full justify-center">
-            {bannerList.map((image, index) => (
+            {contentList.map((image, index) => (
               <button
                 key={image.id}
                 className={`m-[5px] h-[9px] rounded ${currentSlide === index ? "pointer-events-none w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-gray-300"}`}

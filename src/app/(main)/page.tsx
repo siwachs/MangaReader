@@ -13,14 +13,14 @@ import getContentList from "@/libs/dbCRUD/getContentList";
 
 export default async function HomePage() {
   const [
-    bannerList,
-    readWithEditor,
-    completedClassicList,
-    weeklyNovelList,
-    freeReadList,
-    newComicsList,
-    completedList,
-    mangaUpdateTodayList,
+    bannerListResponse,
+    readWithEditorResponse,
+    completedClassicListResponse,
+    weeklyNovelListResponse,
+    freeReadListResponse,
+    newComicsListResponse,
+    completedListResponse,
+    mangaUpdateTodayListResponse,
   ] = await Promise.all([
     getContentList(
       { filterBy: "tags", sortBy: "updatedToday", tags: ["BannerContent"] },
@@ -71,31 +71,37 @@ export default async function HomePage() {
   return (
     <>
       <TabNavigation />
-      <Banner bannerList={bannerList} />
-      <ContentList contentList={readWithEditor} title="👏🏻 Read with Editor" />
+      <Banner bannerListResponse={bannerListResponse} />
       <ContentList
-        contentList={completedClassicList}
+        contentListResponse={readWithEditorResponse}
+        title="👏🏻 Read with Editor"
+      />
+      <ContentList
+        contentListResponse={completedClassicListResponse}
         title="Completed Classics👍🏻"
       />
-      <ContentList contentList={weeklyNovelList} title="✨Weekly Novel✨" />
       <ContentList
-        contentList={freeReadList}
+        contentListResponse={weeklyNovelListResponse}
+        title="✨Weekly Novel✨"
+      />
+      <ContentList
+        contentListResponse={freeReadListResponse}
         title="free read Manga|Anime|comics|manhwa|manhua|online"
       />
-      <HottestComics />
-      <GernresList title="Genres" seeAll="/genre/all/0" />
+      {/* <HottestComics /> */}
+      {/* <GernresList title="Genres" seeAll="/genre/all/0" /> */}
       <ContentList
-        contentList={newComicsList}
+        contentListResponse={newComicsListResponse}
         title="New Comics"
         seeAll="/api/list"
       />
       <ContentList
-        contentList={completedList}
+        contentListResponse={completedListResponse}
         title="Completed"
         seeAll="/api/list"
       />
       <ContentList
-        contentList={mangaUpdateTodayList}
+        contentListResponse={mangaUpdateTodayListResponse}
         title="Manga Update Today"
         seeAll="/api/list"
       />

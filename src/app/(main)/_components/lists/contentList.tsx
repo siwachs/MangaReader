@@ -1,13 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import ErrorMessage from "@/components/messages/errorMessage";
+import { ContentListResponse } from "@/libs/dbCRUD/getContentList";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 
 const ContentList: React.FC<{
   title: string;
   seeAll?: string;
-  contentList: { id: string; poster: string; title: string }[];
-}> = ({ title, seeAll, contentList }) => {
+  contentListResponse: ContentListResponse;
+}> = ({ title, seeAll, contentListResponse }) => {
+  const { error, errorMessage, contentList } = contentListResponse;
+
   return (
     <div className="mx-auto w-[90%] overflow-hidden md:mb-[30px] md:w-full">
       <div className="relative mx-auto my-5 w-full max-w-[1200px] overflow-hidden md:my-[30px]">
@@ -21,6 +25,10 @@ const ContentList: React.FC<{
               See all &gt;
             </span>
           </Link>
+        )}
+
+        {error && (
+          <ErrorMessage>{`Unable to load the ${title} because ${errorMessage}`}</ErrorMessage>
         )}
 
         <div className="mt-5 flex flex-wrap gap-[2%] overflow-hidden md:mt-[30px] md:gap-[30px]">
