@@ -103,3 +103,9 @@ export type GenresResponse = {
   genres?: Genre[];
   errorMessage?: string;
 };
+
+export type ContentResponse = {
+  error: boolean;
+  content?: Content;
+  errorMessage?: string;
+};

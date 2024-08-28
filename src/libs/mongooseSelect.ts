@@ -4,8 +4,10 @@ export const partialUser =
 export const partialUserWithVotedComments =
   "-likedChapters -subscriptions -password -emailVerified";
 
-export const partialContent =
+export const partialContentForUpdate =
   "tags thumbnail poster title status genres author synonyms description imagesAndWallpapers";
+export const partialContentForContentPage =
+  "thumbnail poster title status genres rating author synonyms chapters description imagesAndWallpapers news";
 
 export const partialGenre = "name";
 export const partialGenreWithDescription = "name description";

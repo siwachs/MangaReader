@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 
-import { pageReqObj } from "@/types";
 import getServerSession from "@/libs/auth/getServerSession";
 import AddGenreForm from "./_components/addGenreForm";
 import AddOrUpdateContentForm from "./_components/addOrUpdateContentForm";
@@ -8,12 +7,25 @@ import AddOrUpdateContentForm from "./_components/addOrUpdateContentForm";
 import getGenres from "@/libs/dbCRUD/getGenres";
 import getContent from "@/libs/dbCRUD/getContent";
 
-export default async function ContentPage(req: Readonly<pageReqObj>) {
+type AdminContentPageReqObj = {
+  searchParams: {
+    content_id?: string;
+  };
+};
+
+export default async function ContentPage(
+  req: Readonly<AdminContentPageReqObj>,
+) {
   const data = await getServerSession();
   if (!data?.user?.isAdmin) return notFound();
 
-  const genresResponse = await getGenres();
-  const contentResponse = await getContent(req.searchParams.content_id);
+  const contentId = (req.searchParams.content_id ?? "").trim();
+  const genresResponse = await getGenres({ forClientComponent: true });
+  const contentResponse = contentId
+    ? await getContent(contentId, {
+        forClientComponent: true,
+      })
+    : { error: false };
 
   return (
     <>

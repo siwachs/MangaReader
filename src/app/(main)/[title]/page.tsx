@@ -1,9 +1,14 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import React from "react";
-import type { Metadata } from "next";
 
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+
+import { Content } from "./_types";
+import Description from "./_components/description";
+import ChaptersList from "./_components/chaptersList";
+import BreadCrum from "@/components/breadcrum";
 
 import {
   Calender,
@@ -13,11 +18,10 @@ import {
   ChevronDown,
   InformationCircle,
 } from "@/components/icons";
-import { pageReqObj } from "@/types";
-import { Content } from "./_types";
-import Description from "./_components/description";
-import ChaptersList from "./_components/chaptersList";
-import BreadCrum from "@/components/breadcrum";
+
+import getContent, {
+  getContentTitleAndDescription,
+} from "@/libs/dbCRUD/getContent";
 
 const data: Content = {
   poster: "/dummyContent/mp_poster.jpg",
@@ -827,23 +831,45 @@ const data: Content = {
   ],
 };
 
-export const metadata: Metadata = {
-  title: `${data.title} - MangaToon`,
-  description: data.description,
+export async function generateMetadata(
+  { params, searchParams }: ContentPageReqObj,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const contentId = (searchParams.content_id ?? "").trim();
+  const contentResponse = await getContentTitleAndDescription(contentId);
+  const { title, description } = contentResponse;
+
+  return {
+    title: `${title} - Manga Reader`,
+    description,
+  };
+}
+
+type ContentPageReqObj = {
+  params: { title: string };
+  searchParams: {
+    content_id?: string;
+  };
 };
 
-export default function TitlePage(req: Readonly<pageReqObj>) {
-  if (!req.searchParams.content_id) {
+export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
+  const contentId = (req.searchParams.content_id ?? "").trim();
+
+  const contentResponse = await getContent(contentId);
+  const { error, errorMessage, content } = contentResponse;
+
+  const contentNotFound = !error && !content;
+  if (!contentId || contentNotFound) {
     return notFound();
   }
 
   return (
     <>
-      <BreadCrum
+      {/* <BreadCrum
         titleOne={data.genres[0]}
         titleOneLink="/"
         titleTwo={data.title}
-      />
+      /> */}
 
       <div className="detail-wrapper overflow-hidden">
         <div className="detail-image relative min-h-[208px] w-full md:py-8 lg:bg-[var(--app-text-color-almost-white)]">
@@ -853,6 +879,7 @@ export default function TitlePage(req: Readonly<pageReqObj>) {
             alt={data.title}
             className="absolute left-0 top-0 h-full w-full object-cover object-center lg:hidden"
           />
+
           <div className="absolute left-0 top-0 h-full w-full bg-[var(--app-background-overlay-transparent-black)] backdrop-blur-[10px] lg:hidden" />
 
           <div className="detail-header relative mx-auto flex w-full max-w-[1200px] gap-4 p-[24px_16px] text-xs text-white md:gap-5 md:p-0 lg:text-[var(--app-text-color-primary)]">

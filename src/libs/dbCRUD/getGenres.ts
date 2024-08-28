@@ -1,13 +1,14 @@
 import connectToMongoDB from "../db/connectToMongoDB";
 import Genre from "@/models/Genre";
 
-import { Genre as GenreType, GenresResponse } from "@/types";
+import { GenresResponse } from "@/types";
 import { partialGenre, partialGenreWithDescription } from "../mongooseSelect";
 import formatMongooseDoc from "../db/formatMongooseDoc";
 
 export default async function getGenres({
   nameInLowercase = false,
   withDescription = false,
+  forClientComponent = false,
 } = {}): Promise<GenresResponse> {
   try {
     await connectToMongoDB();
@@ -15,17 +16,22 @@ export default async function getGenres({
       .sort({ updatedAt: -1 })
       .select(withDescription ? partialGenreWithDescription : partialGenre);
 
-    const formatedGenresDoc =
+    const formattedGenresDoc =
       genresDoc?.map((genre) => {
-        const formatedGenre = formatMongooseDoc(genre.toObject());
-        if (nameInLowercase)
-          formatedGenre.name = (formatedGenre.name! as string).toLowerCase();
-        return formatedGenre;
+        const formattedGenre = formatMongooseDoc(genre.toObject());
+
+        if (nameInLowercase) {
+          formattedGenre.name = (formattedGenre.name! as string).toLowerCase();
+        }
+
+        return formattedGenre;
       }) ?? [];
 
     return {
       error: false,
-      genres: formatedGenresDoc as GenreType[],
+      genres: forClientComponent
+        ? JSON.parse(JSON.stringify(formattedGenresDoc))
+        : formattedGenresDoc,
     };
   } catch (error: any) {
     return {

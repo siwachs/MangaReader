@@ -13,7 +13,7 @@ import { useFormState } from "react-dom";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
 import { MAX_FILE_SIZE } from "@/constants";
-import { Content, GenresResponse } from "@/types";
+import { ContentResponse, GenresResponse } from "@/types";
 import { addOrUpdateContent } from "@/actions/contentPageForm";
 import getUpdateImageSelectionEvent from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
 import SubmitForm from "@/components/buttons/submitForm";
@@ -40,11 +40,7 @@ const statusOptions = [
 
 const AddOrUpdateContentForm: React.FC<{
   genresResponse: GenresResponse;
-  contentResponse: {
-    error: boolean;
-    content?: null | Content;
-    errorMessage?: string;
-  };
+  contentResponse: ContentResponse;
 }> = ({ genresResponse, contentResponse }) => {
   const addOrUpdateContentFormRef = useRef<HTMLFormElement>(null);
   const [state, action] = useFormState(addOrUpdateContent, {
