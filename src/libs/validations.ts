@@ -43,7 +43,10 @@ function getValidContentPayload(formData: FormData) {
     };
 
   const synonyms = (formData.get("synonyms") as string).trim();
-  const synonymsArray = synonyms.split(",");
+  const synonymsArray = synonyms
+    .split(",")
+    .map((synonym) => synonym.trim())
+    .filter((synonym) => synonym !== "");
 
   const description = (formData.get("description") as string).trim();
   if (!description)

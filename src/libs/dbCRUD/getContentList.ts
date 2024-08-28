@@ -16,11 +16,12 @@ import {
 import formatMongooseDoc from "../db/formatMongooseDoc";
 
 export type ContentListFilter = {
-  filterBy?: "tags" | "genres" | "status" | "genresPageList";
+  filterBy?: "tags" | "genres" | "status" | "genresPageList" | "word";
   sortBy?: "trending" | "new" | "updatedToday" | "hottest";
   tags?: Tags[];
   genres?: string[];
   status?: Status;
+  word?: string;
   populate?: {
     from: string;
     localField: string;
@@ -39,14 +40,14 @@ export type ContentListResponse = {
 };
 
 async function getFilterQuery(listFilter: ContentListFilter) {
-  const { filterBy, tags = [], status, genres = [] } = listFilter;
+  const { filterBy, tags = [], status, genres = [], word } = listFilter;
 
   switch (filterBy) {
     case "tags":
       return { tags: { $in: tags } };
 
     case "status":
-      return { status };
+      return status ? { status } : {};
 
     case "genres":
     case "genresPageList": {
@@ -61,6 +62,16 @@ async function getFilterQuery(listFilter: ContentListFilter) {
 
       return status ? { $and: [genreFilter, { status }] } : genreFilter;
     }
+
+    case "word":
+      return word
+        ? {
+            $or: [
+              { title: { $regex: word, $options: "i" } },
+              { synonyms: { $elemMatch: { $regex: word, $options: "i" } } },
+            ],
+          }
+        : {};
 
     default:
       return {};

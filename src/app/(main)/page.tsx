@@ -1,9 +1,9 @@
 import TabNavigation from "@/components/tabNavigation";
 
-import Banner from "@/app/(main)/_components/banner";
-import ContentList from "@/app/(main)/_components/lists/contentList";
-import HottestComics from "@/app/(main)/_components/lists/hottestComics";
-import GernresList from "@/app/(main)/_components/lists/genresList";
+import Banner from "@/actions/app/(main)/_components/banner";
+import ContentList from "@/actions/app/(main)/_components/lists/contentList";
+import HottestComics from "@/actions/app/(main)/_components/lists/hottestComics";
+import GernresList from "@/actions/app/(main)/_components/lists/genresList";
 
 import {
   FREE_READ_CONTENT_LIST_PAGE_SIZE,
