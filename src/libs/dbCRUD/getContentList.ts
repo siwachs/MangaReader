@@ -190,9 +190,7 @@ export default async function getContentList(
 
     const { totalContent = 0 } = aggregatedContentList[0].metaData[0] ?? {};
     const contentList =
-      aggregatedContentList[0].data?.map((content: any) =>
-        formatMongooseDoc(content),
-      ) ?? [];
+      aggregatedContentList[0].data?.map(formatMongooseDoc) ?? [];
 
     return {
       error: false,
