@@ -2,6 +2,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
+import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import { Genre } from "@/types";
 import TabNavigation from "@/components/tabNavigation";
 import BreadCrum from "@/components/breadcrum";
@@ -127,6 +128,8 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
                 <div className="md:w-[175px]">
                   <div className="content-image w-full md:h-[233px]">
                     <Image
+                      placeholder="blur"
+                      blurDataURL={contentCoverBlurDataImageURL}
                       src={content.poster}
                       alt={`content${index + 1}`}
                       height={240}

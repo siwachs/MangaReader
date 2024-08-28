@@ -26,9 +26,14 @@ export default async function SearchPage(req: Readonly<SearchPageReqObj>) {
         error: false,
         errorMessage: undefined,
         totalPages: 1,
+        totalContent: 0,
         contentList: [],
       };
-  const { error, errorMessage, totalPages, contentList } = searchResultResponse;
+  const { error, errorMessage, totalPages, totalContent, contentList } =
+    searchResultResponse;
+
+  const haveResults = word && contentList.length > 0;
+  const noResults = !error && word && contentList.length === 0;
 
   return (
     <>
@@ -41,27 +46,28 @@ export default async function SearchPage(req: Readonly<SearchPageReqObj>) {
             <ErrorMessage>{`Unable to load search results because ${errorMessage}`}</ErrorMessage>
           )}
 
-          {word && contentList.length > 0 && (
-            <>
-              <HaveResults
-                title="Manga|Comics"
-                contentList={contentList}
-                word={word}
-              />
-
-              <Pagination
-                lastPageAriaDisabled={page <= 1}
-                lastPageLink={`/search?word=${word}&page=${page - 1}`}
-                nextPageAriaDisabled={page >= totalPages}
-                nextPageLink={`/search?word=${word}&page=${page + 1}`}
-              />
-            </>
+          {haveResults && (
+            <HaveResults
+              title="Manga|Comics"
+              contentList={contentList}
+              word={word}
+              totalContent={totalContent}
+            />
           )}
 
-          {word && contentList.length === 0 && <NoResults />}
+          {noResults && <NoResults />}
 
           <RecommendedForYou />
         </div>
+
+        {haveResults && (
+          <Pagination
+            lastPageAriaDisabled={page <= 1}
+            lastPageLink={`/search?word=${word}&page=${page - 1}`}
+            nextPageAriaDisabled={page >= totalPages}
+            nextPageLink={`/search?word=${word}&page=${page + 1}`}
+          />
+        )}
       </div>
     </>
   );

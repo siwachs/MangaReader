@@ -166,7 +166,12 @@ export default async function getContentList(
     const aggregatedContentList = await Content.aggregate([
       {
         $facet: {
-          metaData: [{ $match: filterQuery }, { $count: "totalContent" }],
+          metaData: [
+            ...(Object.keys(filterQuery).length > 0
+              ? [{ $match: filterQuery }]
+              : []),
+            { $count: "totalContent" },
+          ],
           data: [
             ...(Object.keys(filterQuery).length > 0
               ? [{ $match: filterQuery }]

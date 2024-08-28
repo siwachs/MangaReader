@@ -8,7 +8,8 @@ const HaveResults: React.FC<{
   title: string;
   contentList: Content[];
   word: string;
-}> = ({ title, contentList, word }) => {
+  totalContent: number;
+}> = ({ title, contentList, word, totalContent }) => {
   return (
     <div>
       <div className="font-noto-sans-sc mt-[5%] md:mt-[30px]">
@@ -17,7 +18,7 @@ const HaveResults: React.FC<{
         </span>
 
         <span className="mx-[5%] text-sm md:mx-0 md:text-base">
-          &nbsp;&nbsp;{contentList.length} results for &apos;{word}&apos;
+          &nbsp;&nbsp;{totalContent} results for &apos;{word}&apos;
         </span>
       </div>
 
