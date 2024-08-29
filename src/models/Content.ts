@@ -69,6 +69,6 @@ ContentSchema.pre("findOneAndUpdate", function (next) {
 // Content Validation
 ContentSchema.path("genres").validate(function (genres) {
   return genres.length > 0;
-}, "Genres can't be empty");
+}, "Genres can't be empty.");
 
 export default models.Content || model("Content", ContentSchema, "ContentList");

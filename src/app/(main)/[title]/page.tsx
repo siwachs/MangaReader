@@ -5,23 +5,21 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
+import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import { Content } from "./_types";
+
+import ErrorMessage from "@/components/messages/errorMessage";
+import BreadCrum from "@/components/breadcrum";
+import Rating from "./_components/rating";
 import Description from "./_components/description";
 import ChaptersList from "./_components/chaptersList";
-import BreadCrum from "@/components/breadcrum";
-
-import {
-  Calender,
-  Star,
-  StarSolid,
-  HalfStarSolid,
-  ChevronDown,
-  InformationCircle,
-} from "@/components/icons";
 
 import getContent, {
   getContentTitleAndDescription,
 } from "@/libs/dbCRUD/getContent";
+
+import { ChevronDown, InformationCircle } from "@/components/icons";
+import { FaRegCalendarCheck } from "react-icons/fa";
 
 const data: Content = {
   poster: "/dummyContent/mp_poster.jpg",
@@ -854,14 +852,17 @@ type ContentPageReqObj = {
 
 export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
   const contentId = (req.searchParams.content_id ?? "").trim();
+  if (!contentId) return notFound();
 
-  const contentResponse = await getContent(contentId);
+  const contentResponse = await getContent(contentId, { forContentPage: true });
   const { error, errorMessage, content } = contentResponse;
 
-  const contentNotFound = !error && !content;
-  if (!contentId || contentNotFound) {
-    return notFound();
-  }
+  if (error)
+    return (
+      <ErrorMessage>{`Unable to load because ${errorMessage}`}</ErrorMessage>
+    );
+
+  if (!content) return notFound();
 
   return (
     <>
@@ -872,11 +873,13 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
       /> */}
 
       <div className="detail-wrapper overflow-hidden">
-        <div className="detail-image relative min-h-[208px] w-full md:py-8 lg:bg-[var(--app-text-color-almost-white)]">
+        <div className="detail-image relative min-h-[208px] w-full md:py-8 lg:bg-gray-100">
           <Image
+            placeholder="blur"
+            blurDataURL={contentCoverBlurDataImageURL}
             fill
-            src={data.poster}
-            alt={data.title}
+            src={content.thumbnail}
+            alt={content.title}
             className="absolute left-0 top-0 h-full w-full object-cover object-center lg:hidden"
           />
 
@@ -884,41 +887,47 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
 
           <div className="detail-header relative mx-auto flex w-full max-w-[1200px] gap-4 p-[24px_16px] text-xs text-white md:gap-5 md:p-0 lg:text-[var(--app-text-color-primary)]">
             <Image
-              src={data.poster}
-              alt={data.title}
-              width={200}
-              height={200}
+              placeholder="blur"
+              blurDataURL={contentCoverBlurDataImageURL}
+              src={content.poster}
+              alt={content.title}
+              width={240}
+              height={330}
               className="h-[140px] w-[106px] flex-shrink-0 rounded-lg object-cover md:h-[320px] md:w-[235px]"
             />
 
             <div className="flex flex-grow flex-col md:justify-between">
               <div className="mb-2 items-center gap-[15px] md:mb-2.5 md:flex">
-                <p className="text-lg md:text-2xl md:font-bold">{data.title}</p>
+                <p className="text-lg md:text-2xl md:font-bold">
+                  {content.title}
+                </p>
 
                 <div className="hidden items-center gap-1 md:flex">
-                  <Calender className="h-[14px] w-[14px]" />
-                  <span>{data.status}</span>
+                  <FaRegCalendarCheck className="size-[14px]" />
+                  <span>{content.status}</span>
                 </div>
               </div>
 
               <div className="mb-2.5 flex items-center gap-1 md:hidden">
-                <Calender className="h-[14px] w-[14px]" />
-                <span>{data.status}</span>
+                <FaRegCalendarCheck className="size-3" />
+                <span>{content.status}</span>
               </div>
 
-              <Rating rating={data.rating} mobileOnly />
+              <Rating rating={content.rating} mobileOnly />
 
               <div className="mb-1 md:mb-0 md:text-sm/[18px]">
-                <p className="line-clamp-1">Author: {data.author}</p>
+                <p className="line-clamp-1">Author: {content.author}</p>
               </div>
 
               <p className="line-clamp-1 font-normal leading-[15px] md:text-sm/[18px]">
-                Synonyms: {data.synonyms.join(", ")}
+                {content.synonyms.length === 0
+                  ? "Synonyms: NA"
+                  : `Synonyms: ${content.synonyms.join(", ")}`}
               </p>
 
-              <Description description={data.description} />
+              <Description description={content.description} />
 
-              <Rating rating={data.rating} />
+              <Rating rating={content.rating} />
 
               <div className="mt-2.5 flex items-center">
                 <Link href="/">
@@ -935,17 +944,17 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
         </div>
 
         <ChaptersList
-          title={data.title}
+          title={content.title}
           reminderText={data.reminderText}
           chapters={data.chapters}
         />
 
         <div className="detail-description mt-8 px-4 md:hidden">
           <div className="mb-2 flex items-center justify-between">
-            <p className="text-lg font-bold">{data.title} Introduction</p>
+            <p className="text-lg font-bold">{content.title} Introduction</p>
           </div>
 
-          <Description description={data.description} mobileOnly />
+          <Description description={content.description} mobileOnly />
         </div>
 
         <TitleBox
@@ -1055,39 +1064,6 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
     </>
   );
 }
-
-const Rating: React.FC<{ rating: number; mobileOnly?: boolean }> = ({
-  rating,
-  mobileOnly,
-}) => {
-  return (
-    <div
-      className={`items-center ${mobileOnly ? "mb-2 flex md:hidden" : "hidden md:flex"}`}
-    >
-      <span className="text-base font-bold md:mr-3 md:text-lg md:font-normal lg:text-[var(--app-text-color-standard-gray)]">
-        {rating}
-      </span>
-      <span className="-mt-[1px] text-sm text-gray-300 md:hidden">  | </span>
-
-      {[...new Array(5)].map((_, index) => {
-        const uniqueKey = `star${index}`;
-        const effectiveRating = index * 2;
-        let StarIcon;
-
-        if (Math.floor(rating) > effectiveRating) StarIcon = StarSolid;
-        else if (rating > effectiveRating) StarIcon = HalfStarSolid;
-        else StarIcon = Star;
-
-        return (
-          <StarIcon
-            className="h-[15px] w-[15px] text-[var(--app-text-color-vibrant-golden)] md:h-[18px] md:w-[18px]"
-            key={uniqueKey}
-          />
-        );
-      })}
-    </div>
-  );
-};
 
 const TitleBox: React.FC<{ title: string; subTitle: string; href: string }> = ({
   title,

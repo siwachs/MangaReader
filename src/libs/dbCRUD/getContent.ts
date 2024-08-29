@@ -14,9 +14,13 @@ export default async function getContent(
 ): Promise<ContentResponse> {
   try {
     await connectToMongoDB();
-    const contentDoc = await Content.findById(contentId).select(
-      forContentPage ? partialContentForContentPage : partialContentForUpdate,
-    );
+
+    const contentDoc = await Content.findById(contentId)
+      .select(
+        forContentPage ? partialContentForContentPage : partialContentForUpdate,
+      )
+      .populate({ path: "genres", select: "name" });
+
     if (!contentDoc) return { error: true, errorMessage: "Content not found." };
 
     const formatedContentDoc = formatMongooseDoc(contentDoc.toObject());
