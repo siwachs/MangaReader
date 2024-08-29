@@ -1,5 +1,6 @@
 import connectToMongoDB from "../db/connectToMongoDB";
-import Content from "@/models/Content";
+
+import { Content } from "@/models";
 
 import { ContentResponse } from "@/types";
 import {
@@ -14,12 +15,14 @@ export default async function getContent(
 ): Promise<ContentResponse> {
   try {
     await connectToMongoDB();
+    const partialContent = forContentPage
+      ? partialContentForContentPage
+      : partialContentForUpdate;
 
     const contentDoc = await Content.findById(contentId)
-      .select(
-        forContentPage ? partialContentForContentPage : partialContentForUpdate,
-      )
-      .populate({ path: "genres", select: "name" });
+      .select(partialContent)
+      .populate({ path: "genres", select: "name" })
+      .populate({ path: "chapters", select: "title createdAt" });
 
     if (!contentDoc) return { error: true, errorMessage: "Content not found." };
 
