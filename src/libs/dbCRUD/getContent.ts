@@ -19,10 +19,12 @@ export default async function getContent(
       ? partialContentForContentPage
       : partialContentForUpdate;
 
-    const contentDoc = await Content.findById(contentId)
-      .select(partialContent)
-      .populate({ path: "genres", select: "name" })
-      .populate({ path: "chapters", select: "title createdAt" });
+    const contentDoc = forContentPage
+      ? await Content.findById(contentId)
+          .select(partialContent)
+          .populate({ path: "genres", select: "name" })
+          .populate({ path: "chapters", select: "title createdAt" })
+      : await Content.findById(contentId).select(partialContent);
 
     if (!contentDoc) return { error: true, errorMessage: "Content not found." };
 
