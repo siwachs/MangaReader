@@ -151,9 +151,9 @@ const ChaptersList: React.FC<{
       <div className="detail-episodes-continer mx-auto max-w-[1200px] flex-wrap justify-between md:flex">
         {chapters.slice(0, showAll ? chapters.length : 3).map((chapter) => (
           <ChapterLink
-            key={chapter._id}
+            key={chapter.id}
             title={chapter.title}
-            releaseDate={chapter.releaseDate}
+            releaseDate={chapter.createdAt}
             href="/watch/892982/38938"
           />
         ))}
@@ -197,9 +197,9 @@ const ChaptersList: React.FC<{
               <div className="mb-10 mt-[100px]">
                 {chaptersPayload.chapters.map((chapter) => (
                   <ChapterLink
-                    key={chapter._id}
+                    key={chapter.id}
                     title={chapter.title}
-                    releaseDate={chapter.releaseDate}
+                    releaseDate={chapter.createdAt}
                     href="/watch/89982/983"
                   />
                 ))}

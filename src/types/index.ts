@@ -78,6 +78,17 @@ export type Genre = {
   updatedAt: string;
 };
 
+export type Chapter = {
+  id: string;
+  title: string;
+  images: string[];
+  noOfViews: number;
+  noOfLikes: number;
+  createdAt: string;
+};
+
+type News = { id: string; title: string; shortDescription: string };
+
 export type Content = {
   id: string;
   tags: Tags[];
@@ -91,9 +102,11 @@ export type Content = {
   noOfSubscribers: number;
   author: string;
   synonyms: string[];
+  chapters: Chapter[];
   chaptersCount: number;
   description: string;
   imagesAndWallpapers: string[];
+  news: News[];
   createdAt: string;
   updatedAt: string;
 };
