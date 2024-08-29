@@ -7,7 +7,12 @@ function getFormattedObject(object: Record<string, any>): Record<string, any> {
     const value = object[key];
 
     if (key === "__v") continue;
-    if (key === "_id") newObject.id = value.toString();
+    else if (key === "_id") newObject.id = value.toString();
+    else if (key === "user") {
+      newObject[key] = getFormattedObject(value);
+    } else if (key === "genres" || key === "chapters") {
+      newObject[key] = value.map(convertItem);
+    } else if (value instanceof Date) newObject[key] = value.toISOString();
     else newObject[key] = value;
   }
 
@@ -28,21 +33,7 @@ export default function formatMongooseDoc(
   docObject: Record<string, any>,
   docModelName?: "Comment",
 ) {
-  const newObject: Record<string, unknown> = {};
-  for (const key in docObject) {
-    const value = docObject[key];
-    if (key === "__v") continue;
-
-    if (key === "_id") {
-      newObject.id = value.toString();
-    } else if (key === "user") {
-      newObject[key] = getFormattedObject(value);
-    } else if (key === "genres") {
-      newObject[key] = value.map(convertItem);
-    } else {
-      newObject[key] = value;
-    }
-  }
+  const newObject: Record<string, any> = getFormattedObject(docObject);
 
   if (docModelName === "Comment" && newObject.isDeleted)
     newObject.message = undefined;

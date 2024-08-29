@@ -19,7 +19,6 @@ import {
   LATEST_UPDATES_CONTENT_LIST_PAGE_SIZE,
 } from "@/constants";
 
-import chapters from "@/data/chapters";
 import getContent, {
   getContentTitleAndDescription,
 } from "@/libs/dbCRUD/getContent";
@@ -77,6 +76,8 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
   const genres = content.genres as Genre[];
   const currentGenreName = genres?.[0].name ?? "All";
   const currentGenreLink = `/genre/${encodeURIComponent(currentGenreName.toLowerCase())}/0`;
+
+  const { chapters } = content;
 
   return (
     <>
@@ -144,16 +145,18 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
 
               <Rating rating={content.rating} />
 
-              <div className="mt-2.5 flex items-center">
-                <Link href={``}>
-                  <div className="box-content flex h-[30px] max-w-80 items-center justify-center break-words rounded-[20px] bg-[var(--app-text-color-bright-pink)] px-[15px] md:h-[33px] md:px-5 md:py-1.5 md:text-base lg:text-white">
-                    Read Latest Chapter{" "}
-                    <span className="hidden md:inline">
-                      : Chapter {content.chaptersCount}
-                    </span>
-                  </div>
-                </Link>
-              </div>
+              {chapters.length > 0 && (
+                <div className="mt-2.5 flex items-center">
+                  <Link href={``}>
+                    <div className="box-content flex h-[30px] max-w-80 items-center justify-center break-words rounded-[20px] bg-[var(--app-text-color-bright-pink)] px-[15px] md:h-[33px] md:px-5 md:py-1.5 md:text-base lg:text-white">
+                      Read Latest Chapter{" "}
+                      <span className="hidden md:inline">
+                        : Chapter {content.chaptersCount}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
