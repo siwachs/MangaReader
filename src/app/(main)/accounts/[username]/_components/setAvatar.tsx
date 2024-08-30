@@ -5,7 +5,7 @@ import getUpdateImageSelectionEvent from "@/libs/eventHandlers/getUpdateImageSel
 import ModelOverlay from "@/components/utils/modelOverlay";
 
 const menuButtonClasses =
-  "h-16 w-full border-b border-[var(--app-border-color-light-gray)] p-4 text-base font-bold";
+  "h-16 w-full border-b border-gray-200 p-4 text-base font-bold";
 
 const SetAvatar: React.FC<{
   setAvatarImage: Dispatch<SetStateAction<string[]>>;

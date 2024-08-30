@@ -191,7 +191,7 @@ const ProfileInformationRow: React.FC<{
     const keyDownEvent = createKeydownEvent(onClick);
 
     return (
-      <div className="flex h-14 items-center justify-between border-b border-[var(--app-border-color-light-gray)] p-4">
+      <div className="flex h-14 items-center justify-between border-b border-gray-200 p-4">
         <h3 className="select-none font-bold">{title}</h3>
 
         <div
@@ -226,7 +226,7 @@ const ProfileLinkRow: React.FC<{
   return (
     <Link
       href={href}
-      className="my-1 flex h-12 items-center gap-2.5 border-b border-[var(--app-border-color-light-gray)] p-4"
+      className="my-1 flex h-12 items-center gap-2.5 border-b border-gray-200 p-4"
     >
       <Icon className={iconSize} />
       <span className="select-none font-bold">{title}</span>

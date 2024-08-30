@@ -31,7 +31,7 @@ const Description: React.FC<{ description: string; mobileOnly?: boolean }> = ({
         className="absolute bottom-1 right-0 flex items-center justify-center text-gray-500/70 md:size-4 md:rounded-full md:bg-gray-500/70 md:text-white"
       >
         <FaChevronDown
-          className={`size-[14px] md:size-3 ${seeAll ? "-rotate-180" : ""}`}
+          className={`size-[15px] md:size-3 ${seeAll ? "-rotate-180" : ""}`}
         />
       </button>
     </div>

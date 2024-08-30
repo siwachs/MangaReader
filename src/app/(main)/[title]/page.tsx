@@ -24,7 +24,6 @@ import getContent, {
 } from "@/libs/dbCRUD/getContent";
 import getContentList from "@/libs/dbCRUD/getContentList";
 
-import { ChevronDown } from "@/components/icons";
 import { FaRegCalendarCheck } from "react-icons/fa";
 import { MdError } from "react-icons/md";
 
@@ -78,8 +77,8 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
   const currentGenreName = genres?.[0].name ?? "All";
   const currentGenreLink = `/genre/${encodeURIComponent(currentGenreName.toLowerCase())}/0`;
 
-  const { chapters } = content;
-  const latestChapterId = chapters[chapters.length - 1].id;
+  const { chapters = [] } = content;
+  const latestChapterId = chapters[chapters.length - 1]?.id;
 
   return (
     <>
@@ -210,13 +209,16 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
         <DetailTitleBox
           title={`${content.title} News`}
           subTitle={`${content.news.length} Articles`}
-          href="/"
+          href={`/${encodeURIComponent(content.title.toLowerCase().replaceAll(" ", "-"))}/news?content_id=${content.id}`}
         />
 
         <div className="mx-auto flex max-w-[1200px] flex-col">
           {content.news.map((news) => (
-            <Link key={news.title} href="/">
-              <div className="mx-4 mt-3 flex items-center gap-1 border-b border-[var(--app-border-color-light-gray)] pb-3 md:hidden">
+            <Link
+              key={news.title}
+              href={`${encodeURIComponent(content.title.toLowerCase().replaceAll(" ", "-"))}/news?content_id=${content.id}&news_id=${news.id}`}
+            >
+              <div className="mx-4 mt-3 flex items-center gap-1 border-b border-gray-200 pb-3 md:hidden">
                 <Image
                   src="/assets/internet-searchinformation-icon.png"
                   alt="internet-searchinformation"
@@ -269,7 +271,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
             >
               <span className="md:hidden">{latestUpdate.title}</span>
 
-              <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-gray-100 px-4 font-normal text-gray-600 md:flex">
+              <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-gray-200 px-4 font-normal text-gray-600 md:flex">
                 {latestUpdate.title}
               </div>
             </Link>

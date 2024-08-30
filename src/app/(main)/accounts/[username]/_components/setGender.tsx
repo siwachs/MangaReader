@@ -9,7 +9,7 @@ import { FaCheck } from "react-icons/fa6";
 import { updateProfileEndpoint } from "@/constants/apiEndpoints";
 
 const selectButtonClasses =
-  "flex h-14 w-full items-center justify-between border-b border-[var(--app-border-color-light-gray)] p-4 font-bold";
+  "flex h-14 w-full items-center justify-between border-b border-gray-200 p-4 font-bold";
 
 const SetGender: React.FC<{
   isSetGenderOpen: boolean;

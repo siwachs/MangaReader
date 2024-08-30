@@ -149,6 +149,9 @@ const ChaptersList: React.FC<{
       </div>
 
       <div className="detail-episodes-continer mx-auto max-w-[1200px] flex-wrap justify-between md:flex">
+        {chapters.length === 0 && (
+          <div className="m-4 font-bold">No Chapters updated yet.</div>
+        )}
         {chapters.slice(0, showAll ? chapters.length : 3).map((chapter) => (
           <ChapterLink
             key={chapter.id}
@@ -158,19 +161,21 @@ const ChaptersList: React.FC<{
           />
         ))}
 
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={() => setInfiniteScroll(true)}
-          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
-            if (e.key === "Enter") {
-              setInfiniteScroll(true);
-            }
-          }}
-          className="mx-4 my-2 flex cursor-pointer items-center justify-center rounded-lg bg-gray-100 px-4 py-3 text-gray-500/70 md:hidden"
-        >
-          View All Chapters &nbsp;&nbsp;&nbsp;&gt;&gt;&gt;
-        </div>
+        {chapters.length > 0 && (
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setInfiniteScroll(true)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (e.key === "Enter") {
+                setInfiniteScroll(true);
+              }
+            }}
+            className="mx-4 my-2 flex cursor-pointer items-center justify-center rounded-lg bg-gray-100 px-4 py-3 text-gray-500/70 md:hidden"
+          >
+            View All Chapters &nbsp;&nbsp;&nbsp;&gt;&gt;&gt;
+          </div>
+        )}
 
         {infiniteScroll && (
           <div className="fixed inset-0 z-[999] bg-[var(--app-backdrop-color-black)] md:hidden">

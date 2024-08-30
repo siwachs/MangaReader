@@ -12,7 +12,7 @@ const DetailTitleBox: React.FC<{
       <Link href={href} className="md:hidden">
         <div className="flex items-center justify-between px-4 text-lg">
           <p className="font-bold">{title}</p>
-          <FaChevronRight className="size-5 text-gray-500/70" />
+          <FaChevronRight className="size-[15px] text-gray-500/70" />
         </div>
       </Link>
 
