@@ -1,5 +1,4 @@
 import type { Metadata, ResolvingMetadata } from "next";
-import React from "react";
 
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -13,6 +12,7 @@ import BreadCrum from "@/components/breadcrum";
 import Rating from "./_components/rating";
 import Description from "./_components/description";
 import ChaptersList from "./_components/chaptersList";
+import DetailTitleBox from "./_components/titleHeader";
 
 import {
   CONTENT_LIST_DEFAULT_PAGE_NUMBER,
@@ -24,8 +24,9 @@ import getContent, {
 } from "@/libs/dbCRUD/getContent";
 import getContentList from "@/libs/dbCRUD/getContentList";
 
-import { ChevronDown, InformationCircle } from "@/components/icons";
+import { ChevronDown } from "@/components/icons";
 import { FaRegCalendarCheck } from "react-icons/fa";
+import { MdError } from "react-icons/md";
 
 export async function generateMetadata(
   { params, searchParams }: ContentPageReqObj,
@@ -78,6 +79,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
   const currentGenreLink = `/genre/${encodeURIComponent(currentGenreName.toLowerCase())}/0`;
 
   const { chapters } = content;
+  const latestChapterId = chapters[chapters.length - 1].id;
 
   return (
     <>
@@ -108,7 +110,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
               src={content.poster}
               alt={content.title}
               width={240}
-              height={330}
+              height={325}
               className="h-[140px] w-[106px] flex-shrink-0 rounded-lg object-cover md:h-[320px] md:w-[235px]"
             />
 
@@ -132,10 +134,10 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
               <Rating rating={content.rating} mobileOnly />
 
               <div className="mb-1 md:mb-0 md:text-sm/[18px]">
-                <p className="line-clamp-1">Author: {content.author}</p>
+                <p className="truncate">Author: {content.author}</p>
               </div>
 
-              <p className="line-clamp-1 font-normal leading-[15px] md:text-sm/[18px]">
+              <p className="truncate font-normal leading-[15px] md:text-sm/[18px]">
                 {content.synonyms.length === 0
                   ? "Synonyms: NA"
                   : `Synonyms: ${content.synonyms.join(", ")}`}
@@ -147,11 +149,11 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
 
               {chapters.length > 0 && (
                 <div className="mt-2.5 flex items-center">
-                  <Link href={``}>
+                  <Link href={`/watch/${content.id}/${latestChapterId}`}>
                     <div className="box-content flex h-[30px] max-w-80 items-center justify-center break-words rounded-[20px] bg-[var(--app-text-color-bright-pink)] px-[15px] md:h-[33px] md:px-5 md:py-1.5 md:text-base lg:text-white">
-                      Read Latest Chapter{" "}
+                      <span className="md:hidden">Read Latest Chapter</span>
                       <span className="hidden md:inline">
-                        : Chapter {content.chaptersCount}
+                        Read Latest Chapter : Chapter {content.chaptersCount}
                       </span>
                     </div>
                   </Link>
@@ -175,7 +177,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
           <Description description={content.description} mobileOnly />
         </div>
 
-        <TitleBox
+        <DetailTitleBox
           title={`${content.title} Images/Wallpapers`}
           subTitle={`${content.imagesAndWallpapers.length} Pictures`}
           href="/"
@@ -196,7 +198,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
                     className="h-32 w-full rounded object-cover object-center"
                   />
 
-                  <p className="line-clamp-1 break-words text-center md:mt-2">
+                  <p className="truncate break-words text-center md:mt-2">
                     {content.title} - Piece {index + 1}
                   </p>
                 </div>
@@ -205,7 +207,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
           </div>
         </div>
 
-        <TitleBox
+        <DetailTitleBox
           title={`${content.title} News`}
           subTitle={`${content.news.length} Articles`}
           href="/"
@@ -223,9 +225,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
                   className="h-4 w-4"
                 />
 
-                <p className="line-clamp-1 break-words text-[13px]">
-                  {news.title}
-                </p>
+                <p className="truncate break-words text-[13px]">{news.title}</p>
               </div>
 
               <div className="hidden border-b border-[var(--app-text-color-pale-silver)] py-3 md:block">
@@ -237,7 +237,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
                     width={20}
                     className="h-[18px] w-[18px]"
                   />
-                  <p className="line-clamp-1 break-words text-left text-lg">
+                  <p className="truncate break-words text-left text-lg">
                     {news.title}
                   </p>
                 </div>
@@ -250,7 +250,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
           ))}
         </div>
 
-        <TitleBox
+        <DetailTitleBox
           title="Latest Updates"
           subTitle="More Updates"
           href="/genre/all/1"
@@ -265,57 +265,25 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
             <Link
               key={latestUpdate.id}
               href={`/${encodeURIComponent(latestUpdate.title.toLowerCase().replaceAll(" ", "-"))}?content_id=${latestUpdate.id}`}
-              className="mt-3 w-[48%] break-words text-[13px] font-normal md:hidden"
+              className="mt-3 w-[48%] break-words text-[13px] font-normal md:text-sm"
             >
               <span className="md:hidden">{latestUpdate.title}</span>
 
-              <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-[var(--app-border-color-light-gray)] px-4 font-normal text-gray-600 md:flex">
+              <div className="mb-5 mr-6 box-content hidden h-[50px] items-center border border-gray-100 px-4 font-normal text-gray-600 md:flex">
                 {latestUpdate.title}
               </div>
             </Link>
           ))}
         </div>
 
-        <Link
-          href=""
-          className="mb-[30px] mt-8 flex items-center justify-center text-gray-500/70"
-        >
+        <button className="mx-auto mb-[30px] mt-8 flex items-center justify-center text-gray-500/70">
           <p className="mr-2 text-xs font-normal underline">
             Have problems with reading?
           </p>
-          <InformationCircle className="h-[13px] w-[13px]" strokeWidth={2.6} />
-        </Link>
+
+          <MdError className="size-[13px]" />
+        </button>
       </div>
     </>
   );
 }
-
-const TitleBox: React.FC<{ title: string; subTitle: string; href: string }> = ({
-  title,
-  subTitle,
-  href,
-}) => {
-  return (
-    <div className="detail-title-box mx-auto mt-8 max-w-[1200px] md:mb-6 md:mt-12 md:flex md:items-center md:justify-between">
-      <Link href="/" className="md:hidden">
-        <div className="flex items-center justify-between px-4 text-lg">
-          <p className="font-bold">{title}</p>
-          <ChevronDown
-            className="h-5 w-5 -rotate-90 cursor-pointer text-gray-500/70"
-            strokeWidth={2.6}
-          />
-        </div>
-      </Link>
-
-      <p className="hidden text-2xl font-bold md:block">{title}</p>
-
-      <Link
-        href={href}
-        className="hidden items-center gap-[5px] text-[var(--app-text-color-bright-pink)] md:inline-flex"
-      >
-        <span>{subTitle}</span>
-        <ChevronDown className="h-4 w-4 -rotate-90" strokeWidth={2.6} />
-      </Link>
-    </div>
-  );
-};

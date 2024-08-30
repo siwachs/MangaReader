@@ -4,7 +4,7 @@ import useBodyOverflow from "@/hooks/useBodyOverflow";
 import React, { useState, useEffect, useRef } from "react";
 
 import { BellSolid, ChevronDown, Close } from "@/components/icons";
-import { Chapter } from "../_types";
+import { Chapter } from "@/types";
 import ChapterLink from "@/components/buttons/chapterLink";
 
 type ChaptersOrder = "reverse" | "positive";
