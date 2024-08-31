@@ -10,21 +10,19 @@ import {
 } from "@/constants";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { Chapter } from "@/types";
+import ChaptersOrder from "./chaptersOrder";
 import ChapterLink from "@/components/buttons/chapterLink";
 
 import { LiaTimesSolid } from "react-icons/lia";
 import { FaBell, FaChevronDown } from "react-icons/fa6";
 
-type ChaptersOrder = "reverse" | "positive";
-type ChaptersPayload = {
+export type ChaptersOrder = "reverse" | "positive";
+export type ChaptersPayload = {
   chapters: Chapter[];
   pageNumber: number;
   pageSize: number;
   totalPages: number;
 };
-
-const chaptersOrderBtnClasses =
-  "select-none data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-bright-pink)]";
 
 const ChaptersList: React.FC<{
   contentId: string;
@@ -258,41 +256,6 @@ const DetailSubscribe: React.FC<{
       <button className="flex items-center gap-1 text-sm text-[var(--app-text-color-bright-pink)] md:gap-1.5">
         <FaBell className="size-3" />
         <span>Subscribe</span>
-      </button>
-    </div>
-  );
-};
-
-const ChaptersOrder: React.FC<{
-  mobileOnly?: boolean;
-  order: ChaptersOrder;
-  changeOrderToReverse: () => void;
-  changeOrderToPositive: () => void;
-}> = ({ mobileOnly, order, changeOrderToReverse, changeOrderToPositive }) => {
-  return (
-    <div
-      className={
-        mobileOnly
-          ? "flex items-center text-[13px] leading-4 md:hidden"
-          : "mx-auto mb-6 hidden max-w-[1200px] items-center justify-end text-lg font-normal md:flex"
-      }
-    >
-      <button
-        onClick={changeOrderToReverse}
-        className={chaptersOrderBtnClasses}
-        data-active={order === "reverse"}
-      >
-        Reverse
-      </button>
-
-      <span className="mx-1 text-[var(--app-text-color-pale-silver)]">|</span>
-
-      <button
-        onClick={changeOrderToPositive}
-        className={chaptersOrderBtnClasses}
-        data-active={order === "positive"}
-      >
-        Positive
       </button>
     </div>
   );
