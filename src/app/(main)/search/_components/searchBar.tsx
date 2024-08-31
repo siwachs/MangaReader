@@ -51,7 +51,7 @@ const SearchBar: React.FC<{ word?: string }> = ({ word }) => {
             type="submit"
             className="flex h-full min-w-[55px] flex-shrink-0 items-center justify-center gap-1 rounded-[20px] bg-[var(--app-text-color-red)] px-3 text-xs text-white md:gap-2 md:rounded-full md:px-5 md:text-base"
           >
-            <BiSearchAlt className="size-[14px] md:size-5" />
+            <BiSearchAlt className="size-3.5 md:size-5" />
             <span>Search</span>
           </button>
         </form>

@@ -100,7 +100,7 @@ const GernresList: React.FC<{
                   </div>
 
                   <div className="mt-[5px] flex items-center truncate text-xs/[20px] text-[var(--app-text-color-red)] md:mt-[10px] md:text-sm">
-                    <FaHeart className="mx-[5px] size-3 md:size-[14px] lg:size-4" />
+                    <FaHeart className="mx-[5px] size-3 md:size-3.5 lg:size-4" />
                     <span>{numeral(content.noOfSubscribers)}</span>
                   </div>
                 </Link>

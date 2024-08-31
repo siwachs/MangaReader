@@ -40,7 +40,7 @@ const ChaptersAndCommentsLoading: React.FC<{
             className={`pink-lift-shadow ${contentInteractionButtonClasses} w-[60%] animate-pulse bg-[var(--app-text-color-crimson)] text-[var(--app-text-color-near-white)]`}
           >
             <Book
-              className="h-[14px] w-[14px] md:h-[18px] md:w-[18px]"
+              className="h-3.5 w-3.5 md:h-[18px] md:w-[18px]"
               strokeWidth={2.1}
             />
             <span className="font-noto-sans-sc ml-2.5 inline-block text-[13px]/[37px] font-medium md:h-[29px] md:text-base/[29px]">

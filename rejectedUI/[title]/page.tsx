@@ -195,7 +195,7 @@ export default async function TitlePage() {
               <View className="-mt-0.5 mr-0.5 h-[13px] w-[13px] md:mr-1 md:h-[18px] md:w-[18px]" />
               <span>{data.noOfViews}</span>
 
-              <Like className="-mt-0.5 ml-2.5 mr-0.5 h-[14px] w-[14px] md:ml-[25px] md:mr-1 md:h-[22px] md:w-[22px]" />
+              <Like className="-mt-0.5 ml-2.5 mr-0.5 h-3.5 w-3.5 md:ml-[25px] md:mr-1 md:h-[22px] md:w-[22px]" />
               <span>{data.numberOfLikes}</span>
 
               <div className="-mt-0.5 ml-2.5 flex items-center">

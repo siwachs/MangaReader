@@ -50,22 +50,6 @@ const ContentSchema = new Schema(
   { timestamps: true, validateBeforeSave: true },
 );
 
-// Presave and Find and Update middleware
-ContentSchema.pre("save", function (next) {
-  if (this.isModified("chapters")) this.chaptersCount = this.chapters.length;
-
-  next();
-});
-
-ContentSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as UpdateQuery<Document>;
-
-  if (update && Array.isArray(update.chapters))
-    update.chaptersCount = update.chapters.length;
-
-  next();
-});
-
 // Content Validation
 ContentSchema.path("genres").validate(function (genres) {
   return genres.length > 0;

@@ -7,7 +7,7 @@ export const partialUserWithVotedComments =
 export const partialContentForUpdate =
   "tags thumbnail poster title status genres author synonyms description imagesAndWallpapers";
 export const partialContentForContentPage =
-  "thumbnail poster title status genres rating author synonyms chapters description imagesAndWallpapers news";
+  "thumbnail poster title status genres rating author synonyms chapters chaptersCount chaptersUpdatedOn description imagesAndWallpapers news";
 
 export const partialGenre = "name";
 export const partialGenreWithDescription = "name description";

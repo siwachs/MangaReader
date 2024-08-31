@@ -104,6 +104,7 @@ export type Content = {
   synonyms: string[];
   chapters: Chapter[];
   chaptersCount: number;
+  chaptersUpdatedOn: string;
   description: string;
   imagesAndWallpapers: string[];
   news: News[];

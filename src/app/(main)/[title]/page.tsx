@@ -120,7 +120,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
                 </p>
 
                 <div className="hidden items-center gap-1 md:flex">
-                  <FaRegCalendarCheck className="size-[14px]" />
+                  <FaRegCalendarCheck className="size-3.5" />
                   <span>{content.status}</span>
                 </div>
               </div>
@@ -163,8 +163,9 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
         </div>
 
         <ChaptersList
+          contentId={content.id}
           title={content.title}
-          reminderText={"TODO: Update Text"}
+          updatedOn={content.chaptersUpdatedOn}
           chapters={chapters}
         />
 

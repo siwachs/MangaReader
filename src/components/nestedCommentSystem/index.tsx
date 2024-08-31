@@ -411,7 +411,7 @@ const Comment: React.FC<{ comment: CommentType }> = React.memo(
 
         {childComments.length > 0 && (
           <div
-            className={`${isChildrenCollapsed ? "hidden" : ""} border-l-2 border-[var(--app-border-color-periwinkle)] pl-[14px] sm:pl-[62px]`}
+            className={`${isChildrenCollapsed ? "hidden" : ""} border-l-2 border-[var(--app-border-color-periwinkle)] pl-3.5 sm:pl-[62px]`}
           >
             <CommentList comments={childComments} />
           </div>

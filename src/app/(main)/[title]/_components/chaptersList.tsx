@@ -2,10 +2,18 @@
 
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 import React, { useState, useEffect, useRef } from "react";
+import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
 
-import { BellSolid, ChevronDown, Close } from "@/components/icons";
+import {
+  CHAPTERS_LIST_DEFAULT_PAGE_NUMBER,
+  CHAPTERS_LIST_DEFAULT_PAGE_SIZE,
+} from "@/constants";
+import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { Chapter } from "@/types";
 import ChapterLink from "@/components/buttons/chapterLink";
+
+import { LiaTimesSolid } from "react-icons/lia";
+import { FaBell, FaChevronDown } from "react-icons/fa6";
 
 type ChaptersOrder = "reverse" | "positive";
 type ChaptersPayload = {
@@ -19,23 +27,52 @@ const chaptersOrderBtnClasses =
   "select-none data-[active=true]:pointer-events-none data-[active=false]:cursor-pointer data-[active=true]:text-[var(--app-text-color-bright-pink)]";
 
 const ChaptersList: React.FC<{
+  contentId: string;
   title: string;
-  reminderText: string;
+  updatedOn: string;
   chapters: Chapter[];
-}> = ({ title, reminderText, chapters }) => {
-  const PAGE_SIZE = 18;
+}> = ({ contentId, title, updatedOn, chapters }) => {
+  const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("reverse");
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [chaptersPayload, setChaptersPayload] = useState<ChaptersPayload>({
-    chapters: chapters.slice(0, PAGE_SIZE),
-    pageNumber: 1,
-    pageSize: PAGE_SIZE,
-    totalPages: chapters.length / PAGE_SIZE,
+    chapters: chapters.slice(0, CHAPTERS_LIST_DEFAULT_PAGE_SIZE),
+    pageNumber: CHAPTERS_LIST_DEFAULT_PAGE_NUMBER,
+    pageSize: CHAPTERS_LIST_DEFAULT_PAGE_SIZE,
+    totalPages: chapters.length / CHAPTERS_LIST_DEFAULT_PAGE_SIZE,
   });
-  const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("reverse");
+
+  const resetChaptersPayload = () => {
+    setChaptersPayload((prev) => ({
+      ...prev,
+      chapters: chapters.slice(0, CHAPTERS_LIST_DEFAULT_PAGE_SIZE),
+      pageNumber: 1,
+    }));
+  };
+
+  const changeOrderToReverse = () => {
+    if (chaptersOrder === "reverse") return;
+
+    chapters.reverse();
+    setChaptersOrder("reverse");
+    resetChaptersPayload();
+  };
+  const changeOrderToPositive = () => {
+    if (chaptersOrder === "positive") return;
+
+    chapters.reverse();
+    setChaptersOrder("positive");
+    resetChaptersPayload();
+  };
+
   const [infiniteScroll, setInfiniteScroll] = useState(false);
   const [showAll, setShowAll] = useState(false);
   useBodyOverflow(infiniteScroll);
+
+  const toogleInfiniteScroll = () => setInfiniteScroll((prev) => !prev);
+  const infiniteScrollToogleKeyDown = getKeydownEvent(toogleInfiniteScroll);
+  const toogleShowAll = () => setShowAll((prev) => !prev);
+  const showAllToogleKeyDown = getKeydownEvent(toogleShowAll);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -49,8 +86,9 @@ const ChaptersList: React.FC<{
 
       if (scrolledToBottom && hasMore) {
         setChaptersPayload((prev) => {
-          const startingIndex = (prev.pageNumber + 1) * PAGE_SIZE;
-          const endingIndex = startingIndex + PAGE_SIZE;
+          const startingIndex =
+            (prev.pageNumber + 1) * CHAPTERS_LIST_DEFAULT_PAGE_SIZE;
+          const endingIndex = startingIndex + CHAPTERS_LIST_DEFAULT_PAGE_SIZE;
           const nextChapters = chapters.slice(startingIndex, endingIndex);
 
           return {
@@ -75,17 +113,10 @@ const ChaptersList: React.FC<{
     chapters,
   ]);
 
-  const changeChapterOrder = (order: ChaptersOrder) => {
-    if (order === chaptersOrder) return;
-
-    chapters.reverse();
-    setChaptersOrder(order);
-    setChaptersPayload((prev) => ({
-      ...prev,
-      chapters: chapters.slice(0, PAGE_SIZE),
-      pageNumber: 1,
-    }));
-  };
+  const date = parseISO(updatedOn);
+  const formattedDate = format(date, "dd/MM/yy");
+  const timeAgo = formatDistanceToNow(date, { addSuffix: true });
+  const formattedUpdateOn = `${formattedDate} . ${timeAgo}`;
 
   return (
     <div className="detail-episodes mt-[30px]">
@@ -94,83 +125,51 @@ const ChaptersList: React.FC<{
           {title} Chapters
         </p>
 
-        <div className="detail-subscribe ml-2.5 hidden cursor-pointer items-center gap-0.5 text-sm font-normal text-[var(--app-text-color-bright-pink)] md:flex">
-          <BellSolid className="h-3 w-3" />
-          <span>Update reminder</span>
-        </div>
+        <DetailSubscribe
+          formattedDate={formattedDate}
+          formattedUpdateOn={formattedUpdateOn}
+        />
 
-        <ChaptersOrderMobileOnly
-          chaptersOrder={chaptersOrder}
-          changeChapterOrder={changeChapterOrder}
+        <ChaptersOrder
+          mobileOnly
+          order={chaptersOrder}
+          changeOrderToReverse={changeOrderToReverse}
+          changeOrderToPositive={changeOrderToPositive}
         />
       </div>
 
-      <div className="mx-auto mb-6 hidden max-w-[1200px] items-center justify-end text-lg font-normal md:flex">
-        <span
-          role="button"
-          tabIndex={0}
-          onClick={() => changeChapterOrder("reverse")}
-          onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (e.key === "Enter") {
-              changeChapterOrder("reverse");
-            }
-          }}
-          className={chaptersOrderBtnClasses}
-          data-active={chaptersOrder === "reverse"}
-        >
-          Reverse
-        </span>
-        <span className="text-[var(--app-text-color-pale-silver)]">  |  </span>
-        <span
-          role="button"
-          tabIndex={0}
-          onClick={() => changeChapterOrder("positive")}
-          onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (e.key === "Enter") {
-              changeChapterOrder("positive");
-            }
-          }}
-          className={chaptersOrderBtnClasses}
-          data-active={chaptersOrder === "positive"}
-        >
-          Positive
-        </span>
-      </div>
+      <ChaptersOrder
+        order={chaptersOrder}
+        changeOrderToReverse={changeOrderToReverse}
+        changeOrderToPositive={changeOrderToPositive}
+      />
 
-      <div className="detail-subscribe mx-4 my-2 flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 md:hidden">
-        <p className="text-sm/[18px] font-normal text-gray-500/70">
-          {reminderText}
-        </p>
-
-        <div className="flex cursor-pointer items-center gap-0.5 text-right text-xs text-[var(--app-text-color-bright-pink)]">
-          <BellSolid className="h-3 w-3" />
-          <span>Update reminder</span>
-        </div>
-      </div>
+      <DetailSubscribe
+        mobileOnly
+        formattedDate={formattedDate}
+        formattedUpdateOn={formattedUpdateOn}
+      />
 
       <div className="detail-episodes-continer mx-auto max-w-[1200px] flex-wrap justify-between md:flex">
         {chapters.length === 0 && (
           <div className="m-4 font-bold">No Chapters updated yet.</div>
         )}
+
         {chapters.slice(0, showAll ? chapters.length : 3).map((chapter) => (
           <ChapterLink
             key={chapter.id}
             title={chapter.title}
             releaseDate={chapter.createdAt}
-            href="/watch/892982/38938"
+            href={`/watch/${contentId}/${chapter.id}`}
           />
         ))}
 
-        {chapters.length > 0 && (
+        {chapters.length > 3 && (
           <div
             role="button"
             tabIndex={0}
-            onClick={() => setInfiniteScroll(true)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
-              if (e.key === "Enter") {
-                setInfiniteScroll(true);
-              }
-            }}
+            onClick={toogleInfiniteScroll}
+            onKeyDown={infiniteScrollToogleKeyDown}
             className="mx-4 my-2 flex cursor-pointer items-center justify-center rounded-lg bg-gray-100 px-4 py-3 text-gray-500/70 md:hidden"
           >
             View All Chapters &nbsp;&nbsp;&nbsp;&gt;&gt;&gt;
@@ -185,16 +184,23 @@ const ChaptersList: React.FC<{
             >
               <div className="fixed w-full rounded-t-2xl bg-white">
                 <p className="m-4 text-center text-base font-medium">{title}</p>
-                <Close
-                  className="absolute right-4 top-4 h-5 w-5 cursor-pointer"
-                  onClick={() => setInfiniteScroll(false)}
+                <LiaTimesSolid
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Close Chapters List"
+                  onClick={toogleInfiniteScroll}
+                  onKeyDown={infiniteScrollToogleKeyDown}
+                  className="absolute right-4 top-4 size-5"
                 />
+
                 <div className="mt-2 flex items-center justify-between px-4 text-[13px]">
                   <p>Update to chapters {chapters.length}</p>
 
-                  <ChaptersOrderMobileOnly
-                    chaptersOrder={chaptersOrder}
-                    changeChapterOrder={changeChapterOrder}
+                  <ChaptersOrder
+                    mobileOnly
+                    order={chaptersOrder}
+                    changeOrderToReverse={changeOrderToReverse}
+                    changeOrderToPositive={changeOrderToPositive}
                   />
                 </div>
               </div>
@@ -205,7 +211,7 @@ const ChaptersList: React.FC<{
                     key={chapter.id}
                     title={chapter.title}
                     releaseDate={chapter.createdAt}
-                    href="/watch/89982/983"
+                    href={`/watch/${contentId}/${chapter.id}`}
                   />
                 ))}
               </div>
@@ -216,18 +222,13 @@ const ChaptersList: React.FC<{
         <div
           role="button"
           tabIndex={0}
-          onClick={() => {
-            setShowAll((prev) => !prev);
-          }}
-          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
-            setShowAll((prev) => !prev);
-          }}
-          className="mb-4 box-content hidden h-[43px] w-[288px] cursor-pointer items-center justify-center gap-1 rounded-lg bg-gray-100 px-4 py-3 text-base text-gray-500/70 md:flex"
+          onClick={toogleShowAll}
+          onKeyDown={showAllToogleKeyDown}
+          className="mb-4 hidden h-[68px] w-80 items-center justify-center gap-1.5 rounded-lg bg-gray-100 text-gray-500/70 md:flex"
         >
-          <span>{showAll ? "Hide All Chapters" : "View All Chapters"}</span>
-          <ChevronDown
-            className={`h-4 w-4 ${showAll ? "-rotate-180" : ""} text-gray-500/70`}
-            strokeWidth={2.6}
+          <span>{showAll ? "Hide Chapters" : "View All Chapters"}</span>
+          <FaChevronDown
+            className={`size-3.5 ${showAll ? "-rotate-180" : ""}`}
           />
         </div>
       </div>
@@ -235,41 +236,64 @@ const ChaptersList: React.FC<{
   );
 };
 
-const ChaptersOrderMobileOnly: React.FC<{
-  chaptersOrder: ChaptersOrder;
-  changeChapterOrder: (order: ChaptersOrder) => void;
-}> = ({ chaptersOrder, changeChapterOrder }) => {
+const DetailSubscribe: React.FC<{
+  mobileOnly?: boolean;
+  formattedDate: string;
+  formattedUpdateOn: string;
+}> = ({ mobileOnly, formattedDate, formattedUpdateOn }) => {
   return (
-    <div className="flex items-center text-[13px] leading-4 md:hidden">
-      <span
-        role="button"
-        tabIndex={0}
-        onClick={() => changeChapterOrder("reverse")}
-        onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
-          if (e.key === "Enter") {
-            changeChapterOrder("reverse");
-          }
-        }}
+    <div
+      className={
+        mobileOnly
+          ? "mx-4 my-2 flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 md:hidden"
+          : "ml-3.5 hidden items-center gap-2 font-normal text-[var(--app-text-color-bright-pink)] md:flex"
+      }
+    >
+      <p className="select-none text-sm/[18px] font-normal text-gray-500/70">
+        {mobileOnly
+          ? `Updated on ${formattedDate}`
+          : `Updated on ${formattedUpdateOn}`}
+      </p>
+
+      <button className="flex items-center gap-1 text-sm text-[var(--app-text-color-bright-pink)] md:gap-1.5">
+        <FaBell className="size-3" />
+        <span>Subscribe</span>
+      </button>
+    </div>
+  );
+};
+
+const ChaptersOrder: React.FC<{
+  mobileOnly?: boolean;
+  order: ChaptersOrder;
+  changeOrderToReverse: () => void;
+  changeOrderToPositive: () => void;
+}> = ({ mobileOnly, order, changeOrderToReverse, changeOrderToPositive }) => {
+  return (
+    <div
+      className={
+        mobileOnly
+          ? "flex items-center text-[13px] leading-4 md:hidden"
+          : "mx-auto mb-6 hidden max-w-[1200px] items-center justify-end text-lg font-normal md:flex"
+      }
+    >
+      <button
+        onClick={changeOrderToReverse}
         className={chaptersOrderBtnClasses}
-        data-active={chaptersOrder === "reverse"}
+        data-active={order === "reverse"}
       >
         Reverse
-      </span>
+      </button>
+
       <span className="mx-1 text-[var(--app-text-color-pale-silver)]">|</span>
-      <span
-        role="button"
-        tabIndex={0}
-        onClick={() => changeChapterOrder("positive")}
-        onKeyDown={(e: React.KeyboardEvent<HTMLSpanElement>) => {
-          if (e.key === "Enter") {
-            changeChapterOrder("positive");
-          }
-        }}
+
+      <button
+        onClick={changeOrderToPositive}
         className={chaptersOrderBtnClasses}
-        data-active={chaptersOrder === "positive"}
+        data-active={order === "positive"}
       >
         Positive
-      </span>
+      </button>
     </div>
   );
 };

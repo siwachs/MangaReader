@@ -23,7 +23,7 @@ const RecommendedForYou: React.FC = async () => {
 
       <div className="no-result-recommend-comics flex flex-wrap gap-[3%] md:mb-[50px] md:gap-[18px]">
         {contentList.map((content, index) => (
-          <div key={content.id} className="mb-[14px] w-[31%] md:w-[180px]">
+          <div key={content.id} className="mb-3.5 w-[31%] md:w-[180px]">
             <Link
               href={`/${encodeURIComponent(content.title.toLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
             >
