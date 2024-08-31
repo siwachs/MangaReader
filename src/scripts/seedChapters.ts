@@ -28,7 +28,14 @@ const seedChapters = async (id: string) => {
 
     const insertedChapters = await Chapter.insertMany(transformedChapters);
     const ids = insertedChapters.map((chapter) => chapter._id);
-    await Content.findByIdAndUpdate(id, { chapters: ids });
+    const updatedContent = await Content.findByIdAndUpdate(
+      id,
+      { $push: { chapters: { $each: ids } } },
+      { new: true, upsert: true },
+    );
+    updatedContent.chaptersCount = updatedContent.chapters.length;
+    updatedContent.chaptersUpdatedOn = new Date();
+    await updatedContent.save();
 
     console.log("Chapters seeded and Content updated successfully!");
   } catch (error: any) {
