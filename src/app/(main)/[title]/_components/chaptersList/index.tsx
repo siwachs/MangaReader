@@ -1,7 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
 
 import {
@@ -13,8 +14,15 @@ import { Chapter } from "@/types";
 import ChaptersOrder from "./chaptersOrder";
 import ChapterLink from "@/components/buttons/chapterLink";
 
-import { LiaTimesSolid } from "react-icons/lia";
 import { FaBell, FaChevronDown } from "react-icons/fa6";
+
+// Dynamic Imports
+const InfiniteScrollWithClientHeight = dynamic(
+  () => import("./chaptersListInfiniteScroll/infiniteScrollWithClientHeight"),
+  {
+    ssr: false,
+  },
+);
 
 export type ChaptersOrder = "reverse" | "positive";
 export type ChaptersPayload = {
@@ -31,8 +39,6 @@ const ChaptersList: React.FC<{
   chapters: Chapter[];
 }> = ({ contentId, title, updatedOn, chapters }) => {
   const [chaptersOrder, setChaptersOrder] = useState<ChaptersOrder>("reverse");
-
-  const containerRef = useRef<HTMLDivElement>(null);
   const [chaptersPayload, setChaptersPayload] = useState<ChaptersPayload>({
     chapters: chapters.slice(0, CHAPTERS_LIST_DEFAULT_PAGE_SIZE),
     pageNumber: CHAPTERS_LIST_DEFAULT_PAGE_NUMBER,
@@ -71,45 +77,6 @@ const ChaptersList: React.FC<{
   const infiniteScrollToogleKeyDown = getKeydownEvent(toogleInfiniteScroll);
   const toogleShowAll = () => setShowAll((prev) => !prev);
   const showAllToogleKeyDown = getKeydownEvent(toogleShowAll);
-
-  useEffect(() => {
-    const container = containerRef.current;
-
-    const handleScroll = () => {
-      if (!container) return;
-
-      const bottomOffset = container.scrollHeight - container.clientHeight;
-      const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
-      const hasMore = chaptersPayload.pageNumber !== chaptersPayload.totalPages;
-
-      if (scrolledToBottom && hasMore) {
-        setChaptersPayload((prev) => {
-          const startingIndex =
-            (prev.pageNumber + 1) * CHAPTERS_LIST_DEFAULT_PAGE_SIZE;
-          const endingIndex = startingIndex + CHAPTERS_LIST_DEFAULT_PAGE_SIZE;
-          const nextChapters = chapters.slice(startingIndex, endingIndex);
-
-          return {
-            ...prev,
-            chapters: [...prev.chapters, ...nextChapters],
-            pageNumber: prev.pageNumber + 1,
-          };
-        });
-      }
-    };
-
-    if (infiniteScroll) {
-      container?.addEventListener("scroll", handleScroll);
-    }
-
-    return () => container?.removeEventListener("scroll", handleScroll);
-  }, [
-    infiniteScroll,
-    chaptersPayload.pageNumber,
-    chaptersPayload.totalPages,
-    chaptersPayload.chapters,
-    chapters,
-  ]);
 
   const date = parseISO(updatedOn);
   const formattedDate = format(date, "dd/MM/yy");
@@ -175,46 +142,18 @@ const ChaptersList: React.FC<{
         )}
 
         {infiniteScroll && (
-          <div className="fixed inset-0 z-[999] bg-[var(--app-backdrop-color-black)] md:hidden">
-            <div
-              ref={containerRef}
-              className="fixed bottom-0 left-0 right-0 h-[90vh] overflow-auto rounded-t-2xl bg-white"
-            >
-              <div className="fixed w-full rounded-t-2xl bg-white">
-                <p className="m-4 text-center text-base font-medium">{title}</p>
-                <LiaTimesSolid
-                  tabIndex={0}
-                  role="button"
-                  aria-label="Close Chapters List"
-                  onClick={toogleInfiniteScroll}
-                  onKeyDown={infiniteScrollToogleKeyDown}
-                  className="absolute right-4 top-4 size-5"
-                />
-
-                <div className="mt-2 flex items-center justify-between px-4 text-[13px]">
-                  <p>Update to chapters {chapters.length}</p>
-
-                  <ChaptersOrder
-                    mobileOnly
-                    order={chaptersOrder}
-                    changeOrderToReverse={changeOrderToReverse}
-                    changeOrderToPositive={changeOrderToPositive}
-                  />
-                </div>
-              </div>
-
-              <div className="mb-10 mt-[100px]">
-                {chaptersPayload.chapters.map((chapter) => (
-                  <ChapterLink
-                    key={chapter.id}
-                    title={chapter.title}
-                    releaseDate={chapter.createdAt}
-                    href={`/watch/${contentId}/${chapter.id}`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          <InfiniteScrollWithClientHeight
+            title={title}
+            toogleInfiniteScroll={toogleInfiniteScroll}
+            infiniteScrollToogleKeyDown={infiniteScrollToogleKeyDown}
+            chaptersOrder={chaptersOrder}
+            changeOrderToReverse={changeOrderToReverse}
+            changeOrderToPositive={changeOrderToPositive}
+            chapters={chapters}
+            chaptersPayload={chaptersPayload}
+            setChaptersPayload={setChaptersPayload}
+            contentId={contentId}
+          />
         )}
 
         <div
