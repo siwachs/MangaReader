@@ -10,9 +10,10 @@ import ChapterLink from "@/components/buttons/chapterLink";
 
 import { CHAPTERS_LIST_DEFAULT_PAGE_SIZE } from "@/constants";
 
+import { AiOutlineLoading } from "react-icons/ai";
 import { LiaTimesSolid } from "react-icons/lia";
 
-const InfiniteScrollWithClientHeight: React.FC<{
+const InfiniteScrollWithIntersectionObserver: React.FC<{
   infiniteScroll: boolean;
   title: string;
   toogleInfiniteScroll: () => void;
@@ -37,37 +38,46 @@ const InfiniteScrollWithClientHeight: React.FC<{
   setChaptersPayload,
   contentId,
 }) => {
+  const loaderRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
+    if (!container) return;
 
-    const handleScroll = () => {
-      if (!container) return;
+    const loadMoreChapters = () => {
+      setChaptersPayload((prev) => {
+        const startingIndex =
+          (prev.pageNumber + 1) * CHAPTERS_LIST_DEFAULT_PAGE_SIZE;
+        const endingIndex = startingIndex + CHAPTERS_LIST_DEFAULT_PAGE_SIZE;
+        const nextChapters = chapters.slice(startingIndex, endingIndex);
 
-      const bottomOffset = container.scrollHeight - container.clientHeight;
-      const scrolledToBottom = container.scrollTop >= bottomOffset * 0.9;
-      const hasMore = chaptersPayload.pageNumber !== chaptersPayload.totalPages;
-
-      if (scrolledToBottom && hasMore) {
-        setChaptersPayload((prev) => {
-          const startingIndex =
-            (prev.pageNumber + 1) * CHAPTERS_LIST_DEFAULT_PAGE_SIZE;
-          const endingIndex = startingIndex + CHAPTERS_LIST_DEFAULT_PAGE_SIZE;
-          const nextChapters = chapters.slice(startingIndex, endingIndex);
-
-          return {
-            ...prev,
-            chapters: [...prev.chapters, ...nextChapters],
-            pageNumber: prev.pageNumber + 1,
-          };
-        });
-      }
+        return {
+          ...prev,
+          chapters: [...prev.chapters, ...nextChapters],
+          pageNumber: prev.pageNumber + 1,
+        };
+      });
     };
 
-    container?.addEventListener("scroll", handleScroll);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const isIntersecting = entry.isIntersecting;
+        const hasMore =
+          chaptersPayload.pageNumber !== chaptersPayload.totalPages;
 
-    return () => container?.removeEventListener("scroll", handleScroll);
+        if (isIntersecting && hasMore) loadMoreChapters();
+      },
+      {
+        threshold: 1.0,
+      },
+    );
+
+    if (loaderRef.current) observer.observe(loaderRef.current);
+
+    return () => {
+      if (loaderRef.current) observer.unobserve(loaderRef.current);
+    };
   }, [
     chaptersPayload.pageNumber,
     chaptersPayload.totalPages,
@@ -116,10 +126,14 @@ const InfiniteScrollWithClientHeight: React.FC<{
               href={`/watch/${contentId}/${chapter.id}`}
             />
           ))}
+
+          <div className="">
+            <AiOutlineLoading />
+          </div>
         </div>
       </div>
     </ModelOverlay>
   );
 };
 
-export default InfiniteScrollWithClientHeight;
+export default InfiniteScrollWithIntersectionObserver;

@@ -17,8 +17,11 @@ import ChapterLink from "@/components/buttons/chapterLink";
 import { FaBell, FaChevronDown } from "react-icons/fa6";
 
 // Dynamic Imports
-const InfiniteScrollWithClientHeight = dynamic(
-  () => import("./chaptersListInfiniteScroll/infiniteScrollWithClientHeight"),
+const InfiniteScrollWithIntersectionObserver = dynamic(
+  () =>
+    import(
+      "./chaptersListInfiniteScroll/infiniteScrollWithIntersectionObserver"
+    ),
   {
     ssr: false,
     loading: () => (
@@ -146,7 +149,7 @@ const ChaptersList: React.FC<{
         )}
 
         {infiniteScroll && (
-          <InfiniteScrollWithClientHeight
+          <InfiniteScrollWithIntersectionObserver
             infiniteScroll={infiniteScroll}
             title={title}
             toogleInfiniteScroll={toogleInfiniteScroll}
