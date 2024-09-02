@@ -63,13 +63,12 @@ const InfiniteScrollWithIntersectionObserver: React.FC<{
     const observer = new IntersectionObserver(
       ([entry]) => {
         const isIntersecting = entry.isIntersecting;
-        const hasMore =
-          chaptersPayload.pageNumber !== chaptersPayload.totalPages;
+        const hasMore = chaptersPayload.pageNumber < chaptersPayload.totalPages;
 
         if (isIntersecting && hasMore) loadMoreChapters();
       },
       {
-        threshold: 1.0,
+        threshold: 0.5,
       },
     );
 
@@ -127,8 +126,11 @@ const InfiniteScrollWithIntersectionObserver: React.FC<{
             />
           ))}
 
-          <div className="">
-            <AiOutlineLoading />
+          <div
+            ref={loaderRef}
+            className={`my-5 ${chaptersPayload.pageNumber < chaptersPayload.totalPages ? "flex" : "hidden"} items-center justify-center text-[var(--app-text-color-bright-pink)]`}
+          >
+            <AiOutlineLoading className="size-7 animate-spin" />
           </div>
         </div>
       </div>
