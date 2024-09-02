@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import useBodyOverflow from "@/hooks/useBodyOverflow";
 import React, { useState } from "react";
 import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
 
@@ -11,6 +10,7 @@ import {
 } from "@/constants";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { Chapter } from "@/types";
+import ModelOverlay from "@/components/utils/modelOverlay";
 import ChaptersOrder from "./chaptersOrder";
 import ChapterLink from "@/components/buttons/chapterLink";
 
@@ -21,6 +21,11 @@ const InfiniteScrollWithClientHeight = dynamic(
   () => import("./chaptersListInfiniteScroll/infiniteScrollWithClientHeight"),
   {
     ssr: false,
+    loading: () => (
+      <ModelOverlay blackBgHalfOpacity mobileOnly>
+        <div className="fixed bottom-0 left-0 right-0 h-[90vh] animate-pulse rounded-t-2xl bg-gray-400" />
+      </ModelOverlay>
+    ),
   },
 );
 
@@ -71,7 +76,6 @@ const ChaptersList: React.FC<{
 
   const [infiniteScroll, setInfiniteScroll] = useState(false);
   const [showAll, setShowAll] = useState(false);
-  useBodyOverflow(infiniteScroll);
 
   const toogleInfiniteScroll = () => setInfiniteScroll((prev) => !prev);
   const infiniteScrollToogleKeyDown = getKeydownEvent(toogleInfiniteScroll);
@@ -143,6 +147,7 @@ const ChaptersList: React.FC<{
 
         {infiniteScroll && (
           <InfiniteScrollWithClientHeight
+            infiniteScroll={infiniteScroll}
             title={title}
             toogleInfiniteScroll={toogleInfiniteScroll}
             infiniteScrollToogleKeyDown={infiniteScrollToogleKeyDown}

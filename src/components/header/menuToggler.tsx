@@ -1,11 +1,22 @@
 "use client";
 
-import ReactDom from "react-dom";
+import { createPortal } from "react-dom";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 
-import Sidebar from "./sidebar";
+import ModelOverlay from "../utils/modelOverlay";
 
 import { FaBars } from "react-icons/fa6";
+
+// Dynamic Imports
+const Sidebar = dynamic(() => import("./sidebar"), {
+  ssr: false,
+  loading: () => (
+    <ModelOverlay blackBgHalfOpacity>
+      <div className="fixed inset-0 w-[80%] max-w-sm animate-pulse bg-gray-400" />
+    </ModelOverlay>
+  ),
+});
 
 const MenuToggler: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -13,7 +24,7 @@ const MenuToggler: React.FC = () => {
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   return isSidebarOpen ? (
-    ReactDom.createPortal(
+    createPortal(
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={toggleSidebar}

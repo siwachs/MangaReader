@@ -1,7 +1,10 @@
 import { useEffect, useRef, Dispatch, SetStateAction } from "react";
+import useOutsideClick from "@/hooks/useOutsideClick";
+import useBodyOverflow from "@/hooks/useBodyOverflow";
 
 import { Chapter } from "@/types";
 import { ChaptersOrder as ChaptersOrderType, ChaptersPayload } from "..";
+import ModelOverlay from "@/components/utils/modelOverlay";
 import ChaptersOrder from "../chaptersOrder";
 import ChapterLink from "@/components/buttons/chapterLink";
 
@@ -10,6 +13,7 @@ import { CHAPTERS_LIST_DEFAULT_PAGE_SIZE } from "@/constants";
 import { LiaTimesSolid } from "react-icons/lia";
 
 const InfiniteScrollWithClientHeight: React.FC<{
+  infiniteScroll: boolean;
   title: string;
   toogleInfiniteScroll: () => void;
   infiniteScrollToogleKeyDown?: (e: React.KeyboardEvent) => void;
@@ -21,6 +25,7 @@ const InfiniteScrollWithClientHeight: React.FC<{
   setChaptersPayload: Dispatch<SetStateAction<ChaptersPayload>>;
   contentId: string;
 }> = ({
+  infiniteScroll,
   title,
   toogleInfiniteScroll,
   infiniteScrollToogleKeyDown,
@@ -70,8 +75,11 @@ const InfiniteScrollWithClientHeight: React.FC<{
     chapters,
   ]);
 
+  useBodyOverflow(infiniteScroll);
+  useOutsideClick(containerRef, infiniteScroll, toogleInfiniteScroll);
+
   return (
-    <div className="fixed inset-0 z-[999] bg-[var(--app-backdrop-color-black)] md:hidden">
+    <ModelOverlay blackBgHalfOpacity mobileOnly>
       <div
         ref={containerRef}
         className="fixed bottom-0 left-0 right-0 h-[90vh] overflow-auto rounded-t-2xl bg-white"
@@ -110,7 +118,7 @@ const InfiniteScrollWithClientHeight: React.FC<{
           ))}
         </div>
       </div>
-    </div>
+    </ModelOverlay>
   );
 };
 
