@@ -7,22 +7,35 @@ import { usePathname } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
+import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
 import LoadingOverlay from "@/components/utils/loadingOverlay";
 import ImagePreviewAndUploadTool from "@/components/imagePreviewAndUploadTool";
-import SetUsername from "./_components/setUsername";
-import SetGender from "./_components/setGender";
-import SetAvatar from "./_components/setAvatar";
+// import SetUsername from "./_components/setUsername";
+// import SetGender from "./_components/setGender";
+// import SetAvatar from "./_components/setAvatar";
 
-import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
+// Dynamic Imports
+const SetUsername = dynamic(() => import("./_components/setUsername"), {
+  ssr: false,
+});
+const SetGender = dynamic(() => import("./_components/setGender"), {
+  ssr: false,
+});
+
+const SetAvatar = dynamic(() => import("./_components/setAvatar"), {
+  ssr: false,
+});
 
 import { FaChevronRight } from "react-icons/fa";
 import {
   MdOutlineSettings,
   MdOutlineMail,
   MdOutlineBookmarkAdded,
+  MdAdminPanelSettings,
 } from "react-icons/md";
 import { TfiCommentAlt } from "react-icons/tfi";
 import { BiLike } from "react-icons/bi";
+import dynamic from "next/dynamic";
 
 export default function AccountPage() {
   const session = useSession();
@@ -47,7 +60,7 @@ export default function AccountPage() {
   if (status === "loading") return <LoadingOverlay />;
 
   if (status === "authenticated") {
-    const { avatar, name, username, gender, id } = data.user;
+    const { avatar, name, username, gender, id, isAdmin } = data.user;
 
     return (
       <div className="mx-auto h-[calc(100vh-60px)] max-w-[690px] overflow-auto px-5 pb-5 pt-2.5 md:h-[calc(100vh-120px)] md:pb-[30px]">
@@ -117,16 +130,27 @@ export default function AccountPage() {
         </div>
 
         <div className="soft-edge-shadow mt-3.5 rounded-[10px]">
+          {isAdmin && (
+            <ProfileLinkRow
+              iconSize="size-[30px]"
+              href="/admin/content"
+              Icon={MdAdminPanelSettings}
+              title="Add Manga|Anime|comics|manhwa|manhua"
+            />
+          )}
+
           <ProfileLinkRow
             href={`/accounts/${username}/comments`}
             Icon={TfiCommentAlt}
             title="My Comments"
           />
+
           <ProfileLinkRow
             href={`/accounts/${username}/bookmarks`}
             Icon={MdOutlineBookmarkAdded}
             title="My Bookmarks"
           />
+
           <ProfileLinkRow
             href={`/accounts/${username}/chapters`}
             Icon={BiLike}
@@ -229,7 +253,7 @@ const ProfileLinkRow: React.FC<{
       className="my-1 flex h-12 items-center gap-2.5 border-b border-gray-200 p-4"
     >
       <Icon className={iconSize} />
-      <span className="select-none font-bold">{title}</span>
+      <span className="select-none truncate font-bold">{title}</span>
     </Link>
   );
 });
