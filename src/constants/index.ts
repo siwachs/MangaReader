@@ -14,4 +14,5 @@ export const CONTENT_LIST_PAGE_SIZE = 6;
 export const FREE_READ_CONTENT_LIST_PAGE_SIZE = 9;
 export const LATEST_UPDATES_CONTENT_LIST_PAGE_SIZE = 8;
 
-export const ERROR_404_PAGE_HEADER_TITLE = "MangaToon 404 error page";
+export const ERROR_404_PAGE_HEADER_TITLE = "MangaReader 404 error page";
+export const ERROR_500_PAGE_HEADER_TITLE = "MangaReader 500 error page";

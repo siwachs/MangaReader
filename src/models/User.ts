@@ -4,7 +4,7 @@ const VotedCommentSchema = new Schema(
   {
     commentId: { type: String, required: true },
     contentId: { type: String, required: true },
-    chapterId: { type: String, default: null },
+    chapterId: { type: String },
     voteType: { type: String, enum: ["up", "down"] },
   },
   { _id: false },

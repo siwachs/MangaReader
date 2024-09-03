@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Chapter } from "@/types";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import ChapterLink from "@/components/buttons/chapterLink";
@@ -14,12 +15,11 @@ import { RiHeartAdd2Line } from "react-icons/ri";
 import { FiDownload } from "react-icons/fi";
 import { FaCircleChevronDown, FaChevronLeft } from "react-icons/fa6";
 import { FaTimesCircle } from "react-icons/fa";
-import chapters from "@/data/chapters";
 
 const rightSectionButtonClasses =
   "box-content hidden h-[35px] w-[95px] items-center justify-center gap-[5px] rounded-[100px] border border-[var(--app-text-color-pinkish-red)] lg:inline-flex";
 
-const Header: React.FC = () => {
+const Header: React.FC<{ chapters: Chapter[] }> = ({ chapters }) => {
   const [isChapterSelectOpen, setIsChapterSelectOpen] = useState(false);
 
   const headerContainerRef = useRef<HTMLDivElement>(null);
@@ -46,7 +46,7 @@ const Header: React.FC = () => {
   return (
     <header
       ref={headerContainerRef}
-      className="fixed left-0 top-0 z-10 w-full bg-white transition-[top]"
+      className="fixed left-0 top-0 z-10 w-full bg-[var(--app-bg-color-primary)] transition-[top]"
     >
       <div className="mx-auto flex h-[60px] max-w-[1600px] items-center justify-between md:h-[100px]">
         <div className="ml-5 flex-1 md:flex md:items-center">
@@ -118,17 +118,17 @@ const Header: React.FC = () => {
         ref={chapterSelectContainerRef}
         className={
           isChapterSelectOpen
-            ? "fixed left-1/2 z-10 h-[calc(100vh-60px)] w-full max-w-[1220px] -translate-x-1/2 bg-white md:h-72"
+            ? "fixed left-1/2 z-10 h-[calc(100vh-60px)] w-full max-w-[1220px] -translate-x-1/2 bg-[var(--app-bg-color-primary)] md:h-72"
             : "hidden"
         }
       >
         <div className="hide-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
           {chapters.map((chapter) => (
             <ChapterLink
-              key={chapter._id}
+              key={chapter.id}
               title={chapter.title}
-              releaseDate={chapter.releaseDate}
-              href="/watch/892982/38938"
+              releaseDate={chapter.createdAt}
+              href={`/watch/${chapter.contentId}/${chapter.id}`}
             />
           ))}
         </div>

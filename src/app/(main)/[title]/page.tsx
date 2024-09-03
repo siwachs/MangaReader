@@ -53,8 +53,9 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
   const contentId = (req.searchParams.content_id ?? "").trim();
   if (!contentId) return notFound();
 
-  const contentResponse = await getContent(contentId, { forContentPage: true });
-  const { status, error, errorMessage, content } = contentResponse;
+  const { status, error, errorMessage, content } = await getContent(contentId, {
+    forContentPage: true,
+  });
 
   if (status === 404) return notFound();
   if (error)

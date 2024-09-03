@@ -10,14 +10,24 @@ import {
   useCallback,
 } from "react";
 import { useFormState } from "react-dom";
+import dynamic from "next/dynamic";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
 import { MAX_FILE_SIZE } from "@/constants";
 import { ContentResponse, GenresResponse } from "@/types";
 import { addOrUpdateContent } from "@/actions/contentPageForm";
+import ModelOverlay from "@/components/utils/modelOverlay";
 import getUpdateImageSelectionEvent from "@/libs/eventHandlers/getUpdateImageSelectionEvent";
 import SubmitForm from "@/components/buttons/submitForm";
-import ImagePreviewAndUploadTool from "@/components/imagePreviewAndUploadTool";
+
+// Dynamic Imports
+const ImagePreviewAndUploadTool = dynamic(
+  () => import("@/components/imagePreviewAndUploadTool"),
+  {
+    ssr: false,
+    loading: () => <ModelOverlay useAsLoader />,
+  },
+);
 
 import { FaFileArrowUp } from "react-icons/fa6";
 import { MdPreview } from "react-icons/md";

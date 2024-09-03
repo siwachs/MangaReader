@@ -33,10 +33,14 @@ export const addGenre = async (prevState: any, formData: FormData) => {
     if (existingGenre)
       return { error: true, errorMessage: "Genre must be unique." };
 
-    await Genre.create({ name, description });
+    const genre = await Genre.create({ name, description });
 
     revalidatePath("/admin/content");
-    return { error: false, errorMessage: undefined, resetForm: true };
+    return {
+      error: false,
+      errorMessage: undefined,
+      resetForm: genre?._id.toString(),
+    };
   } catch (error: any) {
     if (error.code === MONGOOSE_DUPLICATE_KEY_ERROR) {
       return { error: true, errorMessage: "Genre must be unique." };
@@ -78,9 +82,13 @@ export const addOrUpdateContent = async (
         imagesAndWallpapers,
       );
 
-    await Content.create(validContentPayload);
+    const content = await Content.create(validContentPayload);
 
-    return { error: false, errorMessage: undefined, resetForm: true };
+    return {
+      error: false,
+      errorMessage: undefined,
+      resetForm: content?._id.toString(),
+    };
   } catch (error: any) {
     if (error.code === MONGOOSE_DUPLICATE_KEY_ERROR) {
       return { error: true, errorMessage: "Title must be unique." };

@@ -1,13 +1,3 @@
-export type pageReqObj = {
-  params: {
-    content_id?: string;
-    chapter_id?: string;
-  };
-  searchParams: {
-    content_id?: string;
-  };
-};
-
 // Header NavLink
 export type LinkObject = {
   key: string;
@@ -79,9 +69,11 @@ export type Genre = {
 };
 
 export type Chapter = {
+  contentId: string;
   id: string;
   title: string;
   images: string[];
+  description?: string;
   noOfViews: number;
   noOfLikes: number;
   createdAt: string;
@@ -118,8 +110,14 @@ export type GenresResponse = {
   errorMessage?: string;
 };
 
+export type ChaptersResponse = {
+  error: boolean;
+  chapters: Chapter[];
+  errorMessage?: string;
+};
+
 export type ContentResponse = {
-  status?: number;
+  status?: 404;
   error: boolean;
   content?: Content;
   errorMessage?: string;

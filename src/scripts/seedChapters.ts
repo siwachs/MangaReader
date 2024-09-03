@@ -10,6 +10,7 @@ const seedChapters = async (id: string) => {
     await connectToMongoDB();
 
     const transformedChapters = chapters.map((chapter) => ({
+      contentId: id,
       title: chapter.title,
       images: [
         "/chapter/1.jpg",

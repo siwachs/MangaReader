@@ -2,8 +2,10 @@ import { Schema, models, model } from "mongoose";
 
 const ChapterSchema = new Schema(
   {
+    contentId: { type: String, reqired: true },
     title: { type: String, required: true },
     images: { type: [String], required: true },
+    description: { type: String },
     noOfViews: { type: Number, default: 0 },
     noOfLikes: { type: Number, default: 0 },
   },
