@@ -16,6 +16,7 @@ import DetailTitleBox from "./_components/titleHeader";
 
 import {
   CONTENT_LIST_DEFAULT_PAGE_NUMBER,
+  ERROR_404_PAGE_HEADER_TITLE,
   LATEST_UPDATES_CONTENT_LIST_PAGE_SIZE,
 } from "@/constants";
 
@@ -33,10 +34,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const contentId = (searchParams.content_id ?? "").trim();
   const contentResponse = await getContentTitleAndDescription(contentId);
-  const { title, description } = contentResponse;
+  const { title = ERROR_404_PAGE_HEADER_TITLE, description } = contentResponse;
 
   return {
-    title: `${title} - Manga Reader`,
+    title: `${title} - MangaReader`,
     description,
   };
 }
@@ -53,8 +54,9 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
   if (!contentId) return notFound();
 
   const contentResponse = await getContent(contentId, { forContentPage: true });
-  const { error, errorMessage, content } = contentResponse;
+  const { status, error, errorMessage, content } = contentResponse;
 
+  if (status === 404) return notFound();
   if (error)
     return (
       <ErrorMessage>{`Unable to load Content page because ${errorMessage}`}</ErrorMessage>
@@ -231,7 +233,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
                 <p className="truncate break-words text-[13px]">{news.title}</p>
               </div>
 
-              <div className="hidden border-b border-[var(--app-text-color-pale-silver)] py-3 md:block">
+              <div className="hidden border-b border-gray-300 py-3 md:block">
                 <div className="mb-2.5 flex items-center gap-2">
                   <Image
                     src="/assets/internet-searchinformation-icon.png"

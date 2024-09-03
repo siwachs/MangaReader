@@ -19,7 +19,16 @@ const tabNavigationLinks: LinkObject[] = [
 ];
 
 const TabNavigation: React.FC = () => {
-  const currentUrl = usePathname();
+  const currentURL = usePathname();
+
+  const getActiveTab = (currentURL: string, link: string) => {
+    if (currentURL === link) return true;
+
+    const currentURLParts = currentURL.split("/");
+    const linkParts = link.split("/");
+
+    return currentURLParts[1] === linkParts[1];
+  };
 
   return (
     <nav className="hide-scrollbar flex h-10 w-full items-center justify-between overflow-auto border-y border-gray-300 px-2.5 md:hidden">
@@ -40,7 +49,7 @@ const TabNavigation: React.FC = () => {
               </span>
 
               <div
-                className={`${currentUrl === link ? "block" : "hidden"} absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]`}
+                className={`${getActiveTab(currentURL, link) ? "block" : "hidden"} absolute bottom-0 left-1/2 h-[5px] w-[25px] -translate-x-1/2 rounded-[200px] bg-[var(--app-text-color-crimson)]`}
               />
             </Link>
           </div>

@@ -119,6 +119,7 @@ export type GenresResponse = {
 };
 
 export type ContentResponse = {
+  status?: number;
   error: boolean;
   content?: Content;
   errorMessage?: string;

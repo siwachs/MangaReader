@@ -13,7 +13,7 @@ import SetUsername from "./_components/setUsername";
 import SetGender from "./_components/setGender";
 import SetAvatar from "./_components/setAvatar";
 
-import createKeydownEvent from "@/libs/eventHandlers/createKeydownEvent";
+import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
 
 import { FaChevronRight } from "react-icons/fa";
 import {
@@ -188,7 +188,7 @@ const ProfileInformationRow: React.FC<{
   }) => {
     const role = onClick ? "button" : undefined;
     const tabIndex = onClick ? 0 : undefined;
-    const keyDownEvent = createKeydownEvent(onClick);
+    const keyDownEvent = getKeydownEvent(onClick);
 
     return (
       <div className="flex h-14 items-center justify-between border-b border-gray-200 p-4">

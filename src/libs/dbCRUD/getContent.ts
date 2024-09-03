@@ -26,7 +26,8 @@ export default async function getContent(
           .populate({ path: "chapters", select: "title createdAt" })
       : await Content.findById(contentId).select(partialContent);
 
-    if (!contentDoc) return { error: true, errorMessage: "Content not found." };
+    if (!contentDoc)
+      return { status: 404, error: true, errorMessage: "Content not found." };
 
     const formatedContentDoc = formatMongooseDoc(contentDoc.toObject());
 

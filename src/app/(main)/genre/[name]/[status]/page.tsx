@@ -31,7 +31,7 @@ export async function generateMetadata(
   const description = await getDescriptionByName(name);
 
   return {
-    title: `${getCapitalizedWord(name)} - Read Manga, Anime, Manhua, and Donghua Online - Manga Reader`,
+    title: `${getCapitalizedWord(name)} - Read Manga, Anime, Manhua, and Donghua Online - MangaReader`,
     description,
   };
 }

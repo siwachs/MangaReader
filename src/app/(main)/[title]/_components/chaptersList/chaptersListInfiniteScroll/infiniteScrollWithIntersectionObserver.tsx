@@ -128,9 +128,9 @@ const InfiniteScrollWithIntersectionObserver: React.FC<{
 
           <div
             ref={loaderRef}
-            className={`my-5 ${chaptersPayload.pageNumber < chaptersPayload.totalPages ? "flex" : "hidden"} items-center justify-center text-[var(--app-text-color-bright-pink)]`}
+            className={`my-5 ${chaptersPayload.pageNumber < chaptersPayload.totalPages ? "" : "hidden"} text-[var(--app-text-color-bright-pink)]`}
           >
-            <AiOutlineLoading className="size-7 animate-spin" />
+            <AiOutlineLoading className="mx-auto size-8 animate-spin" />
           </div>
         </div>
       </div>

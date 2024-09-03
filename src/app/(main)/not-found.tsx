@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "MangaToon 404 error page",
+  title: "MangaReader 404 error page",
 };
 
 export default function NotFound() {

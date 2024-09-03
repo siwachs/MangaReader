@@ -1,4 +1,4 @@
-import { Schema, model, models, UpdateQuery, Document } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const ContentSchema = new Schema(
   {

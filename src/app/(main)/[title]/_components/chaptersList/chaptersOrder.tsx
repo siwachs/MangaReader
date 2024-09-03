@@ -25,7 +25,7 @@ const ChaptersOrder: React.FC<{
         Reverse
       </button>
 
-      <span className="mx-1 text-[var(--app-text-color-pale-silver)]">|</span>
+      <span className="mx-1 text-gray-300">|</span>
 
       <button
         onClick={changeOrderToPositive}
