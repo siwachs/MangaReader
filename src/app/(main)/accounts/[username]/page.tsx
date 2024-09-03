@@ -3,28 +3,48 @@
 import { useState, memo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
 import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
+import ModelOverlay from "@/components/utils/modelOverlay";
 import LoadingOverlay from "@/components/utils/loadingOverlay";
-import ImagePreviewAndUploadTool from "@/components/imagePreviewAndUploadTool";
-// import SetUsername from "./_components/setUsername";
-// import SetGender from "./_components/setGender";
-// import SetAvatar from "./_components/setAvatar";
 
 // Dynamic Imports
 const SetUsername = dynamic(() => import("./_components/setUsername"), {
   ssr: false,
+  loading: () => (
+    <ModelOverlay>
+      <div className="mx-auto mt-[92px] h-[203.6px] w-[90%] max-w-[690px] animate-pulse rounded-lg bg-gray-400 md:mt-36 md:h-[211.6px]" />
+    </ModelOverlay>
+  ),
 });
 const SetGender = dynamic(() => import("./_components/setGender"), {
   ssr: false,
+  loading: () => (
+    <ModelOverlay>
+      <div className="fixed bottom-0 left-0 right-0 z-[9999] mx-auto h-72 animate-pulse rounded-t-2xl bg-gray-400" />
+    </ModelOverlay>
+  ),
 });
 
 const SetAvatar = dynamic(() => import("./_components/setAvatar"), {
   ssr: false,
+  loading: () => (
+    <ModelOverlay>
+      <div className="fixed bottom-0 left-0 right-0 z-[9999] mx-auto h-[200px] max-w-[690px] animate-pulse rounded-t-2xl bg-gray-400" />
+    </ModelOverlay>
+  ),
 });
+const ImagePreviewAndUploadTool = dynamic(
+  () => import("@/components/imagePreviewAndUploadTool"),
+  {
+    ssr: false,
+    loading: () => <ModelOverlay useAsLoader />,
+  },
+);
 
 import { FaChevronRight } from "react-icons/fa";
 import {
@@ -35,7 +55,6 @@ import {
 } from "react-icons/md";
 import { TfiCommentAlt } from "react-icons/tfi";
 import { BiLike } from "react-icons/bi";
-import dynamic from "next/dynamic";
 
 export default function AccountPage() {
   const session = useSession();
