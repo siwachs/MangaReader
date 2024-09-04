@@ -1,4 +1,4 @@
-import { useState, memo, useRef } from "react";
+import { useState, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -22,7 +22,6 @@ const sortButtonClasses =
   "text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-[var(--app-text-color-gunmelt-gray)]";
 
 const NestedCommentsContainer: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const {
     rootComments,
     commentsPayload,
@@ -57,100 +56,95 @@ const NestedCommentsContainer: React.FC = () => {
     <div
       className={`${roboto.className} nested-comment-system-wrapper text-[var(--app-text-color-dark-grayish-green)]`}
     >
-      {isVisible && (
-        <>
-          <header className="mb-6">
-            <div className="flex items-center justify-between border-b-2 border-[var(--app-border-color-slightly-blue-gray)] py-3 font-bold">
-              <span
-                className={
-                  commentsPayload.loading
-                    ? "animate-pulse rounded-sm bg-gray-400 text-gray-400"
-                    : undefined
-                }
-              >
-                {commentsPayload.totalComments} Comments
-              </span>
+      <header className="mb-6">
+        <div className="flex items-center justify-between border-b-2 border-[var(--app-border-color-slightly-blue-gray)] py-3 font-bold">
+          <span
+            className={
+              commentsPayload.loading
+                ? "animate-pulse rounded-sm bg-gray-400 text-gray-400"
+                : undefined
+            }
+          >
+            {commentsPayload.totalComments} Comments
+          </span>
 
-              <ClientAuth
-                profileContainerClasses="relative size-9"
-                profileMenuPositionClasses="right-0 top-10"
-                signInButtonClasses="flex items-center gap-1.5"
-                signInButtonComponent={
-                  <>
-                    <div className="relative">
-                      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
-                        1
-                      </span>
-                      <IoChatbubble className="size-[22px]" />
-                    </div>
+          <ClientAuth
+            profileContainerClasses="relative size-9"
+            profileMenuPositionClasses="right-0 top-10"
+            signInButtonClasses="flex items-center gap-1.5"
+            signInButtonComponent={
+              <>
+                <div className="relative">
+                  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
+                    1
+                  </span>
+                  <IoChatbubble className="size-[22px]" />
+                </div>
 
-                    <span>Sign In</span>
-                  </>
-                }
-              />
-            </div>
-          </header>
+                <span>Sign In</span>
+              </>
+            }
+          />
+        </div>
+      </header>
 
-          <section>
-            <CommentForm />
+      <section>
+        <CommentForm />
 
-            <div className="mb-2 flex items-center justify-between">
-              <div className="mb-3 ml-3 flex items-center gap-2.5">
-                <FaRegHeart />
+        <div className="mb-2 flex items-center justify-between">
+          <div className="mb-3 ml-3 flex items-center gap-2.5">
+            <FaRegHeart />
 
-                <span className="text-xs/[18px] font-bold">6</span>
-              </div>
+            <span className="text-xs/[18px] font-bold">6</span>
+          </div>
 
-              <div className="mb-3 flex items-center gap-4 pt-[3px]">
-                <button
-                  type="button"
-                  onClick={() => changeCommentsOrder("BEST")}
-                  data-active={commentsPayload.sortKey === "BEST"}
-                  className={sortButtonClasses}
-                >
-                  Best
-                </button>
+          <div className="mb-3 flex items-center gap-4 pt-[3px]">
+            <button
+              type="button"
+              onClick={() => changeCommentsOrder("BEST")}
+              data-active={commentsPayload.sortKey === "BEST"}
+              className={sortButtonClasses}
+            >
+              Best
+            </button>
 
-                <button
-                  type="button"
-                  onClick={() => changeCommentsOrder("NEWEST")}
-                  data-active={commentsPayload.sortKey === "NEWEST"}
-                  className={sortButtonClasses}
-                >
-                  Newest
-                </button>
+            <button
+              type="button"
+              onClick={() => changeCommentsOrder("NEWEST")}
+              data-active={commentsPayload.sortKey === "NEWEST"}
+              className={sortButtonClasses}
+            >
+              Newest
+            </button>
 
-                <button
-                  type="button"
-                  onClick={() => changeCommentsOrder("OLDEST")}
-                  data-active={commentsPayload.sortKey === "OLDEST"}
-                  className={sortButtonClasses}
-                >
-                  Oldest
-                </button>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => changeCommentsOrder("OLDEST")}
+              data-active={commentsPayload.sortKey === "OLDEST"}
+              className={sortButtonClasses}
+            >
+              Oldest
+            </button>
+          </div>
+        </div>
 
-            {renderComments()}
+        {renderComments()}
 
-            {commentsPayload.pageNumber !== commentsPayload.totalPages && (
-              <button
-                type="button"
-                onClick={() => loadMoreComments(commentsPayload.pageNumber + 1)}
-                disabled={
-                  commentsPayload.loading ||
-                  commentsPayload.loadMoreCommentsLoding
-                }
-                className="my-1.5 w-full rounded-[15px] border border-[var(--app-text-color-gunmelt-gray)] pb-[8px] pt-[9px] text-center text-lg/[21px] font-bold text-[var(--app-text-color-gunmelt-gray)] transition-all duration-200 hover:bg-[var(--app-text-color-gunmelt-gray)] hover:text-white disabled:pointer-events-none"
-              >
-                Load more comments
-              </button>
-            )}
+        {commentsPayload.pageNumber !== commentsPayload.totalPages && (
+          <button
+            type="button"
+            onClick={() => loadMoreComments(commentsPayload.pageNumber + 1)}
+            disabled={
+              commentsPayload.loading || commentsPayload.loadMoreCommentsLoding
+            }
+            className="my-1.5 w-full rounded-[15px] border border-[var(--app-text-color-gunmelt-gray)] pb-[8px] pt-[9px] text-center text-lg/[21px] font-bold text-[var(--app-text-color-gunmelt-gray)] transition-all duration-200 hover:bg-[var(--app-text-color-gunmelt-gray)] hover:text-white disabled:pointer-events-none"
+          >
+            Load more comments
+          </button>
+        )}
 
-            <div className="mb-5 border border-[#dcdde7]" />
-          </section>
-        </>
-      )}
+        <div className="mb-5 border border-[#dcdde7]" />
+      </section>
     </div>
   );
 };
@@ -401,3 +395,5 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
 });
 
 Comment.displayName = "Comment";
+
+export default NestedCommentsContainer;

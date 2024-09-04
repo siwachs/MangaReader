@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 
 const LazyLoadComponent: React.FC<{ children: React.ReactNode }> = ({
@@ -9,7 +11,10 @@ const LazyLoadComponent: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
       },
       {
         threshold: 0.5,
