@@ -9,6 +9,9 @@ import {
   useEffect,
 } from "react";
 
+import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
+import { DEFAULT_TOAST_AUTODISMISS, DEFAUL_TOAST_TIMEOUT } from "@/constants";
+
 import { IoCloseSharp } from "react-icons/io5";
 import "./toast.css";
 
@@ -19,9 +22,6 @@ type ToastMessage = {
   autoDismiss?: boolean;
   timeOut?: number;
 };
-
-const DEFAULT_TOAST_AUTODISMISS = true;
-const DEFAUL_TOAST_TIMEOUT = 5000;
 
 type ContextType = {
   addToast: (toast: ToastMessage) => void;
@@ -47,7 +47,7 @@ export function useToastContainer() {
 
 const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
   const toastRef = useRef<HTMLDivElement>(null);
-  const [showToast, setShowToast] = useState(false);
+  const [isShowToast, setIsShowToast] = useState(false);
   const [remainingTimePercentage, setRemainingTimePercentage] = useState(100);
   const { removeToast } = useToastContainer();
 
@@ -55,15 +55,16 @@ const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
   const timeOut = toast.timeOut ?? DEFAUL_TOAST_TIMEOUT;
 
   const closeToast = () => {
-    setShowToast(false);
+    setIsShowToast(false);
 
     toastRef.current?.addEventListener("transitionend", () => {
       removeToast(toast);
     });
   };
+  const closeOnKeydown = getKeydownEvent(closeToast);
 
   useEffect(() => {
-    setShowToast(true);
+    setIsShowToast(true);
     if (autoDismiss && timeOut > 0) {
       const startTime = Date.now();
 
@@ -79,6 +80,7 @@ const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
         toastRef.current?.removeEventListener("transitionend", () => {
           removeToast(toast);
         });
+
         clearInterval(intervalId);
       };
     }
@@ -87,26 +89,30 @@ const Toast: React.FC<{ toast: ToastMessage }> = ({ toast }) => {
   return (
     <div
       ref={toastRef}
-      className={`${showToast ? "show toast" : "toast"}`}
+      className={`${isShowToast ? "show toast" : "toast"}`}
       data-type={toast.type}
+      role="alert"
+      aria-live="polite"
+      aria-atomic
+      aria-hidden={!isShowToast}
+      tabIndex={-1}
     >
       <div
         className="timer"
         style={{ height: `${remainingTimePercentage}%` }}
+        aria-hidden
       />
       <div className="text">{toast.text}</div>
+
       <div
         role="button"
         tabIndex={0}
         className="close"
         onClick={closeToast}
-        onKeyDown={(e: React.KeyboardEvent) => {
-          if (e.key === "Enter") {
-            closeToast();
-          }
-        }}
+        onKeyDown={closeOnKeydown}
+        aria-label="Close toast"
       >
-        <IoCloseSharp className="size-[18px]" />
+        <IoCloseSharp className="size-[22px]" />
       </div>
     </div>
   );
@@ -151,6 +157,7 @@ export function ToastContainerProvider({
           ))}
         </div>
       )}
+
       {children}
     </ToastContainerContext.Provider>
   );

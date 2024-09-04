@@ -1,5 +1,5 @@
 .toast-container {
-  @apply fixed z-[1000] max-h-full p-2;
+  @apply fixed z-[1000] mt-[60px] max-h-full p-2 md:mt-[100px];
 }
 
 .toast {

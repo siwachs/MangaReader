@@ -20,6 +20,8 @@ type ChapterResponse = {
   status?: 404;
   error: boolean;
   chapter?: Chapter;
+  prevChapter?: string;
+  nextChapter?: string;
   errorMessage?: string;
 };
 
@@ -70,15 +72,28 @@ export async function getChapter(
     const contentDoc = await Content.findById(contentId)
       .select("chapters")
       .populate({ path: "chapters", select: partialChaptersSelect });
-    const chapter = contentDoc?.chapters.filter(
+
+    const chapterIndex = contentDoc?.chapters.findIndex(
       (content: any) => content._id.toString() === chapterId,
-    )?.[0];
-    if (!chapter)
+    );
+    if (chapterIndex === -1)
       return { status: 404, error: true, errorMessage: "Chapter not found." };
+
+    const chapters = contentDoc?.chapters ?? [];
+    const currentChapter = chapters[chapterIndex];
+
+    const prevChapter =
+      chapterIndex > 0 ? chapters[chapterIndex - 1]._id.toString() : undefined;
+    const nextChapter =
+      chapterIndex < chapters.length - 1
+        ? chapters[chapterIndex + 1]._id.toString()
+        : undefined;
 
     return {
       error: false,
-      chapter: formatMongooseDoc(chapter.toObject()) as Chapter,
+      chapter: formatMongooseDoc(currentChapter.toObject()) as Chapter,
+      prevChapter,
+      nextChapter,
     };
   } catch (error: any) {
     return { error: true, errorMessage: error.message };

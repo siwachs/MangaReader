@@ -13,7 +13,11 @@ import formatMongooseDoc from "../db/formatMongooseDoc";
 
 export default async function getContent(
   contentId: string,
-  { forContentPage = false, forClientComponent = false } = {},
+  {
+    forContentPage = false,
+    forClientComponent = false,
+    chaptersOrderInReverse = true,
+  } = {},
 ): Promise<ContentResponse> {
   try {
     await connectToMongoDB();
@@ -32,6 +36,8 @@ export default async function getContent(
       return { status: 404, error: true, errorMessage: "Content not found." };
 
     const formattedContentDoc = formatMongooseDoc(contentDoc.toObject());
+    if (chaptersOrderInReverse && formattedContentDoc?.chapters)
+      formattedContentDoc.chapters.reverse();
 
     return {
       error: false,

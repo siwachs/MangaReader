@@ -75,7 +75,7 @@ const Header: React.FC<{
               src="/MangaToon.svg"
               alt="mangatoon"
               width={200}
-              height={60}
+              height={36}
               className="-mb-1 h-[27px] w-[131px] md:ml-[31px] lg:-mb-2.5 lg:ml-[63px] lg:h-[40px] lg:w-[194px]"
             />
           </Link>

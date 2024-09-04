@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { connect } from "mongoose";
 
 const uri = process.env.MONGODB_URI as string;
 if (!uri) {
@@ -24,7 +24,7 @@ export default async function connectToMongoDB() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(uri, opts).then((mongoose) => {
+    cached.promise = connect(uri, opts).then((mongoose) => {
       return mongoose;
     });
   }

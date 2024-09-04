@@ -16,3 +16,6 @@ export const LATEST_UPDATES_CONTENT_LIST_PAGE_SIZE = 8;
 
 export const ERROR_404_PAGE_HEADER_TITLE = "MangaReader 404 error page";
 export const ERROR_500_PAGE_HEADER_TITLE = "MangaReader 500 error page";
+
+export const DEFAULT_TOAST_AUTODISMISS = true;
+export const DEFAUL_TOAST_TIMEOUT = 5000;

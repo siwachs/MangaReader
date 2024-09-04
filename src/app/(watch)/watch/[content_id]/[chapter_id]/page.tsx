@@ -1,11 +1,11 @@
 import type { Metadata, ResolvingMetadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
 import Header from "@/app/(watch)/_components/header";
 import ErrorMessage from "@/components/messages/errorMessage";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
+import Pagination from "./_components/pagination";
 import NestedCommentSystem from "@/components/nestedCommentSystem";
 
 import {
@@ -55,11 +55,8 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
     forClientComponent: true,
   });
 
-  const { status, chapter, error, errorMessage } = await getChapter(
-    content_id,
-    chapter_id,
-    { withImages: true },
-  );
+  const { status, chapter, prevChapter, nextChapter, error, errorMessage } =
+    await getChapter(content_id, chapter_id, { withImages: true });
 
   if (status === 404) return notFound();
 
@@ -71,12 +68,17 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
         contentTitle={title!}
         chapterTitle={chapter?.title!}
       />
+
       <main id="page-content">
         {error && (
           <ErrorMessage>{`Unable to load Watch page because ${errorMessage}`}</ErrorMessage>
         )}
 
-        <ChaptersPagination />
+        <Pagination
+          contentId={content_id}
+          prevChapter={prevChapter}
+          nextChapter={nextChapter}
+        />
         <div className="mx-auto mb-5 grid min-h-[calc(100vh-220px)] max-w-[800px] place-items-center md:min-h-[calc(100vh-360px)]">
           {chapter?.images.map((image, index) => (
             <Image
@@ -92,32 +94,18 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
             />
           ))}
         </div>
-        <ChaptersPagination />
+        <Pagination
+          contentId={content_id}
+          prevChapter={prevChapter}
+          nextChapter={nextChapter}
+        />
 
         <div className="mb-[60px]" />
         {/* <NestedCommentSystem
-        contentId={req.params.content_id!}
-        chapterId={req.params.chapter_id}
-      /> */}
+          contentId={content_id}
+          chapterId={req.params.chapter_id}
+        /> */}
       </main>
     </>
   );
 }
-
-const paginationButtonClasses =
-  "box-content flex h-[25px] w-[40%] items-center justify-center rounded-[500px] border border-[var(--app-border-color-medium-gray)] leading-normal text-gray-500/70 data-[active=false]:pointer-events-none data-[active=true]:border-[var(--app-text-color-crimson)] data-[active=true]:text-[var(--app-text-color-crimson)]";
-
-const ChaptersPagination: React.FC = () => {
-  return (
-    <div className="box-content h-[50px] w-full md:-mt-5 md:h-[100px]">
-      <div className="mx-auto box-content flex h-full items-center justify-around px-[10%] md:w-[500px]">
-        <Link data-active={false} href="/" className={paginationButtonClasses}>
-          <span className="text-xs md:text-xl">Previous Episode</span>
-        </Link>
-        <Link data-active={true} href="/" className={paginationButtonClasses}>
-          <span className="text-xs md:text-xl">Next Episode</span>
-        </Link>
-      </div>
-    </div>
-  );
-};
