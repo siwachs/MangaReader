@@ -19,28 +19,37 @@ import { FaTimesCircle } from "react-icons/fa";
 const rightSectionButtonClasses =
   "box-content hidden h-[35px] w-[95px] items-center justify-center gap-[5px] rounded-[100px] border border-[var(--app-text-color-pinkish-red)] lg:inline-flex";
 
-const Header: React.FC<{ chapters: Chapter[] }> = ({ chapters }) => {
+const Header: React.FC<{
+  chapters: Chapter[];
+  contentId: string;
+  contentTitle: string;
+  chapterTitle: string;
+}> = ({ chapters, contentId, contentTitle, chapterTitle }) => {
   const [isChapterSelectOpen, setIsChapterSelectOpen] = useState(false);
 
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const chapterSelectContainerRef = useRef<HTMLDivElement>(null);
+  const toogleChapterSelect = () => setIsChapterSelectOpen((prev) => !prev);
 
   useBodyOverflow(isChapterSelectOpen);
-  useOutsideClick(chapterSelectContainerRef, isChapterSelectOpen, () => {
-    setIsChapterSelectOpen(false);
-  });
+  useOutsideClick(
+    chapterSelectContainerRef,
+    isChapterSelectOpen,
+    toogleChapterSelect,
+  );
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!headerContainerRef.current) return;
+    const hideHeaderOnScroll = () => {
+      const headerContainer = headerContainerRef.current;
+      if (!headerContainer) return;
 
-      if (window.scrollY >= 60) headerContainerRef.current.style.top = "-100px";
-      else headerContainerRef.current.style.top = "0";
+      if (window.scrollY >= 60) headerContainer.style.top = "-100px";
+      else headerContainer.style.top = "0";
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    hideHeaderOnScroll();
+    window.addEventListener("scroll", hideHeaderOnScroll);
+    return () => window.removeEventListener("scroll", hideHeaderOnScroll);
   }, []);
 
   return (
@@ -50,7 +59,9 @@ const Header: React.FC<{ chapters: Chapter[] }> = ({ chapters }) => {
     >
       <div className="mx-auto flex h-[60px] max-w-[1600px] items-center justify-between md:h-[100px]">
         <div className="ml-5 flex-1 md:flex md:items-center">
-          <Link href="/">
+          <Link
+            href={`/${encodeURIComponent(contentTitle?.toLowerCase().replaceAll(" ", "-"))}?content_id=${contentId}`}
+          >
             <FaChevronLeft
               className="size-[18px] md:hidden md:size-[26px] md:text-[var(--app-text-color-crimson)]"
               color="grey"
@@ -73,13 +84,10 @@ const Header: React.FC<{ chapters: Chapter[] }> = ({ chapters }) => {
         <div className="w-1/2">
           <div className="mt-0.5 flex items-center justify-center gap-[7px] font-medium md:gap-3">
             <div className="truncate text-[15px] text-black md:text-xl">
-              Episode 1
+              {chapterTitle}
             </div>
 
-            <button
-              onClick={() => setIsChapterSelectOpen((prev) => !prev)}
-              className="size-3 md:size-4"
-            >
+            <button onClick={toogleChapterSelect} className="size-3 md:size-4">
               {isChapterSelectOpen ? (
                 <FaTimesCircle className="size-[inherit]" color="grey" />
               ) : (
@@ -89,8 +97,7 @@ const Header: React.FC<{ chapters: Chapter[] }> = ({ chapters }) => {
           </div>
 
           <p className="md:font-noto-sans-sc truncate text-center text-[10px]/[20px] font-medium text-neutral-400 md:text-sm/[16px] md:font-normal">
-            Isekai Shoukan Sareta Kita Seijo-sama ga &apos;Kareshi ga
-            Shinda&apos; to Naku Bakari de Hataraite kuremasen
+            {contentTitle}
           </p>
         </div>
 
@@ -128,7 +135,7 @@ const Header: React.FC<{ chapters: Chapter[] }> = ({ chapters }) => {
               key={chapter.id}
               title={chapter.title}
               releaseDate={chapter.createdAt}
-              href={`/watch/${chapter.contentId}/${chapter.id}`}
+              href={`/watch/${contentId}/${chapter.id}`}
             />
           ))}
         </div>

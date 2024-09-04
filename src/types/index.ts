@@ -110,12 +110,6 @@ export type GenresResponse = {
   errorMessage?: string;
 };
 
-export type ChaptersResponse = {
-  error: boolean;
-  chapters: Chapter[];
-  errorMessage?: string;
-};
-
 export type ContentResponse = {
   status?: 404;
   error: boolean;

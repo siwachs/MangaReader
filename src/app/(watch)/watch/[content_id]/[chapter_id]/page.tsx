@@ -13,27 +13,26 @@ import {
   ERROR_500_PAGE_HEADER_TITLE,
 } from "@/constants";
 
-import {
-  getContentChapter,
-  getContentChapters,
-} from "@/libs/dbCRUD/getContent";
+import getChapters, { getChapter } from "@/libs/dbCRUD/getChapters";
+import { getContentTitleAndDescription } from "@/libs/dbCRUD/getContent";
 
 export async function generateMetadata(
   { params }: WatchPageReqObj,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { content_id, chapter_id } = params;
-  const { chapter, status, error } = await getContentChapter(
-    content_id,
-    chapter_id,
-    { withDescription: true },
-  );
-  const title =
-    status === 404
-      ? ERROR_404_PAGE_HEADER_TITLE
-      : error
-        ? ERROR_500_PAGE_HEADER_TITLE
-        : chapter?.title;
+  const { chapter, status, error } = await getChapter(content_id, chapter_id, {
+    withDescription: true,
+  });
+  let title;
+
+  if (status === 404) {
+    title = ERROR_404_PAGE_HEADER_TITLE;
+  } else if (error) {
+    title = ERROR_500_PAGE_HEADER_TITLE;
+  } else {
+    title = chapter?.title;
+  }
 
   return {
     title: `${title} - MangaReader`,
@@ -50,11 +49,13 @@ type WatchPageReqObj = {
 
 export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
   const { content_id, chapter_id } = req.params;
-  const { chapters } = await getContentChapters(content_id, {
+
+  const { title } = await getContentTitleAndDescription(content_id);
+  const { chapters } = await getChapters(content_id, {
     forClientComponent: true,
   });
 
-  const { status, chapter, error, errorMessage } = await getContentChapter(
+  const { status, chapter, error, errorMessage } = await getChapter(
     content_id,
     chapter_id,
     { withImages: true },
@@ -64,14 +65,19 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
 
   return (
     <>
-      <Header chapters={chapters} />
+      <Header
+        chapters={chapters}
+        contentId={content_id}
+        contentTitle={title!}
+        chapterTitle={chapter?.title!}
+      />
       <main id="page-content">
         {error && (
           <ErrorMessage>{`Unable to load Watch page because ${errorMessage}`}</ErrorMessage>
         )}
 
         <ChaptersPagination />
-        <div className="mx-auto grid min-h-[calc(100vh-220px)] max-w-[800px] place-items-center md:min-h-[calc(100vh-360px)]">
+        <div className="mx-auto mb-5 grid min-h-[calc(100vh-220px)] max-w-[800px] place-items-center md:min-h-[calc(100vh-360px)]">
           {chapter?.images.map((image, index) => (
             <Image
               quality={100}
