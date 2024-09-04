@@ -22,9 +22,10 @@ const rightSectionButtonClasses =
 const Header: React.FC<{
   chapters: Chapter[];
   contentId: string;
+  chapterId: string;
   contentTitle: string;
   chapterTitle: string;
-}> = ({ chapters, contentId, contentTitle, chapterTitle }) => {
+}> = ({ chapters, contentId, chapterId, contentTitle, chapterTitle }) => {
   const [isChapterSelectOpen, setIsChapterSelectOpen] = useState(false);
 
   const headerContainerRef = useRef<HTMLDivElement>(null);
@@ -51,6 +52,14 @@ const Header: React.FC<{
     window.addEventListener("scroll", hideHeaderOnScroll);
     return () => window.removeEventListener("scroll", hideHeaderOnScroll);
   }, []);
+
+  useEffect(() => {
+    if (isChapterSelectOpen) {
+      const chapter = document.getElementById(chapterId);
+
+      chapter?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isChapterSelectOpen, chapterId]);
 
   return (
     <header
@@ -87,7 +96,13 @@ const Header: React.FC<{
               {chapterTitle}
             </div>
 
-            <button onClick={toogleChapterSelect} className="size-3 md:size-4">
+            <button
+              aria-expanded={isChapterSelectOpen}
+              aria-haspopup="true"
+              aria-controls="chapters-list"
+              onClick={toogleChapterSelect}
+              className="size-3 md:size-4"
+            >
               {isChapterSelectOpen ? (
                 <FaTimesCircle className="size-[inherit]" color="grey" />
               ) : (
@@ -129,9 +144,14 @@ const Header: React.FC<{
             : "hidden"
         }
       >
-        <div className="hide-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex">
+        <div
+          id="chapters-list"
+          className="hide-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex"
+        >
           {chapters.map((chapter) => (
             <ChapterLink
+              id={chapter.id}
+              dataActive={chapterId}
               key={chapter.id}
               title={chapter.title}
               releaseDate={chapter.createdAt}

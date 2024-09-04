@@ -6,17 +6,23 @@ import { format, formatDistanceToNow, parseISO } from "date-fns";
 import { FaChevronDown } from "react-icons/fa6";
 
 const ChapterLink: React.FC<{
+  id?: string;
+  dataActive?: string;
   title: string;
   releaseDate: string;
   href: string;
-}> = memo(({ title, releaseDate, href }) => {
+}> = memo(({ id, dataActive, title, releaseDate, href }) => {
   const date = parseISO(releaseDate);
   const formattedDate = format(date, "dd/MM/yy");
   const timeAgo = formatDistanceToNow(date, { addSuffix: true });
   const formattedReleaseDate = `${formattedDate} . ${timeAgo}`;
 
   return (
-    <div className="mx-4 my-2 rounded-lg bg-gray-100 px-4 py-3 md:m-0 md:mb-4 md:w-80">
+    <div
+      id={id}
+      data-active={dataActive !== undefined && dataActive === id}
+      className="mx-4 my-2 rounded-lg bg-gray-100 px-4 py-3 data-[active=true]:pointer-events-none data-[active=true]:bg-gray-300 md:m-0 md:mb-4 md:w-80"
+    >
       <div className="flex items-center justify-between">
         <Link href={href}>
           <p className="text-sm/[18px] font-normal">{title}</p>

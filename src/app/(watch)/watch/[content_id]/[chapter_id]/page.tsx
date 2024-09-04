@@ -65,6 +65,7 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
       <Header
         chapters={chapters}
         contentId={content_id}
+        chapterId={chapter_id}
         contentTitle={title!}
         chapterTitle={chapter?.title!}
       />
@@ -101,10 +102,10 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
         />
 
         <div className="mb-[60px]" />
-        {/* <NestedCommentSystem
+        <NestedCommentSystem
           contentId={content_id}
           chapterId={req.params.chapter_id}
-        /> */}
+        />
       </main>
     </>
   );
