@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname, useParams } from "next/navigation";
 import {
   createContext,
   useCallback,
@@ -11,7 +12,6 @@ import {
 
 import uuidv4 from "@/libs/uuidv4";
 import { useToastContainer } from "./toastContainerContext";
-import { usePathname } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { CommentsPayload, Comment, SortKey, VoteType } from "@/types";
 
@@ -77,18 +77,18 @@ export function useNestedCommentSystem() {
 }
 
 export function NestedCommentProvider({
-  contentId,
-  chapterId,
   children,
 }: Readonly<{
-  contentId: string;
-  chapterId?: string;
   children: React.ReactNode;
 }>) {
+  const { content_id: contentId, chapter_id: chapterId } = useParams<{
+    content_id: string;
+    chapter_id?: string;
+  }>();
   const { addToast } = useToastContainer();
-
   const currentUrl = usePathname();
   const session = useSession();
+
   const [commentsPayload, setCommentsPayload] = useState<CommentsPayload>(
     initialCommentsPayload,
   );

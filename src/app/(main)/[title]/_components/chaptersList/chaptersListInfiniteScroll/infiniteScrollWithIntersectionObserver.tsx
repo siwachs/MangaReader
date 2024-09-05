@@ -68,7 +68,7 @@ const InfiniteScrollWithIntersectionObserver: React.FC<{
         if (isIntersecting && hasMore) loadMoreChapters();
       },
       {
-        threshold: 0.5,
+        threshold: 0.1,
       },
     );
 

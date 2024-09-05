@@ -6,7 +6,7 @@ import Header from "@/app/(watch)/_components/header";
 import ErrorMessage from "@/components/messages/errorMessage";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import Pagination from "./_components/pagination";
-import NestedCommentSystem from "@/components/nestedCommentSystem";
+import LazyLoadComponent from "@/components/utils/lazyLoadComponent";
 
 import {
   ERROR_404_PAGE_HEADER_TITLE,
@@ -103,10 +103,7 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
 
         <div className="mb-[60px]" />
 
-        <NestedCommentSystem
-          contentId={content_id}
-          chapterId={req.params.chapter_id}
-        />
+        <LazyLoadComponent component="NestedCommentSystem" />
       </main>
     </>
   );
