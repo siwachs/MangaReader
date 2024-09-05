@@ -28,11 +28,12 @@ const LazyLoadComponent: React.FC<{ component: ComponentType }> = ({
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.disconnect();
+
+          if (ref.current) observer.disconnect();
         }
       },
       {
-        threshold: 0.1,
+        threshold: 0.01,
       },
     );
 

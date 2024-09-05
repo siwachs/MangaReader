@@ -92,7 +92,7 @@ const ClientAuth: React.FC<{
 
           <div
             id="profile-menu"
-            className={`absolute ${profileMenuPositionClasses} z-50 w-full max-w-[360px] ${isProfileMenuOpen ? "block" : "hidden"} rounded-2xl border bg-[var(--app-bg-color-primary)]`}
+            className={`absolute ${profileMenuPositionClasses} z-50 w-full min-w-[360px] max-w-[360px] ${isProfileMenuOpen ? "block" : "hidden"} rounded-2xl border bg-[var(--app-bg-color-primary)]`}
           >
             <div className="relative mx-auto mt-[18px] h-[22px] max-w-[calc(100%-64px)] text-center text-sm font-medium tracking-normal">
               {email}
