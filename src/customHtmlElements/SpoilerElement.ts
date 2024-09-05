@@ -45,4 +45,8 @@ class SpoilerTag extends HTMLElement {
   }
 }
 
+typeof window !== "undefined" &&
+  !customElements.get("spoiler-tag") &&
+  customElements.define("spoiler-tag", SpoilerTag);
+
 export default SpoilerTag;

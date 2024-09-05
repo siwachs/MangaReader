@@ -10,61 +10,72 @@ import {
   useState,
 } from "react";
 
+import { DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY } from "@/constants";
+import { nextPublicNestedCommentSystemBaseEndpoint } from "@/constants/apiEndpoints";
 import uuidv4 from "@/libs/uuidv4";
 import { useToastContainer } from "./toastContainerContext";
-import { useSession, signIn } from "next-auth/react";
-import { CommentsPayload, Comment, SortKey, VoteType } from "@/types";
+import getSignInConfirm from "@/libs/getSignInConfirm";
+import { useSession } from "next-auth/react";
+import { Comment, SortKey, VoteType } from "@/types";
 
 import {
   makeDeleteRequest,
   makePostPutRequest,
   makeGetRequest,
 } from "@/service/asyncApiCalls";
-import SpoilerTag from "@/customHtmlElements/SpoilerElement";
+
+const loadSpoilerTag = async () => {
+  await import("@/customHtmlElements/SpoilerElement");
+};
+
+type CommentsPayload = {
+  loading: boolean;
+  error: boolean;
+  errorMessage?: string;
+  totalPages: number;
+  totalComments: number;
+  pageNumber: number;
+  comments: Comment[];
+  sortKey: SortKey;
+  loadMoreCommentsLoding: boolean;
+};
+
+const initialCommentsPayload: CommentsPayload = {
+  loading: true,
+  error: false,
+  totalPages: 1,
+  totalComments: 0,
+  pageNumber: 1,
+  comments: [],
+  sortKey: DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY,
+  loadMoreCommentsLoding: false,
+};
 
 type ContextType = {
   contentId: string;
   chapterId?: string;
   commentsPayload: CommentsPayload;
   rootComments: Comment[];
-  getReplies: any;
-  changeCommentsOrder: any;
-  makeComment: any;
-  voteComment: any;
+  getReplies: (parentId?: string) => Comment[];
+  changeCommentsOrder: (sortKey: SortKey) => void;
+  makeComment: (body: Record<string, any>) => Promise<void>;
+  voteComment: (
+    body: Record<string, any>,
+    commentId: string,
+    voteType: VoteType,
+  ) => Promise<void>;
   userId?: string;
-  editComment: any;
-  deleteComment: any;
-  loadMoreComments: any;
+  editComment: (body: Record<string, any>, commentId: string) => Promise<void>;
+  deleteComment: (
+    headers: Record<string, any>,
+    commentId: string,
+  ) => Promise<void>;
+  loadMoreComments: (pageNumber: string) => Promise<void>;
 };
 
-const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT_COMMENTS as string;
-
-const initialCommentsPayload: CommentsPayload = {
-  loading: true,
-  error: false,
-  totalPages: 0,
-  totalComments: 0,
-  pageNumber: 1,
-  comments: [],
-  sortKey: "BEST",
-  loadMoreCommentsLoding: false,
-};
-
-const initialContextValue = {
-  contentId: "0",
-  commentsPayload: initialCommentsPayload,
-  rootComments: [],
-  getReplies: undefined,
-  changeCommentsOrder: undefined,
-  makeComment: undefined,
-  voteComment: undefined,
-  editComment: undefined,
-  deleteComment: undefined,
-  loadMoreComments: undefined,
-};
-
-const NestedCommentSystemContext =
-  createContext<ContextType>(initialContextValue);
+const NestedCommentSystemContext = createContext<ContextType | undefined>(
+  undefined,
+);
 
 export function useNestedCommentSystem() {
   const context = useContext(NestedCommentSystemContext);
@@ -85,64 +96,61 @@ export function NestedCommentProvider({
     content_id: string;
     chapter_id?: string;
   }>();
+
   const { addToast } = useToastContainer();
   const currentUrl = usePathname();
   const session = useSession();
+  const loggedInUserId = session.data?.user.id;
 
   const [commentsPayload, setCommentsPayload] = useState<CommentsPayload>(
     initialCommentsPayload,
   );
 
+  const updateCommentsPayload = (updates: Partial<CommentsPayload>) => {
+    setCommentsPayload((prev) => ({ ...prev, ...updates }));
+  };
+
   useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      !window.customElements.get("spoiler-tag")
-    ) {
-      window.customElements.define("spoiler-tag", SpoilerTag);
-    }
+    loadSpoilerTag();
   }, []);
 
   useEffect(() => {
     const getInitialComments = async () => {
-      try {
-        setCommentsPayload((prev) => ({ ...prev, loading: true }));
-        const commentsSortKey = commentsPayload.sortKey || "BEST";
-        const queryParams = new URLSearchParams(
-          chapterId
-            ? {
-                contentId,
-                chapterId,
-                commentsSortKey,
-              }
-            : {
-                contentId,
-                commentsSortKey,
-              },
-        ).toString();
+      updateCommentsPayload({ loading: true });
+      const commentsSortKey =
+        commentsPayload.sortKey || DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY;
+      const queryParams = new URLSearchParams(
+        chapterId
+          ? {
+              contentId,
+              chapterId,
+              commentsSortKey,
+            }
+          : {
+              contentId,
+              commentsSortKey,
+            },
+      ).toString();
+      const requestResponse = await makeGetRequest(
+        nextPublicNestedCommentSystemBaseEndpoint,
+        queryParams,
+        () => updateCommentsPayload({ loading: false }),
+      );
 
-        const commentsPayloadResponse = await fetch(
-          `${apiEndpoint}?${queryParams}`,
-        );
-        const commentsPayloadParsed = await commentsPayloadResponse.json();
-        setCommentsPayload((prev) => ({ ...prev, ...commentsPayloadParsed }));
-      } catch (error: any) {
-        setCommentsPayload((prev) => ({
-          ...prev,
-          error: true,
-          errorMessage: error.message,
-        }));
-      } finally {
-        setCommentsPayload((prev) => ({ ...prev, loading: false }));
-      }
+      if (requestResponse.error)
+        return updateCommentsPayload({
+          ...requestResponse,
+        });
+
+      updateCommentsPayload({ ...requestResponse });
     };
 
     getInitialComments();
   }, [chapterId, contentId, commentsPayload.sortKey]);
 
-  // Method to change comments order
-  const changeCommentsOrder = (sortKey: SortKey) => {
-    setCommentsPayload((prev) => ({ ...prev, sortKey }));
-  };
+  const changeCommentsOrder = useCallback((sortKey: SortKey) => {
+    updateCommentsPayload({ sortKey });
+  }, []);
 
   // Comments grouping by parentId
   const getCommentsByParentId = useMemo(() => {
@@ -164,23 +172,12 @@ export function NestedCommentProvider({
     [getCommentsByParentId],
   );
 
-  const getSignInConfirm = useCallback(() => {
-    if (!session?.data) {
-      if (confirm("Sign in with Google?")) {
-        signIn("google", { callbackUrl: currentUrl });
-      }
-
-      return false;
-    }
-
-    return true;
-  }, [currentUrl, session?.data?.user.id]);
-
   // Nested Comment System CRUD
   const loadMoreComments = useCallback(
     async (pageNumber: string) => {
-      setCommentsPayload((prev) => ({ ...prev, loadMoreCommentsLoding: true }));
-      const commentsSortKey = commentsPayload.sortKey || "BEST";
+      updateCommentsPayload({ loading: true });
+      const commentsSortKey =
+        commentsPayload.sortKey || DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY;
       const queryParams = new URLSearchParams(
         chapterId
           ? {
@@ -197,14 +194,9 @@ export function NestedCommentProvider({
       ).toString();
 
       const requestResponse = await makeGetRequest(
-        apiEndpoint,
+        nextPublicNestedCommentSystemBaseEndpoint,
         queryParams,
-        () => {
-          setCommentsPayload((prev) => ({
-            ...prev,
-            loadMoreCommentsLoding: false,
-          }));
-        },
+        () => updateCommentsPayload({ loading: false }),
       );
 
       if (requestResponse.error)
@@ -214,19 +206,19 @@ export function NestedCommentProvider({
           text: requestResponse.errorMessage,
         });
 
-      const { comments, ...restOfPayload } = requestResponse;
-      setCommentsPayload((prev) => ({
-        ...prev,
-        ...restOfPayload,
-        comments: [...prev.comments, ...comments],
-      }));
+      const { comments, ...rest } = requestResponse;
+      updateCommentsPayload({
+        ...rest,
+        comments: [...commentsPayload.comments, ...comments],
+      });
     },
     [chapterId, contentId, commentsPayload.sortKey],
   );
 
   const makeComment = useCallback(
     async (body: Record<string, any>) => {
-      if (!getSignInConfirm()) return;
+      if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
+
       const { contentId, userId, message } = body;
       if (!contentId || !userId || !message?.trim())
         return addToast({
@@ -236,7 +228,7 @@ export function NestedCommentProvider({
         });
 
       const requestResponse = await makePostPutRequest(
-        apiEndpoint,
+        nextPublicNestedCommentSystemBaseEndpoint,
         "POST",
         body,
       );
@@ -286,12 +278,12 @@ export function NestedCommentProvider({
               ...prev,
               error,
               totalComments: prev.totalComments + 1,
-              comments: [...prev.comments, comment],
+              comments: [comment, ...prev.comments],
             };
         }
       });
     },
-    [getSignInConfirm],
+    [currentUrl, loggedInUserId],
   );
 
   const voteComment = useCallback(
@@ -300,7 +292,8 @@ export function NestedCommentProvider({
       commentId: string,
       voteType: VoteType,
     ) => {
-      if (!getSignInConfirm()) return;
+      if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
+
       if (!body?.userId)
         return addToast({
           id: uuidv4(),
@@ -309,7 +302,7 @@ export function NestedCommentProvider({
         });
 
       const requestResponse = await makePostPutRequest(
-        `${apiEndpoint}/${commentId}/vote/${voteType}`,
+        `${nextPublicNestedCommentSystemBaseEndpoint}/${commentId}/vote/${voteType}`,
         "PUT",
         body,
       );
@@ -322,6 +315,7 @@ export function NestedCommentProvider({
         });
       } else {
         const { comment } = requestResponse;
+
         setCommentsPayload((prev) => ({
           ...prev,
           comments: prev.comments.map((c) =>
@@ -330,7 +324,7 @@ export function NestedCommentProvider({
         }));
       }
     },
-    [getSignInConfirm],
+    [currentUrl, loggedInUserId],
   );
 
   // For Edited and deleted comments
@@ -347,7 +341,8 @@ export function NestedCommentProvider({
 
   const editComment = useCallback(
     async (body: Record<string, any>, commentId: string) => {
-      if (!getSignInConfirm()) return;
+      if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
+
       if (!body?.userId || !body?.message.trim())
         return addToast({
           id: uuidv4(),
@@ -356,7 +351,7 @@ export function NestedCommentProvider({
         });
 
       const requestResponse = await makePostPutRequest(
-        `${apiEndpoint}/${commentId}/edit`,
+        `${nextPublicNestedCommentSystemBaseEndpoint}/${commentId}/edit`,
         "PUT",
         body,
       );
@@ -370,12 +365,12 @@ export function NestedCommentProvider({
 
       updateComments(requestResponse.comment);
     },
-    [getSignInConfirm],
+    [],
   );
 
   const deleteComment = useCallback(
     async (headers: Record<string, any>, commentId: string) => {
-      if (!getSignInConfirm()) return;
+      if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
 
       if (!headers["x-user-id"])
         return addToast({
@@ -385,7 +380,7 @@ export function NestedCommentProvider({
         });
 
       const requestResponse = await makeDeleteRequest(
-        `${apiEndpoint}/${commentId}/delete`,
+        `${nextPublicNestedCommentSystemBaseEndpoint}/${commentId}/delete`,
         headers,
       );
 
@@ -398,7 +393,7 @@ export function NestedCommentProvider({
 
       updateComments(requestResponse.comment);
     },
-    [getSignInConfirm],
+    [currentUrl, loggedInUserId],
   );
 
   return (
@@ -413,7 +408,7 @@ export function NestedCommentProvider({
           changeCommentsOrder,
           makeComment,
           voteComment,
-          userId: session?.data?.user.id,
+          userId: loggedInUserId,
           editComment,
           deleteComment,
           loadMoreComments,
@@ -423,9 +418,10 @@ export function NestedCommentProvider({
           chapterId,
           commentsPayload,
           getReplies,
+          changeCommentsOrder,
           makeComment,
           voteComment,
-          session?.data?.user.id,
+          loggedInUserId,
           editComment,
           deleteComment,
           loadMoreComments,

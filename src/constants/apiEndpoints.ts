@@ -5,3 +5,6 @@ export const claimUsernameEndpoint = process.env
 
 export const updateProfileEndpoint = process.env
   .NEXT_PUBLIC_API_ENDPOINT_ACCOUNTS as string;
+
+export const nextPublicNestedCommentSystemBaseEndpoint = process.env
+  .NEXT_PUBLIC_API_ENDPOINT_COMMENTS as string;

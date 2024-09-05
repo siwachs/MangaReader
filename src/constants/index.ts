@@ -19,3 +19,5 @@ export const ERROR_500_PAGE_HEADER_TITLE = "MangaReader 500 error page";
 
 export const DEFAULT_TOAST_AUTODISMISS = true;
 export const DEFAUL_TOAST_TIMEOUT = 5000;
+
+export const DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY = "BEST";

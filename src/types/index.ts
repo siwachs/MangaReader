@@ -33,18 +33,6 @@ export type Comment = {
 
 export type SortKey = "BEST" | "NEWEST" | "OLDEST";
 
-export type CommentsPayload = {
-  loading: boolean;
-  error: boolean;
-  errorMessage?: string;
-  totalPages: number;
-  totalComments: number;
-  pageNumber: number;
-  comments: Comment[];
-  sortKey: SortKey;
-  loadMoreCommentsLoding: boolean;
-};
-
 // Content Page And CMS
 export type Tags =
   | "BannerContent"
