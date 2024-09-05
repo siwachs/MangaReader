@@ -288,7 +288,7 @@ const CommentForm: React.FC<{
             <button
               disabled={!userId}
               type="submit"
-              className="h-fit whitespace-nowrap rounded-[14px] bg-[var(--app-text-color-gunmelt-gray)] p-[3.5px_15px] text-[15px] font-bold text-white hover:border-[#526069] hover:bg-[#526069] disabled:bg-[#526069]"
+              className="h-fit whitespace-nowrap rounded-[14px] bg-gray-800 p-[3.5px_15px] text-[15px] font-bold text-white hover:border-[#526069] hover:bg-[#526069] disabled:bg-[#526069]"
             >
               Comment
             </button>

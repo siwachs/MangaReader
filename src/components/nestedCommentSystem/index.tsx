@@ -7,7 +7,7 @@ import Image from "next/image";
 
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { roboto } from "@/libs/fonts";
-import { Comment as CommentType, VoteType } from "@/types";
+import { Comment as CommentType, SortKey, VoteType } from "@/types";
 
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 import CommentForm from "./commentForm";
@@ -20,9 +20,6 @@ import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { TiFlag } from "react-icons/ti";
 import { IoMdShareAlt } from "react-icons/io";
-
-const sortButtonClasses =
-  "text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-[var(--app-text-color-gunmelt-gray)]";
 
 const NestedCommentsContainer: React.FC = () => {
   const {
@@ -57,10 +54,10 @@ const NestedCommentsContainer: React.FC = () => {
 
   return (
     <div
-      className={`${roboto.className} nested-comment-system-wrapper text-[var(--app-text-color-dark-grayish-green)]`}
+      className={`${roboto.className} nested-comment-system-wrapper text-gray-800`}
     >
       <header className="mb-6">
-        <div className="flex items-center justify-between border-b-2 border-[var(--app-border-color-slightly-blue-gray)] py-3 font-bold">
+        <div className="flex items-center justify-between border-b-2 border-gray-300 py-3 font-bold">
           <span
             className={
               commentsPayload.loading
@@ -81,6 +78,7 @@ const NestedCommentsContainer: React.FC = () => {
                   <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
                     1
                   </span>
+
                   <IoChatbubble className="size-[22px]" />
                 </div>
 
@@ -98,49 +96,37 @@ const NestedCommentsContainer: React.FC = () => {
           <div className="mb-3 ml-3 flex items-center gap-2.5">
             <FaRegHeart />
 
-            <span className="text-xs/[18px] font-bold">6</span>
+            <span className="text-xs/[18px] font-bold">0</span>
           </div>
 
           <div className="mb-3 flex items-center gap-4 pt-[3px]">
-            <button
-              type="button"
-              onClick={() => changeCommentsOrder("BEST")}
-              data-active={commentsPayload.sortKey === "BEST"}
-              className={sortButtonClasses}
-            >
-              Best
-            </button>
-
-            <button
-              type="button"
-              onClick={() => changeCommentsOrder("NEWEST")}
-              data-active={commentsPayload.sortKey === "NEWEST"}
-              className={sortButtonClasses}
-            >
-              Newest
-            </button>
-
-            <button
-              type="button"
-              onClick={() => changeCommentsOrder("OLDEST")}
-              data-active={commentsPayload.sortKey === "OLDEST"}
-              className={sortButtonClasses}
-            >
-              Oldest
-            </button>
+            {["BEST", "NEWEST", "OLDEST"].map((order) => (
+              <button
+                key={order}
+                onClick={() => changeCommentsOrder(order as SortKey)}
+                data-active={commentsPayload.sortKey === order}
+                className="text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-gray-800"
+              >
+                {order === "BEST"
+                  ? "Best"
+                  : order === "NEWEST"
+                    ? "Newest"
+                    : "Oldest"}
+              </button>
+            ))}
           </div>
         </div>
 
         {renderComments()}
 
-        {commentsPayload.pageNumber !== commentsPayload.totalPages && (
+        {commentsPayload.pageNumber < commentsPayload.totalPages && (
           <button
             type="button"
             onClick={() => loadMoreComments(commentsPayload.pageNumber + 1)}
             disabled={
               commentsPayload.loading || commentsPayload.loadMoreCommentsLoding
             }
-            className="my-1.5 w-full rounded-[15px] border border-[var(--app-text-color-gunmelt-gray)] pb-[8px] pt-[9px] text-center text-lg/[21px] font-bold text-[var(--app-text-color-gunmelt-gray)] transition-all duration-200 hover:bg-[var(--app-text-color-gunmelt-gray)] hover:text-white disabled:pointer-events-none"
+            className="my-1.5 w-full rounded-[15px] border border-gray-800 pb-[8px] pt-[9px] text-center text-lg/[21px] font-bold text-gray-800 transition-all duration-200 hover:bg-gray-800 hover:text-white disabled:pointer-events-none"
           >
             Load more comments
           </button>
@@ -153,7 +139,7 @@ const NestedCommentsContainer: React.FC = () => {
 };
 
 const CommentList: React.FC<{ comments: CommentType[] }> = ({ comments }) => {
-  return comments.map((comment: any) => (
+  return comments.map((comment: CommentType) => (
     <Comment key={comment.id} comment={comment} />
   ));
 };
@@ -190,8 +176,9 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
           className={`relative mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
         >
           <div
-            className={`absolute left-0 top-0 hidden ${isChildrenCollapsed ? "h-10" : "h-[52px]"} w-[5px] rounded-[3px] bg-[var(--app-text-color-gunmelt-gray)]`}
+            className={`absolute left-0 top-0 hidden ${isChildrenCollapsed ? "h-10" : "h-[52px]"} w-[5px] rounded-[3px] bg-gray-800`}
           />
+
           <Image // ml-3
             src={comment.user?.avatar ?? "/assets/person.png"}
             alt={comment.user?.username ?? "profile-pic"}
@@ -211,15 +198,14 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
               className="mr-3 flex-1 text-xs/[21px]"
             >
               <div className="flex flex-wrap items-center">
-                <span className="mr-1 line-clamp-1 text-[15px] font-bold text-[var(--app-text-color-gunmelt-gray)]">
+                <span className="mr-1 line-clamp-1 text-[15px] font-bold text-gray-800">
                   {comment.user?.username ?? "deleted"}
                   &nbsp;
                   <HiUserAdd
-                    className="-mt-1 inline-block size-[18px] text-[var(--app-text-color-blue-gray)] hover:text-[var(--app-text-color-gunmelt-gray)]"
+                    className="-mt-1 inline-block size-[18px] text-[var(--app-text-color-blue-gray)] hover:text-gray-800"
                     tabIndex={0}
                     role="button"
                     aria-label="Add user"
-                    onClick={() => {}}
                   />
                 </span>
 
@@ -247,7 +233,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
             >
               {isChildrenCollapsed ? (
                 <FaPlus
-                  className="mr-2.5 size-4 hover:text-[var(--app-text-color-gunmelt-gray)]"
+                  className="mr-2.5 size-4 hover:text-gray-800"
                   tabIndex={0}
                   role="button"
                   aria-label="Expand Children"
@@ -255,7 +241,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
                 />
               ) : (
                 <FaMinus
-                  className="mr-2.5 size-[18px] hover:text-[var(--app-text-color-gunmelt-gray)]"
+                  className="mr-2.5 size-[18px] hover:text-gray-800"
                   tabIndex={0}
                   role="button"
                   aria-label="Collapse Children"
@@ -264,11 +250,10 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
               )}
 
               <TiFlag
-                className="mt-0.5 size-4 hover:text-[var(--app-text-color-gunmelt-gray)]"
+                className="mt-0.5 size-4 hover:text-gray-800"
                 tabIndex={0}
                 role="button"
                 aria-label="Flag Comment"
-                onClick={() => {}}
               />
             </div>
           </div>
@@ -288,7 +273,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
               }}
             />
 
-            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium text-[var(--app-text-color-dark-grayish-green)]">
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium text-gray-800">
               <div className="flex flex-wrap items-center">
                 <button
                   onClick={() => onClickVoteComment("up")}

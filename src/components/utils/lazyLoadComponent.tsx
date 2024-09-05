@@ -3,16 +3,12 @@
 import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 
-const Loader = () => {
-  return (
-    <div className="mx-auto h-[107px] max-w-[1110px] animate-pulse bg-gray-400" />
-  );
-};
+import LoadingSpinner from "./loadingSpinner";
 
 // Dynamic Imports
 const NestedCommentsSystem = dynamic(() => import("../nestedCommentSystem"), {
   ssr: false,
-  loading: () => <Loader />,
+  loading: () => <LoadingSpinner />,
 });
 
 type ComponentType = "NestedCommentSystem";
@@ -54,7 +50,11 @@ const LazyLoadComponent: React.FC<{ component: ComponentType }> = ({
 
   const Component = getComponent();
 
-  return <div ref={ref}>{isVisible && Component && <Component />}</div>;
+  return (
+    <div ref={ref}>
+      {isVisible && Component ? <Component /> : <LoadingSpinner />}
+    </div>
+  );
 };
 
 export default LazyLoadComponent;

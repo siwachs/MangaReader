@@ -70,7 +70,7 @@ type ContextType = {
     headers: Record<string, any>,
     commentId: string,
   ) => Promise<void>;
-  loadMoreComments: (pageNumber: string) => Promise<void>;
+  loadMoreComments: (pageNumber: number) => Promise<void>;
 };
 
 const NestedCommentSystemContext = createContext<ContextType | undefined>(
@@ -174,7 +174,7 @@ export function NestedCommentProvider({
 
   // Nested Comment System CRUD
   const loadMoreComments = useCallback(
-    async (pageNumber: string) => {
+    async (pageNumber: number) => {
       updateCommentsPayload({ loading: true });
       const commentsSortKey =
         commentsPayload.sortKey || DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY;
@@ -184,12 +184,12 @@ export function NestedCommentProvider({
               contentId,
               chapterId,
               commentsSortKey,
-              pageNumber,
+              pageNumber: pageNumber.toString(),
             }
           : {
               contentId,
               commentsSortKey,
-              pageNumber,
+              pageNumber: pageNumber.toString(),
             },
       ).toString();
 

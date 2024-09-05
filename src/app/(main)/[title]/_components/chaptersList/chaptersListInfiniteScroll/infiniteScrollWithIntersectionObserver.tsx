@@ -10,8 +10,8 @@ import ChapterLink from "@/components/buttons/chapterLink";
 
 import { CHAPTERS_LIST_DEFAULT_PAGE_SIZE } from "@/constants";
 
-import { AiOutlineLoading } from "react-icons/ai";
 import { LiaTimesSolid } from "react-icons/lia";
+import LoadingSpinner from "@/components/utils/loadingSpinner";
 
 const InfiniteScrollWithIntersectionObserver: React.FC<{
   infiniteScroll: boolean;
@@ -126,12 +126,12 @@ const InfiniteScrollWithIntersectionObserver: React.FC<{
             />
           ))}
 
-          <div
-            ref={loaderRef}
-            className={`my-5 ${chaptersPayload.pageNumber < chaptersPayload.totalPages ? "" : "hidden"} text-[var(--app-text-color-bright-pink)]`}
-          >
-            <AiOutlineLoading className="mx-auto size-8 animate-spin" />
-          </div>
+          <LoadingSpinner
+            loaderRef={loaderRef}
+            hideLoader={
+              chaptersPayload.pageNumber >= chaptersPayload.totalPages
+            }
+          />
         </div>
       </div>
     </ModelOverlay>
