@@ -80,7 +80,7 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
           prevChapter={prevChapter}
           nextChapter={nextChapter}
         />
-        <div className="mx-auto mb-5 grid min-h-[calc(100vh-220px)] max-w-[800px] place-items-center md:min-h-[calc(100vh-360px)]">
+        {/* <div className="mx-auto mb-5 grid min-h-[calc(100vh-220px)] max-w-[800px] place-items-center md:min-h-[calc(100vh-360px)]">
           {chapter?.images.map((image, index) => (
             <Image
               quality={100}
@@ -94,7 +94,7 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
               className="m-[inherit] h-auto max-w-full"
             />
           ))}
-        </div>
+        </div> */}
         <Pagination
           contentId={content_id}
           prevChapter={prevChapter}

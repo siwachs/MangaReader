@@ -63,6 +63,7 @@ type ContextType = {
     body: Record<string, any>,
     commentId: string,
     voteType: VoteType,
+    callback?: () => void,
   ) => Promise<void>;
   userId?: string;
   editComment: (body: Record<string, any>, commentId: string) => Promise<void>;
@@ -291,6 +292,7 @@ export function NestedCommentProvider({
       body: Record<string, any>,
       commentId: string,
       voteType: VoteType,
+      callback?: () => void,
     ) => {
       if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
 
@@ -305,6 +307,7 @@ export function NestedCommentProvider({
         `${nextPublicNestedCommentSystemBaseEndpoint}/${commentId}/vote/${voteType}`,
         "PUT",
         body,
+        callback,
       );
 
       if (requestResponse.error) {

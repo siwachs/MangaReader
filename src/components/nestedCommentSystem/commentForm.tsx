@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, ReactElement } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 import { useToastContainer } from "@/contexts/toastContainerContext";
 
@@ -218,7 +218,7 @@ const CommentForm: React.FC<{
     if (callback) callback();
 
     if (editMode) {
-      await editComment({ userId, message: sanatizeHtml(message) }, commentId);
+      await editComment({ userId, message: sanatizeHtml(message) }, commentId!);
     } else {
       await makeComment({
         contentId,
