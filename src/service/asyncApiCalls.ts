@@ -38,12 +38,11 @@ export async function makePostPutRequest(
 export async function makeDeleteRequest(
   apiEndpoint: string,
   headers: Record<string, any>,
-  method = "DELETE",
   callback?: () => void,
 ) {
   try {
     const requestResponse = await fetch(apiEndpoint, {
-      method,
+      method: "DELETE",
       headers,
     });
     return await requestResponse.json();

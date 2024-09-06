@@ -62,12 +62,23 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
   const upVote = () => voteCommentCallback("up");
   const downVote = () => voteCommentCallback("down");
 
+  const [isDeleteCommentLoading, setIsDeleteCommentLoading] = useState(false);
   const deleteCommentCallback = async () => {
-    if (comment.isDeleted)
-      return await deleteComment({ "x-user-id": userId }, comment.id);
+    if (isDeleteCommentLoading) return;
 
-    if (confirm("You cannot delete a comment. You can only hide it."))
-      await deleteComment({ "x-user-id": userId }, comment.id);
+    if (comment.isDeleted) {
+      setIsDeleteCommentLoading(true);
+      return await deleteComment({ "x-user-id": userId }, comment.id, () =>
+        setIsDeleteCommentLoading(false),
+      );
+    }
+
+    if (confirm("You cannot delete a comment. You can only hide it.")) {
+      setIsDeleteCommentLoading(true);
+      await deleteComment({ "x-user-id": userId }, comment.id, () =>
+        setIsDeleteCommentLoading(false),
+      );
+    }
   };
 
   return (
@@ -167,7 +178,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
             }
           >
             <p
-              className={`break-words text-[15px] leading-[21px] ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
+              className={`break-words text-[15px] leading-[21px] ${isDeleteCommentLoading ? "w-fit animate-pulse rounded-sm bg-gray-400 text-gray-400" : ""} ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
               dangerouslySetInnerHTML={{
                 __html: comment.isDeleted
                   ? "This comment was deleted."

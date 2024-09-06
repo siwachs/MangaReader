@@ -70,6 +70,7 @@ type ContextType = {
   deleteComment: (
     headers: Record<string, any>,
     commentId: string,
+    callback?: () => void,
   ) => Promise<void>;
   loadMoreComments: (pageNumber: number) => Promise<void>;
 };
@@ -368,11 +369,15 @@ export function NestedCommentProvider({
 
       updateComments(requestResponse.comment);
     },
-    [],
+    [currentUrl, loggedInUserId],
   );
 
   const deleteComment = useCallback(
-    async (headers: Record<string, any>, commentId: string) => {
+    async (
+      headers: Record<string, any>,
+      commentId: string,
+      callback?: () => void,
+    ) => {
       if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
 
       if (!headers["x-user-id"])
@@ -385,6 +390,7 @@ export function NestedCommentProvider({
       const requestResponse = await makeDeleteRequest(
         `${nextPublicNestedCommentSystemBaseEndpoint}/${commentId}/delete`,
         headers,
+        callback,
       );
 
       if (requestResponse.error)
