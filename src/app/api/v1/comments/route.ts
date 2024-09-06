@@ -164,6 +164,7 @@ const getComments = async (req: NextRequest) => {
 
 const addComment = async (req: NextRequest) => {
   try {
+    const startTime = Date.now();
     const { contentId, chapterId, userId, parentId, message } =
       await req.json();
     if (!contentId || !userId || !message?.trim())
@@ -173,7 +174,7 @@ const addComment = async (req: NextRequest) => {
     if (!serverSession) return unauthorizedUser();
 
     await connectToMongoDB();
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("username avatar");
     if (!user) return notFound(["User"]);
 
     const scriptTagRegex = /<\s*script[\s\S]*?>[\s\S]*?<\s*\/\s*script\s*>/gi;
@@ -190,10 +191,22 @@ const addComment = async (req: NextRequest) => {
       chapterId: chapterId ?? null,
       user: userId,
     });
-    await comment.populate({ path: "user", select: "username avatar" });
+
+    const endTime = Date.now();
+    const responseTime = endTime - startTime;
+    console.log("Response time of API is = ", responseTime);
 
     return NextResponse.json(
-      { error: false, comment: formatMongooseDoc(comment.toObject()) },
+      {
+        error: false,
+        comment: {
+          ...formatMongooseDoc(comment.toObject()),
+          user: {
+            username: user?.username,
+            avatar: user?.avatar,
+          },
+        },
+      },
       { status: 201 },
     );
   } catch (error: any) {

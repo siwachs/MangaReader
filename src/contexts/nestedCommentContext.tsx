@@ -66,7 +66,11 @@ type ContextType = {
     callback?: () => void,
   ) => Promise<void>;
   userId?: string;
-  editComment: (body: Record<string, any>, commentId: string) => Promise<void>;
+  editComment: (
+    body: Record<string, any>,
+    commentId: string,
+    callback?: () => void,
+  ) => Promise<void>;
   deleteComment: (
     headers: Record<string, any>,
     commentId: string,
@@ -344,7 +348,11 @@ export function NestedCommentProvider({
   };
 
   const editComment = useCallback(
-    async (body: Record<string, any>, commentId: string) => {
+    async (
+      body: Record<string, any>,
+      commentId: string,
+      callback?: () => void,
+    ) => {
       if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
 
       if (!body?.userId || !body?.message.trim())
@@ -358,6 +366,7 @@ export function NestedCommentProvider({
         `${nextPublicNestedCommentSystemBaseEndpoint}/${commentId}/edit`,
         "PUT",
         body,
+        callback,
       );
 
       if (requestResponse.error)

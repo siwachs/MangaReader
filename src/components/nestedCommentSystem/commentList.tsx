@@ -33,7 +33,10 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
 
   const [isChildrenCollapsed, setIsChildrenCollapsed] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
+
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingLoading, setIsEditingLoading] = useState(false);
+  const toogleIsEditingLoading = () => setIsEditingLoading((prev) => !prev);
 
   const toogleIsChildrenCollapsed = () =>
     setIsChildrenCollapsed((prev) => !prev);
@@ -63,20 +66,26 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
   const downVote = () => voteCommentCallback("down");
 
   const [isDeleteCommentLoading, setIsDeleteCommentLoading] = useState(false);
+  const toogleIsDeletCommentLoading = () =>
+    setIsDeleteCommentLoading((prev) => !prev);
   const deleteCommentCallback = async () => {
     if (isDeleteCommentLoading) return;
 
     if (comment.isDeleted) {
-      setIsDeleteCommentLoading(true);
-      return await deleteComment({ "x-user-id": userId }, comment.id, () =>
-        setIsDeleteCommentLoading(false),
+      toogleIsDeletCommentLoading();
+      return await deleteComment(
+        { "x-user-id": userId },
+        comment.id,
+        toogleIsDeletCommentLoading,
       );
     }
 
     if (confirm("You cannot delete a comment. You can only hide it.")) {
       setIsDeleteCommentLoading(true);
-      await deleteComment({ "x-user-id": userId }, comment.id, () =>
-        setIsDeleteCommentLoading(false),
+      await deleteComment(
+        { "x-user-id": userId },
+        comment.id,
+        toogleIsDeletCommentLoading,
       );
     }
   };
@@ -178,7 +187,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
             }
           >
             <p
-              className={`break-words text-[15px] leading-[21px] ${isDeleteCommentLoading ? "w-fit animate-pulse rounded-sm bg-gray-400 text-gray-400" : ""} ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
+              className={`break-words text-[15px] leading-[21px] ${isDeleteCommentLoading || isEditingLoading ? "w-fit animate-pulse rounded-sm bg-gray-400 text-gray-400" : ""} ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
               dangerouslySetInnerHTML={{
                 __html: comment.isDeleted
                   ? "This comment was deleted."
@@ -261,6 +270,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
           initialMessage={comment.message}
           commentId={comment.id}
           editMode
+          editModeCallback={toogleIsEditingLoading}
           callback={toogleIsEditing}
         />
       )}

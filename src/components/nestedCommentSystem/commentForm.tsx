@@ -103,11 +103,13 @@ const CommentForm: React.FC<{
   parentId?: string;
   commentId?: string;
   callback?: () => void;
+  editModeCallback?: () => void;
   editMode?: boolean;
 }> = ({
   initialMessage = "",
   parentId = "root",
   commentId,
+  editModeCallback,
   callback,
   editMode,
 }) => {
@@ -218,7 +220,12 @@ const CommentForm: React.FC<{
     if (callback) callback();
 
     if (editMode) {
-      await editComment({ userId, message: sanatizeHtml(message) }, commentId!);
+      if (editModeCallback) editModeCallback();
+      await editComment(
+        { userId, message: sanatizeHtml(message) },
+        commentId!,
+        editModeCallback,
+      );
     } else {
       await makeComment({
         contentId,
