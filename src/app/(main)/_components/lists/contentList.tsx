@@ -40,7 +40,7 @@ const ContentList: React.FC<{
               <Link
                 href={`/${encodeURIComponent(content.title.toLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
               >
-                <div className="h-[140px] w-full overflow-hidden md:h-[233px]">
+                <div className="h-[140px] w-full overflow-hidden sm:h-[233px]">
                   <Image
                     placeholder="blur"
                     blurDataURL={contentCoverBlurDataImageURL}
@@ -52,7 +52,7 @@ const ContentList: React.FC<{
                   />
                 </div>
 
-                <div className="mt-[5px] overflow-hidden truncate text-xs/[13px] md:mt-2.5 md:text-lg/[22px]">
+                <div className="mt-[5px] overflow-hidden truncate text-xs leading-[13px] sm:mt-2.5 sm:text-sm md:text-lg/[22px]">
                   <span>{content.title}</span>
                 </div>
               </Link>

@@ -59,8 +59,8 @@ const HottestComics: React.FC<{
               key={content.id}
               href={`/${encodeURIComponent(content.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
             >
-              <div className="mb-[2%] mr-[15px] box-border h-[190px] w-[150%] overflow-hidden bg-[url('/assets/hot-content-bg.png')] bg-[length:100%_100%] p-[2%] md:h-[275px] lg:mb-0 lg:w-[590px] lg:p-[15px]">
-                <div className="float-left h-full w-1/4 md:h-[245px] md:w-[185px]">
+              <div className="mb-[2%] mr-[15px] box-border h-[190px] w-[150%] overflow-hidden bg-[url('/assets/hot-content-bg.png')] bg-[length:100%_100%] p-[2%] sm:h-[275px] lg:mb-0 lg:w-[590px] lg:p-[15px]">
+                <div className="float-left h-full w-1/4 sm:h-[245px] md:w-[185px]">
                   <Image
                     placeholder="blur"
                     blurDataURL={contentCoverBlurDataImageURL}
@@ -73,11 +73,11 @@ const HottestComics: React.FC<{
                 </div>
 
                 <div className="float-left ml-[3%] w-1/2 overflow-hidden md:m-[10px_30px_20px_17px] lg:w-[328px]">
-                  <div className="h-[29px] w-[70%] truncate text-base/[29px] md:text-xl/[29px]">
+                  <div className="h-[29px] w-[70%] truncate text-base leading-[29px] md:text-xl">
                     <span>{content.title}</span>
                   </div>
 
-                  <div className="font-noto-sans-sc h-5 w-[80%] truncate text-sm/[20px] font-normal text-neutral-400">
+                  <div className="font-noto-sans-sc h-5 w-[80%] truncate text-sm/[20px] text-neutral-400">
                     {(content.genres as Genre[])
                       .map((genre) => genre.name)
                       .join(" / ")}

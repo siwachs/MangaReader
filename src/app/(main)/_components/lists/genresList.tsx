@@ -83,7 +83,7 @@ const GernresList: React.FC<{
                 <Link
                   href={`/${encodeURIComponent(content.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${content.id}`}
                 >
-                  <div className="h-[140px] w-full overflow-hidden rounded md:h-[233px]">
+                  <div className="h-[140px] w-full overflow-hidden rounded sm:h-[233px]">
                     <Image
                       placeholder="blur"
                       blurDataURL={contentCoverBlurDataImageURL}
@@ -95,7 +95,7 @@ const GernresList: React.FC<{
                     />
                   </div>
 
-                  <div className="mt-[5px] overflow-hidden truncate text-xs/[13px] md:mt-2.5 md:text-lg/[22px]">
+                  <div className="mt-[5px] overflow-hidden truncate text-xs leading-[13px] sm:mt-2.5 sm:text-sm md:text-lg/[22px]">
                     <span>{content.title}</span>
                   </div>
 

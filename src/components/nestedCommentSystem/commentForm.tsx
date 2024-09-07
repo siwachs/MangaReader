@@ -194,6 +194,11 @@ const CommentForm: React.FC<{
     }));
   };
 
+  const isEditorEmpty = () => {
+    const innerText = editorRef.current?.innerText;
+    return innerText?.trim() === "" || innerText === "<br>";
+  };
+
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId)
@@ -203,8 +208,7 @@ const CommentForm: React.FC<{
         text: "You need to sign in for that.",
       });
 
-    const innerText = editorRef.current?.innerText;
-    if (innerText?.trim() === "" || innerText === "<br>")
+    if (isEditorEmpty())
       return addToast({
         id: uuidv4(),
         type: "warning",
@@ -237,10 +241,13 @@ const CommentForm: React.FC<{
     }
   };
 
-  const expandEditor = () => setExpandedEditor(true);
   const editorChangeEvent = (e: React.ChangeEvent<HTMLDivElement>) => {
-    if (e.target.innerHTML === "<br>") e.target.innerHTML = "";
+    if (isEditorEmpty()) e.target.innerHTML = "";
   };
+  const collapseEditor = () => {
+    if (isEditorEmpty()) setExpandedEditor(false);
+  };
+  const expandEditor = () => setExpandedEditor(true);
 
   return (
     <form onSubmit={submitComment} className="my-4 mb-[18px]">
@@ -248,6 +255,7 @@ const CommentForm: React.FC<{
         <div
           role="textbox"
           ref={editorRef}
+          onBlur={collapseEditor}
           onFocus={expandEditor}
           onInput={editorChangeEvent}
           spellCheck

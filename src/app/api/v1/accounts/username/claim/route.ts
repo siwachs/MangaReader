@@ -9,7 +9,7 @@ import {
 } from "@/libs/apiErrorResponse";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
 import getServerSession from "@/libs/auth/getServerSession";
-import User from "@/models/User";
+import { User } from "@/models";
 
 const claimUsername = async (req: NextRequest) => {
   try {
@@ -28,7 +28,7 @@ const claimUsername = async (req: NextRequest) => {
     if (usernameAvailable !== null)
       return badRequest("Username already claimed.");
 
-    const updatedUser = User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       userId,
       { username: trimmedUsername },
       { new: true, runValidators: true },

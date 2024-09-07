@@ -188,13 +188,19 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
         <DetailTitleBox
           title={`${content.title} Images/Wallpapers`}
           subTitle={`${content.imagesAndWallpapers.length} Pictures`}
-          href="/"
+          href=""
         />
 
         <div className="detail-gallery mx-auto mt-2.5 max-w-[1200px] md:mt-0">
+          {content.imagesAndWallpapers.length === 0 && (
+            <div className="m-4 select-none font-bold md:mx-0 md:text-lg">
+              No Images yet.
+            </div>
+          )}
+
           <div className="hide-scrollbar mt-2.5 flex overflow-auto pl-4 md:flex-wrap md:overflow-auto md:pl-0">
             {content.imagesAndWallpapers.map((image, index) => (
-              <Link key={image} href="/" className="flex-shrink-0">
+              <Link key={image} href="" className="flex-shrink-0">
                 <div className="mr-3 w-24 md:mr-5">
                   <Image
                     placeholder="blur"
@@ -222,6 +228,12 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
         />
 
         <div className="mx-auto flex max-w-[1200px] flex-col">
+          {content.news.length === 0 && (
+            <div className="m-4 select-none font-bold md:mx-0 md:text-lg">
+              No News yet.
+            </div>
+          )}
+
           {content.news.map((news) => (
             <Link
               key={news.title}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, memo, useCallback } from "react";
+import { useState, useCallback, useEffect, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -10,7 +10,17 @@ import useBodyOverflow from "@/hooks/useBodyOverflow";
 
 import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
 import ModelOverlay from "@/components/utils/modelOverlay";
-import LoadingOverlay from "@/components/utils/loadingOverlay";
+import LoadingSkeleton from "@/components/utils/loadingSkeleton";
+
+import { FaChevronRight } from "react-icons/fa";
+import {
+  MdOutlineSettings,
+  MdOutlineMail,
+  MdOutlineBookmarkAdded,
+  MdAdminPanelSettings,
+} from "react-icons/md";
+import { TfiCommentAlt } from "react-icons/tfi";
+import { BiLike } from "react-icons/bi";
 
 // Dynamic Imports
 const SetUsername = dynamic(() => import("./_components/setUsername"), {
@@ -25,11 +35,10 @@ const SetGender = dynamic(() => import("./_components/setGender"), {
   ssr: false,
   loading: () => (
     <ModelOverlay>
-      <div className="fixed bottom-0 left-0 right-0 z-[9999] mx-auto h-72 animate-pulse rounded-t-2xl bg-gray-400" />
+      <div className="fixed bottom-0 left-0 right-0 z-[9999] mx-auto h-72 max-w-[690px] animate-pulse rounded-t-2xl bg-gray-400" />
     </ModelOverlay>
   ),
 });
-
 const SetAvatar = dynamic(() => import("./_components/setAvatar"), {
   ssr: false,
   loading: () => (
@@ -46,37 +55,46 @@ const ImagePreviewAndUploadTool = dynamic(
   },
 );
 
-import { FaChevronRight } from "react-icons/fa";
-import {
-  MdOutlineSettings,
-  MdOutlineMail,
-  MdOutlineBookmarkAdded,
-  MdAdminPanelSettings,
-} from "react-icons/md";
-import { TfiCommentAlt } from "react-icons/tfi";
-import { BiLike } from "react-icons/bi";
-
 export default function AccountPage() {
   const session = useSession();
   const currentUrl = usePathname();
   const { status, data } = session;
 
   const [avatarImage, setAvatarImage] = useState<string[]>([]);
-  const [isSetAvatarOpen, setIsSetAvatarOpen] = useState(false);
-  const [isSetUsernameOpen, setIsSetUsernameOpen] = useState(false);
-  const [isSetGenderOpen, setIsSetGenderOpen] = useState(false);
+  const [modalState, setModalState] = useState({
+    isSetAvatarOpen: false,
+    isSetUsernameOpen: false,
+    isSetGenderOpen: false,
+  });
+
   useBodyOverflow(
     avatarImage.length > 0 ||
-      isSetAvatarOpen ||
-      isSetUsernameOpen ||
-      isSetGenderOpen,
+      modalState.isSetAvatarOpen ||
+      modalState.isSetUsernameOpen ||
+      modalState.isSetGenderOpen,
   );
 
-  const openSetAvatar = useCallback(() => setIsSetAvatarOpen(true), []);
-  const openSetUsername = useCallback(() => setIsSetUsernameOpen(true), []);
-  const openSetGender = useCallback(() => setIsSetGenderOpen(true), []);
+  const openModal = useCallback(
+    (modal: "isSetAvatarOpen" | "isSetUsernameOpen" | "isSetGenderOpen") => {
+      setModalState((prevState) => ({ ...prevState, [modal]: true }));
+    },
+    [],
+  );
 
-  if (status === "loading") return <LoadingOverlay />;
+  const closeModal = useCallback(
+    (modal: "isSetAvatarOpen" | "isSetUsernameOpen" | "isSetGenderOpen") => {
+      setModalState((prevState) => ({ ...prevState, [modal]: false }));
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (status === "authenticated" && !data?.user?.username) {
+      openModal("isSetUsernameOpen");
+    }
+  }, [data?.user?.username, status, openModal]);
+
+  if (status === "loading") return <LoadingSkeleton />;
 
   if (status === "authenticated") {
     const { avatar, name, username, gender, id, isAdmin } = data.user;
@@ -93,7 +111,6 @@ export default function AccountPage() {
               1
             </span>
           </Link>
-
           <Link href={`/accounts/${username}/setting`}>
             <MdOutlineSettings className="size-6" />
           </Link>
@@ -107,14 +124,13 @@ export default function AccountPage() {
             height={52}
             className="size-[50px] rounded-full object-cover object-center"
           />
-
           <h3 className="select-none text-xl font-bold">{name ?? "Not Set"}</h3>
         </div>
 
         <div className="soft-edge-shadow mt-3.5 rounded-[10px]">
           <ProfileInformationRow
             title="Avatar"
-            onClick={openSetAvatar}
+            onClick={() => openModal("isSetAvatarOpen")}
             ariaLabel="Open SetAvatar"
             childrenIsText={false}
           >
@@ -129,15 +145,15 @@ export default function AccountPage() {
 
           <ProfileInformationRow
             title="Username"
-            onClick={openSetUsername}
-            ariaLabel="Open Setusername"
+            onClick={() => openModal("isSetUsernameOpen")}
+            ariaLabel="Open SetUsername"
           >
             {username ?? "Not Set"}
           </ProfileInformationRow>
 
           <ProfileInformationRow
             title="Gender"
-            onClick={openSetGender}
+            onClick={() => openModal("isSetGenderOpen")}
             ariaLabel="Open SetGender"
           >
             {gender ?? "Not Set"}
@@ -157,19 +173,16 @@ export default function AccountPage() {
               title="Add Manga|Anime|comics|manhwa|manhua"
             />
           )}
-
           <ProfileLinkRow
             href={`/accounts/${username}/comments`}
             Icon={TfiCommentAlt}
             title="My Comments"
           />
-
           <ProfileLinkRow
             href={`/accounts/${username}/bookmarks`}
             Icon={MdOutlineBookmarkAdded}
             title="My Bookmarks"
           />
-
           <ProfileLinkRow
             href={`/accounts/${username}/chapters`}
             Icon={BiLike}
@@ -185,25 +198,25 @@ export default function AccountPage() {
           />
         )}
 
-        {isSetAvatarOpen && (
+        {modalState.isSetAvatarOpen && (
           <SetAvatar
             setAvatarImage={setAvatarImage}
-            isSetAvatarOpen={isSetAvatarOpen}
-            setIsSetAvatarOpen={setIsSetAvatarOpen}
+            isSetAvatarOpen={modalState.isSetAvatarOpen}
+            setIsSetAvatarOpen={() => closeModal("isSetAvatarOpen")}
           />
         )}
 
-        {isSetUsernameOpen && (
+        {modalState.isSetUsernameOpen && (
           <SetUsername
-            isSetUsernameOpen={isSetUsernameOpen}
-            setIsSetUsernameOpen={setIsSetUsernameOpen}
+            isSetUsernameOpen={modalState.isSetUsernameOpen}
+            setIsSetUsernameOpen={() => closeModal("isSetUsernameOpen")}
           />
         )}
 
-        {isSetGenderOpen && (
+        {modalState.isSetGenderOpen && (
           <SetGender
-            isSetGenderOpen={isSetGenderOpen}
-            setIsSetGenderOpen={setIsSetGenderOpen}
+            isSetGenderOpen={modalState.isSetGenderOpen}
+            setIsSetGenderOpen={() => closeModal("isSetGenderOpen")}
           />
         )}
       </div>

@@ -86,7 +86,7 @@ const ChaptersList: React.FC<{
   const showAllToogleKeyDown = getKeydownEvent(toogleShowAll);
 
   const date = parseISO(updatedOn);
-  const formattedDate = format(date, "dd/MM/yy");
+  const formattedDate = format(date, "d MMM yyyy");
   const timeAgo = formatDistanceToNow(date, { addSuffix: true });
   const formattedUpdateOn = `${formattedDate} . ${timeAgo}`;
 
@@ -124,7 +124,9 @@ const ChaptersList: React.FC<{
 
       <div className="detail-episodes-continer mx-auto max-w-[1200px] flex-wrap justify-between md:flex">
         {chapters.length === 0 && (
-          <div className="m-4 font-bold">No Chapters updated yet.</div>
+          <div className="m-4 select-none font-bold md:mx-0 md:text-lg">
+            No Chapters updated yet.
+          </div>
         )}
 
         {chapters.slice(0, showAll ? chapters.length : 3).map((chapter) => (
@@ -164,18 +166,20 @@ const ChaptersList: React.FC<{
           />
         )}
 
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={toogleShowAll}
-          onKeyDown={showAllToogleKeyDown}
-          className="mb-4 hidden h-[68px] w-80 items-center justify-center gap-1.5 rounded-lg bg-gray-100 text-gray-500/70 md:flex"
-        >
-          <span>{showAll ? "Hide Chapters" : "View All Chapters"}</span>
-          <FaChevronDown
-            className={`size-3.5 ${showAll ? "-rotate-180" : ""}`}
-          />
-        </div>
+        {chapters.length > 3 && (
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={toogleShowAll}
+            onKeyDown={showAllToogleKeyDown}
+            className="mb-4 hidden h-[68px] w-80 items-center justify-center gap-1.5 rounded-lg bg-gray-100 text-gray-500/70 md:flex"
+          >
+            <span>{showAll ? "Hide Chapters" : "View All Chapters"}</span>
+            <FaChevronDown
+              className={`size-3.5 ${showAll ? "-rotate-180" : ""}`}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

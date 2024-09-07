@@ -102,3 +102,17 @@ body {
 #page-content {
   @apply relative mt-[60px] md:mt-[120px];
 }
+
+/* Loading Animation on Page Change */
+@keyframes progress-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.loading-bar {
+  animation: progress-bar 2s linear infinite;
+}

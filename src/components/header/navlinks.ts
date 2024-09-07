@@ -19,14 +19,13 @@ export const navLinks: LinkObject[] = [
     link: "/history",
     sidebarOnly: true,
   },
-  { key: "comics", Icon: FaBook, label: "Comics", link: "/genre/all" },
+  { key: "comics", Icon: FaBook, label: "Comics", link: "/genre/all/0" },
   {
     key: "novelToon",
     Icon: FaBook,
     label: "NovelToon",
     link: "/noveltoon",
   },
-  { key: "allManga", Icon: FaBook, label: "AllManga", link: "/allmanga" },
   { key: "booklist", Icon: FaBook, label: "Booklist", link: "/book/list" },
   {
     key: "contribute",

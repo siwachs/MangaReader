@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import TabNavigation from "@/components/tabNavigation";
 
 import Banner from "./_components/banner";
@@ -11,6 +13,10 @@ import {
   CONTENT_LIST_DEFAULT_PAGE_NUMBER,
 } from "@/constants";
 import getContentList from "@/libs/dbCRUD/getContentList";
+
+// Static Assets
+import circleLeft from "@/../public/assets/circle-left.png";
+import circleRight from "@/../public/assets/circle-right.png";
 
 export default async function HomePage() {
   const [
@@ -71,6 +77,17 @@ export default async function HomePage() {
 
   return (
     <>
+      <Image
+        src={circleLeft}
+        alt="circle-left"
+        className="absolute left-0 top-[350px] hidden h-[376px] w-[152px] md:inline"
+      />
+      <Image
+        src={circleRight}
+        alt="circle-right"
+        className="absolute right-0 top-[50px] hidden h-[365px] w-[60px] md:inline"
+      />
+
       <TabNavigation />
       <Banner bannerListResponse={bannerListResponse} />
       <ContentList
@@ -94,7 +111,7 @@ export default async function HomePage() {
       <ContentList
         contentListResponse={newComicsListResponse}
         title="New Comics"
-        seeAll="/api/list"
+        seeAll="/genre/all/3"
       />
       <ContentList
         contentListResponse={completedListResponse}

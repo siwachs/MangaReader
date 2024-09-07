@@ -7,7 +7,7 @@ const LoadingSpinner: React.FC<{
   return (
     <div
       ref={loaderRef}
-      className={`my-5 ${hideLoader ? "hidden" : ""} text-[var(--app-text-color-bright-pink)]`}
+      className={`my-5 ${hideLoader ? "hidden" : ""} text-[var(--app-text-color-crimson)]`}
     >
       <AiOutlineLoading className="mx-auto size-8 animate-spin" />
     </div>
