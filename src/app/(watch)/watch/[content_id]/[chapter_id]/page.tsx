@@ -6,6 +6,8 @@ import Header from "@/app/(watch)/_components/header";
 import ErrorMessage from "@/components/messages/errorMessage";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import Pagination from "./_components/pagination";
+import { ToastContainerProvider } from "@/contexts/toastContainerContext";
+import { NestedCommentProvider } from "@/contexts/nestedCommentContext";
 import LazyLoadComponent from "@/components/utils/lazyLoadComponent";
 
 import {
@@ -80,7 +82,7 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
           prevChapter={prevChapter}
           nextChapter={nextChapter}
         />
-        {/* <div className="mx-auto mb-5 grid min-h-[calc(100vh-220px)] max-w-[800px] place-items-center md:min-h-[calc(100vh-360px)]">
+        <div className="mx-auto mb-5 grid min-h-[calc(100vh-220px)] max-w-[800px] place-items-center md:min-h-[calc(100vh-360px)]">
           {chapter?.images.map((image, index) => (
             <Image
               quality={100}
@@ -94,7 +96,7 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
               className="m-[inherit] h-auto max-w-full"
             />
           ))}
-        </div> */}
+        </div>
         <Pagination
           contentId={content_id}
           prevChapter={prevChapter}
@@ -103,7 +105,11 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
 
         <div className="mb-[60px]" />
 
-        <LazyLoadComponent component="NestedCommentSystem" />
+        <ToastContainerProvider>
+          <NestedCommentProvider>
+            <LazyLoadComponent component="NestedCommentSystem" />
+          </NestedCommentProvider>
+        </ToastContainerProvider>
       </main>
     </>
   );

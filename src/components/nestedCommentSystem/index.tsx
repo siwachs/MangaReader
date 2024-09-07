@@ -97,7 +97,14 @@ const NestedCommentsContainer: React.FC = () => {
             {["BEST", "NEWEST", "OLDEST"].map((order) => (
               <button
                 key={order}
-                onClick={() => changeCommentsOrder(order as SortKey)}
+                onClick={() => {
+                  if (
+                    commentsPayload.loading ||
+                    commentsPayload.loadMoreCommentsLoding
+                  )
+                    return;
+                  changeCommentsOrder(order as SortKey);
+                }}
                 data-active={commentsPayload.sortKey === order}
                 className="text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-gray-800"
               >

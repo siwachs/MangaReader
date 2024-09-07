@@ -13,6 +13,9 @@ import Rating from "./_components/rating";
 import Description from "./_components/description";
 import ChaptersList from "./_components/chaptersList";
 import DetailTitleBox from "./_components/titleHeader";
+import { ToastContainerProvider } from "@/contexts/toastContainerContext";
+import { NestedCommentProvider } from "@/contexts/nestedCommentContext";
+import LazyLoadComponent from "@/components/utils/lazyLoadComponent";
 
 import {
   CONTENT_LIST_DEFAULT_PAGE_NUMBER,
@@ -94,6 +97,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
       <div className="detail-wrapper overflow-hidden">
         <div className="detail-image relative min-h-[208px] w-full md:py-8 lg:bg-gray-100">
           <Image
+            priority
             placeholder="blur"
             blurDataURL={contentCoverBlurDataImageURL}
             fill
@@ -107,6 +111,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
 
           <div className="detail-header relative mx-auto flex w-full max-w-[1200px] gap-4 p-[24px_16px] text-xs text-white md:gap-5 md:p-0 lg:text-[var(--app-text-color-primary)]">
             <Image
+              priority
               placeholder="blur"
               blurDataURL={contentCoverBlurDataImageURL}
               src={content.poster}
@@ -289,6 +294,12 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
 
           <MdError className="size-[13px]" />
         </button>
+
+        <ToastContainerProvider>
+          <NestedCommentProvider>
+            <LazyLoadComponent component="NestedCommentSystem" />
+          </NestedCommentProvider>
+        </ToastContainerProvider>
       </div>
     </>
   );

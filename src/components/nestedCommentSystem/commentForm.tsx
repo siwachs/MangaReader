@@ -14,7 +14,6 @@ import {
   MdFormatUnderlined,
   MdStrikethroughS,
 } from "react-icons/md";
-import { FcGoogle } from "react-icons/fc";
 import { FaCode } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
 import { BiSolidHide } from "react-icons/bi";
@@ -111,7 +110,7 @@ const CommentForm: React.FC<{
   commentId,
   editModeCallback,
   callback,
-  editMode,
+  editMode = false,
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const { addToast } = useToastContainer();
@@ -126,17 +125,6 @@ const CommentForm: React.FC<{
       editorRef.current.innerHTML = initialMessage;
     }
   }, [initialMessage]);
-
-  useEffect(() => {
-    applyStyle();
-  }, [
-    activeTools.isBoldStyleActive,
-    activeTools.isItalicStyleActive,
-    activeTools.isCodeStyleActive,
-    activeTools.isSpoilerStyleActive,
-    activeTools.isStrikethroughStyleActive,
-    activeTools.isUnderlineStyleActive,
-  ]);
 
   const applyStyle = () => {
     const selection = window.getSelection();
@@ -188,6 +176,17 @@ const CommentForm: React.FC<{
     selection.addRange(newRange);
   };
 
+  useEffect(() => {
+    applyStyle();
+  }, [
+    activeTools.isBoldStyleActive,
+    activeTools.isItalicStyleActive,
+    activeTools.isCodeStyleActive,
+    activeTools.isSpoilerStyleActive,
+    activeTools.isStrikethroughStyleActive,
+    activeTools.isUnderlineStyleActive,
+  ]);
+
   const updateActiveTools = (key: keyof typeof activeTools) => {
     setActiveTools((prev) => ({
       ...prev,
@@ -204,9 +203,7 @@ const CommentForm: React.FC<{
         text: "You need to sign in for that.",
       });
 
-    const message = editorRef.current?.innerHTML!;
     const innerText = editorRef.current?.innerText;
-
     if (innerText?.trim() === "" || innerText === "<br>")
       return addToast({
         id: uuidv4(),
@@ -214,12 +211,15 @@ const CommentForm: React.FC<{
         text: "Message can't be empty.",
       });
 
+    const message = editorRef.current?.innerHTML as string;
     if (editorRef.current) editorRef.current.innerHTML = "";
+
     setExpandedEditor(false);
     setActiveTools(initialActiveTools);
     if (callback) callback();
 
     if (editMode) {
+      // For Loading state toogle
       if (editModeCallback) editModeCallback();
       await editComment(
         { userId, message: sanatizeHtml(message) },
@@ -237,13 +237,19 @@ const CommentForm: React.FC<{
     }
   };
 
+  const expandEditor = () => setExpandedEditor(true);
+  const editorChangeEvent = (e: React.ChangeEvent<HTMLDivElement>) => {
+    if (e.target.innerHTML === "<br>") e.target.innerHTML = "";
+  };
+
   return (
-    <form onSubmit={submitComment} className="my-4">
+    <form onSubmit={submitComment} className="my-4 mb-[18px]">
       <div className="rounded-2xl border-2 border-[var(--app-border-color-grayish-blue)]">
         <div
           role="textbox"
           ref={editorRef}
-          onFocus={() => setExpandedEditor(true)}
+          onFocus={expandEditor}
+          onInput={editorChangeEvent}
           spellCheck
           contentEditable
           className={`relative max-h-[350px] ${expandedEditor ? "min-h-[115px] border-b-2" : "min-h-[65px]"} max-w-full overflow-y-auto whitespace-pre-wrap break-words p-5 leading-[1.4] outline-none transition-all`}
@@ -264,6 +270,7 @@ const CommentForm: React.FC<{
 
               <span className="mx-0.5 inline-block h-6 w-0.5 bg-[var(--app-border-color-grayish-blue)]" />
 
+              {/* Toolbox for Large screens. */}
               {tools.map((tool) => (
                 <button
                   key={tool.key}
@@ -293,7 +300,6 @@ const CommentForm: React.FC<{
             </div>
 
             <button
-              disabled={!userId}
               type="submit"
               className="h-fit whitespace-nowrap rounded-[14px] bg-gray-800 p-[3.5px_15px] text-[15px] font-bold text-white hover:border-[#526069] hover:bg-[#526069] disabled:bg-[#526069]"
             >
@@ -301,6 +307,7 @@ const CommentForm: React.FC<{
             </button>
           </div>
 
+          {/* Mobile Only Toolbox. */}
           <div
             className={
               activeTools.isToolboxActive
@@ -321,21 +328,6 @@ const CommentForm: React.FC<{
               </button>
             ))}
           </div>
-        </div>
-      </div>
-
-      <div className="pt-2.5">
-        <h6 className="mb-2.5 text-[11px] font-bold uppercase not-italic leading-[1] text-[var(--app-text-color-blue-gray)]">
-          Log in with
-        </h6>
-
-        <div className="mb-[18px]">
-          <button
-            type="button"
-            className="opacity-90 transition-opacity hover:opacity-100"
-          >
-            <FcGoogle className="size-9" />
-          </button>
         </div>
       </div>
     </form>

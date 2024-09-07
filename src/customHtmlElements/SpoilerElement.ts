@@ -1,6 +1,5 @@
 class SpoilerTag extends HTMLElement {
   setInitialStyles() {
-    this.style.display = "inline-block";
     this.style.backgroundColor = "var(--app-text-color-blue-gray)";
     this.style.padding = "0 0.5em";
     this.style.color = "transparent";

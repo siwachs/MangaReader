@@ -315,7 +315,6 @@ const renderVoteIcon = (
     isVoteLoading,
     currentVoteType,
   );
-  console.log(voteLoadingClasses);
 
   switch (voteType) {
     case "up":

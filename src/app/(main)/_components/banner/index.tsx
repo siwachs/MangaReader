@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "./slider.css";
 
+import { BANNER_AUTO_NEXT_DELAY } from "@/constants";
 import ErrorMessage from "@/components/messages/errorMessage";
 import { ContentListResponse } from "@/libs/dbCRUD/getContentList";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
@@ -39,10 +40,19 @@ const Banner: React.FC<{
     );
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(
+      () => changeSlide("right"),
+      BANNER_AUTO_NEXT_DELAY,
+    );
+
+    return () => clearInterval(intervalId);
+  }, [contentList.length]);
+
   return (
     <div className="banner mx-auto mt-5 w-[90%] overflow-hidden md:m-0 md:w-full">
       <div className="banner-images relative mx-auto w-full max-w-[1200px] md:my-[30px]">
-        <div className="slide relative h-[60vw] w-full overflow-hidden md:h-[432px]">
+        <div className="slide relative h-[60vw] w-full overflow-hidden md:h-[332px] lg:h-[432px]">
           {error && (
             <ErrorMessage>{`Unable to load the Banner because ${errorMessage}`}</ErrorMessage>
           )}
