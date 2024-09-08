@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 import { useToastContainer } from "@/contexts/toastContainerContext";
 
@@ -18,10 +18,8 @@ import { FaCode } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
 import { BiSolidHide } from "react-icons/bi";
 
-const placeholder = `<div className="pointer-events-none absolute top-0 mt-5 w-auto max-w-full select-none font-[Arial] font-normal text-black opacity-[0.333]"><p className="leading-[1.4]">Join the discussion…</p></div>`;
-
 const editorToolboxButtonClasses =
-  "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100 data-[active=true]:bg-[var(--app-text-color-light-blue-gray)]";
+  "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100 data-[active=true]:bg-blue-300/50";
 const editorToolboxButtonIconClasses = "size-5";
 
 const initialActiveTools = {
@@ -244,9 +242,6 @@ const CommentForm: React.FC<{
   const editorChangeEvent = (e: React.ChangeEvent<HTMLDivElement>) => {
     if (isEditorEmpty()) e.target.innerHTML = "";
   };
-  const collapseEditor = () => {
-    if (isEditorEmpty()) setExpandedEditor(false);
-  };
   const expandEditor = () => setExpandedEditor(true);
 
   return (
@@ -255,7 +250,6 @@ const CommentForm: React.FC<{
         <div
           role="textbox"
           ref={editorRef}
-          onBlur={collapseEditor}
           onFocus={expandEditor}
           onInput={editorChangeEvent}
           spellCheck

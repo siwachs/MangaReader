@@ -7,12 +7,10 @@ import {
   notFound,
   unauthorizedUser,
 } from "@/libs/apiErrorResponse";
-import { partialUser } from "@/libs/mongooseSelect";
 import formatMongooseDoc from "@/libs/db/formatMongooseDoc";
 import getServerSession from "@/libs/auth/getServerSession";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
-import Comment from "@/models/Comment";
-import User from "@/models/User";
+import { Comment } from "@/models";
 
 const deleteComment = async (
   req: NextRequest,
@@ -23,9 +21,6 @@ const deleteComment = async (
     if (!userId) return invalidHeaders(["x-user-id"]);
 
     await connectToMongoDB();
-    const user = await User.findById(userId).select(partialUser);
-    if (!user) return notFound(["User"]);
-
     const serverSession = await getServerSession(userId);
     if (!serverSession) return unauthorizedUser();
 

@@ -14,7 +14,7 @@ import { BiSolidErrorCircle } from "react-icons/bi";
 import { RiHeartAdd2Line } from "react-icons/ri";
 import { FiDownload } from "react-icons/fi";
 import { FaCircleChevronDown, FaChevronLeft } from "react-icons/fa6";
-import { FaTimesCircle } from "react-icons/fa";
+import { FaTimesCircle, FaCaretDown } from "react-icons/fa";
 
 const rightSectionButtonClasses =
   "box-content hidden h-[35px] w-[95px] items-center justify-center gap-[5px] rounded-[100px] border border-[var(--app-text-color-pinkish-red)] lg:inline-flex";
@@ -27,17 +27,23 @@ const Header: React.FC<{
   chapterTitle: string;
 }> = ({ chapters, contentId, chapterId, contentTitle, chapterTitle }) => {
   const [isChapterSelectOpen, setIsChapterSelectOpen] = useState(false);
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
 
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const chapterSelectContainerRef = useRef<HTMLDivElement>(null);
-  const toogleChapterSelect = () => setIsChapterSelectOpen((prev) => !prev);
+  const moreMenuContainerRef = useRef<HTMLDivElement>(null);
 
-  useBodyOverflow(isChapterSelectOpen);
+  const toogleChapterSelect = () => setIsChapterSelectOpen((prev) => !prev);
+  const toogleMoreMenu = () => setIsMoreMenuOpen((prev) => !prev);
+
+  useBodyOverflow(isChapterSelectOpen || isMoreMenuOpen);
+
   useOutsideClick(
     chapterSelectContainerRef,
     isChapterSelectOpen,
     toogleChapterSelect,
   );
+  useOutsideClick(moreMenuContainerRef, isMoreMenuOpen, toogleMoreMenu);
 
   useEffect(() => {
     const hideHeaderOnScroll = () => {
@@ -101,7 +107,7 @@ const Header: React.FC<{
               aria-haspopup="true"
               aria-controls="chapters-list"
               onClick={toogleChapterSelect}
-              className="size-3 md:size-4"
+              className="size-[13px] md:size-4"
             >
               {isChapterSelectOpen ? (
                 <FaTimesCircle className="size-[inherit]" color="grey" />
@@ -111,28 +117,79 @@ const Header: React.FC<{
             </button>
           </div>
 
-          <p className="md:font-noto-sans-sc truncate text-center text-[10px]/[20px] font-medium text-neutral-400 md:text-sm/[16px] md:font-normal">
+          <p className="md:font-noto-sans-sc truncate text-center text-[10px]/[20px] font-medium text-neutral-400 sm:text-sm/[16px] md:font-normal">
             {contentTitle}
           </p>
         </div>
 
-        <div className="mr-[15px] flex flex-1 items-center justify-end gap-2 text-[var(--app-text-color-pinkish-red)] sm:gap-5 md:mr-5 md:gap-6">
-          <FiDownload className="size-4 md:size-5" />
+        <div className="relative mr-[15px] flex flex-1 items-center justify-end gap-2.5 text-[var(--app-text-color-pinkish-red)] sm:gap-5 md:mr-5 md:gap-6">
+          <button aria-label="Download" className="hidden sm:inline-flex">
+            <FiDownload className="size-5" />
+          </button>
 
-          <HiOutlineShare className="size-4 lg:hidden" />
+          <button
+            aria-label="Share"
+            className="hidden sm:inline-flex lg:hidden"
+          >
+            <HiOutlineShare className="size-5" />
+          </button>
 
-          <div className={rightSectionButtonClasses}>
-            <HiOutlineShare className="size-4" />
+          <button className={rightSectionButtonClasses}>
+            <HiOutlineShare className="size-5" />
             <span>Share</span>
-          </div>
+          </button>
 
-          <div className={rightSectionButtonClasses}>
-            <RiHeartAdd2Line className="size-4" />
+          <button className={rightSectionButtonClasses}>
+            <RiHeartAdd2Line className="size-5" />
             <span>Collect</span>
-          </div>
+          </button>
 
-          <RiHeartAdd2Line className="size-4 lg:hidden" />
-          <BiSolidErrorCircle className="size-[17px] md:size-6" color="gray" />
+          <button aria-label="Like" className="lg:hidden">
+            <RiHeartAdd2Line className="size-5" />
+          </button>
+          <button aria-label="Report Error" className="hidden sm:inline-flex">
+            <BiSolidErrorCircle className="size-5 lg:size-6" color="gray" />
+          </button>
+
+          <div className="sm:hidden" ref={moreMenuContainerRef}>
+            <button
+              onClick={toogleMoreMenu}
+              aria-expanded={isMoreMenuOpen}
+              aria-controls="more-menu"
+              aria-haspopup="true"
+            >
+              <FaCaretDown className="size-[22px] text-gray-500/70" />
+            </button>
+
+            <div
+              id="more-menu"
+              className={`absolute right-0 top-[24px] z-10 ${isMoreMenuOpen ? "block" : "hidden"} w-[150px] rounded-xl border border-gray-300 bg-[var(--app-bg-color-primary)] shadow-lg`}
+            >
+              <button
+                onClick={toogleMoreMenu}
+                className="my-1 flex h-7 w-full items-center gap-2 px-4"
+              >
+                <FiDownload className="size-5" />
+                <span className="text-sm">Download</span>
+              </button>
+
+              <button
+                onClick={toogleMoreMenu}
+                className="my-1 flex h-7 w-full items-center gap-2 px-4"
+              >
+                <HiOutlineShare className="size-5" />
+                <span className="text-sm">Share</span>
+              </button>
+
+              <button
+                onClick={toogleMoreMenu}
+                className="my-1 flex h-7 w-full items-center gap-2 px-4"
+              >
+                <BiSolidErrorCircle className="size-5" color="gray" />
+                <span className="text-sm">Report Error</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -146,7 +203,7 @@ const Header: React.FC<{
       >
         <div
           id="chapters-list"
-          className="hide-scrollbar h-full flex-wrap justify-between overflow-auto p-[6px_3vw] md:flex"
+          className="h-full overflow-auto p-[6px_3vw] pb-[84px] md:flex md:flex-wrap md:items-start md:justify-between"
         >
           {chapters.map((chapter) => (
             <ChapterLink
@@ -156,6 +213,7 @@ const Header: React.FC<{
               title={chapter.title}
               releaseDate={chapter.createdAt}
               href={`/watch/${contentId}/${chapter.id}`}
+              callback={toogleChapterSelect}
             />
           ))}
         </div>

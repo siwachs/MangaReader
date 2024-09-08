@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "./slider.css";
@@ -17,19 +17,25 @@ const Banner: React.FC<{
 }> = ({ bannerListResponse }) => {
   const { error, errorMessage, contentList } = bannerListResponse;
 
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [currentSlide, setCurrentSlide] = useState(
-    Math.floor(contentList.length / 2),
+    contentList.length > 0 ? Math.floor(contentList.length / 2) : 0,
   );
 
   const getImageClass = (index: number): string => {
     if (index === currentSlide) return "centerActive";
-
     if ((currentSlide - 1 + contentList.length) % contentList.length === index)
       return "leftActive";
-
     if ((currentSlide + 1) % contentList.length === index) return "rightActive";
-
     return "imageHidden";
+  };
+
+  const startAutoNext = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(
+      () => changeSlide("right"),
+      BANNER_AUTO_NEXT_DELAY,
+    );
   };
 
   const changeSlide = (direction: "left" | "right") => {
@@ -38,29 +44,39 @@ const Banner: React.FC<{
         ? (prev + 1) % contentList.length
         : (prev - 1 + contentList.length) % contentList.length,
     );
+
+    startAutoNext();
+  };
+
+  const moveToSlideNumber = (index: number) => {
+    setCurrentSlide(index);
+    startAutoNext();
   };
 
   useEffect(() => {
-    const intervalId = setInterval(
-      () => changeSlide("right"),
-      BANNER_AUTO_NEXT_DELAY,
-    );
+    if (contentList.length > 0) {
+      startAutoNext();
 
-    return () => clearInterval(intervalId);
+      return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
+    }
   }, [contentList.length]);
+
+  if (error) {
+    return (
+      <ErrorMessage>{`Unable to load the Banner because ${errorMessage}`}</ErrorMessage>
+    );
+  }
 
   return (
     <div className="banner mx-auto mt-5 w-[90%] overflow-hidden md:m-0 md:w-full">
       <div className="banner-images relative mx-auto w-full max-w-[1200px] md:my-[30px]">
         <div className="slide relative h-[60vw] w-full overflow-hidden md:h-[332px] lg:h-[432px]">
-          {error && (
-            <ErrorMessage>{`Unable to load the Banner because ${errorMessage}`}</ErrorMessage>
-          )}
-
           {contentList.map((image, index) => (
             <Link
               key={image.id}
-              href={`${encodeURIComponent(image.title.toLocaleLowerCase().replaceAll(" ", "-"))}?content_id=${image.id}`}
+              href={`${encodeURIComponent(image.title.toLowerCase().replaceAll(" ", "-"))}?content_id=${image.id}`}
               onClick={() => setCurrentSlide(index)}
             >
               <div
@@ -80,11 +96,11 @@ const Banner: React.FC<{
           ))}
 
           <div className="absolute bottom-0 z-30 flex w-full justify-center">
-            {contentList.map((image, index) => (
+            {contentList.map((_, index) => (
               <button
-                key={image.id}
+                key={index}
                 className={`m-[5px] h-[9px] rounded ${currentSlide === index ? "pointer-events-none w-[25px] bg-[var(--app-text-color-red)]" : "w-[9px] cursor-pointer bg-gray-300"}`}
-                onClick={() => setCurrentSlide(index)}
+                onClick={() => moveToSlideNumber(index)}
               />
             ))}
           </div>

@@ -11,9 +11,10 @@ const ChapterLink: React.FC<{
   title: string;
   releaseDate: string;
   href: string;
-}> = memo(({ id, dataActive, title, releaseDate, href }) => {
+  callback?: () => void;
+}> = memo(({ id, dataActive, title, releaseDate, href, callback }) => {
   const date = parseISO(releaseDate);
-  const formattedDate = format(date, "dd/MM/yy");
+  const formattedDate = format(date, "d MMM yyyy");
   const timeAgo = formatDistanceToNow(date, { addSuffix: true });
   const formattedReleaseDate = `${formattedDate} . ${timeAgo}`;
 
@@ -24,13 +25,10 @@ const ChapterLink: React.FC<{
       className="mx-4 my-2 rounded-lg bg-gray-100 px-4 py-3 data-[active=true]:pointer-events-none data-[active=true]:bg-gray-300 md:m-0 md:mb-4 md:w-80"
     >
       <div className="flex items-center justify-between">
-        <Link href={href}>
+        <Link onClick={callback} href={href}>
           <p className="text-sm/[18px] font-normal">{title}</p>
           <p className="mt-2.5 text-xs font-normal text-gray-500/70">
-            <span className="md:hidden">release on {formattedDate}</span>
-            <span className="hidden md:inline">
-              release on {formattedReleaseDate}
-            </span>
+            release on {formattedReleaseDate}
           </p>
         </Link>
 

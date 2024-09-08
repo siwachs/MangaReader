@@ -9,7 +9,7 @@ const Channels: React.FC<{
   return (
     <div className="my-2.5 ml-5 w-full max-w-[1200px] overflow-hidden whitespace-nowrap md:mx-auto md:mb-[35px]">
       <div className="flex items-center justify-between overflow-hidden md:items-start">
-        <div className="my-[5px] w-[50px] py-[5px] text-sm text-[var(--app-text-color-stone-gray)] md:mr-[50px] md:w-[80px] md:text-lg">
+        <div className="my-[5px] w-[50px] py-[5px] text-sm text-gray-500/70 md:mr-[50px] md:w-[80px] md:text-lg">
           <span>{title}</span>
         </div>
 

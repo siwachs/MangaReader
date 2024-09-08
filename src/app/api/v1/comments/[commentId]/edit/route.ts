@@ -10,8 +10,7 @@ import {
 import formatMongooseDoc from "@/libs/db/formatMongooseDoc";
 import getServerSession from "@/libs/auth/getServerSession";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
-import Comment from "@/models/Comment";
-import User from "@/models/User";
+import { Comment } from "@/models";
 
 const editComment = async (
   req: NextRequest,
@@ -23,12 +22,10 @@ const editComment = async (
     if (!userId || !message?.trim()) return invalidBody(["userId", "message"]);
 
     await connectToMongoDB();
-    const user = await User.findById(userId);
-    if (!user) return notFound(["User"]);
-
     const serverSession = await getServerSession(userId);
     if (!serverSession) return unauthorizedUser();
 
+    const { user } = serverSession;
     const commentId = dynamicRouteValue.params.commentId;
     const comment = await Comment.findById(commentId);
     if (!comment) return notFound(["Comment"]);
@@ -38,12 +35,19 @@ const editComment = async (
       commentId,
       { message, isEdited: true },
       { new: true },
-    ).populate("user", "username avatar");
+    );
 
     return NextResponse.json(
       {
         error: false,
-        comment: formatMongooseDoc(editedComment.toObject()),
+        comment: {
+          ...formatMongooseDoc(editedComment.toObject()),
+          user: {
+            id: user.id,
+            username: user?.username,
+            avatar: user?.avatar,
+          },
+        },
       },
       { status: 200 },
     );

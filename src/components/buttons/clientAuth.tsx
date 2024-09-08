@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   signIn,
   useSession,
@@ -33,7 +33,12 @@ const ClientAuth: React.FC<{
   const profileContainerRef = useRef<HTMLDivElement>(null);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
-  const currentUrl = usePathname();
+  const url = usePathname();
+  const searchParams = useSearchParams();
+  const params = Object.fromEntries(searchParams.entries());
+  const queryParamsString = new URLSearchParams(params).toString();
+  const currentUrl = `${url}?${queryParamsString}`;
+
   const session = useSession();
   const { status, data } = session;
 

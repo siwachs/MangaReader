@@ -13,7 +13,6 @@ import { useFormState } from "react-dom";
 import dynamic from "next/dynamic";
 import useBodyOverflow from "@/hooks/useBodyOverflow";
 
-import { MAX_FILE_SIZE } from "@/constants";
 import { ContentResponse, GenresResponse } from "@/types";
 import { addOrUpdateContent } from "@/actions/contentPageForm";
 import ModelOverlay from "@/components/utils/modelOverlay";
@@ -95,15 +94,8 @@ const AddOrUpdateContentForm: React.FC<{
 
   const formAction = useCallback(
     (formData: FormData) => {
-      if (thumbnail.length === 0 || poster.length === 0) {
-        return {
-          error: true,
-          errorMessage: `Pick a valid Thumbnail and Poster of size up to ${MAX_FILE_SIZE}MB.`,
-        };
-      }
-
-      formData.append("thumbnail", thumbnail[0]);
-      formData.append("poster", poster[0]);
+      formData.append("thumbnail", thumbnail?.[0]);
+      formData.append("poster", poster?.[0]);
       imagesAndWallpapers.forEach((image) =>
         formData.append("imagesAndWallpapers", image),
       );
@@ -138,7 +130,7 @@ const AddOrUpdateContentForm: React.FC<{
             id="tags"
             name="tags"
             multiple
-            className="admin-form-input-type-select h-[136px]"
+            className="admin-form-input-type-select h-[146px]"
             aria-multiselectable="true"
             defaultValue={content?.tags}
           >
@@ -214,7 +206,7 @@ const AddOrUpdateContentForm: React.FC<{
             id="genres"
             name="genres"
             multiple
-            className="admin-form-input-type-select h-[136px]"
+            className="admin-form-input-type-select h-[233px]"
             aria-required
             required
             defaultValue={content?.genres as string[]}

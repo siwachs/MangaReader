@@ -85,22 +85,16 @@ const voteComment = async (
     const { userId, contentId, chapterId } = await req.json();
     const voteType = dynamicRouteValue.params.voteType;
 
-    if (
-      !userId ||
-      !contentId ||
-      !chapterId ||
-      (voteType !== "up" && voteType !== "down")
-    )
-      return invalidBody(["userId", "contentId", "chapterId", "voteType"]);
+    if (!userId || !contentId || (voteType !== "up" && voteType !== "down"))
+      return invalidBody(["userId", "contentId", "voteType"]);
 
     await connectToMongoDB();
+    const serverSession = await getServerSession(userId);
+    if (!serverSession) return unauthorizedUser();
+
     const user = await User.findById(userId).select(
       partialUserWithVotedComments,
     );
-    if (!user) return notFound(["User"]);
-
-    const serverSession = await getServerSession(userId);
-    if (!serverSession) return unauthorizedUser();
 
     const commentId = dynamicRouteValue.params.commentId;
     const comment = await Comment.findById(commentId).populate(

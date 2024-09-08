@@ -1,45 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
 
-import { Comment as CommentType, VoteType } from "@/types";
+import {
+  DEFAULT_NESTED_COMMENT_SYSTEM_PAGE_NUMBER,
+  DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY,
+  DEFAULT_NESTED_COMMENT_SYSTEM_PAGE_SIZE,
+} from "@/constants";
+import { Comment as CommentType, SortKey, VoteType } from "@/types";
 import {
   invalidBody,
   invalidQuery,
-  notFound,
   serverError,
   unauthorizedUser,
 } from "@/libs/apiErrorResponse";
 import formatMongooseDoc from "@/libs/db/formatMongooseDoc";
 import getServerSession from "@/libs/auth/getServerSession";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
-import Comment from "@/models/Comment";
-import User from "@/models/User";
-
-const PAGE_NUMBER = 1;
-const PAGE_SIZE = 50;
-const COMMENTS_SORT_KEY = "BEST";
+import { Comment, User } from "@/models";
 
 const getComments = async (req: NextRequest) => {
   try {
-    const contentId = req.nextUrl.searchParams.get("contentId");
+    const { searchParams } = req.nextUrl;
+    const contentId = searchParams.has("contentId")
+      ? (searchParams.get("contentId") as string).trim()
+      : null;
     if (!contentId) return invalidQuery(["contentId"]);
 
-    const chapterId = !req.nextUrl.searchParams.get("chapterId")
-      ? null
-      : req.nextUrl.searchParams.get("chapterId");
+    const chapterId = searchParams.has("chapterId")
+      ? searchParams.get("chapterId")
+      : null;
 
-    const pageNumber =
-      parseInt(req.nextUrl.searchParams.get("pageNumber")!) || PAGE_NUMBER;
-    const pageSize =
-      parseInt(req.nextUrl.searchParams.get("pageSize")!) || PAGE_SIZE;
+    const pageNumber = searchParams.has("pageNumber")
+      ? parseInt(searchParams.get("pageNumber") as string)
+      : DEFAULT_NESTED_COMMENT_SYSTEM_PAGE_NUMBER;
+    const pageSize = searchParams.has("pageSize")
+      ? parseInt(searchParams.get("pageSize") as string)
+      : DEFAULT_NESTED_COMMENT_SYSTEM_PAGE_SIZE;
 
-    const commentsSortKey = !req.nextUrl.searchParams.get("commentsSortKey")
-      ? COMMENTS_SORT_KEY
-      : req.nextUrl.searchParams.get("commentsSortKey");
+    const commentsSortKey: SortKey = searchParams.has("commentsSortKey")
+      ? (searchParams.get("commentsSortKey") as SortKey)
+      : DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY;
 
     const matchConditions = [{ contentId }, { chapterId }];
-
     let sortingConditions: Record<string, 1 | -1> = {};
+
     if (commentsSortKey === "NEWEST") sortingConditions = { createdAt: -1 };
     else if (commentsSortKey === "OLDEST") sortingConditions = { createdAt: 1 };
     else sortingConditions = { upVotes: -1, createdAt: -1 };
@@ -164,26 +168,22 @@ const getComments = async (req: NextRequest) => {
 
 const addComment = async (req: NextRequest) => {
   try {
-    const startTime = Date.now();
     const { contentId, chapterId, userId, parentId, message } =
       await req.json();
     if (!contentId || !userId || !message?.trim())
       return invalidBody(["contentId", "userId", "message"]);
 
+    const scriptTagRegex = /<\s*script[\s\S]*?>[\s\S]*?<\s*\/\s*script\s*>/gi;
+    const eventAttributeRegex = /on\w+\s*=\s*(['"])(.*?)\1(?=\s|\/|>)/gi;
+    if (scriptTagRegex.test(message) || eventAttributeRegex.test(message)) {
+      return invalidBody();
+    }
+
+    await connectToMongoDB();
     const serverSession = await getServerSession(userId);
     if (!serverSession) return unauthorizedUser();
 
-    await connectToMongoDB();
-    const user = await User.findById(userId).select("username avatar");
-    if (!user) return notFound(["User"]);
-
-    const scriptTagRegex = /<\s*script[\s\S]*?>[\s\S]*?<\s*\/\s*script\s*>/gi;
-    const eventAttributeRegex = /on\w+\s*=\s*(['"])(.*?)\1(?=\s|\/|>)/gi;
-    const hasScriptTag = scriptTagRegex.test(message);
-    const hasEventAttribute = eventAttributeRegex.test(message);
-
-    if (hasScriptTag || hasEventAttribute) return invalidBody();
-
+    const { user } = serverSession;
     const comment = await Comment.create({
       parentId: parentId ?? "root",
       message,
@@ -192,16 +192,13 @@ const addComment = async (req: NextRequest) => {
       user: userId,
     });
 
-    const endTime = Date.now();
-    const responseTime = endTime - startTime;
-    console.log("Response time of API is = ", responseTime);
-
     return NextResponse.json(
       {
         error: false,
         comment: {
           ...formatMongooseDoc(comment.toObject()),
           user: {
+            id: user.id,
             username: user?.username,
             avatar: user?.avatar,
           },

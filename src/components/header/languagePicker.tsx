@@ -43,7 +43,7 @@ const LanguagePicker: React.FC = () => {
 
       <div
         id="languages-list"
-        className={`absolute -right-5 top-[30px] z-10 ${isLanguagePickerOpen ? "block" : "hidden"} w-[120px] rounded-xl border border-gray-300 bg-white py-2.5 text-xs md:left-1/2 md:right-0 md:w-[150px] md:-translate-x-1/2 md:rounded-[10px] md:text-sm`}
+        className={`absolute -right-5 top-[30px] z-10 ${isLanguagePickerOpen ? "block" : "hidden"} w-[120px] rounded-xl border border-gray-300 bg-[var(--app-bg-color-primary)] py-2.5 text-xs md:left-1/2 md:right-0 md:w-[150px] md:-translate-x-1/2 md:rounded-[10px] md:text-sm`}
       >
         {languages.map((language) => (
           <Link

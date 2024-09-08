@@ -265,7 +265,7 @@ const ProfileInformationRow: React.FC<{
           )}
 
           {clientInteractable && (
-            <FaChevronRight className="size-3.5 text-[var(--app-text-color-stone-gray)]" />
+            <FaChevronRight className="size-3.5 text-gray-500/70" />
           )}
         </div>
       </div>

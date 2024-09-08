@@ -118,7 +118,7 @@ export default async function GenrePage(req: Readonly<GenrePageReqObj>) {
       )}
 
       <div className="mx-auto mt-5 w-full max-w-[1200px] overflow-hidden md:mb-5 md:mt-[50px]">
-        <div className="items mx-auto min-h-[calc(100vh-355px)] w-[90%] md:flex md:w-full md:flex-wrap md:gap-[30px]">
+        <div className="items mx-auto w-[90%] md:flex md:w-full md:flex-wrap md:gap-[30px]">
           {contentList.map((content, index) => (
             <Link
               key={content.id}

@@ -199,9 +199,8 @@ const DetailSubscribe: React.FC<{
       }
     >
       <p className="select-none text-sm/[18px] font-normal text-gray-500/70">
-        {mobileOnly
-          ? `Updated on ${formattedDate}`
-          : `Updated on ${formattedUpdateOn}`}
+        <span className="sm:hidden">Updated on {formattedDate}</span>
+        <span className="hidden sm:inline">Updated on {formattedUpdateOn}</span>
       </p>
 
       <button className="flex items-center gap-1 text-sm text-[var(--app-text-color-bright-pink)] md:gap-1.5">

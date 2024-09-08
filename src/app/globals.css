@@ -14,11 +14,7 @@
   --app-text-color-bright-pink: #ff526e;
   --app-text-color-pinkish-red: rgba(255, 32, 78, 1);
 
-  --app-text-color-stone-gray: #9d9d9d;
-  --app-text-color-silver-gray: #1e0808;
-  --app-text-color-darker-gray: #555;
   --app-text-color-muted: #948084;
-  --app-text-color-neutral-gray: #c6c6c6;
   --app-text-color-dark-gray: #1f1f1f;
 
   --app-text-color-medium-dark-blue: #0b57d0;
@@ -26,12 +22,10 @@
   --app-border-color-medium-dark-gray: #747775;
 
   /* Nested Comment System Variables */
-  --app-text-color-muted-blue-gray: #030304;
   --app-text-color-blue-gray: #687a86;
   --app-text-color-grayish-blue: #e7e9ee;
   --app-text-color-very-dary-steel-blue: #494e58;
   --app-text-color-medium-gray-blue: #7f919e;
-  --app-text-color-light-blue-gray: rgba(60, 75, 120, 0.12);
 
   --app-border-color-grayish-blue: rgba(60, 78, 110, 0.18);
   --app-border-color-periwinkle: #9ca1de;

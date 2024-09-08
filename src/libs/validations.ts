@@ -1,4 +1,5 @@
 import { Tags, Status } from "@/types";
+import { MAX_FILE_SIZE } from "@/constants";
 
 function isBase64Image(data: string): boolean {
   const base64Regex = /^data:image\/[^;]+;base64,/;
@@ -18,6 +19,14 @@ function isValidHttpURL(urlString: string): boolean {
 function getValidContentPayload(formData: FormData) {
   const thumbnail = formData.get("thumbnail") as string;
   const poster = formData.get("poster") as string;
+
+  console.log("thumbanil = ", poster);
+  if (!isBase64Image(thumbnail) || !isBase64Image(poster))
+    return {
+      error: true,
+      errorMessage: `Pick a valid Thumbnail and Poster of size up to ${MAX_FILE_SIZE}MB.`,
+    };
+
   const tags = formData.getAll("tags") as Tags[];
 
   const title = (formData.get("title") as string).trim();

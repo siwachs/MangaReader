@@ -84,7 +84,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
   const currentGenreLink = `/genre/${encodeURIComponent(currentGenreName.toLowerCase())}/0`;
 
   const { chapters = [] } = content;
-  const latestChapterId = chapters[chapters.length - 1]?.id;
+  const latestChapterId = chapters[0]?.id;
 
   return (
     <>
@@ -144,7 +144,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
                 <p className="truncate">Author: {content.author}</p>
               </div>
 
-              <p className="truncate font-normal leading-[15px] md:text-sm/[18px]">
+              <p className="font-normal leading-[15px] md:text-sm/[18px]">
                 {content.synonyms.length === 0
                   ? "Synonyms: NA"
                   : `Synonyms: ${content.synonyms.join(", ")}`}

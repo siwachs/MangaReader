@@ -98,6 +98,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
           className={`relative mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
         >
           <div
+            id="indicator"
             className={`absolute left-0 top-0 hidden ${isChildrenCollapsed ? "h-10" : "h-[52px]"} w-[5px] rounded-[3px] bg-gray-800`}
           />
 
@@ -106,7 +107,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
             alt={comment.user?.username ?? "profile-pic"}
             width={60}
             height={60}
-            className="h-full w-full rounded-[inherit] object-cover object-center"
+            className="h-full w-full rounded-[inherit] object-cover object-center before:h-[52px] before:w-[5px] before:rounded-[3px] before:bg-gray-800 before:pr-3 before:content-['']"
           />
         </div>
 
@@ -134,11 +135,10 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
                 {comment.parentId !== "root" && (
                   <Link
                     href={`#${comment.parentId}`}
-                    className="ml-2 select-none font-medium text-[var(--app-text-color-very-dary-steel-blue)]"
+                    className="ml-2 flex select-none items-center gap-0.5 font-medium text-[var(--app-text-color-very-dary-steel-blue)]"
                   >
-                    <IoMdShareAlt className="inline-block size-4" />
-                    &nbsp;
-                    {comment.user?.username ?? "deleted"}
+                    <IoMdShareAlt className="size-4" />
+                    <span>{comment.user?.username ?? "deleted"}</span>
                   </Link>
                 )}
               </div>
