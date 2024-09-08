@@ -38,6 +38,7 @@ export default async function SearchPage(req: Readonly<SearchPageReqObj>) {
   return (
     <>
       <TabNavigation />
+
       <div className="search-page-wrapper">
         <SearchBar word={word} />
 

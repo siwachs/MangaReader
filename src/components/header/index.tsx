@@ -1,7 +1,10 @@
+import { Suspense } from "react";
+
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
+import LoadingSkeleton from "../utils/loadingSkeleton";
 import ClientAuth from "@/components/buttons/clientAuth";
 import { navLinks } from "./navlinks";
 
@@ -49,11 +52,13 @@ const Header: React.FC = () => {
         >
           <MenuToggler />
 
-          <ClientAuth
-            profileMenuPositionClasses="right-2.5 top-12"
-            profileContainerClasses="hidden size-[42px] flex-shrink-0 md:inline"
-            signInButtonClasses="hidden md:inline"
-          />
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ClientAuth
+              profileMenuPositionClasses="right-2.5 top-12"
+              profileContainerClasses="hidden size-[42px] flex-shrink-0 md:inline"
+              signInButtonClasses="hidden md:inline"
+            />
+          </Suspense>
 
           <Link className="hidden md:inline" href="/history">
             History

@@ -2,10 +2,12 @@
 
 import "./index.css";
 
+import { Suspense } from "react";
 import { roboto } from "@/libs/fonts";
 import { SortKey } from "@/types";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 
+import LoadingSkeleton from "../utils/loadingSkeleton";
 import ClientAuth from "../buttons/clientAuth";
 import CommentForm from "./commentForm";
 import CommentList from "./commentList";
@@ -62,24 +64,26 @@ const NestedCommentsContainer: React.FC = () => {
             {commentsPayload.totalComments} Comments
           </span>
 
-          <ClientAuth
-            profileContainerClasses="relative size-9"
-            profileMenuPositionClasses="right-0 top-10"
-            signInButtonClasses="flex items-center gap-1.5"
-            signInButtonComponent={
-              <>
-                <div className="relative">
-                  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
-                    1
-                  </span>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ClientAuth
+              profileContainerClasses="relative size-9"
+              profileMenuPositionClasses="right-0 top-10"
+              signInButtonClasses="flex items-center gap-1.5"
+              signInButtonComponent={
+                <>
+                  <div className="relative">
+                    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
+                      1
+                    </span>
 
-                  <IoChatbubble className="size-[22px]" />
-                </div>
+                    <IoChatbubble className="size-[22px]" />
+                  </div>
 
-                <span>Sign In</span>
-              </>
-            }
-          />
+                  <span>Sign In</span>
+                </>
+              }
+            />
+          </Suspense>
         </div>
       </header>
 

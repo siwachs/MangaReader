@@ -1,8 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import LoadingSkeleton from "../utils/loadingSkeleton";
 import { LinkObject } from "@/types";
 import ClientAuth from "../buttons/clientAuth";
 
@@ -36,11 +38,13 @@ const TabNavigation: React.FC = () => {
         const { key, link, label } = navLink;
 
         return key === "signin" ? (
-          <ClientAuth
-            key={key}
-            profileContainerClasses="mx-2.5 size-[30px] flex-shrink-0 sm:size-[32px]"
-            signInButtonClasses="text-sm font-normal leading-[37px] whitespace-nowrap text-gray-800"
-          />
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ClientAuth
+              key={key}
+              profileContainerClasses="mx-2.5 size-[30px] flex-shrink-0 sm:size-[32px]"
+              signInButtonClasses="text-sm font-normal leading-[37px] whitespace-nowrap text-gray-800"
+            />
+          </Suspense>
         ) : (
           <div key={key} className="relative mx-2.5 flex-shrink-0">
             <Link href={link}>
