@@ -18,6 +18,8 @@ import getContentList from "@/libs/dbCRUD/getContentList";
 import circleLeft from "@/../public/assets/circle-left.png";
 import circleRight from "@/../public/assets/circle-right.png";
 
+export const revalidate = 80;
+
 export default async function HomePage() {
   const [
     bannerListResponse,
