@@ -38,6 +38,7 @@ const SetUsername: React.FC<{
 
   const [username, setUsername] = useState(data?.user.username ?? "");
   const [usernameQuery, setUsernameQuery] = useState(initialUsernameQuery);
+  const { error, usernameAvailable, loading } = usernameQuery;
 
   useOutsideClick(formRef, isSetUsernameOpen, () => {
     setIsSetUsernameOpen(false);
@@ -54,16 +55,18 @@ const SetUsername: React.FC<{
       },
     );
 
-    const { error, errorMessage, usernameAvailable } = requestResponse;
+    const { error, errorMessage, usernameAvailable = false } = requestResponse;
+
     if (error)
       return setUsernameQuery((prev) => ({
         ...prev,
+        usernameAvailable,
         error: errorMessage,
       }));
 
     setUsernameQuery((prev) => ({
       ...prev,
-      error: null,
+      error: errorMessage,
       usernameAvailable,
     }));
   }, []);
@@ -85,7 +88,7 @@ const SetUsername: React.FC<{
         usernameAvailable: null,
       });
 
-    if (usernameQuery.loading || !usernameQuery.usernameAvailable) return;
+    if (loading || !usernameAvailable) return;
 
     setUsernameQuery({ ...initialUsernameQuery, loading: true });
     const requestResponse = await makePostPutRequest(
@@ -119,8 +122,7 @@ const SetUsername: React.FC<{
     });
   };
 
-  const disableButton =
-    username === data?.user.username || usernameQuery.loading;
+  const disableButton = username === data?.user.username || loading;
 
   return (
     <ModelOverlay>
@@ -133,7 +135,7 @@ const SetUsername: React.FC<{
 
         <div className="w-full">
           <div
-            className={`flex items-center rounded-lg border bg-gray-100 ${usernameQuery.error ? "border-red-500" : "border-transparent"}`}
+            className={`flex items-center rounded-lg border bg-gray-100 ${error ? "border-red-500" : "border-transparent"}`}
           >
             <input
               value={username}
@@ -144,26 +146,22 @@ const SetUsername: React.FC<{
               className="flex-1 bg-transparent p-2.5 outline-none"
             />
 
-            {usernameQuery.usernameAvailable !== null && (
-              <>
-                {usernameQuery.usernameAvailable && (
-                  <IoCheckmarkCircle className="mr-2 size-6 text-green-500" />
-                )}
-                {!usernameQuery.usernameAvailable && (
-                  <IoCloseCircle className="mr-2 size-6 text-red-500" />
-                )}
-              </>
-            )}
+            {usernameAvailable !== null &&
+              (usernameAvailable ? (
+                <IoCheckmarkCircle className="mr-2 size-6 text-green-500" />
+              ) : (
+                <IoCloseCircle className="mr-2 size-6 text-red-500" />
+              ))}
 
-            {usernameQuery.loading && (
+            {loading && (
               <AiOutlineLoading className="mr-2 size-6 animate-spin" />
             )}
           </div>
 
           <p
-            className={`my-1.5 h-5 text-[11px] font-bold text-red-500 md:text-[13px] lg:text-sm ${usernameQuery.error ? "opacity-100" : "opacity-0"}`}
+            className={`my-1.5 h-5 text-[11px] font-bold text-red-500 md:text-[13px] lg:text-sm ${error ? "opacity-100" : "opacity-0"}`}
           >
-            {usernameQuery.error}
+            {error}
           </p>
         </div>
 

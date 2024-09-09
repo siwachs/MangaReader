@@ -5,11 +5,13 @@ import {
   DEFAULT_NESTED_COMMENT_SYSTEM_PAGE_NUMBER,
   DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY,
   DEFAULT_NESTED_COMMENT_SYSTEM_PAGE_SIZE,
+  NESTED_COMMENT_SET_A_USERNAME_MESSAGE,
 } from "@/constants";
 import { Comment as CommentType, SortKey, VoteType } from "@/types";
 import {
   invalidBody,
   invalidQuery,
+  methodNotAllowed,
   serverError,
   unauthorizedUser,
 } from "@/libs/apiErrorResponse";
@@ -168,9 +170,14 @@ const getComments = async (req: NextRequest) => {
 
 const addComment = async (req: NextRequest) => {
   try {
-    const { contentId, chapterId, userId, parentId, message } =
-      await req.json();
-    if (!contentId || !userId || !message?.trim())
+    const {
+      contentId,
+      chapterId = null,
+      userId,
+      parentId = "root",
+      message = "",
+    } = await req.json();
+    if (!contentId || !userId || !message.trim())
       return invalidBody(["contentId", "userId", "message"]);
 
     const scriptTagRegex = /<\s*script[\s\S]*?>[\s\S]*?<\s*\/\s*script\s*>/gi;
@@ -182,13 +189,15 @@ const addComment = async (req: NextRequest) => {
     await connectToMongoDB();
     const serverSession = await getServerSession(userId);
     if (!serverSession) return unauthorizedUser();
+    if (!serverSession.user.username)
+      return methodNotAllowed(NESTED_COMMENT_SET_A_USERNAME_MESSAGE);
 
     const { user } = serverSession;
     const comment = await Comment.create({
-      parentId: parentId ?? "root",
+      parentId,
       message,
       contentId,
-      chapterId: chapterId ?? null,
+      chapterId,
       user: userId,
     });
 

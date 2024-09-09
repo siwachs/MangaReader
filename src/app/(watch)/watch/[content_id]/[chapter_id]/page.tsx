@@ -15,6 +15,7 @@ import {
   ERROR_500_PAGE_HEADER_TITLE,
 } from "@/constants";
 
+import { Chapter } from "@/models";
 import getChapters, { getChapter } from "@/libs/dbCRUD/getChapters";
 import { getContentTitleAndDescription } from "@/libs/dbCRUD/getContent";
 
@@ -61,6 +62,10 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
     await getChapter(content_id, chapter_id, { withImages: true });
 
   if (status === 404) return notFound();
+  await Chapter.updateOne(
+    { _id: chapter_id, contentId: content_id },
+    { $inc: { noOfViews: 1 } },
+  );
 
   return (
     <>

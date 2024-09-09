@@ -89,10 +89,14 @@ export default function AccountPage() {
   );
 
   useEffect(() => {
-    if (status === "authenticated" && !data?.user?.username) {
+    if (
+      status === "authenticated" &&
+      !data?.user?.username &&
+      !modalState.isSetAvatarOpen
+    ) {
       openModal("isSetUsernameOpen");
     }
-  }, [data?.user?.username, status, openModal]);
+  }, [data?.user?.username, status, modalState.isSetUsernameOpen]);
 
   if (status === "loading") return <LoadingSkeleton />;
 

@@ -38,9 +38,8 @@ const TabNavigation: React.FC = () => {
         const { key, link, label } = navLink;
 
         return key === "signin" ? (
-          <Suspense fallback={<LoadingSkeleton />}>
+          <Suspense key={key} fallback={<LoadingSkeleton />}>
             <ClientAuth
-              key={key}
               profileContainerClasses="mx-2.5 size-[30px] flex-shrink-0 sm:size-[32px]"
               signInButtonClasses="text-sm font-normal leading-[37px] whitespace-nowrap text-gray-800"
             />

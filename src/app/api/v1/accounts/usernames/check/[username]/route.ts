@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { PROFILE_MANAGEMENT_USERNAME_ALREADY_CLAIMED } from "@/constants";
 import { notFound, serverError } from "@/libs/apiErrorResponse";
 import connectToMongoDB from "@/libs/db/connectToMongoDB";
 import User from "@/models/User";
@@ -19,7 +20,11 @@ const checkUsername = async (
     );
 
     return NextResponse.json(
-      { error: false, usernameAvailable: userId === null },
+      {
+        errorMessage:
+          userId === null ? null : PROFILE_MANAGEMENT_USERNAME_ALREADY_CLAIMED,
+        usernameAvailable: userId === null,
+      },
       { status: 200 },
     );
   } catch (error: any) {

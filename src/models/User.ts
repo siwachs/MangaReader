@@ -13,7 +13,11 @@ const VotedCommentSchema = new Schema(
 const UserSchema = new Schema(
   {
     name: { type: String },
-    username: { type: String, unique: true },
+    username: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
     email: { type: String, required: true, unique: true },
     gender: {
       type: String,

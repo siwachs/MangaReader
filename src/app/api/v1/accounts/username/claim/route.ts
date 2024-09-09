@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { PROFILE_MANAGEMENT_USERNAME_ALREADY_CLAIMED } from "@/constants";
 import {
   notFound,
   serverError,
@@ -13,8 +14,8 @@ import { User } from "@/models";
 
 const claimUsername = async (req: NextRequest) => {
   try {
-    const { userId, username } = await req.json();
-    const trimmedUsername = username?.trim();
+    const { userId, username = "" } = await req.json();
+    const trimmedUsername = username.trim();
     if (!trimmedUsername) return invalidBody(["userId", "username"]);
 
     await connectToMongoDB();
@@ -26,7 +27,7 @@ const claimUsername = async (req: NextRequest) => {
       username: trimmedUsername,
     }).select("_id");
     if (usernameAvailable !== null)
-      return badRequest("Username already claimed.");
+      return badRequest(PROFILE_MANAGEMENT_USERNAME_ALREADY_CLAIMED);
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,

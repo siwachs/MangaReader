@@ -22,6 +22,14 @@ export const DEFAUL_TOAST_TIMEOUT = 5000;
 
 export const BANNER_AUTO_NEXT_DELAY = 5000;
 
+export const PROFILE_MANAGEMENT_USERNAME_ALREADY_CLAIMED =
+  "Username already claimed.";
+
 export const DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY = "BEST";
 export const DEFAULT_NESTED_COMMENT_SYSTEM_PAGE_NUMBER = 1;
 export const DEFAULT_NESTED_COMMENT_SYSTEM_PAGE_SIZE = 50;
+
+export const NESTED_COMMENT_SYSYEM_INVALID_BODY_MESSAGE =
+  "Invalid body bad request. contentId, userId and message are required.";
+export const NESTED_COMMENT_SET_A_USERNAME_MESSAGE =
+  "Please set a username from profile section.";

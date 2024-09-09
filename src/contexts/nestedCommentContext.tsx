@@ -10,7 +10,11 @@ import {
   useState,
 } from "react";
 
-import { DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY } from "@/constants";
+import {
+  DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY,
+  NESTED_COMMENT_SET_A_USERNAME_MESSAGE,
+  NESTED_COMMENT_SYSYEM_INVALID_BODY_MESSAGE,
+} from "@/constants";
 import { nextPublicNestedCommentSystemBaseEndpoint } from "@/constants/apiEndpoints";
 import uuidv4 from "@/libs/uuidv4";
 import { useToastContainer } from "./toastContainerContext";
@@ -58,7 +62,10 @@ type ContextType = {
   rootComments: Comment[];
   getReplies: (parentId?: string) => Comment[];
   changeCommentsOrder: (sortKey: SortKey) => void;
-  makeComment: (body: Record<string, any>) => Promise<void>;
+  makeComment: (
+    body: Record<string, any>,
+    callback?: () => void,
+  ) => Promise<void>;
   voteComment: (
     body: Record<string, any>,
     commentId: string,
@@ -66,6 +73,7 @@ type ContextType = {
     callback?: () => void,
   ) => Promise<void>;
   userId?: string;
+  username?: string;
   editComment: (
     body: Record<string, any>,
     commentId: string,
@@ -114,7 +122,9 @@ export function NestedCommentProvider({
   const { addToast } = useToastContainer();
   const currentUrl = usePathname();
   const session = useSession();
+
   const loggedInUserId = session.data?.user.id;
+  const username = session.data?.user.username;
 
   const [commentsPayload, setCommentsPayload] = useState<CommentsPayload>(
     initialCommentsPayload,
@@ -230,21 +240,28 @@ export function NestedCommentProvider({
   );
 
   const makeComment = useCallback(
-    async (body: Record<string, any>) => {
-      if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
+    async (body: Record<string, any>, callback?: () => void) => {
+      const { contentId, userId, message = "" } = body;
 
-      const { contentId, userId, message } = body;
-      if (!contentId || !userId || !message?.trim())
+      if (!contentId || !userId || !message.trim())
         return addToast({
           id: uuidv4(),
           type: "warning",
-          text: "Invalid body bad request. contentId, userId and message are required.",
+          text: NESTED_COMMENT_SYSYEM_INVALID_BODY_MESSAGE,
+        });
+
+      if (!username)
+        return addToast({
+          id: uuidv4(),
+          type: "info",
+          text: NESTED_COMMENT_SET_A_USERNAME_MESSAGE,
         });
 
       const requestResponse = await makePostPutRequest(
         nextPublicNestedCommentSystemBaseEndpoint,
         "POST",
         body,
+        callback,
       );
 
       if (requestResponse.error)
@@ -297,7 +314,7 @@ export function NestedCommentProvider({
         }
       });
     },
-    [currentUrl, loggedInUserId],
+    [username],
   );
 
   const voteComment = useCallback(
@@ -307,9 +324,12 @@ export function NestedCommentProvider({
       voteType: VoteType,
       callback?: () => void,
     ) => {
-      if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
+      if (!getSignInConfirm(currentUrl, loggedInUserId)) {
+        return callback && callback();
+      }
 
-      if (!body?.userId)
+      const { userId } = body;
+      if (!userId)
         return addToast({
           id: uuidv4(),
           type: "warning",
@@ -361,13 +381,20 @@ export function NestedCommentProvider({
       commentId: string,
       callback?: () => void,
     ) => {
-      if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
+      const { userId, message = "" } = body;
 
-      if (!body?.userId || !body?.message.trim())
+      if (!userId || !message.trim())
         return addToast({
           id: uuidv4(),
           type: "warning",
           text: "Invalid body bad request. userId and message are required.",
+        });
+
+      if (!username)
+        return addToast({
+          id: uuidv4(),
+          type: "info",
+          text: NESTED_COMMENT_SET_A_USERNAME_MESSAGE,
         });
 
       const requestResponse = await makePostPutRequest(
@@ -386,7 +413,7 @@ export function NestedCommentProvider({
 
       updateComments(requestResponse.comment);
     },
-    [currentUrl, loggedInUserId],
+    [username],
   );
 
   const deleteComment = useCallback(
@@ -395,7 +422,9 @@ export function NestedCommentProvider({
       commentId: string,
       callback?: () => void,
     ) => {
-      if (!getSignInConfirm(currentUrl, loggedInUserId)) return;
+      if (!getSignInConfirm(currentUrl, loggedInUserId)) {
+        return callback && callback();
+      }
 
       if (!headers["x-user-id"])
         return addToast({
@@ -435,6 +464,7 @@ export function NestedCommentProvider({
           makeComment,
           voteComment,
           userId: loggedInUserId,
+          username,
           editComment,
           deleteComment,
           loadMoreComments,
@@ -448,6 +478,7 @@ export function NestedCommentProvider({
           makeComment,
           voteComment,
           loggedInUserId,
+          username,
           editComment,
           deleteComment,
           loadMoreComments,

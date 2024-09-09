@@ -88,11 +88,11 @@ export function serverError(errorMessage: string) {
   );
 }
 
-export function methodNotAllowed() {
+export function methodNotAllowed(errorMessage = "Method not allowed.") {
   return NextResponse.json(
     {
       error: true,
-      errorMessage: "Method not allowed.",
+      errorMessage,
     },
     { status: 405 },
   );

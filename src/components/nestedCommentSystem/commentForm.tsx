@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
 import { useToastContainer } from "@/contexts/toastContainerContext";
 
+import { NESTED_COMMENT_SET_A_USERNAME_MESSAGE } from "@/constants";
 import sanatizeHtml from "@/libs/sanitizeHtml";
 import uuidv4 from "@/libs/uuidv4";
 
@@ -19,8 +20,8 @@ import { RiLinksFill } from "react-icons/ri";
 import { BiSolidHide } from "react-icons/bi";
 
 const editorToolboxButtonClasses =
-  "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100 data-[active=true]:bg-blue-300/50";
-const editorToolboxButtonIconClasses = "size-5";
+  "flex size-6 items-center justify-center rounded text-[var(--app-text-color-medium-gray-blue)] opacity-60 hover:opacity-100 data-[active=true]:opacity-100 data-[active=true]:bg-blue-300/50 md:size-8";
+const editorToolboxButtonIconClasses = "size-5 md:size-7";
 
 const initialActiveTools = {
   isToolboxActive: false,
@@ -49,49 +50,49 @@ const tools = [
     activeKey: "isBoldStyleActive",
     className: editorToolboxButtonClasses,
     title: "Bold",
-    icon: <MdFormatBold className="size-7" />,
+    icon: <MdFormatBold className="size-7 md:size-8" />,
   },
   {
     key: "italic",
     activeKey: "isItalicStyleActive",
     className: editorToolboxButtonClasses,
     title: "Italic",
-    icon: <MdOutlineFormatItalic className="size-7" />,
+    icon: <MdOutlineFormatItalic className="size-7 md:size-8" />,
   },
   {
     key: "underline",
     activeKey: "isUnderlineStyleActive",
     className: editorToolboxButtonClasses,
     title: "Underline",
-    icon: <MdFormatUnderlined className="size-7" />,
+    icon: <MdFormatUnderlined className="size-7 md:size-8" />,
   },
   {
     key: "strikethrough",
     activeKey: "isStrikethroughStyleActive",
     className: editorToolboxButtonClasses,
     title: "StrikeThrough",
-    icon: <MdStrikethroughS className="size-7" />,
+    icon: <MdStrikethroughS className="size-7 md:size-8" />,
   },
   {
     key: "link",
     activeKey: "isAddLinkActive",
     className: editorToolboxButtonClasses,
     title: "Add Link",
-    icon: <RiLinksFill className="size-5" strokeWidth={1} />,
+    icon: <RiLinksFill className="size-5 md:size-6" strokeWidth={1} />,
   },
   {
     key: "spoiler",
     activeKey: "isSpoilerStyleActive",
     className: editorToolboxButtonClasses,
     title: "Spoiler",
-    icon: <BiSolidHide className="size-5" />,
+    icon: <BiSolidHide className="size-5 md:size-6" />,
   },
   {
     key: "code",
     activeKey: "isCodeStyleActive",
     className: editorToolboxButtonClasses,
     title: "Code",
-    icon: <FaCode className="size-[18px]" />,
+    icon: <FaCode className="size-[18px] md:size-6" />,
   },
 ];
 
@@ -112,7 +113,7 @@ const CommentForm: React.FC<{
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const { addToast } = useToastContainer();
-  const { userId, contentId, chapterId, makeComment, editComment } =
+  const { userId, username, contentId, chapterId, makeComment, editComment } =
     useNestedCommentSystem();
 
   const [expandedEditor, setExpandedEditor] = useState(false);
@@ -213,6 +214,13 @@ const CommentForm: React.FC<{
         text: "Message can't be empty.",
       });
 
+    if (!username)
+      return addToast({
+        id: uuidv4(),
+        type: "info",
+        text: NESTED_COMMENT_SET_A_USERNAME_MESSAGE,
+      });
+
     const message = editorRef.current?.innerHTML as string;
     if (editorRef.current) editorRef.current.innerHTML = "";
 
@@ -223,6 +231,7 @@ const CommentForm: React.FC<{
     if (editMode) {
       // For Loading state toogle
       if (editModeCallback) editModeCallback();
+
       await editComment(
         { userId, message: sanatizeHtml(message) },
         commentId!,
@@ -303,7 +312,7 @@ const CommentForm: React.FC<{
 
             <button
               type="submit"
-              className="h-fit whitespace-nowrap rounded-[14px] bg-gray-800 p-[3.5px_15px] text-[15px] font-bold text-white hover:border-[#526069] hover:bg-[#526069] disabled:bg-[#526069]"
+              className="h-fit whitespace-nowrap rounded-[14px] bg-gray-800 p-[3.5px_15px] text-[15px] font-bold text-white hover:border-[#526069] hover:bg-[#526069] disabled:bg-[#526069] md:text-lg"
             >
               Comment
             </button>

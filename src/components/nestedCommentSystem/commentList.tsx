@@ -95,7 +95,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
       <div className="mb-4 flex flex-wrap">
         <div
           data-role="avatar-container"
-          className={`relative mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10" : "size-[52px]"} flex-shrink-0 rounded-2xl`}
+          className={`relative mb-[9px] mr-2.5 ${isChildrenCollapsed ? "size-10 md:size-[46px]" : "size-[52px] md:size-[58px]"} flex-shrink-0 rounded-2xl md:mr-3.5`}
         >
           <div
             id="indicator"
@@ -107,7 +107,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
             alt={comment.user?.username ?? "profile-pic"}
             width={60}
             height={60}
-            className="h-full w-full rounded-[inherit] object-cover object-center before:h-[52px] before:w-[5px] before:rounded-[3px] before:bg-gray-800 before:pr-3 before:content-['']"
+            className="h-full w-full rounded-[inherit] object-cover object-center"
           />
         </div>
 
@@ -118,14 +118,14 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
           >
             <div
               data-role="username-timestamp"
-              className="mr-3 flex-1 text-xs/[21px]"
+              className="mr-3 flex-1 text-xs/[21px] md:text-base"
             >
               <div className="flex flex-wrap items-center">
-                <span className="mr-1 line-clamp-1 text-[15px] font-bold text-gray-800">
+                <span className="mr-1 line-clamp-1 text-[15px] font-bold text-gray-800 md:text-lg">
                   {comment.user?.username ?? "deleted"}
                   &nbsp;
                   <HiUserAdd
-                    className="-mt-1 inline-block size-[18px] text-[var(--app-text-color-blue-gray)] hover:text-gray-800"
+                    className="-mt-1 inline-block size-[18px] text-[var(--app-text-color-blue-gray)] hover:text-gray-800 md:size-5"
                     tabIndex={0}
                     role="button"
                     aria-label="Add user"
@@ -137,7 +137,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
                     href={`#${comment.parentId}`}
                     className="ml-2 flex select-none items-center gap-0.5 font-medium text-[var(--app-text-color-very-dary-steel-blue)]"
                   >
-                    <IoMdShareAlt className="size-4" />
+                    <IoMdShareAlt className="size-4 md:size-[22px]" />
                     <span>{comment.user?.username ?? "deleted"}</span>
                   </Link>
                 )}
@@ -155,7 +155,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
             >
               {isChildrenCollapsed ? (
                 <FaPlus
-                  className="mr-2.5 size-4 hover:text-gray-800"
+                  className="mr-2.5 size-4 hover:text-gray-800 md:size-[22px]"
                   tabIndex={0}
                   role="button"
                   aria-label="Expand Children"
@@ -163,7 +163,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
                 />
               ) : (
                 <FaMinus
-                  className="mr-2.5 size-[18px] hover:text-gray-800"
+                  className="mr-2.5 size-[18px] hover:text-gray-800 md:size-[22px]"
                   tabIndex={0}
                   role="button"
                   aria-label="Collapse Children"
@@ -172,7 +172,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
               )}
 
               <TiFlag
-                className="mt-0.5 size-4 hover:text-gray-800"
+                className="mt-0.5 size-4 hover:text-gray-800 md:size-[22px]"
                 tabIndex={0}
                 role="button"
                 aria-label="Flag Comment"
@@ -187,7 +187,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
             }
           >
             <p
-              className={`break-words text-[15px] leading-[21px] ${isDeleteCommentLoading || isEditingLoading ? "w-fit animate-pulse rounded-sm bg-gray-400 text-gray-400" : ""} ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
+              className={`break-words text-[15px] leading-[21px] md:text-lg ${isDeleteCommentLoading || isEditingLoading ? "w-fit animate-pulse rounded-sm bg-gray-400 text-gray-400" : ""} ${comment.isDeleted ? "line-through" : "whitespace-pre-wrap"}`}
               dangerouslySetInnerHTML={{
                 __html: comment.isDeleted
                   ? "This comment was deleted."
@@ -195,7 +195,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
               }}
             />
 
-            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium text-gray-800">
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium text-gray-800 md:mt-3.5 md:text-base">
               <div className="flex flex-wrap items-center">
                 <button
                   onClick={upVote}
@@ -229,14 +229,14 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
               <div className="flex flex-wrap items-center">
                 <button
                   onClick={toogleIsReplying}
-                  className="ml-2 mr-3.5 text-sm"
+                  className="ml-2 mr-3.5 text-sm md:text-base"
                 >
                   Reply
                 </button>
 
                 {!comment.isDeleted && comment.user.id === userId && (
                   <FaEdit
-                    className="mx-1.5 text-sm"
+                    className="mx-1.5 text-sm md:text-base"
                     tabIndex={0}
                     role="button"
                     aria-label="Edit Comment"
@@ -247,7 +247,7 @@ const Comment: React.FC<{ comment: CommentType }> = memo(({ comment }) => {
                 {comment.user.id === userId && (
                   <button
                     onClick={deleteCommentCallback}
-                    className={`mx-1.5 text-sm ${comment.isDeleted ? "text-[var(--app-text-color-medium-dark-blue)]" : "text-red-600"}`}
+                    className={`mx-1.5 text-sm md:text-base ${comment.isDeleted ? "text-[var(--app-text-color-medium-dark-blue)]" : "text-red-600"}`}
                     aria-label={
                       comment.isDeleted ? "Unde Delete" : "Delete Comment"
                     }
@@ -309,7 +309,7 @@ const renderVoteIcon = (
   isVoteLoading: IsVoteLoading,
   currentVoteType?: VoteType,
 ) => {
-  const baseClasses = "mx-2 size-5";
+  const baseClasses = "mx-2 size-5 md:size-6";
   const voteLoadingClasses = getVoteLoadingClasses(
     voteType,
     isVoteLoading,

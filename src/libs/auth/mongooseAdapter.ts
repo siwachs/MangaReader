@@ -8,9 +8,7 @@ import {
 import connectToMongoDB from "../db/connectToMongoDB";
 
 import { partialUser } from "../mongooseSelect";
-import Account from "@/models/Account";
-import Session from "@/models/Session";
-import User from "@/models/User";
+import { Account, Session, User } from "@/models";
 
 const format = {
   /** Takes a MongoDB object and returns a plain old JavaScript object */

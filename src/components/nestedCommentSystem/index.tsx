@@ -58,7 +58,7 @@ const NestedCommentsContainer: React.FC = () => {
             className={
               commentsPayload.loading
                 ? "animate-pulse rounded-sm bg-gray-400 text-gray-400"
-                : undefined
+                : "md:text-lg"
             }
           >
             {commentsPayload.totalComments} Comments
@@ -76,10 +76,10 @@ const NestedCommentsContainer: React.FC = () => {
                       1
                     </span>
 
-                    <IoChatbubble className="size-[22px]" />
+                    <IoChatbubble className="size-[22px] md:size-7" />
                   </div>
 
-                  <span>Sign In</span>
+                  <span className="md:size-lg">Sign In</span>
                 </>
               }
             />
@@ -92,9 +92,9 @@ const NestedCommentsContainer: React.FC = () => {
 
         <div className="mb-2 flex items-center justify-between">
           <div className="mb-3 ml-3 flex items-center gap-2.5">
-            <FaRegHeart />
+            <FaRegHeart className="md:size-4" />
 
-            <span className="text-xs/[18px] font-bold">0</span>
+            <span className="text-xs/[18px] font-bold md:text-base">0</span>
           </div>
 
           <div className="mb-3 flex items-center gap-4 pt-[3px]">
@@ -110,7 +110,7 @@ const NestedCommentsContainer: React.FC = () => {
                   changeCommentsOrder(order as SortKey);
                 }}
                 data-active={commentsPayload.sortKey === order}
-                className="text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-gray-800"
+                className="text-sm/[19px] font-semibold data-[active=true]:border-b-[3px] data-[active=true]:border-gray-800 md:text-base"
               >
                 {order === "BEST"
                   ? "Best"

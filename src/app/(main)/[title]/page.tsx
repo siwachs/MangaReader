@@ -23,6 +23,7 @@ import {
   LATEST_UPDATES_CONTENT_LIST_PAGE_SIZE,
 } from "@/constants";
 
+import { Content } from "@/models";
 import getContent, {
   getContentTitleAndDescription,
 } from "@/libs/dbCRUD/getContent";
@@ -78,6 +79,7 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
   } = latestUpdatesContentListResponse;
 
   if (!content) return notFound();
+  await Content.updateOne({ _id: contentId }, { $inc: { noOfViews: 1 } });
 
   const genres = content.genres as Genre[];
   const currentGenreName = genres?.[0].name ?? "All";
@@ -300,11 +302,11 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
         </div>
 
         <button className="mx-auto mb-[30px] mt-8 flex items-center justify-center text-gray-500/70">
-          <p className="mr-2 text-xs font-normal underline">
+          <p className="mr-2 text-xs font-normal underline md:mr-2.5 md:text-base">
             Have problems with reading?
           </p>
 
-          <MdError className="size-[13px]" />
+          <MdError className="size-[13px] md:size-4" />
         </button>
 
         <ToastContainerProvider>
