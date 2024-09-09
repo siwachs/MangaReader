@@ -5,6 +5,17 @@ A full-stack web application for reading manga/books, built using **Next.js 14**
 ### Live Demo:
 [Visit Manga Reader](https://manga-reader-teal.vercel.app)
 
+### What's New in Version 2.0:
+- **Enhanced UI**: Improved user interface for a more intuitive and visually appealing experience.
+- **Improved Load Time**: Further optimized performance with faster load times.
+- **Proper Loading Indicators**: Introduced dynamic loading indicators for better user feedback.
+- **Recommended for You Section**: Personalized recommendations based on user preferences.
+- **SEO Improvements**: Enhanced SEO for better search engine visibility and ranking.
+- **Lazy Load Components**: Components are now lazy-loaded to enhance performance.
+- **Infinite Scroll**: Added infinite scroll for a seamless reading experience.
+- **Nested Comment System**: Introduced a feature-rich nested comment system for better interaction.
+- **Dynamic Headers**: Dynamic page headers based on content for improved navigation.
+
 ### Technologies Used:
 - **Next.js 14**: For server-side rendering (SSR) and optimized performance.
 - **Tailwind CSS**: For creating a modern, responsive, and customizable user interface.
