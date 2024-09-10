@@ -15,7 +15,7 @@ export type Comment = {
   parentId: string;
   message: string;
   contentId: string;
-  chapterId?: string;
+  chapterId: null;
   user: {
     id: string;
     username?: string;
@@ -27,7 +27,6 @@ export type Comment = {
   isReported: boolean;
   isDeleted: boolean;
   createdAt: string;
-  updatedAt: string;
   voteType?: VoteType;
 };
 

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="flex h-[calc(100vh-60px)] flex-col items-center justify-center md:h-[calc(100vh-120px)]">
+    <div className="flex h-full flex-col items-center justify-center">
       <Image
         src="/assets/404cry.png"
         alt="404cry"
@@ -15,6 +15,7 @@ export default function NotFound() {
         width={320}
         className="w-[280px]"
       />
+
       <h1 className="text-5xl font-bold leading-[100px] text-[#9954BB]">404</h1>
       <h3 className="my-4 text-2xl font-extrabold">Page not found!</h3>
     </div>

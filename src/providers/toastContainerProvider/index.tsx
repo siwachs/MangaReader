@@ -1,5 +1,7 @@
 "use client";
 
+import "./toast.css";
+
 import {
   createContext,
   useContext,
@@ -13,27 +15,10 @@ import getKeydownEvent from "@/libs/eventHandlers/getKeydownEvent";
 import { DEFAULT_TOAST_AUTODISMISS, DEFAUL_TOAST_TIMEOUT } from "@/constants";
 
 import { IoCloseSharp } from "react-icons/io5";
-import "./toast.css";
 
-type ToastMessage = {
-  id: string | number;
-  type: "success" | "error" | "warning" | "info";
-  text: string;
-  autoDismiss?: boolean;
-  timeOut?: number;
-};
+import { Context, ToastMessage } from "./types";
 
-type ContextType = {
-  addToast: (toast: ToastMessage) => void;
-  removeToast: (toast: ToastMessage) => void;
-};
-
-const initialContextValue = {
-  addToast: (toast: ToastMessage) => {},
-  removeToast: (toast: ToastMessage) => {},
-};
-
-const ToastContainerContext = createContext<ContextType>(initialContextValue);
+const ToastContainerContext = createContext<Context | undefined>(undefined);
 
 export function useToastContainer() {
   const context = useContext(ToastContainerContext);
@@ -153,7 +138,7 @@ export function ToastContainerProvider({
       {toasts.length > 0 && (
         <div className="toast-container" data-position={position}>
           {toasts.map((toast) => (
-            <Toast key={toast.id.toString()} toast={toast} />
+            <Toast key={toast.id} toast={toast} />
           ))}
         </div>
       )}

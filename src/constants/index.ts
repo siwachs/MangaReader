@@ -1,3 +1,5 @@
+export const HOME_PAGE_CACHE_TTL = 90;
+
 export const DEBOUNCED_DELAY = 300;
 
 export const MAX_FILE_SIZE = 4.6;
@@ -33,3 +35,5 @@ export const NESTED_COMMENT_SYSYEM_INVALID_BODY_MESSAGE =
   "Invalid body bad request. contentId, userId and message are required.";
 export const NESTED_COMMENT_SET_A_USERNAME_MESSAGE =
   "Please set a username from profile section.";
+export const NESTED_COMMENT_SYSTEM_INVALID_USERID =
+  "Invalid body bad request. userId is required.";

@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+:root {
+  height: 100%;
+}
+
 :root {
   --app-bg-color-primary: #faf9f6;
   --app-text-color-primary: #333333;

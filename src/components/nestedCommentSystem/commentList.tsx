@@ -5,7 +5,7 @@ import Image from "next/image";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { Comment as CommentType, VoteType } from "@/types";
 
-import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
+import { useNestedCommentSystem } from "@/providers/nestedCommentProvider";
 import CommentForm from "./commentForm";
 
 import { HiUserAdd } from "react-icons/hi";

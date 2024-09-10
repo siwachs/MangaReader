@@ -1,6 +1,3 @@
-import { notFound } from "next/navigation";
-
-import getServerSession from "@/libs/auth/getServerSession";
 import AddGenreForm from "./_components/addGenreForm";
 import AddOrUpdateContentForm from "./_components/addOrUpdateContentForm";
 
@@ -16,9 +13,6 @@ type AdminContentPageReqObj = {
 export default async function ContentPage(
   req: Readonly<AdminContentPageReqObj>,
 ) {
-  const data = await getServerSession();
-  if (!data?.user?.isAdmin) return notFound();
-
   const contentId = (req.searchParams.content_id ?? "").trim();
   const genresResponse = await getGenres({ forClientComponent: true });
   const contentResponse = contentId

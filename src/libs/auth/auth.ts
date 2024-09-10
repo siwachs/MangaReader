@@ -4,6 +4,7 @@ import Google from "next-auth/providers/google";
 import mongooseAdapter from "./mongooseAdapter";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [Google],
   theme: { logo: "/MangaToon.svg" },
   adapter: mongooseAdapter(),
   callbacks: {
@@ -15,5 +16,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       };
     },
   },
-  providers: [Google],
 });

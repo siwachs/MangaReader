@@ -8,6 +8,7 @@ import HottestComics from "./_components/lists/hottestComics";
 import GernresList from "./_components/lists/genresList";
 
 import {
+  HOME_PAGE_CACHE_TTL,
   FREE_READ_CONTENT_LIST_PAGE_SIZE,
   CONTENT_LIST_PAGE_SIZE,
   CONTENT_LIST_DEFAULT_PAGE_NUMBER,
@@ -18,7 +19,7 @@ import getContentList from "@/libs/dbCRUD/getContentList";
 import circleLeft from "@/../public/assets/circle-left.png";
 import circleRight from "@/../public/assets/circle-right.png";
 
-export const revalidate = 80;
+export const revalidate = HOME_PAGE_CACHE_TTL;
 
 export default async function HomePage() {
   const [

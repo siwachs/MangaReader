@@ -1,9 +1,9 @@
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  // Add Middleware logic.
+  // Middleware Logic.
 }
 
 export const config = {
-  matcher: "/admin/:path*",
+  matcher: ["/admin/:path*"],
 };

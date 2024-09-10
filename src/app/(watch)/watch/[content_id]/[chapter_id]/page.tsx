@@ -6,8 +6,8 @@ import Header from "@/app/(watch)/_components/header";
 import ErrorMessage from "@/components/messages/errorMessage";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import Pagination from "./_components/pagination";
-import { ToastContainerProvider } from "@/contexts/toastContainerContext";
-import { NestedCommentProvider } from "@/contexts/nestedCommentContext";
+import { ToastContainerProvider } from "@/providers/toastContainerProvider";
+import { NestedCommentProvider } from "@/providers/nestedCommentProvider";
 import LazyLoadComponent from "@/components/utils/lazyLoadComponent";
 
 import {

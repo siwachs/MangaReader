@@ -2,15 +2,19 @@
 
 import "./index.css";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { roboto } from "@/libs/fonts";
 import { SortKey } from "@/types";
-import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
+import { useNestedCommentSystem } from "@/providers/nestedCommentProvider";
 
+import { DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY } from "@/constants";
 import LoadingSkeleton from "../utils/loadingSkeleton";
 import ClientAuth from "../buttons/clientAuth";
 import CommentForm from "./commentForm";
 import CommentList from "./commentList";
+
+import { nextPublicNestedCommentSystemBaseEndpoint } from "@/constants/apiEndpoints";
+import { makeGetRequest } from "@/service/asyncApiCalls";
 
 import { IoChatbubble } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
@@ -21,7 +25,44 @@ const NestedCommentsContainer: React.FC = () => {
     commentsPayload,
     changeCommentsOrder,
     loadMoreComments,
+    contentId,
+    chapterId,
+    updateCommentsPayload,
   } = useNestedCommentSystem();
+
+  useEffect(() => {
+    const getInitialComments = async () => {
+      updateCommentsPayload({ loading: true });
+      const commentsSortKey =
+        commentsPayload.sortKey || DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY;
+      const queryParams = new URLSearchParams(
+        chapterId
+          ? {
+              contentId,
+              chapterId,
+              commentsSortKey,
+            }
+          : {
+              contentId,
+              commentsSortKey,
+            },
+      ).toString();
+      const requestResponse = await makeGetRequest(
+        nextPublicNestedCommentSystemBaseEndpoint,
+        queryParams,
+        () => updateCommentsPayload({ loading: false }),
+      );
+
+      if (requestResponse.error)
+        return updateCommentsPayload({
+          ...requestResponse,
+        });
+
+      updateCommentsPayload({ ...requestResponse });
+    };
+
+    getInitialComments();
+  }, [chapterId, contentId, commentsPayload.sortKey]);
 
   function renderComments() {
     if (commentsPayload.loading)

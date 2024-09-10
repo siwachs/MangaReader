@@ -13,8 +13,8 @@ import Rating from "./_components/rating";
 import Description from "./_components/description";
 import ChaptersList from "./_components/chaptersList";
 import DetailTitleBox from "./_components/titleHeader";
-import { ToastContainerProvider } from "@/contexts/toastContainerContext";
-import { NestedCommentProvider } from "@/contexts/nestedCommentContext";
+import { ToastContainerProvider } from "@/providers/toastContainerProvider";
+import { NestedCommentProvider } from "@/providers/nestedCommentProvider";
 import LazyLoadComponent from "@/components/utils/lazyLoadComponent";
 
 import {

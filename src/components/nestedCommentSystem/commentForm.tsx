@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNestedCommentSystem } from "@/contexts/nestedCommentContext";
-import { useToastContainer } from "@/contexts/toastContainerContext";
+import { useNestedCommentSystem } from "@/providers/nestedCommentProvider";
+import { useToastContainer } from "@/providers/toastContainerProvider";
 
 import { NESTED_COMMENT_SET_A_USERNAME_MESSAGE } from "@/constants";
 import sanatizeHtml from "@/libs/sanitizeHtml";

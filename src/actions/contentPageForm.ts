@@ -83,6 +83,7 @@ export const addOrUpdateContent = async (
       );
 
     const content = await Content.create(validContentPayload);
+    revalidatePath("/");
 
     return {
       error: false,
@@ -168,6 +169,7 @@ const updateContent = async (
 
   await Content.findByIdAndUpdate(contentId, validContentPayload);
 
+  revalidatePath("/");
   revalidatePath("/admin/content");
   return { error: false, errorMessage: undefined };
 };
