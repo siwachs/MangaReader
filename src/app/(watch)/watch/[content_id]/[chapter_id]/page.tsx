@@ -6,7 +6,7 @@ import Header from "@/app/(watch)/_components/header";
 import ErrorMessage from "@/components/messages/errorMessage";
 import { contentCoverBlurDataImageURL } from "@/data/imageDataUrls";
 import Pagination from "./_components/pagination";
-import { ToastContainerProvider } from "@/providers/toastContainerProvider";
+
 import { NestedCommentProvider } from "@/providers/nestedCommentProvider";
 import LazyLoadComponent from "@/components/utils/lazyLoadComponent";
 
@@ -110,11 +110,9 @@ export default async function WatchPage(req: Readonly<WatchPageReqObj>) {
 
         <div className="mb-[60px]" />
 
-        <ToastContainerProvider>
-          <NestedCommentProvider>
-            <LazyLoadComponent component="NestedCommentSystem" />
-          </NestedCommentProvider>
-        </ToastContainerProvider>
+        <NestedCommentProvider contentId={content_id} chapterId={chapter_id}>
+          <LazyLoadComponent component="NestedCommentSystem" />
+        </NestedCommentProvider>
       </main>
     </>
   );

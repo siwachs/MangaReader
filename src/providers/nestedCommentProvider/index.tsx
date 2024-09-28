@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useParams, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   createContext,
   useCallback,
@@ -61,22 +61,13 @@ export function useNestedCommentSystem() {
 
 export function NestedCommentProvider({
   children,
+  contentId,
+  chapterId,
 }: Readonly<{
   children: React.ReactNode;
+  contentId: string;
+  chapterId?: string;
 }>) {
-  const { content_id: routeContentId, chapter_id: routeChapterId } =
-    useParams();
-  const searchParams = useSearchParams();
-
-  const contentId =
-    (routeContentId as string) ||
-    (searchParams.get("content_id") as string) ||
-    "";
-  const chapterId =
-    (routeChapterId as string) ||
-    (searchParams.get("chapter_id") as string) ||
-    undefined;
-
   const { addToast } = useToastContainer();
   const currentUrl = usePathname();
   const session = useSession();

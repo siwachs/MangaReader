@@ -13,7 +13,7 @@ import Rating from "./_components/rating";
 import Description from "./_components/description";
 import ChaptersList from "./_components/chaptersList";
 import DetailTitleBox from "./_components/titleHeader";
-import { ToastContainerProvider } from "@/providers/toastContainerProvider";
+
 import { NestedCommentProvider } from "@/providers/nestedCommentProvider";
 import LazyLoadComponent from "@/components/utils/lazyLoadComponent";
 
@@ -309,11 +309,9 @@ export default async function TitlePage(req: Readonly<ContentPageReqObj>) {
           <MdError className="size-[13px] md:size-4" />
         </button>
 
-        <ToastContainerProvider>
-          <NestedCommentProvider>
-            <LazyLoadComponent component="NestedCommentSystem" />
-          </NestedCommentProvider>
-        </ToastContainerProvider>
+        <NestedCommentProvider contentId={contentId}>
+          <LazyLoadComponent component="NestedCommentSystem" />
+        </NestedCommentProvider>
       </div>
     </>
   );
