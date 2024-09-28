@@ -4,9 +4,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import LoadingSkeleton from "../utils/loadingSkeleton";
 import { LinkObject } from "@/types";
-import ClientAuth from "../buttons/clientAuth";
+import ClientAuth, { LoadingSkeleton } from "../buttons/clientAuth";
 
 const tabNavigationLinks: LinkObject[] = [
   { key: "home", label: "Home", link: "/" },
@@ -38,7 +37,12 @@ const TabNavigation: React.FC = () => {
         const { key, link, label } = navLink;
 
         return key === "signin" ? (
-          <Suspense key={key} fallback={<LoadingSkeleton />}>
+          <Suspense
+            key={key}
+            fallback={
+              <LoadingSkeleton profileContainerClasses="mx-2.5 size-[30px] flex-shrink-0 sm:size-[32px]" />
+            }
+          >
             <ClientAuth
               profileContainerClasses="mx-2.5 size-[30px] flex-shrink-0 sm:size-[32px]"
               signInButtonClasses="text-sm font-normal leading-[37px] whitespace-nowrap text-gray-800"

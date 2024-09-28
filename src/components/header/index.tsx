@@ -4,8 +4,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
-import LoadingSkeleton from "../utils/loadingSkeleton";
-import ClientAuth from "@/components/buttons/clientAuth";
+import ClientAuth, { LoadingSkeleton } from "@/components/buttons/clientAuth";
 import { navLinks } from "./navlinks";
 
 import { FaBars } from "react-icons/fa6";
@@ -52,7 +51,11 @@ const Header: React.FC = () => {
         >
           <MenuToggler />
 
-          <Suspense fallback={<LoadingSkeleton />}>
+          <Suspense
+            fallback={
+              <LoadingSkeleton profileContainerClasses="hidden size-[42px] flex-shrink-0 md:inline" />
+            }
+          >
             <ClientAuth
               profileMenuPositionClasses="right-2.5 top-12"
               profileContainerClasses="hidden size-[42px] flex-shrink-0 md:inline"

@@ -8,8 +8,7 @@ import { SortKey } from "@/types";
 import { useNestedCommentSystem } from "@/providers/nestedCommentProvider";
 
 import { DEFAULT_NESTED_COMMENT_SYSTEM_SORT_KEY } from "@/constants";
-import LoadingSkeleton from "../utils/loadingSkeleton";
-import ClientAuth from "../buttons/clientAuth";
+import ClientAuth, { LoadingSkeleton } from "../buttons/clientAuth";
 import CommentForm from "./commentForm";
 import CommentList from "./commentList";
 
@@ -105,7 +104,11 @@ const NestedCommentsContainer: React.FC = () => {
             {commentsPayload.totalComments} Comments
           </span>
 
-          <Suspense fallback={<LoadingSkeleton />}>
+          <Suspense
+            fallback={
+              <LoadingSkeleton profileContainerClasses="relative size-9" />
+            }
+          >
             <ClientAuth
               profileContainerClasses="relative size-9"
               profileMenuPositionClasses="right-0 top-10"

@@ -17,6 +17,21 @@ import { roboto } from "@/libs/fonts";
 import { LiaTimesSolid } from "react-icons/lia";
 import { MdExitToApp } from "react-icons/md";
 
+export const LoadingSkeleton: React.FC<{ profileContainerClasses: string }> = ({
+  profileContainerClasses,
+}) => {
+  return (
+    <div role="status" aria-live="polite" className={profileContainerClasses}>
+      <div
+        aria-busy="true"
+        className="h-full w-full animate-pulse rounded-full bg-gray-400"
+      >
+        <span className="sr-only">Loading profile...</span>
+      </div>
+    </div>
+  );
+};
+
 const ClientAuth: React.FC<{
   profileMenuPositionClasses?: string;
   authProvider?: string;
@@ -53,14 +68,7 @@ const ClientAuth: React.FC<{
 
   if (status === "loading")
     return (
-      <div role="status" aria-live="polite" className={profileContainerClasses}>
-        <div
-          aria-busy="true"
-          className="h-full w-full animate-pulse rounded-full bg-gray-400"
-        >
-          <span className="sr-only">Loading profile...</span>
-        </div>
-      </div>
+      <LoadingSkeleton profileContainerClasses={profileContainerClasses} />
     );
 
   if (status === "unauthenticated")
